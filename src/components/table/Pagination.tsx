@@ -3,7 +3,7 @@ import {
   MdOutlineArrowBackIos,
   MdOutlineArrowForwardIos,
 } from "react-icons/md";
-import { useQueryParams } from "../../hooks/useQueryParams";
+import { useQueryParams } from "./useQueryParams";
 
 interface PaginationProps {
   totalItems: number;
@@ -54,7 +54,7 @@ const Pagination: React.FC<PaginationProps> = ({
     (page: number) => {
       updateParams(queryName, page.toString());
     },
-    [getParams, updateParams, queryName],
+    [getParams, updateParams, queryName]
   );
 
   const goToFirstPage = () => updatePage(1);

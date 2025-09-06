@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { inputClass } from "../inputs/Input";
+import { inputClass } from "./utils";
 import { BiChevronDown } from "react-icons/bi";
-import { useSearchParams } from "react-router-dom";
 
 const PageSizeSelect = ({
   pageSize,
@@ -13,13 +12,19 @@ const PageSizeSelect = ({
   initialPageSize?: number;
 }) => {
   const [size, setSize] = useState(pageSize);
-  const [searchParams, setSearchParams] = useSearchParams();
+
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newSize = Number(e.target.value);
     setSize(newSize);
-    searchParams?.delete("page");
-    searchParams.set("pageSize", newSize?.toString());
-    setSearchParams(searchParams, { replace: true });
+
+    // دریافت و ویرایش پارامترهای query به صورت دستی
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.delete("page"); // حذف پارامتر page
+    searchParams.set("pageSize", newSize.toString());
+
+    // به‌روزرسانی URL بدون رفرش
+    const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+    window.history.replaceState(null, "", newUrl);
 
     onPageSizeChange(newSize);
   };
@@ -32,7 +37,9 @@ const PageSizeSelect = ({
         onChange={handleChange}
         className={`${inputClass} appearance-none pl-6 cursor-pointer`}
       >
-        <option value={initialPageSize}>{initialPageSize}</option>
+        {initialPageSize && (
+          <option value={initialPageSize}>{initialPageSize}</option>
+        )}
         <option value={20}>20</option>
         <option value={50}>50</option>
         <option value={100}>100</option>

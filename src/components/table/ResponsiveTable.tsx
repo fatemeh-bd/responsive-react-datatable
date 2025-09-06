@@ -1,15 +1,14 @@
 import { ColumnType } from "./Table";
 import BoxCell from "./BoxCell";
-import LoaderScreen from "../loaders/LoaderScreen";
+import LoaderScreen from "./LoaderScreen";
 import React, { useState, useRef, useEffect } from "react";
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
-import { useIsMobile } from "../../hooks/useIsMobile";
-import Paragraph from "../typography/Paragraph";
+import { useIsMobile } from "./useIsMobile";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import Skeleton from "../Skeleton/Skeleton";
+import Skeleton from "./Skeleton";
 import { Virtual } from "swiper/modules";
 
 export type OrderType = {
@@ -120,11 +119,11 @@ const ResponsiveTable = ({
                   ? column?.render(
                       cellKey ? row[cellKey] : undefined,
                       row,
-                      rowIndex,
+                      rowIndex
                     )
                   : cellKey
-                    ? row[cellKey]
-                    : null;
+                  ? row[cellKey]
+                  : null;
 
                 return column?.dontShowDataInMobile ? null : (
                   <div
@@ -140,7 +139,11 @@ const ResponsiveTable = ({
 
                     <BoxCell
                       visible={isMobile}
-                      className={`flex text-wrap text-sm items-center justify-center gap-2 !mx-0 flex-wrap ${column?.title === "عملیات" ? "[&>button]:flex-1 [&>div]:flex-1 !w-full [&>a]:flex-1" : ""}`}
+                      className={`flex text-wrap text-sm items-center justify-center gap-2 !mx-0 flex-wrap ${
+                        column?.title === "عملیات"
+                          ? "[&>button]:flex-1 [&>div]:flex-1 !w-full [&>a]:flex-1"
+                          : ""
+                      }`}
                     >
                       {content}
                     </BoxCell>
@@ -151,9 +154,9 @@ const ResponsiveTable = ({
           ))}
         </Swiper>
       ) : (
-        <Paragraph className="text-center text-secondary-700 py-6">
+        <p className="text-center text-secondary-700 py-6">
           اطلاعاتی برای نمایش وجود ندارد
-        </Paragraph>
+        </p>
       )}
     </div>
   ) : (
@@ -176,7 +179,9 @@ const ResponsiveTable = ({
                       onClick={() =>
                         column?.orderable && handleSort(colIndex, column)
                       }
-                      className={`${column?.orderable && "!cursor-pointer"} py-2 px-1 text-center text-secondary-900 min-w-max border-b border-secondary-600`}
+                      className={`${
+                        column?.orderable && "!cursor-pointer"
+                      } py-2 px-1 text-center text-secondary-900 min-w-max border-b border-secondary-600`}
                     >
                       <BoxCell
                         tooltip={column?.width ? column?.title : ""}
@@ -242,11 +247,11 @@ const ResponsiveTable = ({
                             ? column?.render(
                                 cellKey ? row[cellKey] : undefined,
                                 row,
-                                rowIndex,
+                                rowIndex
                               )
                             : cellKey
-                              ? row[cellKey]
-                              : null;
+                            ? row[cellKey]
+                            : null;
 
                           return (
                             <td

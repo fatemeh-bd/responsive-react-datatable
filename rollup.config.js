@@ -40,7 +40,7 @@ export default [
       }),
       terser(),
     ],
-    external: ["react", "react-dom", "react-icons", "axios", "swiper/react"],
+    external: ["react", "react-dom", "react-icons", "axios", "swiper"],
   },
   {
     input: "./src/index.ts",

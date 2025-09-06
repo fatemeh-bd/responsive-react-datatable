@@ -10,7 +10,6 @@ import { CgClose, CgSearch } from "react-icons/cg";
 import { useQuery } from "@tanstack/react-query";
 import { notify } from "../../utils/notify/notify";
 import { BASE_URL, postMethod } from "../../api/callApi";
-import Paragraph from "../typography/Paragraph";
 import { numberWithCommas } from "../../utils/helper";
 import Pagination from "./Pagination";
 import { useSearchParams } from "react-router-dom";
@@ -31,7 +30,7 @@ interface CustomBody {
   [key: string]: string | number | boolean | null | undefined | Object;
 }
 export const rowRenderer = (
-  fn: (cell?: any, row?: any, index?: number) => React.ReactNode,
+  fn: (cell?: any, row?: any, index?: number) => React.ReactNode
 ) => {
   return (cell?: any, row?: any, index?: number) => fn(cell, row, index);
 };
@@ -41,7 +40,7 @@ export interface ColumnType {
   render?: (
     cell?: unknown,
     row?: Record<string, any>,
-    index?: number,
+    index?: number
   ) => React.ReactNode;
   width?: number;
   orderable?: boolean;
@@ -130,7 +129,7 @@ const Table: React.FC<TableProps> = ({
         onSelectChange?.([...(selectedIds || []), id]);
       }
     },
-    [selectedIds, onSelectChange, selectedKey],
+    [selectedIds, onSelectChange, selectedKey]
   );
   const handleOrderChange = useCallback((newOrder: OrderType) => {
     setOrder(newOrder ? [newOrder] : []);
@@ -224,7 +223,7 @@ const Table: React.FC<TableProps> = ({
           payload,
           undefined,
           undefined,
-          baseUrl,
+          baseUrl
         );
         onFetch?.(response);
         return response;
@@ -263,7 +262,7 @@ const Table: React.FC<TableProps> = ({
       const expireAt = Date.now() + 5 * 60 * 1000;
       sessionStorage.setItem(
         key,
-        JSON.stringify({ value: searchValue, expireAt }),
+        JSON.stringify({ value: searchValue, expireAt })
       );
     }
   }, [searchValue, saveSearch, tableName]);
@@ -272,7 +271,7 @@ const Table: React.FC<TableProps> = ({
         if (!item.isFilter) return count;
         const { noRefresh, isFilter, ...rest } = item;
         const hasValue = Object.values(rest).some(
-          (val) => val !== null && val !== undefined && val !== "",
+          (val) => val !== null && val !== undefined && val !== ""
         );
         return hasValue ? count + 1 : count;
       }, 0)
@@ -316,7 +315,7 @@ const Table: React.FC<TableProps> = ({
                         newParams.delete("page");
                         return newParams;
                       },
-                      { replace: true },
+                      { replace: true }
                     );
                   }
                 }}
@@ -372,7 +371,7 @@ const Table: React.FC<TableProps> = ({
           pageSize={pageSizeState}
         />
         {tableRows?.recordsFiltered > 0 && (
-          <Paragraph
+          <p
             themeType="secondary"
             size="md"
             className="sm:mr-auto w-fit font-medium"
@@ -380,10 +379,10 @@ const Table: React.FC<TableProps> = ({
             نمایش {(Number(pageNum) - 1) * pageSizeState + 1} تا{" "}
             {Math.min(
               Number(pageNum) * pageSizeState,
-              tableRows?.recordsFiltered,
+              tableRows?.recordsFiltered
             )}{" "}
             از {numberWithCommas(tableRows?.recordsFiltered)} رکورد
-          </Paragraph>
+          </p>
         )}
       </div>
       {isMobile && (
