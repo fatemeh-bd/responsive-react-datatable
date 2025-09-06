@@ -1,6 +1,6 @@
 {
   "name": "responsive-react-datatable",
-  "version": "1.3.7",
+  "version": "0.0.1",
   "description": "A highly customizable React component for image selection, upload, and cropping with progress indicators and responsive design",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -34,6 +34,13 @@
     "email": "baridaryan@gmail.com",
     "url": "https://github.com/fatemeh-bd"
   },
+  "contributors": [
+    {
+      "name": "Zephinax",
+      "email": "zephinax@gmail.com",
+      "url": "https://github.com/Zephinax"
+    }
+  ],
   "license": "MIT",
   "peerDependencies": {
     "react": ">=16.8",
