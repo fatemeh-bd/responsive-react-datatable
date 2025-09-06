@@ -9,19 +9,19 @@
     "dist",
     "README.md"
   ],
-  "homepage": "https://zephinax.github.io/ReactPictureSelector",
+  "homepage": "https://github.com/fatemeh-bd/responsive-react-datatable",
   "bugs": {
-    "url": "https://github.com/Zephinax/PictureSelector/issues",
-    "email": "zephinax@gmail.com"
+    "url": "https://github.com/fatemeh-bd/responsive-react-datatable/issues",
+    "email": "baridaryan@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Zephinax/PictureSelector.git",
+    "url": "https://github.com/fatemeh-bd/responsive-react-datatable",
     "directory": "/"
   },
   "funding": {
     "type": "individual",
-    "url": "https://github.com/sponsors/Zephinax"
+    "url": "https://github.com/sponsors/fatemeh-bd"
   },
   "scripts": {
     "rollup": "rollup -c --bundleConfigAsCjs",
@@ -30,9 +30,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": {
-    "name": "Zephinax",
-    "email": "zephinax@gmail.com",
-    "url": "https://github.com/Zephinax"
+    "name": "fatemeh daryan",
+    "email": "baridaryan@gmail.com",
+    "url": "https://github.com/fatemeh-bd"
   },
   "license": "MIT",
   "peerDependencies": {
