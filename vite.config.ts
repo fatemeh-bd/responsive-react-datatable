@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/ReactPictureSelector/",
+  base: "/responsive-react-datatable/",
   root: ".",
   server: {
     port: 5173,
