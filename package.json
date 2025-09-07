@@ -9,7 +9,7 @@
     "dist",
     "README.md"
   ],
-  "homepage": "https://github.com/fatemeh-bd/responsive-react-datatable",
+  "homepage": "https://fatemeh-bd.github.io/responsive-react-datatable",
   "bugs": {
     "url": "https://github.com/fatemeh-bd/responsive-react-datatable/issues",
     "email": "baridaryan@gmail.com"
@@ -74,6 +74,7 @@
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^5.0.2",
     "autoprefixer": "^10.4.21",
+    "gh-pages": "^6.3.0",
     "postcss": "^8.5.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
