@@ -5,81 +5,47 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import Input from "../inputs/Input";
 import { CgClose, CgSearch } from "react-icons/cg";
 import { useQuery } from "@tanstack/react-query";
-import { notify } from "../../utils/notify/notify";
-import { BASE_URL, postMethod } from "../../api/callApi";
-import { numberWithCommas } from "../../utils/helper";
+// import { notify } from "../../utils/notify/notify";
+import { postMethod } from "./callApi";
+import { numberWithCommas } from "./utils";
 import Pagination from "./Pagination";
-import { useSearchParams } from "react-router-dom";
 import "./style.css";
 import PageSizeSelect from "./PageSizeSelect";
 import ResponsiveTable, { OrderType } from "./ResponsiveTable";
-import { useIsMobile } from "../../hooks/useIsMobile";
-import { BiFilterAlt } from "react-icons/bi";
-import Title from "../typography/Title";
-import Modal from "../modals/Modal";
-import MainButton from "../buttons/MainButton";
+import { useIsMobile } from "./useIsMobile";
+import { BiFilterAlt, BiTrash } from "react-icons/bi";
+// import Title from "../typography/Title";
+import Modal from "./Modal";
+import MainButton from "./MainButton";
+import Checkbox from "./CheckBox";
+import Input from "./Input";
+import { ColumnType, CustomBody, TableProps } from "./types";
 
-import Checkbox from "../inputs/CheckBox";
-import { TrashIcon } from "@heroicons/react/24/outline";
-interface CustomBody {
-  noRefresh?: boolean;
-  isFilter?: boolean;
-  [key: string]: string | number | boolean | null | undefined | Object;
-}
 export const rowRenderer = (
   fn: (cell?: any, row?: any, index?: number) => React.ReactNode
 ) => {
   return (cell?: any, row?: any, index?: number) => fn(cell, row, index);
 };
-export interface ColumnType {
-  data: string | null;
-  title: string;
-  render?: (
-    cell?: unknown,
-    row?: Record<string, any>,
-    index?: number
-  ) => React.ReactNode;
-  width?: number;
-  orderable?: boolean;
-  searchable?: boolean;
-  dontShowTitleInMobile?: boolean;
-  dontShowDataInMobile?: boolean;
-}
-interface TableProps {
-  columns: ColumnType[];
-  endpoint: string;
-  baseUrl?: string;
-  customBody?: CustomBody[];
-  pageSize?: number;
-  height?: string;
-  noSearch?: boolean;
-  tableName?: string;
-  deafaultSortBy?: string;
-  onFetch?: (data: any) => void;
-  saveSearch?: boolean;
-  searchPlaceholder?: string;
-  sortType?: "desc" | "asc";
-  actionButtonsLeft?: ReactNode;
-  filters?: ReactNode;
-  topFilter?: ReactNode;
-  title: string;
-  filterContainerClassName?: string;
-  topFilterContainerClassName?: string;
-  isSelectable?: boolean;
-  selectedIds?: any[];
-  onSelectChange?: (value: any) => void;
-  selectedKey?: string;
-  removeFilterKey?: string;
-  hasColumnOrder?: boolean;
-}
+
+const getSearchParams = () => {
+  if (typeof window === "undefined") return new URLSearchParams();
+  return new URLSearchParams(window.location.search);
+};
+
+const updateSearchParams = (params: URLSearchParams) => {
+  if (typeof window === "undefined") return;
+
+  const newUrl = `${window.location.pathname}?${params.toString()}`;
+  window.history.replaceState(null, "", newUrl);
+};
+
 export const defaultSize = 10;
 const Table: React.FC<TableProps> = ({
   columns = [],
   endpoint,
-  baseUrl = BASE_URL,
+  baseUrl = "BASE_URL",
   customBody = [],
   pageSize = defaultSize,
   height,
@@ -103,7 +69,15 @@ const Table: React.FC<TableProps> = ({
   removeFilterKey,
   hasColumnOrder,
 }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = getSearchParams();
+  const setSearchParams = useCallback(
+    (updater: (prev: URLSearchParams) => URLSearchParams) => {
+      const newParams = updater(getSearchParams());
+      updateSearchParams(newParams);
+    },
+    []
+  );
+
   const pageNum = searchParams?.get("page") || 1;
   const pageSizeInitial = Number(searchParams?.get("pageSize")) || pageSize;
   const isMobile = useIsMobile();
@@ -228,7 +202,7 @@ const Table: React.FC<TableProps> = ({
         onFetch?.(response);
         return response;
       } catch (error: any) {
-        notify(error?.message, "error");
+        // notify(error?.message, "error");
       }
     },
   });
@@ -283,9 +257,7 @@ const Table: React.FC<TableProps> = ({
         <div className={topFilterContainerClassName}>{topFilter}</div>
       )}
       <div className="flex items-start gap-2 justify-between mb-2 max-md:items-center flex-wrap-reverse">
-        {title && (
-          <Title className="md:hidden max-sm:!text-base">{title}</Title>
-        )}
+        {title && <h1 className="md:hidden max-sm:!text-base">{title}</h1>}
 
         {isMobile && (filters || topFilter) && (
           <button
@@ -306,17 +278,14 @@ const Table: React.FC<TableProps> = ({
             <div className="max-md:w-full">
               <Input
                 value={searchValue}
-                onChange={(e) => {
+                onChange={(e: any) => {
                   setSearchValue(e.target.value);
-                  if (searchParams?.get("page")) {
-                    setSearchParams(
-                      (prev) => {
-                        const newParams = new URLSearchParams(prev);
-                        newParams.delete("page");
-                        return newParams;
-                      },
-                      { replace: true }
-                    );
+                  if (getSearchParams().get("page")) {
+                    setSearchParams((prev: URLSearchParams) => {
+                      const newParams = new URLSearchParams(prev);
+                      newParams.delete("page");
+                      return newParams;
+                    });
                   }
                 }}
                 placeholder={searchPlaceholder}
@@ -347,6 +316,11 @@ const Table: React.FC<TableProps> = ({
               pageSize={pageSizeInitial}
               onPageSizeChange={(newSize) => {
                 setPageSizeState(newSize);
+                setSearchParams((prev) => {
+                  const newParams = new URLSearchParams(prev);
+                  newParams.set("pageSize", newSize.toString());
+                  return newParams;
+                });
               }}
             />
           )}
@@ -371,11 +345,7 @@ const Table: React.FC<TableProps> = ({
           pageSize={pageSizeState}
         />
         {tableRows?.recordsFiltered > 0 && (
-          <p
-            themeType="secondary"
-            size="md"
-            className="sm:mr-auto w-fit font-medium"
-          >
+          <p className="sm:mr-auto w-fit font-medium">
             نمایش {(Number(pageNum) - 1) * pageSizeState + 1} تا{" "}
             {Math.min(
               Number(pageNum) * pageSizeState,
@@ -415,17 +385,13 @@ const Table: React.FC<TableProps> = ({
             full
             theme="error"
             outline
-            Icon={TrashIcon}
+            Icon={BiTrash}
             onClick={() => {
-              const newParams = new URLSearchParams(searchParams);
-              Array.from(newParams.keys()).forEach((key) => {
-                newParams.delete(key);
-              });
-              setSearchParams(newParams);
+              const newParams = new URLSearchParams();
+              setSearchParams(() => newParams);
               if (removeFilterKey) {
                 sessionStorage.removeItem(removeFilterKey);
               }
-
               location.reload();
             }}
           >
