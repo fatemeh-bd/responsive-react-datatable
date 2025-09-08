@@ -1,15 +1,15 @@
-import { ColumnType } from "./Table";
-import BoxCell from "./BoxCell";
-import LoaderScreen from "./LoaderScreen";
+import BoxCell from "./requirements/BoxCell";
+import LoaderScreen from "./requirements/LoaderScreen";
 import React, { useState, useRef, useEffect } from "react";
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
-import { useIsMobile } from "./useIsMobile";
+import { useIsMobile } from "./requirements/useIsMobile";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import Skeleton from "./Skeleton";
+import Skeleton from "./requirements/Skeleton";
 import { Virtual } from "swiper/modules";
+import { ColumnType } from "./requirements/types";
 
 export type OrderType = {
   column: number;

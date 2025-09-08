@@ -11,7 +11,9 @@ const BoxCell = ({
     <div
       title={tooltip}
       // style={{ width: `auto` }}
-      className={`block truncate mx-auto print:line-clamp-none print:text-wrap m-auto text-center ${lineClamp} ${className || ""} ${visible ? "!overflow-visible h-auto" : ""}`}
+      className={`block truncate mx-auto print:line-clamp-none print:text-wrap m-auto text-center ${lineClamp} ${
+        className || ""
+      } ${visible ? "!overflow-visible h-auto" : ""}`}
     >
       {children}
     </div>

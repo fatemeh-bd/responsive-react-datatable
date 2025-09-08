@@ -3,7 +3,7 @@ import {
   MdOutlineArrowBackIos,
   MdOutlineArrowForwardIos,
 } from "react-icons/md";
-import { useQueryParams } from "./useQueryParams";
+import { useQueryParams } from "./requirements/useQueryParams";
 
 interface PaginationProps {
   totalItems: number;

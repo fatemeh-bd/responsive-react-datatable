@@ -1,27 +1,21 @@
-import React, {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { CgClose, CgSearch } from "react-icons/cg";
 import { useQuery } from "@tanstack/react-query";
 // import { notify } from "../../utils/notify/notify";
-import { postMethod } from "./callApi";
-import { numberWithCommas } from "./utils";
+import { postMethod } from "./requirements/callApi";
+import { numberWithCommas } from "./requirements/utils";
 import Pagination from "./Pagination";
 import "./style.css";
 import PageSizeSelect from "./PageSizeSelect";
 import ResponsiveTable, { OrderType } from "./ResponsiveTable";
-import { useIsMobile } from "./useIsMobile";
+import { useIsMobile } from "./requirements/useIsMobile";
 import { BiFilterAlt, BiTrash } from "react-icons/bi";
 // import Title from "../typography/Title";
-import Modal from "./Modal";
-import MainButton from "./MainButton";
-import Checkbox from "./CheckBox";
-import Input from "./Input";
-import { ColumnType, CustomBody, TableProps } from "./types";
+import Modal from "./requirements/Modal";
+import MainButton from "./requirements/MainButton";
+import Checkbox from "./requirements/CheckBox";
+import Input from "./requirements/Input";
+import { ColumnType, CustomBody, TableProps } from "./requirements/types";
 
 export const rowRenderer = (
   fn: (cell?: any, row?: any, index?: number) => React.ReactNode
