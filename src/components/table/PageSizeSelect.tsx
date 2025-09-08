@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { inputClass } from "./utils";
+import { inputClass } from "./requirements/utils";
 import { BiChevronDown } from "react-icons/bi";
 
 const PageSizeSelect = ({

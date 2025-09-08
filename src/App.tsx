@@ -1,6 +1,6 @@
 import React from "react";
 import Table from "./components/table/Table";
-import { ColumnType } from "./components/table/types";
+import { ColumnType } from "./components/table/requirements/types";
 
 const App: React.FC = () => {
   const columns: ColumnType[] = [
