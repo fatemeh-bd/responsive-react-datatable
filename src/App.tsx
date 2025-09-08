@@ -34,7 +34,7 @@ const App: React.FC = () => {
     },
   ];
   return (
-    <div className="min-h-screen w-screen  p-6 bg-black">
+    <div className="min-h-screen w-screen  p-6">
       <Table columns={columns} endpoint="endpoint" title="title" />
     </div>
   );
