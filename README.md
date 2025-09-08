@@ -1,1 +1,1 @@
-# responsive-react-datatable
+# Responsive React Datatable
