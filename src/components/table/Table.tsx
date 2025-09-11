@@ -1,21 +1,20 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { CgClose, CgSearch } from "react-icons/cg";
 import { useQuery } from "@tanstack/react-query";
-// import { notify } from "../../utils/notify/notify";
 import { postMethod } from "./requirements/callApi";
 import { numberWithCommas } from "./requirements/utils";
 import Pagination from "./Pagination";
 import "./style.css";
 import PageSizeSelect from "./PageSizeSelect";
-import ResponsiveTable, { OrderType } from "./ResponsiveTable";
+import ResponsiveTable, { OrderType, TableConfig } from "./ResponsiveTable";
 import { useIsMobile } from "./requirements/useIsMobile";
 import { BiFilterAlt, BiTrash } from "react-icons/bi";
-// import Title from "../typography/Title";
 import Modal from "./requirements/Modal";
 import MainButton from "./requirements/MainButton";
 import Checkbox from "./requirements/CheckBox";
 import Input from "./requirements/Input";
 import { ColumnType, CustomBody, TableProps } from "./requirements/types";
+import mockData from "./mockData.json";
 
 export const rowRenderer = (
   fn: (cell?: any, row?: any, index?: number) => React.ReactNode
@@ -36,7 +35,13 @@ const updateSearchParams = (params: URLSearchParams) => {
 };
 
 export const defaultSize = 10;
-const Table: React.FC<TableProps> = ({
+
+interface ExtendedTableProps extends TableProps {
+  isTestMode?: boolean; // prop جدید برای فعال‌سازی حالت تست
+  tableConfig?: TableConfig; // prop جدید برای کانفیگ جدول
+}
+
+const Table: React.FC<ExtendedTableProps> = ({
   columns = [],
   endpoint,
   baseUrl = "BASE_URL",
@@ -62,6 +67,8 @@ const Table: React.FC<TableProps> = ({
   selectedKey = "id",
   removeFilterKey,
   hasColumnOrder,
+  isTestMode = false, // پیش‌فرض غیرفعال
+  tableConfig = {}, // کانفیگ جدول با پیش‌فرض خالی
 }) => {
   const searchParams = getSearchParams();
   const setSearchParams = useCallback(
@@ -86,6 +93,7 @@ const Table: React.FC<TableProps> = ({
       name: deafaultSortBy,
     },
   ]);
+
   const handleCheckboxChange = useCallback(
     (row: any) => {
       const id = row?.[selectedKey];
@@ -99,6 +107,7 @@ const Table: React.FC<TableProps> = ({
     },
     [selectedIds, onSelectChange, selectedKey]
   );
+
   const handleOrderChange = useCallback((newOrder: OrderType) => {
     setOrder(newOrder ? [newOrder] : []);
   }, []);
@@ -141,6 +150,7 @@ const Table: React.FC<TableProps> = ({
     pageSizeState,
     endpoint,
   ]);
+
   const refreshableCustomBody = Array.isArray(customBody)
     ? customBody.filter((item) => !item.noRefresh)
     : [];
@@ -160,41 +170,72 @@ const Table: React.FC<TableProps> = ({
     refetchIntervalInBackground: false,
     queryFn: async () => {
       try {
-        const makeCurrentCols = columnsWithRow
-          ?.filter((i) => i.data !== null)
-          ?.map((item) => ({
-            data: item?.data,
-            name: item?.data,
-            searchable: item?.searchable,
-            orderable: item?.orderable,
-            search: { value: "", regex: false, fixed: [] },
-          }));
+        if (isTestMode) {
+          // در حالت تست، داده‌ها از فایل JSON خوانده می‌شوند
+          const filteredData = mockData.data.filter((row) =>
+            debouncedSearch
+              ? Object.values(row).some((value) =>
+                  String(value)
+                    .toLowerCase()
+                    .includes(debouncedSearch.toLowerCase())
+                )
+              : true
+          );
 
-        let payload: Record<string, any> = {
-          draw: Number(pageNum),
-          columns: makeCurrentCols,
-          order: order || [],
-          start: (Number(pageNum) - 1) * pageSizeState,
-          length: pageSizeState,
-          search: { value: debouncedSearch || "", regex: false, fixed: [] },
-        };
+          // اعمال صفحه‌بندی
+          const start = (Number(pageNum) - 1) * pageSizeState;
+          const end = start + pageSizeState;
+          const paginatedData = filteredData.slice(start, end);
 
-        payloadCustomBody.forEach((item) => {
-          const { noRefresh, isFilter, ...rest } = item;
-          Object.assign(payload, rest);
-        });
-        if (openFilter) {
-          setOpenFilter(false);
+          // شبیه‌سازی پاسخ API
+          const response = {
+            data: paginatedData,
+            recordsFiltered: filteredData.length,
+            recordsTotal: mockData.data.length,
+          };
+
+          onFetch?.(response);
+          return response;
+        } else {
+          // حالت اصلی با فراخوانی API
+          const makeCurrentCols = columnsWithRow
+            ?.filter((i) => i.data !== null)
+            ?.map((item) => ({
+              data: item?.data,
+              name: item?.data,
+              searchable: item?.searchable,
+              orderable: item?.orderable,
+              search: { value: "", regex: false, fixed: [] },
+            }));
+
+          let payload: Record<string, any> = {
+            draw: Number(pageNum),
+            columns: makeCurrentCols,
+            order: order || [],
+            start: (Number(pageNum) - 1) * pageSizeState,
+            length: pageSizeState,
+            search: { value: debouncedSearch || "", regex: false, fixed: [] },
+          };
+
+          payloadCustomBody.forEach((item) => {
+            const { noRefresh, isFilter, ...rest } = item;
+            Object.assign(payload, rest);
+          });
+
+          if (openFilter) {
+            setOpenFilter(false);
+          }
+
+          const response = await postMethod(
+            endpoint,
+            payload,
+            undefined,
+            undefined,
+            baseUrl
+          );
+          onFetch?.(response);
+          return response;
         }
-        const response = await postMethod(
-          endpoint,
-          payload,
-          undefined,
-          undefined,
-          baseUrl
-        );
-        onFetch?.(response);
-        return response;
       } catch (error: any) {
         // notify(error?.message, "error");
       }
@@ -208,6 +249,7 @@ const Table: React.FC<TableProps> = ({
 
     return () => clearTimeout(handler);
   }, [searchValue, setSearchParams]);
+
   useEffect(() => {
     if (saveSearch && tableName) {
       const key = `search_${tableName}`;
@@ -234,6 +276,7 @@ const Table: React.FC<TableProps> = ({
       );
     }
   }, [searchValue, saveSearch, tableName]);
+
   const activeFilterCount = Array.isArray(customBody)
     ? customBody.reduce((count, item) => {
         if (!item.isFilter) return count;
@@ -331,6 +374,7 @@ const Table: React.FC<TableProps> = ({
             : `calc(${pageSize * 51.15}px)`
         }
         onOrderChange={handleOrderChange}
+        config={tableConfig} // پاس دادن کانفیگ به ResponsiveTable
       />
 
       <div className="flex items-center max-sm:justify-center justify-between gap-2 mt-2 flex-wrap-reverse">
@@ -363,7 +407,6 @@ const Table: React.FC<TableProps> = ({
       <Modal
         size="lg"
         title="فیلتر ها"
-        // childrenClass="!h-[80svh]"
         isOpen={openFilter}
         onClose={() => setOpenFilter(false)}
       >
