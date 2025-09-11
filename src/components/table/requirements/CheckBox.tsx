@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import "./checkboxStyle.css";
+import "./checkBoxStyle.css";
 
 interface CheckboxProps {
   label?: string;
@@ -24,7 +24,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       disabled = false,
       defaultChecked,
     },
-    ref,
+    ref
   ) => (
     <label className={`${className} checkbox`}>
       <input
@@ -41,7 +41,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       <span className="checkbox-control"></span>
       <span className="checkbox-label">{label}</span>
     </label>
-  ),
+  )
 );
 
 Checkbox.displayName = "Checkbox";
