@@ -370,7 +370,7 @@ const Table: React.FC<ExtendedTableProps> = ({
             : `calc(${pageSize * 51.15}px)`
         }
         onOrderChange={handleOrderChange}
-        config={tableConfig} // پاس دادن کانفیگ به ResponsiveTable
+        config={tableConfig}
       />
 
       <div className="flex items-center max-sm:justify-center justify-between gap-2 mt-2 flex-wrap-reverse">
