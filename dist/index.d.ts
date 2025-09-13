@@ -43,6 +43,41 @@ interface CustomBody {
     [key: string]: string | number | boolean | null | undefined | Object;
 }
 
-declare const _default: React.NamedExoticComponent<TableProps>;
+type TableConfig = {
+    borderColor?: string;
+    borderRadius?: string;
+    bgColor?: string;
+    shadowClass?: string;
+    textSecondaryColor?: string;
+    textSecondaryLightColor?: string;
+    textErrorColor?: string;
+    headerTextColor?: string;
+    headerBorderColor?: string;
+    headerBgColor?: string;
+    headerHoverClass?: string;
+    rowBorderColor?: string;
+    rowHoverBgColor?: string;
+    skeletonBgColor?: string;
+    noDataTextColor?: string;
+    noDataBgColor?: string;
+    sortIconActiveColor?: string;
+    sortIconInactiveColor?: string;
+    mobileCardBorderColor?: string;
+    mobileCardBgColor?: string;
+    mobileTitleColor?: string;
+    mobileContentColor?: string;
+    loaderBgColor?: string;
+    loaderSrc?: string;
+    loaderWidth?: string | number;
+    loaderHeight?: string | number;
+    loaderClassName?: string;
+    loaderZIndex?: number;
+};
+
+interface ExtendedTableProps extends TableProps {
+    isTestMode?: boolean;
+    tableConfig?: TableConfig;
+}
+declare const _default: React.NamedExoticComponent<ExtendedTableProps>;
 
 export { _default as default };
