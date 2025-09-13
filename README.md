@@ -16,7 +16,7 @@ A reusable and responsive table component for React applications, designed to di
 ## Installation
 
 ```bash
-npm install
+npm i responsive-react-datatable
 ```
 
 Ensure dependencies like `react-icons` and custom components (`Pagination`, `ResponsiveTable`, `PageSizeSelect`, `Modal`, `MainButton`, `Checkbox`, `Input`) are installed.
@@ -24,7 +24,7 @@ Ensure dependencies like `react-icons` and custom components (`Pagination`, `Res
 ## Usage
 
 ```jsx
-import Table from "./Table";
+import Table from "responsive-react-datatable";
 
 const columns = [
   { data: "name", title: "نام", searchable: true, orderable: true },
