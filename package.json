@@ -1,6 +1,6 @@
 {
   "name": "responsive-react-datatable",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A highly customizable React component for image selection, upload, and cropping with progress indicators and responsive design",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
