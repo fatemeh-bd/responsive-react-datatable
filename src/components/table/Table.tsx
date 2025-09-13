@@ -13,7 +13,7 @@ import Modal from "./requirements/Modal";
 import MainButton from "./requirements/MainButton";
 import Checkbox from "./requirements/CheckBox";
 import Input from "./requirements/Input";
-import { ColumnType, CustomBody, TableProps } from "./requirements/types";
+import { ColumnType, TableProps } from "./requirements/types";
 import mockData from "./mockData.json";
 
 export const rowRenderer = (
@@ -37,8 +37,8 @@ const updateSearchParams = (params: URLSearchParams) => {
 export const defaultSize = 10;
 
 interface ExtendedTableProps extends TableProps {
-  isTestMode?: boolean; // prop جدید برای فعال‌سازی حالت تست
-  tableConfig?: TableConfig; // prop جدید برای کانفیگ جدول
+  isTestMode?: boolean;
+  tableConfig?: TableConfig;
 }
 
 const Table: React.FC<ExtendedTableProps> = ({
@@ -67,8 +67,8 @@ const Table: React.FC<ExtendedTableProps> = ({
   selectedKey = "id",
   removeFilterKey,
   hasColumnOrder,
-  isTestMode = false, // پیش‌فرض غیرفعال
-  tableConfig = {}, // کانفیگ جدول با پیش‌فرض خالی
+  isTestMode = false,
+  tableConfig = {},
 }) => {
   const searchParams = getSearchParams();
   const setSearchParams = useCallback(
@@ -171,7 +171,6 @@ const Table: React.FC<ExtendedTableProps> = ({
     queryFn: async () => {
       try {
         if (isTestMode) {
-          // در حالت تست، داده‌ها از فایل JSON خوانده می‌شوند
           const filteredData = mockData.data.filter((row) =>
             debouncedSearch
               ? Object.values(row).some((value) =>
@@ -182,12 +181,10 @@ const Table: React.FC<ExtendedTableProps> = ({
               : true
           );
 
-          // اعمال صفحه‌بندی
           const start = (Number(pageNum) - 1) * pageSizeState;
           const end = start + pageSizeState;
           const paginatedData = filteredData.slice(start, end);
 
-          // شبیه‌سازی پاسخ API
           const response = {
             data: paginatedData,
             recordsFiltered: filteredData.length,
@@ -197,7 +194,6 @@ const Table: React.FC<ExtendedTableProps> = ({
           onFetch?.(response);
           return response;
         } else {
-          // حالت اصلی با فراخوانی API
           const makeCurrentCols = columnsWithRow
             ?.filter((i) => i.data !== null)
             ?.map((item) => ({

@@ -40,12 +40,12 @@ export type TableConfig = {
   mobileCardBgColor?: string;
   mobileTitleColor?: string;
   mobileContentColor?: string;
-  loaderBgColor?: string; // رنگ پس‌زمینه لودر
-  loaderSrc?: string; // مسیر تصویر لودینگ
-  loaderWidth?: string | number; // عرض تصویر لودینگ
-  loaderHeight?: string | number; // ارتفاع تصویر لودینگ
-  loaderClassName?: string; // کلاس‌های اضافی برای تصویر لودینگ
-  loaderZIndex?: number; // z-index برای لودر
+  loaderBgColor?: string;
+  loaderSrc?: string;
+  loaderWidth?: string | number;
+  loaderHeight?: string | number;
+  loaderClassName?: string;
+  loaderZIndex?: number;
 };
 
 const ResponsiveTable = ({
@@ -55,7 +55,7 @@ const ResponsiveTable = ({
   pageSize,
   maxHeight,
   onOrderChange,
-  config = {}, // prop جدید برای کانفیگ
+  config = {},
 }: {
   columns: ColumnType[];
   isLoading: boolean;
@@ -63,12 +63,10 @@ const ResponsiveTable = ({
   pageSize: number;
   maxHeight?: string;
   onOrderChange?: (order: OrderType) => void;
-  config?: TableConfig; // تایپ کانفیگ
+  config?: TableConfig;
 }) => {
   const isMobile = useIsMobile();
   const [order, setOrder] = useState<OrderType>(null);
-
-  // مقادیر پیش‌فرض کانفیگ
   const defaultConfig: Required<TableConfig> = {
     borderColor: "border-secondary-400",
     borderRadius: "rounded-xl",
@@ -92,16 +90,15 @@ const ResponsiveTable = ({
     mobileCardBgColor: "bg-white",
     mobileTitleColor: "text-secondary-600",
     mobileContentColor: "text-gray-900",
-    loaderBgColor: "rgba(42, 42, 42, 0.08)", // پیش‌فرض از LoaderScreen
-    loaderSrc: "/loading.gif", // پیش‌فرض از LoaderScreen
-    loaderWidth: 200, // پیش‌فرض از LoaderScreen
-    loaderHeight: 200, // پیش‌فرض از LoaderScreen
-    loaderClassName: "md:translate-x-[-80px]", // پیش‌فرض از LoaderScreen
-    loaderZIndex: 9999, // پیش‌فرض از LoaderScreen
-    ...config, // اورراید با مقادیر ارسالی
+    loaderBgColor: "rgba(42, 42, 42, 0.08)",
+    loaderSrc: "/loading.gif",
+    loaderWidth: 200,
+    loaderHeight: 200,
+    loaderClassName: "md:translate-x-[-80px]",
+    loaderZIndex: 9999,
+    ...config,
   };
 
-  // Refs for synchronizing scroll
   const headerContainerRef = useRef<HTMLDivElement>(null);
   const bodyContainerRef = useRef<HTMLDivElement>(null);
 
@@ -122,7 +119,6 @@ const ResponsiveTable = ({
     });
   };
 
-  // Synchronize horizontal scroll between header and body
   useEffect(() => {
     const bodyContainer = bodyContainerRef.current;
     const headerContainer = headerContainerRef.current;
@@ -247,7 +243,6 @@ const ResponsiveTable = ({
     >
       <div className="relative">
         <>
-          {/* Header table (fixed) */}
           <div
             ref={headerContainerRef}
             className="overflow-x-auto overflow-y-hidden scrollbar-hide"
