@@ -236,19 +236,14 @@ const Table: React.FC<ExtendedTableProps> = ({
       setIsFetching(false);
     }
   }, [
-    tableName,
     pageNum,
     debouncedSearch,
     order,
     pageSizeState,
-    refreshableCustomBody,
+    JSON.stringify(refreshableCustomBody),
     isTestMode,
-    columnsWithRow,
-    payloadCustomBody,
-    openFilter,
     endpoint,
     baseUrl,
-    onFetch,
   ]);
 
   // Effect to fetch data when dependencies change
