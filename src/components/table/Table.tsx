@@ -15,6 +15,8 @@ import Input from "./requirements/Input";
 import { ColumnType, TableProps } from "./requirements/types";
 import mockData from "./mockData.json";
 
+type UpdateOptions = { replace?: boolean };
+
 export const rowRenderer = (
   fn: (cell?: any, row?: any, index?: number) => React.ReactNode
 ) => {
@@ -26,11 +28,15 @@ const getSearchParams = () => {
   return new URLSearchParams(window.location.search);
 };
 
-const updateSearchParams = (params: URLSearchParams) => {
+const updateSearchParams = (params: URLSearchParams, replace = false) => {
   if (typeof window === "undefined") return;
 
   const newUrl = `${window.location.pathname}?${params.toString()}`;
-  window.history.replaceState(null, "", newUrl);
+  if (replace) {
+    window.history.replaceState(null, "", newUrl);
+  } else {
+    window.history.pushState(null, "", newUrl);
+  }
 };
 
 export const defaultSize = 10;
@@ -57,7 +63,6 @@ const Table: React.FC<ExtendedTableProps> = ({
   actionButtonsLeft,
   filters,
   topFilter,
-  title,
   topFilterContainerClassName = "sm:mb-4 flex items-center flex-wrap md:gap-2 gap-3 [&>div]:md:w-[200px] [&>div]:w-full",
   filterContainerClassName = "flex flex-wrap md:gap-2 gap-3 [&>div]:md:w-[200px] [&>div]:w-full",
   isSelectable = false,
@@ -70,17 +75,26 @@ const Table: React.FC<ExtendedTableProps> = ({
   tableConfig = {},
 }) => {
   const searchParams = getSearchParams();
+
   const setSearchParams = useCallback(
-    (updater: (prev: URLSearchParams) => URLSearchParams) => {
+    (
+      updater: (prev: URLSearchParams) => URLSearchParams,
+      options?: UpdateOptions
+    ) => {
       const newParams = updater(getSearchParams());
-      updateSearchParams(newParams);
+      updateSearchParams(newParams, options?.replace);
     },
     []
   );
-
-  const pageNum = searchParams?.get("page") || 1;
   const pageSizeInitial = Number(searchParams?.get("pageSize")) || pageSize;
   const isMobile = useIsMobile();
+  const [dynamicPageSize, setDynamicPageSize] = useState(
+    isMobile ? pageSizeInitial : 0
+  );
+  const [tableHeightPageSize, setTableHeightPageSize] = useState(
+    isMobile ? pageSizeInitial : 0
+  );
+  const pageNum = searchParams?.get("page") || 1;
   const [searchValue, setSearchValue] = useState("");
   const [openFilter, setOpenFilter] = useState(false);
   const [pageSizeState, setPageSizeState] = useState(pageSizeInitial);
@@ -132,7 +146,7 @@ const Table: React.FC<ExtendedTableProps> = ({
                 />
               )}
               {!isMobile &&
-                (Number(pageNum) - 1) * pageSizeState + (index! + 1)}
+                (Number(pageNum) - 1) * dynamicPageSize + (index! + 1)}
             </span>
           );
         }),
@@ -151,7 +165,7 @@ const Table: React.FC<ExtendedTableProps> = ({
     handleCheckboxChange,
     isMobile,
     pageNum,
-    pageSizeState,
+    dynamicPageSize,
     endpoint,
   ]);
 
@@ -264,13 +278,9 @@ const Table: React.FC<ExtendedTableProps> = ({
       const key = `search_${tableName}`;
       const savedData = sessionStorage.getItem(key);
       if (savedData) {
-        const { value, expireAt } = JSON.parse(savedData);
-        if (Date.now() < expireAt) {
-          setSearchValue(value);
-          setDebouncedSearch(value);
-        } else {
-          sessionStorage.removeItem(key);
-        }
+        const { value } = JSON.parse(savedData);
+        setSearchValue(value);
+        setDebouncedSearch(value);
       }
     }
   }, [saveSearch, tableName]);
@@ -278,11 +288,7 @@ const Table: React.FC<ExtendedTableProps> = ({
   useEffect(() => {
     if (saveSearch && tableName) {
       const key = `search_${tableName}`;
-      const expireAt = Date.now() + 5 * 60 * 1000;
-      sessionStorage.setItem(
-        key,
-        JSON.stringify({ value: searchValue, expireAt })
-      );
+      sessionStorage.setItem(key, JSON.stringify({ value: searchValue }));
     }
   }, [searchValue, saveSearch, tableName]);
 
@@ -314,39 +320,37 @@ const Table: React.FC<ExtendedTableProps> = ({
 
   return (
     <div>
-      {!isMobile && (
-        <div className={topFilterContainerClassName}>{topFilter}</div>
+      {!isMobile && topFilter && (
+        <div className={topFilterContainerClassName} id="topFilter">
+          {topFilter}
+        </div>
       )}
-      <div className="flex items-start gap-2 justify-between mb-2 max-md:items-center flex-wrap-reverse">
-        {title && <h1 className="md:hidden max-sm:!text-base">{title}</h1>}
+      <div
+        id="filters"
+        className={`flex items-start gap-2 justify-between mb-2 max-md:items-center flex-wrap-reverse`}
+      >
+        {/* {title && (
+          <Title className="md:hidden max-sm:!text-base">{title}</Title>
+        )} */}
 
-        {isMobile && (filters || topFilter) && (
-          <button
-            onClick={() => setOpenFilter(true)}
-            className="relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 min-h-[38px] justify-center rounded-md"
-          >
-            {activeFilterCount > 0 && (
-              <span className="absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">
-                {activeFilterCount}
-              </span>
-            )}
-            فیلتر
-            <BiFilterAlt />
-          </button>
-        )}
-        <div className="flex md:items-start items-center gap-2 w-fit md:flex-wrap-reverse max-md:w-full max-md:mt-2">
+        <div
+          className={`flex md:items-start items-center md:gap-2 gap-3 w-fit md:flex-wrap-reverse max-md:w-full`}
+        >
           {!noSearch && (
             <div className="max-md:w-full">
               <Input
                 value={searchValue}
-                onChange={(e: any) => {
+                onChange={(e) => {
                   setSearchValue(e.target.value);
-                  if (getSearchParams().get("page")) {
-                    setSearchParams((prev: URLSearchParams) => {
-                      const newParams = new URLSearchParams(prev);
-                      newParams.delete("page");
-                      return newParams;
-                    });
+                  if (searchParams?.get("page")) {
+                    setSearchParams(
+                      (prev) => {
+                        const newParams = new URLSearchParams(prev);
+                        newParams.delete("page");
+                        return newParams;
+                      },
+                      { replace: true }
+                    );
                   }
                 }}
                 placeholder={searchPlaceholder}
@@ -361,27 +365,37 @@ const Table: React.FC<ExtendedTableProps> = ({
                   )
                 }
                 className="md:!w-[320px] !w-full [&>div]:!gap-1 [&>div]:!flex-row-reverse"
-                inputClassName="placeholder:!text-[10.5pt]"
+                inputClassName="placeholder:!text-[10.5pt] max-sm:placeholder:!text-[9pt]"
               />
             </div>
           )}
-          {!isMobile && (
+
+          {isMobile && (filters || topFilter) && (
+            <button
+              onClick={() => setOpenFilter(true)}
+              className="relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 min-h-[43px] justify-center rounded-md"
+            >
+              {activeFilterCount > 0 && (
+                <span className="absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">
+                  {activeFilterCount}
+                </span>
+              )}
+              فیلتر
+              <BiFilterAlt />
+            </button>
+          )}
+          {!isMobile && filters && (
             <div className={filterContainerClassName}>{filters}</div>
           )}
         </div>
-        <div className="flex items-center gap-3 flex-wrap max-md:justify-end max-md:!w-full">
+        <div className="flex items-center gap-3 flex-wrap max-sm:w-full justify-between">
           {actionButtonsLeft && actionButtonsLeft}
           {!isMobile && (
             <PageSizeSelect
-              initialPageSize={pageSize}
+              initialPageSize={tableHeightPageSize}
               pageSize={pageSizeInitial}
               onPageSizeChange={(newSize) => {
-                setPageSizeState(newSize);
-                setSearchParams((prev) => {
-                  const newParams = new URLSearchParams(prev);
-                  newParams.set("pageSize", newSize.toString());
-                  return newParams;
-                });
+                setDynamicPageSize(newSize);
               }}
             />
           )}
@@ -401,36 +415,43 @@ const Table: React.FC<ExtendedTableProps> = ({
         config={tableConfig}
       />
 
-      <div className="flex items-center max-sm:justify-center justify-between gap-2 mt-2 flex-wrap-reverse">
-        <Pagination
-          totalItems={tableRows?.recordsFiltered || 0}
-          pageSize={pageSizeState}
-        />
-        {tableRows?.recordsFiltered > 0 && (
-          <p className="sm:mr-auto w-fit font-medium">
-            نمایش {(Number(pageNum) - 1) * pageSizeState + 1} تا{" "}
-            {Math.min(
-              Number(pageNum) * pageSizeState,
-              tableRows?.recordsFiltered
-            )}{" "}
-            از {numberWithCommas(tableRows?.recordsFiltered)} رکورد
-          </p>
+      <div
+        className="max-md:flex items-start justify-between gap-4 flex-wrap w-full"
+        id="paging"
+      >
+        <div className="flex items-center max-sm:justify-center justify-between gap-2 md:mt-2 flex-wrap-reverse">
+          <Pagination
+            totalItems={tableRows?.recordsFiltered || 0}
+            pageSize={dynamicPageSize}
+          />
+          {tableRows?.recordsFiltered > 0 && !isMobile && (
+            <p className="sm:mr-auto w-fit font-medium">
+              نمایش {(Number(pageNum) - 1) * dynamicPageSize + 1} تا{" "}
+              {Math.min(
+                Number(pageNum) * dynamicPageSize,
+                tableRows?.recordsFiltered
+              )}{" "}
+              از {numberWithCommas(tableRows?.recordsFiltered)} رکورد
+            </p>
+          )}
+        </div>
+        {isMobile && tableRows?.data?.length > 0 && (
+          <div className="flex items-center gap-3 flex-wrap justify-center md:mt-4">
+            <PageSizeSelect
+              initialPageSize={tableHeightPageSize}
+              pageSize={pageSizeInitial}
+              onPageSizeChange={(newSize) => {
+                setDynamicPageSize(newSize);
+              }}
+            />
+          </div>
         )}
       </div>
-      {isMobile && (
-        <div className="flex items-center gap-3 flex-wrap justify-center mt-4 !w-full">
-          <PageSizeSelect
-            initialPageSize={pageSize}
-            pageSize={pageSizeInitial}
-            onPageSizeChange={(newSize) => {
-              setPageSizeState(newSize);
-            }}
-          />
-        </div>
-      )}
+
       <Modal
         size="lg"
         title="فیلتر ها"
+        // childrenClass="!h-[80svh]"
         isOpen={openFilter}
         onClose={() => setOpenFilter(false)}
       >
@@ -448,11 +469,18 @@ const Table: React.FC<ExtendedTableProps> = ({
             outline
             Icon={BiTrash}
             onClick={() => {
-              const newParams = new URLSearchParams();
-              setSearchParams(() => newParams);
+              setSearchParams(() => {
+                const newParams = getSearchParams();
+                Array.from(newParams.keys()).forEach((key) =>
+                  newParams.delete(key)
+                );
+                return newParams;
+              });
+
               if (removeFilterKey) {
                 sessionStorage.removeItem(removeFilterKey);
               }
+
               location.reload();
             }}
           >

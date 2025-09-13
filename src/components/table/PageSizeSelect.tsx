@@ -31,15 +31,13 @@ const PageSizeSelect = ({
 
   return (
     <div className="relative flex items-center gap-1">
-      نمایش
+      <span className="md:text-base text-xs">نمایش</span>
       <select
         value={size}
         onChange={handleChange}
-        className={`${inputClass} appearance-none pl-6 cursor-pointer`}
+        className={`${inputClass} appearance-none pl-6 cursor-pointer max-md:py-1 max-md:h-8 max-md:min-w-12 max-md:text-sm`}
       >
-        {initialPageSize && (
-          <option value={initialPageSize}>{initialPageSize}</option>
-        )}
+        <option value={initialPageSize}>{initialPageSize}</option>
         <option value={20}>20</option>
         <option value={50}>50</option>
         <option value={100}>100</option>

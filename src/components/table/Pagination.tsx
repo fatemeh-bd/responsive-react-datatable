@@ -1,9 +1,11 @@
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 import {
   MdOutlineArrowBackIos,
   MdOutlineArrowForwardIos,
 } from "react-icons/md";
 import { useQueryParams } from "./requirements/useQueryParams";
+import { useIsMobile } from "./requirements/useIsMobile";
+import { numberWithCommas } from "./requirements/utils";
 
 interface PaginationProps {
   totalItems: number;
@@ -22,7 +24,9 @@ const Pagination: React.FC<PaginationProps> = ({
   const { updateParams, getParams } = useQueryParams();
   const currentPage = Number(getParams(queryName)) || 1;
   const totalPages = Math.ceil(totalItems / pageSize);
-
+  const [pageInput, setPageInput] = useState(currentPage.toString());
+  const isMobile = useIsMobile();
+  const maxInputLength = totalPages.toString().length;
   const middlePages = useMemo(() => {
     let start = currentPage - 1;
     let end = currentPage + 1;
@@ -57,6 +61,37 @@ const Pagination: React.FC<PaginationProps> = ({
     [getParams, updateParams, queryName]
   );
 
+  const handleGoToPage = () => {
+    if (!pageInput) {
+      setPageInput(currentPage.toString());
+      return;
+    }
+    let page = parseInt(pageInput, 10);
+    if (isNaN(page) || page < 1) page = 1;
+    if (page > totalPages) page = totalPages;
+    if (page !== currentPage) {
+      updatePage(page);
+    } else {
+      setPageInput(currentPage.toString());
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, "");
+    if (value.length <= maxInputLength) {
+      setPageInput(value);
+    }
+  };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleGoToPage();
+    }
+  };
+
+  const handleBlur = () => {
+    handleGoToPage();
+  };
+
   const goToFirstPage = () => updatePage(1);
   const goToLastPage = () => updatePage(totalPages);
   const goToNextPage = () =>
@@ -65,8 +100,40 @@ const Pagination: React.FC<PaginationProps> = ({
 
   if (totalPages <= 1) return null;
 
-  return (
-    <nav className="w-fit" aria-label="صفحه‌بندی">
+  return isMobile ? (
+    <>
+      <button
+        type="button"
+        className={`${baseClass} size-[26px] px-0.5`}
+        disabled={currentPage === 1}
+        onClick={goToPrevPage}
+        aria-label="صفحه قبلی"
+      >
+        <MdOutlineArrowForwardIos className="size-3" />
+      </button>
+      <input
+        className="!w-[40px] text-center text-base !h-7 !py-0 outline-none border border-secondary-400 rounded-md p-0.5"
+        type="number"
+        inputMode="numeric"
+        value={pageInput}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+        onBlur={handleBlur}
+      />
+      <span className="text-sm text-secondary-600">/</span>
+      <span className="text-sm">{totalPages}</span>
+      <button
+        type="button"
+        className={`${baseClass} size-[26px] px-0.5`}
+        disabled={currentPage === totalPages}
+        onClick={goToNextPage}
+        aria-label="صفحه بعدی"
+      >
+        <MdOutlineArrowBackIos className="size-3" />
+      </button>
+    </>
+  ) : (
+    <nav className="w-fit" id="paging" aria-label="صفحه‌بندی">
       <div className="flex items-center flex-wrap gap-1">
         <button
           type="button"
@@ -118,7 +185,7 @@ const Pagination: React.FC<PaginationProps> = ({
             aria-label={`صفحه ${pageNum}`}
             aria-current={pageNum === currentPage ? "page" : undefined}
           >
-            {pageNum || ""}
+            {numberWithCommas(pageNum) || ""}
           </button>
         ))}
         {showRightEllipsis && (
@@ -140,7 +207,7 @@ const Pagination: React.FC<PaginationProps> = ({
           aria-label={`صفحه ${totalPages}`}
           aria-current={totalPages === currentPage ? "page" : undefined}
         >
-          {totalPages || ""}
+          {numberWithCommas(totalPages) || ""}
         </button>
         <button
           type="button"
