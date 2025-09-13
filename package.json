@@ -1,67 +1,23 @@
 {
   "name": "responsive-react-datatable",
   "version": "0.0.1",
-  "description": "A highly customizable React component for image selection, upload, and cropping with progress indicators and responsive design",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "README.md"
-  ],
-  "homepage": "https://fatemeh-bd.github.io/responsive-react-datatable",
-  "bugs": {
-    "url": "https://github.com/fatemeh-bd/responsive-react-datatable/issues",
-    "email": "baridaryan@gmail.com"
+  "author": {
+    "name": "fatemeh daryan",
+    "email": "baridaryan@gmail.com",
+    "url": "https://github.com/fatemeh-bd"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/fatemeh-bd/responsive-react-datatable",
     "directory": "/"
   },
-  "funding": {
-    "type": "individual",
-    "url": "https://github.com/sponsors/fatemeh-bd"
-  },
-  "scripts": {
-    "rollup": "rollup -c --bundleConfigAsCjs",
-    "dev": "vite",
-    "build": "vite build",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
-    "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": {
-    "name": "fatemeh daryan",
-    "email": "baridaryan@gmail.com",
-    "url": "https://github.com/fatemeh-bd"
-  },
-  "contributors": [
-    {
-      "name": "Zephinax",
-      "email": "zephinax@gmail.com",
-      "url": "https://github.com/Zephinax"
-    }
-  ],
-  "license": "MIT",
-  "peerDependencies": {
-    "react": ">=16.8",
-    "react-dom": ">=16.8"
-  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "dependencies": {
     "@tanstack/react-query": "^5.61.3",
     "axios": ">=0.22.0 <2",
     "react-icons": ">=4.7.0 <6",
     "swiper": "^11.2.10"
-  },
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^26.0.1",
@@ -70,14 +26,14 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@tailwindcss/postcss": "^4.1.13",
-    "@types/react": "^18.3.24",
-    "@types/react-dom": "^18.3.7",
+    "@types/react": "18.2.14",
+    "@types/react-dom": "18.2.7",
     "@vitejs/plugin-react": "^5.0.2",
     "autoprefixer": "^10.4.21",
     "gh-pages": "^6.3.0",
     "postcss": "^8.5.6",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "rollup": "^4.18.1",
     "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
@@ -87,6 +43,38 @@
     "typescript": "^5.5.3",
     "vite": "^7.1.4"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/fatemeh-bd/responsive-react-datatable/issues",
+    "email": "baridaryan@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Zephinax",
+      "email": "zephinax@gmail.com",
+      "url": "https://github.com/Zephinax"
+    }
+  ],
+  "description": "A highly customizable React component for image selection, upload, and cropping with progress indicators and responsive design",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/sponsors/fatemeh-bd"
+  },
+  "homepage": "https://fatemeh-bd.github.io/responsive-react-datatable",
   "keywords": [
     "react",
     "react-component",
@@ -107,12 +95,20 @@
     "image-editor",
     "react-library"
   ],
-  "engines": {
-    "node": ">=14.0.0",
-    "npm": ">=6.0.0"
-  },
+  "license": "MIT",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  }
+  },
+  "scripts": {
+    "rollup": "rollup -c --bundleConfigAsCjs",
+    "dev": "vite",
+    "build": "vite build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "sideEffects": false,
+  "types": "dist/index.d.ts"
 }
