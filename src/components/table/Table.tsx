@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { CgClose, CgSearch } from "react-icons/cg";
-import { useQuery } from "@tanstack/react-query";
 import { postMethod } from "./requirements/callApi";
 import { numberWithCommas } from "./requirements/utils";
 import Pagination from "./Pagination";
@@ -94,6 +93,11 @@ const Table: React.FC<ExtendedTableProps> = ({
     },
   ]);
 
+  // State for table data
+  const [tableRows, setTableRows] = useState<any>(null);
+  const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const handleCheckboxChange = useCallback(
     (row: any) => {
       const id = row?.[selectedKey];
@@ -157,86 +161,100 @@ const Table: React.FC<ExtendedTableProps> = ({
 
   const payloadCustomBody = customBody || [];
 
-  const { data: tableRows, isFetching } = useQuery({
-    queryKey: [
-      tableName,
-      pageNum,
-      debouncedSearch,
-      order,
-      pageSizeState,
-      refreshableCustomBody,
-    ],
-    refetchOnWindowFocus: false,
-    refetchIntervalInBackground: false,
-    queryFn: async () => {
-      try {
-        if (isTestMode) {
-          const filteredData = mockData.data.filter((row) =>
-            debouncedSearch
-              ? Object.values(row).some((value) =>
-                  String(value)
-                    .toLowerCase()
-                    .includes(debouncedSearch.toLowerCase())
-                )
-              : true
-          );
+  // Function to fetch data
+  const fetchTableData = useCallback(async () => {
+    try {
+      setIsFetching(true);
+      setError(null);
 
-          const start = (Number(pageNum) - 1) * pageSizeState;
-          const end = start + pageSizeState;
-          const paginatedData = filteredData.slice(start, end);
+      if (isTestMode) {
+        const filteredData = mockData.data.filter((row) =>
+          debouncedSearch
+            ? Object.values(row).some((value) =>
+                String(value)
+                  .toLowerCase()
+                  .includes(debouncedSearch.toLowerCase())
+              )
+            : true
+        );
 
-          const response = {
-            data: paginatedData,
-            recordsFiltered: filteredData.length,
-            recordsTotal: mockData.data.length,
-          };
+        const start = (Number(pageNum) - 1) * pageSizeState;
+        const end = start + pageSizeState;
+        const paginatedData = filteredData.slice(start, end);
 
-          onFetch?.(response);
-          return response;
-        } else {
-          const makeCurrentCols = columnsWithRow
-            ?.filter((i) => i.data !== null)
-            ?.map((item) => ({
-              data: item?.data,
-              name: item?.data,
-              searchable: item?.searchable,
-              orderable: item?.orderable,
-              search: { value: "", regex: false, fixed: [] },
-            }));
+        const response = {
+          data: paginatedData,
+          recordsFiltered: filteredData.length,
+          recordsTotal: mockData.data.length,
+        };
 
-          let payload: Record<string, any> = {
-            draw: Number(pageNum),
-            columns: makeCurrentCols,
-            order: order || [],
-            start: (Number(pageNum) - 1) * pageSizeState,
-            length: pageSizeState,
-            search: { value: debouncedSearch || "", regex: false, fixed: [] },
-          };
+        onFetch?.(response);
+        setTableRows(response);
+      } else {
+        const makeCurrentCols = columnsWithRow
+          ?.filter((i) => i.data !== null)
+          ?.map((item) => ({
+            data: item?.data,
+            name: item?.data,
+            searchable: item?.searchable,
+            orderable: item?.orderable,
+            search: { value: "", regex: false, fixed: [] },
+          }));
 
-          payloadCustomBody.forEach((item) => {
-            const { noRefresh, isFilter, ...rest } = item;
-            Object.assign(payload, rest);
-          });
+        let payload: Record<string, any> = {
+          draw: Number(pageNum),
+          columns: makeCurrentCols,
+          order: order || [],
+          start: (Number(pageNum) - 1) * pageSizeState,
+          length: pageSizeState,
+          search: { value: debouncedSearch || "", regex: false, fixed: [] },
+        };
 
-          if (openFilter) {
-            setOpenFilter(false);
-          }
+        payloadCustomBody.forEach((item) => {
+          const { noRefresh, isFilter, ...rest } = item;
+          Object.assign(payload, rest);
+        });
 
-          const response = await postMethod(
-            endpoint,
-            payload,
-            undefined,
-            undefined,
-            baseUrl
-          );
-          onFetch?.(response);
-          return response;
+        if (openFilter) {
+          setOpenFilter(false);
         }
-      } catch (error: any) {
-        // notify(error?.message, "error");
+
+        const response = await postMethod(
+          endpoint,
+          payload,
+          undefined,
+          undefined,
+          baseUrl
+        );
+        onFetch?.(response);
+        setTableRows(response);
       }
-    },
-  });
+    } catch (error: any) {
+      setError(error?.message || "خطا در دریافت داده‌ها");
+      console.error("API Error:", error);
+    } finally {
+      setIsFetching(false);
+    }
+  }, [
+    tableName,
+    pageNum,
+    debouncedSearch,
+    order,
+    pageSizeState,
+    refreshableCustomBody,
+    isTestMode,
+    columnsWithRow,
+    payloadCustomBody,
+    openFilter,
+    endpoint,
+    baseUrl,
+    onFetch,
+  ]);
+
+  // Effect to fetch data when dependencies change
+  useEffect(() => {
+    fetchTableData();
+  }, [fetchTableData]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -283,6 +301,21 @@ const Table: React.FC<ExtendedTableProps> = ({
         return hasValue ? count + 1 : count;
       }, 0)
     : 0;
+
+  // Show error if there's an error
+  if (error) {
+    return (
+      <div className="text-center py-4">
+        <p className="text-red-500">خطا: {error}</p>
+        <button
+          onClick={fetchTableData}
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          تلاش مجدد
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div>
