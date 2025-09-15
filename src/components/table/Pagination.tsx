@@ -6,6 +6,7 @@ import {
 import { useQueryParams } from "./requirements/useQueryParams";
 import { useIsMobile } from "./requirements/useIsMobile";
 import { numberWithCommas } from "./requirements/utils";
+import { useFZTableCSSVars } from "./contexts/FZTableThemeContext";
 
 interface PaginationProps {
   totalItems: number;
@@ -21,6 +22,7 @@ const Pagination: React.FC<PaginationProps> = ({
   pageSize,
   queryName = "page",
 }) => {
+  const vars = useFZTableCSSVars();
   const { updateParams, getParams } = useQueryParams();
   const currentPage = Number(getParams(queryName)) || 1;
   const totalPages = Math.ceil(totalItems / pageSize);

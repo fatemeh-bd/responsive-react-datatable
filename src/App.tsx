@@ -3,47 +3,6 @@ import Table from "./components/table/Table";
 import { ColumnType } from "./components/table/requirements/types";
 
 const App: React.FC = () => {
-  const tableConfig = {
-    // رنگ‌های اصلی
-    borderColor: "border-gray-200",
-    borderRadius: "rounded-xl",
-    bgColor: "bg-white",
-    shadowClass: "shadow-sm",
-
-    // هدر
-    headerTextColor: "text-gray-800",
-    headerBorderColor: "border-gray-200",
-    headerHoverClass: "hover:bg-gray-50",
-
-    // ردیف‌ها
-    rowBorderColor: "border-gray-100",
-    rowHoverBgColor: "hover:bg-gray-50",
-
-    // اسکلتون
-    skeletonBgColor: "bg-gradient-to-r from-gray-200 to-gray-300",
-
-    // متن‌ها
-    noDataTextColor: "text-gray-500",
-    mobileTitleColor: "text-gray-600",
-    mobileContentColor: "text-gray-900",
-
-    // لودر سفارشی
-    loaderBgColor: "rgba(0, 0, 0, 0.1)",
-    loaderSrc: "/loading-spinner.gif", // تصویر لودینگ سفارشی
-    loaderWidth: 60,
-    loaderHeight: 60,
-    loaderClassName: "animate-spin",
-    loaderZIndex: 50,
-
-    // آیکون‌های مرتب‌سازی
-    sortIconActiveColor: "text-blue-600",
-    sortIconInactiveColor: "opacity-30 text-gray-400",
-
-    // موبایل
-    mobileCardBorderColor: "border-gray-200",
-    mobileCardBgColor: "bg-white",
-  };
-
   const columns: ColumnType[] = [
     {
       data: "contractName",
@@ -86,7 +45,6 @@ const App: React.FC = () => {
         height={"400"}
         saveSearch={true}
         searchPlaceholder="جستجو در نام قرارداد، مشتری..."
-        tableConfig={tableConfig}
         // فیلترهای سفارشی
         customBody={[
           {
