@@ -360,10 +360,10 @@ const Table: React.FC<ExtendedTableProps> = ({
                     searchValue ? (
                       <CgClose
                         onClick={() => setSearchValue("")}
-                        className="size-5 text-error font-bold scale-150 cursor-pointer border-r pr-1"
+                        className="size-5 text-error font-bold scale-150 cursor-pointer border-gray-300 border-r pr-1"
                       />
                     ) : (
-                      <CgSearch className="size-5 scale-150 opacity-70 border-r pr-1" />
+                      <CgSearch className="size-5 scale-150 opacity-70 border-r border-gray-300 pr-1" />
                     )
                   }
                   className="md:!w-[320px] !w-full [&>div]:!gap-1 [&>div]:!flex-row-reverse"

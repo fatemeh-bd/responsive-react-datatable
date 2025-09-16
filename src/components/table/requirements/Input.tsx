@@ -1,12 +1,20 @@
 import { forwardRef } from "react";
-import { InputProps } from "./types";
+import { InputProps, InputStyle } from "./types";
 import Label from "./Label";
 import { useFZTableColors } from "../contexts/FZTableThemeContext";
 
-// import { convertPriceToWords, removeCommas } from "../../utils/helper";
-
-export const inputClass =
-  "text-right text-base bg-white rounded-lg placeholder:text-sm !outline-none block w-full p-2.5 border border-secondary-500 focus:border-primary disabled:opacity-70 disabled:cursor-not-allowed disabled:bg-secondary-200";
+export const inputBaseStyle = (colors: any): InputStyle => ({
+  textAlign: "right",
+  backgroundColor: colors.white || "#ffffff",
+  borderRadius: "0.5rem",
+  outline: "none",
+  display: "block",
+  width: "100%",
+  padding: "0.625rem",
+  border: `1px solid ${colors.secondary500}`,
+  fontSize: "1rem",
+  lineHeight: "1.5rem",
+});
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -25,59 +33,97 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     ref
   ) => {
     const colors = useFZTableColors();
-    const classList = `${inputClass} ${
-      border === false ? "!border-none" : ""
-    } ${readOnlyMode ? "!bg-secondary-200 opacity-80" : ""} bg-transparent`;
+
+    const getInputStyle = () => {
+      const baseStyle = inputBaseStyle(colors);
+
+      if (border === false) {
+        baseStyle.border = "none";
+      }
+
+      if (readOnlyMode) {
+        baseStyle.backgroundColor = colors.secondary200 || "#e5e7eb";
+        baseStyle.opacity = "0.8";
+      }
+
+      return baseStyle;
+    };
+
+    const containerStyle = {
+      display: "flex",
+      flexDirection: "column" as const,
+      gap: "0.25rem",
+    };
+
+    const iconContainerStyle = {
+      ...getInputStyle(),
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: "0.75rem",
+      margin: "0",
+    };
+
+    const inputStyle = {
+      width: "100%",
+      border: "none",
+      backgroundColor: "transparent",
+      outline: "none",
+    };
+
+    const priceWordsStyle = {
+      marginTop: "0.25rem",
+      color: colors.blue || "#3b82f6",
+    };
 
     return icon ? (
-      <div className={`flex flex-col gap-1 ${className || ""}`}>
+      <div
+        style={{ ...containerStyle, ...(className ? {} : {}) }}
+        className={className}
+      >
         <Label text={label || ""}>
           {typeof subLabel === "string" ? `(${subLabel})` : subLabel}
         </Label>
-        <div
-          className={`my-0 flex items-center justify-between  gap-3 ${classList}`}
-        >
+        <div style={iconContainerStyle}>
           {icon}
           <input
             {...rest}
             ref={ref}
-            className={`w-full border-none bg-transparent !outline-none ${
-              inputClassName || ""
-            }`}
+            style={{ ...inputStyle, ...(inputClassName ? {} : {}) }}
+            className={inputClassName}
           />
         </div>
         {errorText && <p>{errorText}</p>}
-        {showPriceInWords && (
-          <p className="mt-1 text-blue-500">{showPriceInWords}</p>
-        )}
+        {showPriceInWords && <p style={priceWordsStyle}>{showPriceInWords}</p>}
       </div>
     ) : label ? (
-      <div className={`flex flex-col gap-1 ${className || ""}`}>
+      <div
+        style={{ ...containerStyle, ...(className ? {} : {}) }}
+        className={className}
+      >
         <Label text={label}>
           {typeof subLabel === "string" ? `(${subLabel})` : subLabel}
         </Label>
 
         <input
-          className={`${classList} ${inputClassName || ""}`}
+          style={getInputStyle()}
+          className={inputClassName}
           {...rest}
           ref={ref}
         />
         {errorText && <p>{errorText}</p>}
-        {showPriceInWords && (
-          <p className="mt-1 text-blue-500">{showPriceInWords}</p>
-        )}
+        {showPriceInWords && <p style={priceWordsStyle}>{showPriceInWords}</p>}
       </div>
     ) : (
-      <div className={`${className || ""}`}>
+      <div className={className}>
         <input
-          className={`${classList} ${inputClassName || ""}`}
+          style={getInputStyle()}
+          className={inputClassName}
           {...rest}
           ref={ref}
         />
         {errorText && <p>{errorText}</p>}
-        {showPriceInWords && (
-          <p className="mt-1 text-blue-500">{showPriceInWords}</p>
-        )}
+        {showPriceInWords && <p style={priceWordsStyle}>{showPriceInWords}</p>}
       </div>
     );
   }
