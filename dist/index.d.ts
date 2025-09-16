@@ -43,40 +43,31 @@ interface CustomBody {
     [key: string]: string | number | boolean | null | undefined | Object;
 }
 
-type TableConfig = {
-    borderColor?: string;
-    borderRadius?: string;
-    bgColor?: string;
-    shadowClass?: string;
-    textSecondaryColor?: string;
-    textSecondaryLightColor?: string;
-    textErrorColor?: string;
-    headerTextColor?: string;
-    headerBorderColor?: string;
-    headerBgColor?: string;
-    headerHoverClass?: string;
-    rowBorderColor?: string;
-    rowHoverBgColor?: string;
-    skeletonBgColor?: string;
-    noDataTextColor?: string;
-    noDataBgColor?: string;
-    sortIconActiveColor?: string;
-    sortIconInactiveColor?: string;
-    mobileCardBorderColor?: string;
-    mobileCardBgColor?: string;
-    mobileTitleColor?: string;
-    mobileContentColor?: string;
-    loaderBgColor?: string;
-    loaderSrc?: string;
-    loaderWidth?: string | number;
-    loaderHeight?: string | number;
-    loaderClassName?: string;
-    loaderZIndex?: number;
-};
+interface SecondaryColors {
+    100: string;
+    200: string;
+    400: string;
+    500: string;
+    600: string;
+    700: string;
+    800: string;
+    900: string;
+}
+interface FZTableThemeConfigType {
+    blue: string;
+    error: string;
+    success: string;
+    darkgreen: string;
+    primary: string;
+    white: string;
+    background: string;
+    secondary: SecondaryColors;
+    black: string;
+}
 
 interface ExtendedTableProps extends TableProps {
     isTestMode?: boolean;
-    tableConfig?: TableConfig;
+    themeConfig?: FZTableThemeConfigType;
 }
 declare const _default: React.NamedExoticComponent<ExtendedTableProps>;
 
