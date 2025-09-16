@@ -3,7 +3,7 @@ import React, { createContext, useContext, ReactNode } from "react";
 const CSS_PREFIX = "fztable";
 
 // تایپ‌های رنگ‌ها
-interface SecondaryColors {
+export interface SecondaryColors {
   100: string;
   200: string;
   400: string;
@@ -26,8 +26,8 @@ export interface FZTableThemeConfigType {
   black: string;
 }
 
-// تایپ دقیق برای cssVarNames
-type CSSVarNames = {
+// تایپ دقیق برای رنگ‌ها
+export type ThemeColors = {
   blue: string;
   error: string;
   success: string;
@@ -46,14 +46,8 @@ type CSSVarNames = {
   secondary900: string;
 };
 
-interface FZTableThemeContextType {
-  cssVarNames: CSSVarNames;
-}
-
-const FZTableThemeContext = createContext<FZTableThemeContextType | null>(null);
-
-// کانفیگ پیش‌فرض
-const defaultThemeConfig: FZTableThemeConfigType = {
+// مقادیر پیش‌فرض
+export const defaultThemeConfig: FZTableThemeConfigType = {
   blue: "#427BD2",
   error: "#f43f5e",
   success: "#4adb96",
@@ -73,6 +67,12 @@ const defaultThemeConfig: FZTableThemeConfigType = {
   },
   black: "#000000",
 };
+
+interface FZTableThemeContextType {
+  colors: ThemeColors;
+}
+
+const FZTableThemeContext = createContext<FZTableThemeContextType | null>(null);
 
 interface FZTableThemeProviderProps {
   children: ReactNode;
@@ -95,75 +95,77 @@ export const FZTableThemeProvider: React.FC<FZTableThemeProviderProps> = ({
     },
   };
 
-  // نام‌های متغیرهای CSS
-  const cssVarNames: CSSVarNames = {
-    blue: `--${cssPrefix}-blue`,
-    error: `--${cssPrefix}-error`,
-    success: `--${cssPrefix}-success`,
-    darkgreen: `--${cssPrefix}-darkgreen`,
-    primary: `--${cssPrefix}-primary`,
-    white: `--${cssPrefix}-white`,
-    background: `--${cssPrefix}-background`,
-    black: `--${cssPrefix}-black`,
-    secondary100: `--${cssPrefix}-secondary-100`,
-    secondary200: `--${cssPrefix}-secondary-200`,
-    secondary400: `--${cssPrefix}-secondary-400`,
-    secondary500: `--${cssPrefix}-secondary-500`,
-    secondary600: `--${cssPrefix}-secondary-600`,
-    secondary700: `--${cssPrefix}-secondary-700`,
-    secondary800: `--${cssPrefix}-secondary-800`,
-    secondary900: `--${cssPrefix}-secondary-900`,
+  // تعریف رنگ‌ها (مقادیر هگز)
+  const colors: ThemeColors = {
+    blue: mergedConfig.blue,
+    error: mergedConfig.error,
+    success: mergedConfig.success,
+    darkgreen: mergedConfig.darkgreen,
+    primary: mergedConfig.primary,
+    white: mergedConfig.white,
+    background: mergedConfig.background,
+    black: mergedConfig.black,
+    secondary100: mergedConfig.secondary[100],
+    secondary200: mergedConfig.secondary[200],
+    secondary400: mergedConfig.secondary[400],
+    secondary500: mergedConfig.secondary[500],
+    secondary600: mergedConfig.secondary[600],
+    secondary700: mergedConfig.secondary[700],
+    secondary800: mergedConfig.secondary[800],
+    secondary900: mergedConfig.secondary[900],
   };
 
-  // متغیرهای CSS
+  // متغیرهای CSS (برای سازگاری با کدهای قبلی که ممکن است از متغیرهای CSS استفاده کنند)
   const cssVariables = {
-    [cssVarNames.blue]: mergedConfig.blue,
-    [cssVarNames.error]: mergedConfig.error,
-    [cssVarNames.success]: mergedConfig.success,
-    [cssVarNames.darkgreen]: mergedConfig.darkgreen,
-    [cssVarNames.primary]: mergedConfig.primary,
-    [cssVarNames.white]: mergedConfig.white,
-    [cssVarNames.background]: mergedConfig.background,
-    [cssVarNames.black]: mergedConfig.black,
-    [cssVarNames.secondary100]: mergedConfig.secondary[100],
-    [cssVarNames.secondary200]: mergedConfig.secondary[200],
-    [cssVarNames.secondary400]: mergedConfig.secondary[400],
-    [cssVarNames.secondary500]: mergedConfig.secondary[500],
-    [cssVarNames.secondary600]: mergedConfig.secondary[600],
-    [cssVarNames.secondary700]: mergedConfig.secondary[700],
-    [cssVarNames.secondary800]: mergedConfig.secondary[800],
-    [cssVarNames.secondary900]: mergedConfig.secondary[900],
+    [`--${cssPrefix}-blue`]: mergedConfig.blue,
+    [`--${cssPrefix}-error`]: mergedConfig.error,
+    [`--${cssPrefix}-success`]: mergedConfig.success,
+    [`--${cssPrefix}-darkgreen`]: mergedConfig.darkgreen,
+    [`--${cssPrefix}-primary`]: mergedConfig.primary,
+    [`--${cssPrefix}-white`]: mergedConfig.white,
+    [`--${cssPrefix}-background`]: mergedConfig.background,
+    [`--${cssPrefix}-black`]: mergedConfig.black,
+    [`--${cssPrefix}-secondary-100`]: mergedConfig.secondary[100],
+    [`--${cssPrefix}-secondary-200`]: mergedConfig.secondary[200],
+    [`--${cssPrefix}-secondary-400`]: mergedConfig.secondary[400],
+    [`--${cssPrefix}-secondary-500`]: mergedConfig.secondary[500],
+    [`--${cssPrefix}-secondary-600`]: mergedConfig.secondary[600],
+    [`--${cssPrefix}-secondary-700`]: mergedConfig.secondary[700],
+    [`--${cssPrefix}-secondary-800`]: mergedConfig.secondary[800],
+    [`--${cssPrefix}-secondary-900`]: mergedConfig.secondary[900],
   } as React.CSSProperties;
 
   return (
-    <FZTableThemeContext.Provider value={{ cssVarNames }}>
+    <FZTableThemeContext.Provider value={{ colors }}>
       <div style={cssVariables}>{children}</div>
     </FZTableThemeContext.Provider>
   );
 };
 
-// Hook برای دریافت نام متغیرهای CSS
-export const useFZTableCSSVars = () => {
+// Hook برای دریافت رنگ‌ها
+export const useFZTableColors = () => {
   const context = useContext(FZTableThemeContext);
   if (!context) {
     throw new Error(
-      "useFZTableCSSVars must be used within a FZTableThemeProvider"
+      "useFZTableColors must be used within a FZTableThemeProvider"
     );
   }
-  return context.cssVarNames;
+  return context.colors;
 };
 
+export const withVar = (cssVar: string) => cssVar;
+
 // Helper function برای دسترسی آسان به رنگ‌های secondary
-export const useFZTableSecondaryVars = () => {
-  const vars = useFZTableCSSVars();
+export const useFZTableSecondaryColors = () => {
+  const colors = useFZTableColors();
   return {
-    secondary100: vars.secondary100,
-    secondary200: vars.secondary200,
-    secondary400: vars.secondary400,
-    secondary500: vars.secondary500,
-    secondary600: vars.secondary600,
-    secondary700: vars.secondary700,
-    secondary800: vars.secondary800,
-    secondary900: vars.secondary900,
+    secondary100: colors.secondary100,
+    secondary200: colors.secondary200,
+    secondary400: colors.secondary400,
+    secondary500: colors.secondary500,
+    secondary600: colors.secondary600,
+    secondary700: colors.secondary700,
+    secondary800: colors.secondary800,
+    secondary900: colors.secondary900,
   };
 };

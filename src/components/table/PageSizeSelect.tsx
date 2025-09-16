@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { inputClass } from "./requirements/utils";
 import { BiChevronDown } from "react-icons/bi";
+import { useFZTableColors } from "./contexts/FZTableThemeContext";
 
 const PageSizeSelect = ({
   pageSize,
@@ -12,7 +12,7 @@ const PageSizeSelect = ({
   initialPageSize?: number;
 }) => {
   const [size, setSize] = useState(pageSize);
-
+  const colors = useFZTableColors();
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newSize = Number(e.target.value);
     setSize(newSize);
@@ -33,9 +33,10 @@ const PageSizeSelect = ({
     <div className="relative flex items-center gap-1">
       <span className="md:text-base text-xs">نمایش</span>
       <select
+        style={{}}
         value={size}
         onChange={handleChange}
-        className={`${inputClass} appearance-none pl-6 cursor-pointer max-md:py-1 max-md:h-8 max-md:min-w-12 max-md:text-sm`}
+        className={`text-right text-base bg-white rounded-lg placeholder:text-sm !outline-none block w-full p-2.5 border border-secondary-500 focus:border-primary disabled:opacity-70 disabled:cursor-not-allowed disabled:bg-secondary-200 appearance-none pl-6 cursor-pointer max-md:py-1 max-md:h-8 max-md:min-w-12 max-md:text-sm`}
       >
         <option value={initialPageSize}>{initialPageSize}</option>
         <option value={20}>20</option>
@@ -44,7 +45,12 @@ const PageSizeSelect = ({
         <option value={200}>200</option>
         <option value={300}>300</option>
       </select>
-      <BiChevronDown className="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500" />
+      <BiChevronDown
+        style={{
+          color: colors.secondary500,
+        }}
+        className={`absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none`}
+      />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import { InputProps } from "./types";
 import Label from "./Label";
+import { useFZTableColors } from "../contexts/FZTableThemeContext";
 
 // import { convertPriceToWords, removeCommas } from "../../utils/helper";
 
@@ -23,6 +24,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
+    const colors = useFZTableColors();
     const classList = `${inputClass} ${
       border === false ? "!border-none" : ""
     } ${readOnlyMode ? "!bg-secondary-200 opacity-80" : ""} bg-transparent`;

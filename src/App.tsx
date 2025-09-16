@@ -44,7 +44,7 @@ const App: React.FC = () => {
         pageSize={5}
         height={"400"}
         saveSearch={true}
-        searchPlaceholder="جستجو در نام قرارداد، مشتری..."
+        searchPlaceholder="Search..."
         // فیلترهای سفارشی
         customBody={[
           {

@@ -6,7 +6,7 @@ import {
 import { useQueryParams } from "./requirements/useQueryParams";
 import { useIsMobile } from "./requirements/useIsMobile";
 import { numberWithCommas } from "./requirements/utils";
-import { useFZTableCSSVars } from "./contexts/FZTableThemeContext";
+import { useFZTableColors } from "./contexts/FZTableThemeContext";
 
 interface PaginationProps {
   totalItems: number;
@@ -14,21 +14,21 @@ interface PaginationProps {
   queryName?: string;
 }
 
-const baseClass =
-  "text-secondary-900 font-normal px-2 bg-transparent border border-secondary-500 flex items-center justify-center text-base max-md:text-sm rounded-md transition-colors hover:!border-primary disabled:!bg-secondary-200 disabled:!cursor-not-allowed";
-
 const Pagination: React.FC<PaginationProps> = ({
   totalItems,
   pageSize,
   queryName = "page",
 }) => {
-  const vars = useFZTableCSSVars();
+  const colors = useFZTableColors();
   const { updateParams, getParams } = useQueryParams();
   const currentPage = Number(getParams(queryName)) || 1;
   const totalPages = Math.ceil(totalItems / pageSize);
   const [pageInput, setPageInput] = useState(currentPage.toString());
   const isMobile = useIsMobile();
   const maxInputLength = totalPages.toString().length;
+
+  const baseClass = `cursor-pointer font-normal px-2 bg-transparent border flex items-center justify-center text-base max-md:text-sm rounded-md transition-colors`;
+
   const middlePages = useMemo(() => {
     let start = currentPage - 1;
     let end = currentPage + 1;
@@ -107,6 +107,10 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         type="button"
         className={`${baseClass} size-[26px] px-0.5`}
+        style={{
+          color: colors.secondary900,
+          borderColor: colors.secondary500,
+        }}
         disabled={currentPage === 1}
         onClick={goToPrevPage}
         aria-label="صفحه قبلی"
@@ -114,7 +118,10 @@ const Pagination: React.FC<PaginationProps> = ({
         <MdOutlineArrowForwardIos className="size-3" />
       </button>
       <input
-        className="!w-[40px] text-center text-base !h-7 !py-0 outline-none border border-secondary-400 rounded-md p-0.5"
+        className="!w-[40px] text-center text-base !h-7 !py-0 outline-none rounded-md p-0.5"
+        style={{
+          borderColor: colors.secondary400,
+        }}
         type="number"
         inputMode="numeric"
         value={pageInput}
@@ -122,11 +129,17 @@ const Pagination: React.FC<PaginationProps> = ({
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
       />
-      <span className="text-sm text-secondary-600">/</span>
+      <span className="text-sm" style={{ color: colors.secondary600 }}>
+        /
+      </span>
       <span className="text-sm">{totalPages}</span>
       <button
         type="button"
         className={`${baseClass} size-[26px] px-0.5`}
+        style={{
+          color: colors.secondary900,
+          borderColor: colors.secondary500,
+        }}
         disabled={currentPage === totalPages}
         onClick={goToNextPage}
         aria-label="صفحه بعدی"
@@ -140,6 +153,10 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           type="button"
           className={`${baseClass} h-8 max-md:h-7`}
+          style={{
+            color: colors.secondary900,
+            borderColor: colors.secondary500,
+          }}
           disabled={currentPage === 1}
           onClick={goToFirstPage}
           aria-label="صفحه اول"
@@ -149,6 +166,10 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           type="button"
           className={`${baseClass} size-8 max-md:min-w-7 max-md:h-7`}
+          style={{
+            color: colors.secondary900,
+            borderColor: colors.secondary500,
+          }}
           disabled={currentPage === 1}
           onClick={goToPrevPage}
           aria-label="صفحه قبلی"
@@ -157,9 +178,18 @@ const Pagination: React.FC<PaginationProps> = ({
         </button>
         <button
           type="button"
-          className={`${baseClass} min-w-8 h-8 max-md:min-w-7 max-md:h-7 ${
-            1 === currentPage ? "!bg-primary font-bold !border-primary" : ""
-          }`}
+          className={`${baseClass} min-w-8 h-8 max-md:min-w-7 max-md:h-7`}
+          style={{
+            color: colors.secondary900,
+            borderColor: colors.secondary500,
+            ...(1 === currentPage
+              ? {
+                  backgroundColor: colors.primary,
+                  fontWeight: "bold",
+                  borderColor: colors.primary,
+                }
+              : {}),
+          }}
           onClick={() => updatePage(1)}
           aria-label={`صفحه ${1}`}
           aria-current={1 === currentPage ? "page" : undefined}
@@ -169,6 +199,10 @@ const Pagination: React.FC<PaginationProps> = ({
         {showLeftEllipsis && (
           <span
             className={`${baseClass} min-w-8 h-8 max-md:min-w-7 max-md:h-7 !bg-transparent !border-none !hover:bg-transparent`}
+            style={{
+              color: colors.secondary900,
+              borderColor: colors.secondary500,
+            }}
             aria-hidden="true"
           >
             ...
@@ -178,11 +212,18 @@ const Pagination: React.FC<PaginationProps> = ({
           <button
             type="button"
             key={pageNum}
-            className={`${baseClass} min-w-8 h-8 max-md:min-w-7 max-md:h-7 ${
-              pageNum === currentPage
-                ? "!bg-primary font-bold !border-primary"
-                : ""
-            }`}
+            className={`${baseClass} min-w-8 h-8 max-md:min-w-7 max-md:h-7`}
+            style={{
+              color: colors.secondary900,
+              borderColor: colors.secondary500,
+              ...(pageNum === currentPage
+                ? {
+                    backgroundColor: colors.primary,
+                    fontWeight: "bold",
+                    borderColor: colors.primary,
+                  }
+                : {}),
+            }}
             onClick={() => updatePage(pageNum)}
             aria-label={`صفحه ${pageNum}`}
             aria-current={pageNum === currentPage ? "page" : undefined}
@@ -193,6 +234,10 @@ const Pagination: React.FC<PaginationProps> = ({
         {showRightEllipsis && (
           <span
             className={`${baseClass} min-w-8 h-8 max-md:min-w-7 max-md:h-7 !bg-transparent !border-none !hover:bg-transparent`}
+            style={{
+              color: colors.secondary900,
+              borderColor: colors.secondary500,
+            }}
             aria-hidden="true"
           >
             ...
@@ -200,11 +245,18 @@ const Pagination: React.FC<PaginationProps> = ({
         )}
         <button
           type="button"
-          className={`${baseClass} min-w-8 h-8 max-md:min-w-7 max-md:h-7 ${
-            totalPages === currentPage
-              ? "!bg-primary font-bold !border-primary"
-              : ""
-          }`}
+          className={`${baseClass} min-w-8 h-8 max-md:min-w-7 max-md:h-7`}
+          style={{
+            color: colors.secondary900,
+            borderColor: colors.secondary500,
+            ...(totalPages === currentPage
+              ? {
+                  backgroundColor: colors.primary,
+                  fontWeight: "bold",
+                  borderColor: colors.primary,
+                }
+              : {}),
+          }}
           onClick={() => updatePage(totalPages)}
           aria-label={`صفحه ${totalPages}`}
           aria-current={totalPages === currentPage ? "page" : undefined}
@@ -214,6 +266,10 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           type="button"
           className={`${baseClass} size-8 max-md:min-w-7 max-md:h-7`}
+          style={{
+            color: colors.secondary900,
+            borderColor: colors.secondary500,
+          }}
           disabled={currentPage === totalPages}
           onClick={goToNextPage}
           aria-label="صفحه بعدی"
@@ -223,6 +279,10 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           type="button"
           className={`${baseClass} h-8 max-md:h-7`}
+          style={{
+            color: colors.secondary900,
+            borderColor: colors.secondary500,
+          }}
           disabled={currentPage === totalPages}
           onClick={goToLastPage}
           aria-label="صفحه آخر"
