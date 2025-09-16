@@ -10,43 +10,13 @@ import "swiper/css/pagination";
 import Skeleton from "./requirements/Skeleton";
 import { Virtual } from "swiper/modules";
 import { ColumnType } from "./requirements/types";
+import { useFZTableColors } from "./contexts/FZTableThemeContext";
 
 export type OrderType = {
   column: number;
   dir: "asc" | "desc";
   name: string;
 } | null;
-
-export type TableConfig = {
-  borderColor?: string;
-  borderRadius?: string;
-  bgColor?: string;
-  shadowClass?: string;
-  textSecondaryColor?: string;
-  textSecondaryLightColor?: string;
-  textErrorColor?: string;
-  headerTextColor?: string;
-  headerBorderColor?: string;
-  headerBgColor?: string;
-  headerHoverClass?: string;
-  rowBorderColor?: string;
-  rowHoverBgColor?: string;
-  skeletonBgColor?: string;
-  noDataTextColor?: string;
-  noDataBgColor?: string;
-  sortIconActiveColor?: string;
-  sortIconInactiveColor?: string;
-  mobileCardBorderColor?: string;
-  mobileCardBgColor?: string;
-  mobileTitleColor?: string;
-  mobileContentColor?: string;
-  loaderBgColor?: string;
-  loaderSrc?: string;
-  loaderWidth?: string | number;
-  loaderHeight?: string | number;
-  loaderClassName?: string;
-  loaderZIndex?: number;
-};
 
 const ResponsiveTable = ({
   columns,
@@ -55,7 +25,6 @@ const ResponsiveTable = ({
   pageSize,
   maxHeight,
   onOrderChange,
-  config = {},
 }: {
   columns: ColumnType[];
   isLoading: boolean;
@@ -63,42 +32,10 @@ const ResponsiveTable = ({
   pageSize: number;
   maxHeight?: string;
   onOrderChange?: (order: OrderType) => void;
-  config?: TableConfig;
 }) => {
   const isMobile = useIsMobile();
   const [order, setOrder] = useState<OrderType>(null);
-  const defaultConfig: Required<TableConfig> = {
-    borderColor: "border-secondary-400",
-    borderRadius: "rounded-xl",
-    bgColor: "bg-white",
-    shadowClass: "shadow-sm",
-    textSecondaryColor: "text-secondary-700",
-    textSecondaryLightColor: "text-secondary-600",
-    textErrorColor: "text-error",
-    headerTextColor: "text-secondary-900",
-    headerBorderColor: "border-secondary-600",
-    headerBgColor: "bg-transparent",
-    headerHoverClass: "",
-    rowBorderColor: "border-gray-400",
-    rowHoverBgColor: "hover:bg-gray-50",
-    skeletonBgColor: "bg-gray-200",
-    noDataTextColor: "text-secondary-700",
-    noDataBgColor: "",
-    sortIconActiveColor: "text-secondary-900",
-    sortIconInactiveColor: "opacity-20",
-    mobileCardBorderColor: "border-secondary-300",
-    mobileCardBgColor: "bg-white",
-    mobileTitleColor: "text-secondary-600",
-    mobileContentColor: "text-gray-900",
-    loaderBgColor: "rgba(42, 42, 42, 0.08)",
-    loaderSrc: "/loading.gif",
-    loaderWidth: 200,
-    loaderHeight: 200,
-    loaderClassName: "md:translate-x-[-80px]",
-    loaderZIndex: 9999,
-    ...config,
-  };
-
+  const colors = useFZTableColors();
   const headerContainerRef = useRef<HTMLDivElement>(null);
   const bodyContainerRef = useRef<HTMLDivElement>(null);
 
@@ -137,10 +74,13 @@ const ResponsiveTable = ({
   }, []);
 
   return isMobile ? (
-    <div className={`block md:hidden ${defaultConfig.noDataBgColor}`}>
+    <div className={`block md:hidden`}>
       {isLoading ? (
         <div
-          className={`${defaultConfig.borderColor} ${defaultConfig.borderRadius} ${defaultConfig.borderColor} p-4 space-y-2`}
+          className="rounded-xl p-4 space-y-2"
+          style={{
+            border: `1px solid ${colors.secondary400}`,
+          }}
         >
           {columns?.map((_item, index) => (
             <React.Fragment key={index}>
@@ -148,27 +88,17 @@ const ResponsiveTable = ({
                 <Skeleton
                   height="h-4"
                   width={index % 2 ? "w-[40%]" : "w-[60%]"}
-                  bgColor={defaultConfig.skeletonBgColor}
                 />
                 <Skeleton
                   height="h-4"
                   width={index % 2 !== 0 ? "w-[60%]" : "w-[40%]"}
-                  bgColor={defaultConfig.skeletonBgColor}
                 />
               </div>
 
               {_item?.data === null && (
                 <div className="flex items-center gap-2">
-                  <Skeleton
-                    height="h-8"
-                    width="w-[50%]"
-                    bgColor={defaultConfig.skeletonBgColor}
-                  />
-                  <Skeleton
-                    height="h-8"
-                    width="w-[50%]"
-                    bgColor={defaultConfig.skeletonBgColor}
-                  />
+                  <Skeleton height="h-8" width="w-[50%]" />
+                  <Skeleton height="h-8" width="w-[50%]" />
                 </div>
               )}
             </React.Fragment>
@@ -185,7 +115,11 @@ const ResponsiveTable = ({
           {rows.map((row, rowIndex) => (
             <SwiperSlide
               key={rowIndex}
-              className={`p-4 !h-auto mb-3 ${defaultConfig.borderRadius} overflow-hidden border ${defaultConfig.mobileCardBorderColor} ${defaultConfig.mobileCardBgColor} ${defaultConfig.shadowClass}`}
+              className="p-4 !h-auto mb-3 rounded-xl overflow-hidden"
+              style={{
+                border: `1px solid ${colors.secondary400}`,
+                backgroundColor: colors.white,
+              }}
             >
               {columns.map((column, colIndex) => {
                 const cellKey = column.data;
@@ -207,7 +141,8 @@ const ResponsiveTable = ({
                     {column?.title === "عملیات" ||
                     column?.dontShowTitleInMobile ? null : (
                       <span
-                        className={`text-xs ${defaultConfig.mobileTitleColor} min-w-[80px]`}
+                        className="text-xs min-w-[80px]"
+                        style={{ color: colors.secondary600 }}
                       >
                         {column?.title + ":"}
                       </span>
@@ -216,8 +151,6 @@ const ResponsiveTable = ({
                     <BoxCell
                       visible={isMobile}
                       className={`flex text-wrap text-sm items-center justify-center gap-2 !mx-0 flex-wrap ${
-                        defaultConfig.mobileContentColor
-                      } ${
                         column?.title === "عملیات"
                           ? "[&>button]:flex-1 [&>div]:flex-1 !w-full [&>a]:flex-1"
                           : ""
@@ -232,15 +165,13 @@ const ResponsiveTable = ({
           ))}
         </Swiper>
       ) : (
-        <p className={`text-center ${defaultConfig.noDataTextColor} py-6`}>
+        <p className="text-center py-6" style={{ color: colors.secondary700 }}>
           اطلاعاتی برای نمایش وجود ندارد
         </p>
       )}
     </div>
   ) : (
-    <div
-      className={`w-full overflow-hidden dt-scroll ${defaultConfig.borderRadius}`}
-    >
+    <div className={`w-full overflow-hidden dt-scroll rounded-xl`}>
       <div className="relative">
         <>
           <div
@@ -254,17 +185,17 @@ const ResponsiveTable = ({
                   {columns.map((column, colIndex) => (
                     <th
                       key={column?.data}
-                      style={{ width: column?.width }}
                       onClick={() =>
                         column?.orderable && handleSort(colIndex, column)
                       }
                       className={`${
                         column?.orderable && "!cursor-pointer"
-                      } py-2 px-1 text-center min-w-max border-b ${
-                        defaultConfig.headerBorderColor
-                      } ${defaultConfig.headerTextColor} ${
-                        defaultConfig.headerHoverClass
-                      }`}
+                      } py-2 px-1 text-center min-w-max`}
+                      style={{
+                        borderBottom: `1px solid ${colors.secondary600}`,
+                        color: colors.secondary900,
+                        width: column?.width,
+                      }}
                     >
                       <BoxCell
                         tooltip={column?.width ? column?.title : ""}
@@ -273,20 +204,34 @@ const ResponsiveTable = ({
                         {column?.orderable && (
                           <span className="flex flex-col items-center">
                             <BiSolidUpArrow
-                              className={`h-2 translate-y-[1px] ${
-                                order?.column === colIndex &&
-                                order?.dir === "asc"
-                                  ? defaultConfig.sortIconActiveColor
-                                  : defaultConfig.sortIconInactiveColor
-                              }`}
+                              className="h-2 translate-y-[1px]"
+                              style={{
+                                color:
+                                  order?.column === colIndex &&
+                                  order?.dir === "asc"
+                                    ? colors.secondary900
+                                    : undefined,
+                                opacity:
+                                  order?.column === colIndex &&
+                                  order?.dir === "asc"
+                                    ? 1
+                                    : 0.2,
+                              }}
                             />
                             <BiSolidDownArrow
-                              className={`h-2 ${
-                                order?.column === colIndex &&
-                                order?.dir === "desc"
-                                  ? defaultConfig.sortIconActiveColor
-                                  : defaultConfig.sortIconInactiveColor
-                              }`}
+                              className="h-2"
+                              style={{
+                                color:
+                                  order?.column === colIndex &&
+                                  order?.dir === "desc"
+                                    ? colors.secondary900
+                                    : undefined,
+                                opacity:
+                                  order?.column === colIndex &&
+                                  order?.dir === "desc"
+                                    ? 1
+                                    : 0.2,
+                              }}
                             />
                           </span>
                         )}
@@ -298,16 +243,7 @@ const ResponsiveTable = ({
               </thead>
             </table>
           </div>
-          {isLoading && (
-            <LoaderScreen
-              bgColor={defaultConfig.loaderBgColor}
-              loaderSrc={defaultConfig.loaderSrc}
-              loaderWidth={defaultConfig.loaderWidth}
-              loaderHeight={defaultConfig.loaderHeight}
-              loaderClassName={defaultConfig.loaderClassName}
-              zIndex={defaultConfig.loaderZIndex}
-            />
-          )}
+          {isLoading && <LoaderScreen />}
           {/* Scrollable body */}
           <div
             ref={bodyContainerRef}
@@ -322,7 +258,8 @@ const ResponsiveTable = ({
                       {columns?.map((_, colIndex) => (
                         <td key={colIndex}>
                           <div
-                            className={`h-9 w-full ${defaultConfig.skeletonBgColor} animate-pulse`}
+                            className="h-9 w-full animate-pulse"
+                            style={{ backgroundColor: colors.secondary200 }}
                           />
                         </td>
                       ))}
@@ -333,7 +270,9 @@ const ResponsiveTable = ({
                     {rows?.map((row, rowIndex) => (
                       <tr
                         key={rowIndex}
-                        className={`border-b ${defaultConfig.rowBorderColor} ${defaultConfig.rowHoverBgColor}`}
+                        style={{
+                          borderBottom: `1px solid ${colors.secondary400}`,
+                        }}
                       >
                         {columns.map((column, colIndex) => {
                           const cellKey = column.data;
@@ -376,7 +315,8 @@ const ResponsiveTable = ({
                   <tr>
                     <td
                       colSpan={columns?.length}
-                      className={`p-6 text-center ${defaultConfig.noDataTextColor}`}
+                      className="p-6 text-center"
+                      style={{ color: colors.secondary700 }}
                     >
                       اطلاعاتی برای نمایش وجود ندارد
                     </td>

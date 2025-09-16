@@ -4,6 +4,20 @@ import React, {
   ReactNode,
 } from "react";
 
+export interface InputStyle {
+  textAlign: "right";
+  backgroundColor: string;
+  borderRadius: string;
+  outline: string;
+  display: string;
+  width: string;
+  padding: string;
+  border: string;
+  fontSize: string;
+  lineHeight: string;
+  opacity?: string;
+}
+
 export const ColorType = {
   SECONDARY: "secondary",
   BLACK: "black",

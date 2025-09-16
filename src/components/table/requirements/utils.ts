@@ -8,7 +8,7 @@ export const numberWithCommas = (number: number | string) => {
       : parseFloat(number.toString().replace(/,/g, ""));
   if (isNaN(num)) return ""; // Handle invalid numbers
 
-  return num.toLocaleString("en-US"); // Use built-in formatting
+  return num.toLocaleString("en-US");
 };
 
 export function getCookie(name: string) {

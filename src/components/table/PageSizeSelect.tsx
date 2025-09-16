@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { inputClass } from "./requirements/utils";
 import { BiChevronDown } from "react-icons/bi";
+import { useFZTableColors } from "./contexts/FZTableThemeContext";
 
 const PageSizeSelect = ({
   pageSize,
@@ -12,6 +12,7 @@ const PageSizeSelect = ({
   initialPageSize?: number;
 }) => {
   const [size, setSize] = useState(pageSize);
+  const colors = useFZTableColors();
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newSize = Number(e.target.value);
@@ -31,11 +32,31 @@ const PageSizeSelect = ({
 
   return (
     <div className="relative flex items-center gap-1">
-      <span className="md:text-base text-xs">نمایش</span>
+      <span
+        style={{ fontSize: "0.75rem", lineHeight: "1rem" }}
+        className="md:text-base"
+      >
+        نمایش
+      </span>
       <select
         value={size}
         onChange={handleChange}
-        className={`${inputClass} appearance-none pl-6 cursor-pointer max-md:py-1 max-md:h-8 max-md:min-w-12 max-md:text-sm`}
+        style={{
+          textAlign: "right",
+          backgroundColor: colors.white || "#ffffff",
+          borderRadius: "0.5rem",
+          outline: "none",
+          display: "block",
+          width: "100%",
+          padding: "0.625rem",
+          border: `1px solid ${colors.secondary500}`,
+          fontSize: "1rem",
+          lineHeight: "1.5rem",
+          appearance: "none",
+          paddingLeft: "1.5rem",
+          cursor: "pointer",
+        }}
+        className="focus:border-primary disabled:opacity-70 disabled:cursor-not-allowed max-md:py-1 max-md:h-8 max-md:min-w-12 max-md:text-sm"
       >
         <option value={initialPageSize}>{initialPageSize}</option>
         <option value={20}>20</option>
@@ -44,7 +65,16 @@ const PageSizeSelect = ({
         <option value={200}>200</option>
         <option value={300}>300</option>
       </select>
-      <BiChevronDown className="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500" />
+      <BiChevronDown
+        style={{
+          color: colors.secondary500,
+          position: "absolute",
+          left: "0.5rem",
+          top: "50%",
+          transform: "translateY(-50%)",
+          pointerEvents: "none",
+        }}
+      />
     </div>
   );
 };

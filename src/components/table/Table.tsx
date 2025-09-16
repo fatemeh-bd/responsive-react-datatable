@@ -3,9 +3,8 @@ import { CgClose, CgSearch } from "react-icons/cg";
 import { postMethod } from "./requirements/callApi";
 import { numberWithCommas } from "./requirements/utils";
 import Pagination from "./Pagination";
-import "./style.css";
 import PageSizeSelect from "./PageSizeSelect";
-import ResponsiveTable, { OrderType, TableConfig } from "./ResponsiveTable";
+import ResponsiveTable, { OrderType } from "./ResponsiveTable";
 import { useIsMobile } from "./requirements/useIsMobile";
 import { BiFilterAlt, BiTrash } from "react-icons/bi";
 import Modal from "./requirements/Modal";
@@ -14,6 +13,11 @@ import Checkbox from "./requirements/CheckBox";
 import Input from "./requirements/Input";
 import { ColumnType, TableProps } from "./requirements/types";
 import mockData from "./mockData.json";
+import { getTableCss } from "./tableCss";
+import {
+  FZTableThemeConfigType,
+  FZTableThemeProvider,
+} from "./contexts/FZTableThemeContext";
 
 type UpdateOptions = { replace?: boolean };
 
@@ -43,7 +47,7 @@ export const defaultSize = 10;
 
 interface ExtendedTableProps extends TableProps {
   isTestMode?: boolean;
-  tableConfig?: TableConfig;
+  themeConfig?: FZTableThemeConfigType;
 }
 
 const Table: React.FC<ExtendedTableProps> = ({
@@ -72,7 +76,7 @@ const Table: React.FC<ExtendedTableProps> = ({
   removeFilterKey,
   hasColumnOrder,
   isTestMode = false,
-  tableConfig = {},
+  themeConfig,
 }) => {
   const searchParams = getSearchParams();
 
@@ -107,7 +111,6 @@ const Table: React.FC<ExtendedTableProps> = ({
     },
   ]);
 
-  // State for table data
   const [tableRows, setTableRows] = useState<any>(null);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -175,7 +178,6 @@ const Table: React.FC<ExtendedTableProps> = ({
 
   const payloadCustomBody = customBody || [];
 
-  // Function to fetch data
   const fetchTableData = useCallback(async () => {
     try {
       setIsFetching(true);
@@ -260,7 +262,6 @@ const Table: React.FC<ExtendedTableProps> = ({
     baseUrl,
   ]);
 
-  // Effect to fetch data when dependencies change
   useEffect(() => {
     fetchTableData();
   }, [fetchTableData]);
@@ -303,7 +304,6 @@ const Table: React.FC<ExtendedTableProps> = ({
       }, 0)
     : 0;
 
-  // Show error if there's an error
   if (error) {
     return (
       <div className="text-center py-4">
@@ -319,176 +319,178 @@ const Table: React.FC<ExtendedTableProps> = ({
   }
 
   return (
-    <div>
-      {!isMobile && topFilter && (
-        <div className={topFilterContainerClassName} id="topFilter">
-          {topFilter}
-        </div>
-      )}
-      <div
-        id="filters"
-        className={`flex items-start gap-2 justify-between mb-2 max-md:items-center flex-wrap-reverse`}
-      >
-        {/* {title && (
+    <FZTableThemeProvider config={themeConfig}>
+      <style>{getTableCss(themeConfig)}</style>
+      <div>
+        {!isMobile && topFilter && (
+          <div className={topFilterContainerClassName} id="topFilter">
+            {topFilter}
+          </div>
+        )}
+        <div
+          id="filters"
+          className={`flex items-start gap-2 justify-between mb-2 max-md:items-center flex-wrap-reverse`}
+        >
+          {/* {title && (
           <Title className="md:hidden max-sm:!text-base">{title}</Title>
         )} */}
 
-        <div
-          className={`flex md:items-start items-center md:gap-2 gap-3 w-fit md:flex-wrap-reverse max-md:w-full`}
-        >
-          {!noSearch && (
-            <div className="max-md:w-full">
-              <Input
-                value={searchValue}
-                onChange={(e) => {
-                  setSearchValue(e.target.value);
-                  if (searchParams?.get("page")) {
-                    setSearchParams(
-                      (prev) => {
-                        const newParams = new URLSearchParams(prev);
-                        newParams.delete("page");
-                        return newParams;
-                      },
-                      { replace: true }
-                    );
+          <div
+            className={`flex md:items-start items-center md:gap-2 gap-3 w-fit md:flex-wrap-reverse max-md:w-full`}
+          >
+            {!noSearch && (
+              <div className="max-md:w-full">
+                <Input
+                  value={searchValue}
+                  onChange={(e) => {
+                    setSearchValue(e.target.value);
+                    if (searchParams?.get("page")) {
+                      setSearchParams(
+                        (prev) => {
+                          const newParams = new URLSearchParams(prev);
+                          newParams.delete("page");
+                          return newParams;
+                        },
+                        { replace: true }
+                      );
+                    }
+                  }}
+                  placeholder={searchPlaceholder}
+                  icon={
+                    searchValue ? (
+                      <CgClose
+                        onClick={() => setSearchValue("")}
+                        className="size-5 text-error font-bold scale-150 cursor-pointer border-gray-300 border-r pr-1"
+                      />
+                    ) : (
+                      <CgSearch className="size-5 scale-150 opacity-70 border-r border-gray-300 pr-1" />
+                    )
                   }
+                  className="md:!w-[320px] !w-full [&>div]:!gap-1 [&>div]:!flex-row-reverse"
+                  inputClassName="placeholder:!text-[10.5pt] max-sm:placeholder:!text-[9pt]"
+                />
+              </div>
+            )}
+
+            {isMobile && (filters || topFilter) && (
+              <button
+                onClick={() => setOpenFilter(true)}
+                className="relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 min-h-[43px] justify-center rounded-md"
+              >
+                {activeFilterCount > 0 && (
+                  <span className="absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">
+                    {activeFilterCount}
+                  </span>
+                )}
+                فیلتر
+                <BiFilterAlt />
+              </button>
+            )}
+            {!isMobile && filters && (
+              <div className={filterContainerClassName}>{filters}</div>
+            )}
+          </div>
+          <div className="flex items-center gap-3 flex-wrap max-sm:w-full justify-between">
+            {actionButtonsLeft && actionButtonsLeft}
+            {!isMobile && (
+              <PageSizeSelect
+                initialPageSize={tableHeightPageSize}
+                pageSize={pageSizeInitial}
+                onPageSizeChange={(newSize) => {
+                  setDynamicPageSize(newSize);
                 }}
-                placeholder={searchPlaceholder}
-                icon={
-                  searchValue ? (
-                    <CgClose
-                      onClick={() => setSearchValue("")}
-                      className="size-5 text-error font-bold scale-150 cursor-pointer border-r pr-1"
-                    />
-                  ) : (
-                    <CgSearch className="size-5 scale-150 opacity-70 border-r pr-1" />
-                  )
-                }
-                className="md:!w-[320px] !w-full [&>div]:!gap-1 [&>div]:!flex-row-reverse"
-                inputClassName="placeholder:!text-[10.5pt] max-sm:placeholder:!text-[9pt]"
+              />
+            )}
+          </div>
+        </div>
+        <ResponsiveTable
+          columns={columnsWithRow}
+          isLoading={isFetching}
+          rows={tableRows?.data || []}
+          pageSize={pageSize}
+          maxHeight={
+            height || pageSize >= defaultSize
+              ? `calc(${pageSize * 51.15}px)`
+              : `calc(${pageSize * 51.15}px)`
+          }
+          onOrderChange={handleOrderChange}
+        />
+
+        <div
+          className="max-md:flex items-start justify-between gap-4 flex-wrap w-full"
+          id="paging"
+        >
+          <div className="flex items-center max-sm:justify-center justify-between gap-2 md:mt-2 flex-wrap-reverse">
+            <Pagination
+              totalItems={tableRows?.recordsFiltered || 0}
+              pageSize={dynamicPageSize}
+            />
+            {tableRows?.recordsFiltered > 0 && !isMobile && (
+              <p className="sm:mr-auto w-fit font-medium">
+                نمایش {(Number(pageNum) - 1) * dynamicPageSize + 1} تا{" "}
+                {Math.min(
+                  Number(pageNum) * dynamicPageSize,
+                  tableRows?.recordsFiltered
+                )}{" "}
+                از {numberWithCommas(tableRows?.recordsFiltered)} رکورد
+              </p>
+            )}
+          </div>
+          {isMobile && tableRows?.data?.length > 0 && (
+            <div className="flex items-center gap-3 flex-wrap justify-center md:mt-4">
+              <PageSizeSelect
+                initialPageSize={tableHeightPageSize}
+                pageSize={pageSizeInitial}
+                onPageSizeChange={(newSize) => {
+                  setDynamicPageSize(newSize);
+                }}
               />
             </div>
           )}
+        </div>
 
-          {isMobile && (filters || topFilter) && (
-            <button
-              onClick={() => setOpenFilter(true)}
-              className="relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 min-h-[43px] justify-center rounded-md"
-            >
-              {activeFilterCount > 0 && (
-                <span className="absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">
-                  {activeFilterCount}
-                </span>
-              )}
-              فیلتر
-              <BiFilterAlt />
-            </button>
-          )}
-          {!isMobile && filters && (
-            <div className={filterContainerClassName}>{filters}</div>
-          )}
-        </div>
-        <div className="flex items-center gap-3 flex-wrap max-sm:w-full justify-between">
-          {actionButtonsLeft && actionButtonsLeft}
-          {!isMobile && (
-            <PageSizeSelect
-              initialPageSize={tableHeightPageSize}
-              pageSize={pageSizeInitial}
-              onPageSizeChange={(newSize) => {
-                setDynamicPageSize(newSize);
-              }}
-            />
-          )}
-        </div>
-      </div>
-      <ResponsiveTable
-        columns={columnsWithRow}
-        isLoading={isFetching}
-        rows={tableRows?.data || []}
-        pageSize={pageSize}
-        maxHeight={
-          height || pageSize >= defaultSize
-            ? `calc(${pageSize * 51.15}px)`
-            : `calc(${pageSize * 51.15}px)`
-        }
-        onOrderChange={handleOrderChange}
-        config={tableConfig}
-      />
-
-      <div
-        className="max-md:flex items-start justify-between gap-4 flex-wrap w-full"
-        id="paging"
-      >
-        <div className="flex items-center max-sm:justify-center justify-between gap-2 md:mt-2 flex-wrap-reverse">
-          <Pagination
-            totalItems={tableRows?.recordsFiltered || 0}
-            pageSize={dynamicPageSize}
-          />
-          {tableRows?.recordsFiltered > 0 && !isMobile && (
-            <p className="sm:mr-auto w-fit font-medium">
-              نمایش {(Number(pageNum) - 1) * dynamicPageSize + 1} تا{" "}
-              {Math.min(
-                Number(pageNum) * dynamicPageSize,
-                tableRows?.recordsFiltered
-              )}{" "}
-              از {numberWithCommas(tableRows?.recordsFiltered)} رکورد
-            </p>
-          )}
-        </div>
-        {isMobile && tableRows?.data?.length > 0 && (
-          <div className="flex items-center gap-3 flex-wrap justify-center md:mt-4">
-            <PageSizeSelect
-              initialPageSize={tableHeightPageSize}
-              pageSize={pageSizeInitial}
-              onPageSizeChange={(newSize) => {
-                setDynamicPageSize(newSize);
-              }}
-            />
+        <Modal
+          size="lg"
+          title="فیلتر ها"
+          // childrenClass="!h-[80svh]"
+          isOpen={openFilter}
+          onClose={() => setOpenFilter(false)}
+        >
+          <div className={filterContainerClassName}>
+            {filters}
+            {topFilter}
           </div>
-        )}
+          <div className="flex items-center gap-2 mt-8">
+            <MainButton onClick={() => setOpenFilter(false)} full>
+              بستن
+            </MainButton>
+            <MainButton
+              full
+              theme="error"
+              outline
+              Icon={BiTrash}
+              onClick={() => {
+                setSearchParams(() => {
+                  const newParams = getSearchParams();
+                  Array.from(newParams.keys()).forEach((key) =>
+                    newParams.delete(key)
+                  );
+                  return newParams;
+                });
+
+                if (removeFilterKey) {
+                  sessionStorage.removeItem(removeFilterKey);
+                }
+
+                location.reload();
+              }}
+            >
+              حذف فیلتر ها
+            </MainButton>
+          </div>
+        </Modal>
       </div>
-
-      <Modal
-        size="lg"
-        title="فیلتر ها"
-        // childrenClass="!h-[80svh]"
-        isOpen={openFilter}
-        onClose={() => setOpenFilter(false)}
-      >
-        <div className={filterContainerClassName}>
-          {filters}
-          {topFilter}
-        </div>
-        <div className="flex items-center gap-2 mt-8">
-          <MainButton onClick={() => setOpenFilter(false)} full>
-            بستن
-          </MainButton>
-          <MainButton
-            full
-            theme="error"
-            outline
-            Icon={BiTrash}
-            onClick={() => {
-              setSearchParams(() => {
-                const newParams = getSearchParams();
-                Array.from(newParams.keys()).forEach((key) =>
-                  newParams.delete(key)
-                );
-                return newParams;
-              });
-
-              if (removeFilterKey) {
-                sessionStorage.removeItem(removeFilterKey);
-              }
-
-              location.reload();
-            }}
-          >
-            حذف فیلتر ها
-          </MainButton>
-        </div>
-      </Modal>
-    </div>
+    </FZTableThemeProvider>
   );
 };
 
