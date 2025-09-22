@@ -3,3 +3,6 @@ export interface PaginationProps {
   pageSize: number;
   queryName?: string;
 }
+export interface TableProps {
+  startMobileSize?: number;
+}
