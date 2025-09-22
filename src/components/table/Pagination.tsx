@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback, useState, useEffect } from "react";
 import {
   MdOutlineArrowBackIos,
   MdOutlineArrowForwardIos,
@@ -29,6 +29,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
   const baseClass = `cursor-pointer font-normal px-2 bg-transparent border flex items-center justify-center text-base max-md:text-sm rounded-md transition-colors`;
 
+  // محاسبه صفحات میانی
   const middlePages = useMemo(() => {
     let start = currentPage - 1;
     let end = currentPage + 1;
@@ -39,9 +40,6 @@ const Pagination: React.FC<PaginationProps> = ({
     } else if (currentPage > totalPages - 2) {
       start = totalPages - 3;
       end = totalPages - 1;
-    } else {
-      start = currentPage - 1;
-      end = currentPage + 1;
     }
 
     if (start < 2) start = 2;
@@ -60,10 +58,16 @@ const Pagination: React.FC<PaginationProps> = ({
     (page: number) => {
       updateParams(queryName, page.toString());
     },
-    [getParams, updateParams, queryName]
+    [updateParams, queryName]
   );
 
-  const handleGoToPage = () => {
+  const goToFirstPage = () => updatePage(1);
+  const goToLastPage = () => updatePage(totalPages);
+  const goToNextPage = () =>
+    currentPage < totalPages && updatePage(currentPage + 1);
+  const goToPrevPage = () => currentPage > 1 && updatePage(currentPage - 1);
+
+  const handleGoToPage = useCallback(() => {
     if (!pageInput) {
       setPageInput(currentPage.toString());
       return;
@@ -76,29 +80,31 @@ const Pagination: React.FC<PaginationProps> = ({
     } else {
       setPageInput(currentPage.toString());
     }
-  };
+  }, [pageInput, currentPage, totalPages, updatePage]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, "");
-    if (value.length <= maxInputLength) {
-      setPageInput(value);
-    }
+    if (value.length <= maxInputLength) setPageInput(value);
   };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter") handleGoToPage();
+  };
+
+  const handleBlur = () => handleGoToPage();
+
+  // debounce برای input
+  useEffect(() => {
+    if (pageInput === currentPage.toString() || pageInput === "") return;
+    const timer = setTimeout(() => {
       handleGoToPage();
-    }
-  };
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [pageInput, currentPage, handleGoToPage]);
 
-  const handleBlur = () => {
-    handleGoToPage();
-  };
-
-  const goToFirstPage = () => updatePage(1);
-  const goToLastPage = () => updatePage(totalPages);
-  const goToNextPage = () =>
-    currentPage < totalPages && updatePage(currentPage + 1);
-  const goToPrevPage = () => currentPage > 1 && updatePage(currentPage - 1);
+  useEffect(() => {
+    setPageInput(currentPage.toString());
+  }, [currentPage]);
 
   if (totalPages <= 1) return null;
 
@@ -107,10 +113,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         type="button"
         className={`${baseClass} size-[26px] px-0.5`}
-        style={{
-          color: colors.secondary900,
-          borderColor: colors.secondary500,
-        }}
+        style={{ color: colors.secondary900, borderColor: colors.secondary500 }}
         disabled={currentPage === 1}
         onClick={goToPrevPage}
         aria-label="صفحه قبلی"
@@ -118,16 +121,14 @@ const Pagination: React.FC<PaginationProps> = ({
         <MdOutlineArrowForwardIos className="size-3" />
       </button>
       <input
-        className="!w-[40px] text-center text-base !h-7 !py-0 outline-none rounded-md p-0.5"
-        style={{
-          borderColor: colors.secondary400,
-        }}
         type="number"
         inputMode="numeric"
         value={pageInput}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
+        className="!w-[40px] text-center text-base !h-7 !py-0 outline-none rounded-md p-0.5"
+        style={{ borderColor: colors.secondary400 }}
       />
       <span className="text-sm" style={{ color: colors.secondary600 }}>
         /
@@ -136,10 +137,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         type="button"
         className={`${baseClass} size-[26px] px-0.5`}
-        style={{
-          color: colors.secondary900,
-          borderColor: colors.secondary500,
-        }}
+        style={{ color: colors.secondary900, borderColor: colors.secondary500 }}
         disabled={currentPage === totalPages}
         onClick={goToNextPage}
         aria-label="صفحه بعدی"
@@ -176,6 +174,7 @@ const Pagination: React.FC<PaginationProps> = ({
         >
           <MdOutlineArrowForwardIos className="size-6" />
         </button>
+
         <button
           type="button"
           className={`${baseClass} min-w-8 h-8 max-md:min-w-7 max-md:h-7`}
@@ -196,6 +195,7 @@ const Pagination: React.FC<PaginationProps> = ({
         >
           {1}
         </button>
+
         {showLeftEllipsis && (
           <span
             className={`${baseClass} min-w-8 h-8 max-md:min-w-7 max-md:h-7 !bg-transparent !border-none !hover:bg-transparent`}
@@ -208,6 +208,7 @@ const Pagination: React.FC<PaginationProps> = ({
             ...
           </span>
         )}
+
         {middlePages.map((pageNum) => (
           <button
             type="button"
@@ -231,6 +232,7 @@ const Pagination: React.FC<PaginationProps> = ({
             {numberWithCommas(pageNum) || ""}
           </button>
         ))}
+
         {showRightEllipsis && (
           <span
             className={`${baseClass} min-w-8 h-8 max-md:min-w-7 max-md:h-7 !bg-transparent !border-none !hover:bg-transparent`}
@@ -243,6 +245,7 @@ const Pagination: React.FC<PaginationProps> = ({
             ...
           </span>
         )}
+
         <button
           type="button"
           className={`${baseClass} min-w-8 h-8 max-md:min-w-7 max-md:h-7`}
@@ -263,6 +266,7 @@ const Pagination: React.FC<PaginationProps> = ({
         >
           {numberWithCommas(totalPages) || ""}
         </button>
+
         <button
           type="button"
           className={`${baseClass} size-8 max-md:min-w-7 max-md:h-7`}

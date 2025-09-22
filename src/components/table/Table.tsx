@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import { CgClose, CgSearch } from "react-icons/cg";
 import { postMethod } from "./requirements/callApi";
 import { numberWithCommas } from "./requirements/utils";
@@ -35,7 +41,10 @@ const getSearchParams = () => {
 const updateSearchParams = (params: URLSearchParams, replace = false) => {
   if (typeof window === "undefined") return;
 
-  const newUrl = `${window.location.pathname}?${params.toString()}`;
+  const qs = params.toString();
+  const newUrl = qs
+    ? `${window.location.pathname}?${qs}`
+    : window.location.pathname;
   if (replace) {
     window.history.replaceState(null, "", newUrl);
   } else {
@@ -45,9 +54,42 @@ const updateSearchParams = (params: URLSearchParams, replace = false) => {
 
 export const defaultSize = 10;
 
+export interface AutoPageSizeConfig {
+  enabled?: boolean;
+  containerSelector?: string;
+  subtractSelectors?: string[];
+  optionalSelectorsForExtraBuffer?: string[];
+  rowHeight?: number;
+  baseBufferRows?: number;
+  extraBufferRows?: number;
+}
+
+const defaultAutoConfig: AutoPageSizeConfig = {
+  enabled: true,
+  containerSelector: "#content-wrapper",
+  subtractSelectors: [
+    "#filters",
+    "#topFilter",
+    "#tabPage",
+    "#paging",
+    "#userCards",
+    "#title",
+  ],
+  optionalSelectorsForExtraBuffer: [
+    "#tabPage",
+    "#topFilter",
+    "#userCards",
+    "#title",
+  ],
+  rowHeight: 51.15,
+  baseBufferRows: 2,
+  extraBufferRows: 1,
+};
+
 interface ExtendedTableProps extends TableProps {
   isTestMode?: boolean;
   themeConfig?: FZTableThemeConfigType;
+  autoPageSizeConfig?: AutoPageSizeConfig;
 }
 
 const Table: React.FC<ExtendedTableProps> = ({
@@ -77,7 +119,20 @@ const Table: React.FC<ExtendedTableProps> = ({
   hasColumnOrder,
   isTestMode = false,
   themeConfig,
+  autoPageSizeConfig: customAutoPageSizeConfig,
 }) => {
+  const autoConfig = { ...defaultAutoConfig, ...customAutoPageSizeConfig };
+
+  const {
+    enabled: autoEnabled,
+    containerSelector,
+    subtractSelectors,
+    optionalSelectorsForExtraBuffer,
+    rowHeight = defaultAutoConfig.rowHeight,
+    baseBufferRows,
+    extraBufferRows,
+  } = autoConfig;
+
   const searchParams = getSearchParams();
 
   const setSearchParams = useCallback(
@@ -90,8 +145,10 @@ const Table: React.FC<ExtendedTableProps> = ({
     },
     []
   );
+
   const pageSizeInitial = Number(searchParams?.get("pageSize")) || pageSize;
   const isMobile = useIsMobile();
+
   const [dynamicPageSize, setDynamicPageSize] = useState(
     isMobile ? pageSizeInitial : 0
   );
@@ -115,24 +172,7 @@ const Table: React.FC<ExtendedTableProps> = ({
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleCheckboxChange = useCallback(
-    (row: any) => {
-      const id = row?.[selectedKey];
-      if (!id) return;
-
-      if (selectedIds?.includes(id)) {
-        onSelectChange?.(selectedIds.filter((i) => i !== id));
-      } else {
-        onSelectChange?.([...(selectedIds || []), id]);
-      }
-    },
-    [selectedIds, onSelectChange, selectedKey]
-  );
-
-  const handleOrderChange = useCallback((newOrder: OrderType) => {
-    setOrder(newOrder ? [newOrder] : []);
-  }, []);
-
+  // columnsWithRow memo
   const columnsWithRow = useMemo<ColumnType[]>(() => {
     return [
       {
@@ -160,24 +200,43 @@ const Table: React.FC<ExtendedTableProps> = ({
       },
       ...columns,
     ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     columns,
     isSelectable,
     selectedIds,
     selectedKey,
-    handleCheckboxChange,
     isMobile,
     pageNum,
     dynamicPageSize,
     endpoint,
   ]);
 
+  // checkbox handler depends on selectedIds etc
+  const handleCheckboxChange = useCallback(
+    (row: any) => {
+      const id = row?.[selectedKey];
+      if (!id) return;
+
+      if (selectedIds?.includes(id)) {
+        onSelectChange?.(selectedIds.filter((i) => i !== id));
+      } else {
+        onSelectChange?.([...(selectedIds || []), id]);
+      }
+    },
+    [selectedIds, onSelectChange, selectedKey]
+  );
+
+  const handleOrderChange = useCallback((newOrder: OrderType) => {
+    setOrder(newOrder ? [newOrder] : []);
+  }, []);
+
   const refreshableCustomBody = Array.isArray(customBody)
     ? customBody.filter((item) => !item.noRefresh)
     : [];
-
   const payloadCustomBody = customBody || [];
 
+  // fetchTableData
   const fetchTableData = useCallback(async () => {
     try {
       setIsFetching(true);
@@ -206,74 +265,79 @@ const Table: React.FC<ExtendedTableProps> = ({
 
         onFetch?.(response);
         setTableRows(response);
-      } else {
-        const makeCurrentCols = columnsWithRow
-          ?.filter((i) => i.data !== null)
-          ?.map((item) => ({
-            data: item?.data,
-            name: item?.data,
-            searchable: item?.searchable,
-            orderable: item?.orderable,
-            search: { value: "", regex: false, fixed: [] },
-          }));
-
-        let payload: Record<string, any> = {
-          draw: Number(pageNum),
-          columns: makeCurrentCols,
-          order: order || [],
-          start: (Number(pageNum) - 1) * pageSizeState,
-          length: pageSizeState,
-          search: { value: debouncedSearch || "", regex: false, fixed: [] },
-        };
-
-        payloadCustomBody.forEach((item) => {
-          const { noRefresh, isFilter, ...rest } = item;
-          Object.assign(payload, rest);
-        });
-
-        if (openFilter) {
-          setOpenFilter(false);
-        }
-
-        const response = await postMethod(
-          endpoint,
-          payload,
-          undefined,
-          undefined,
-          baseUrl
-        );
-        onFetch?.(response);
-        setTableRows(response);
+        return;
       }
+
+      const makeCurrentCols = columnsWithRow
+        ?.filter((i) => i.data !== null)
+        ?.map((item) => ({
+          data: item?.data,
+          name: item?.data,
+          searchable: item?.searchable,
+          orderable: item?.orderable,
+          search: { value: "", regex: false, fixed: [] },
+        }));
+
+      let payload: Record<string, any> = {
+        draw: Number(pageNum),
+        columns: makeCurrentCols,
+        order: order || [],
+        start: (Number(pageNum) - 1) * pageSizeState,
+        length: pageSizeState,
+        search: { value: debouncedSearch || "", regex: false, fixed: [] },
+      };
+
+      payloadCustomBody.forEach((item) => {
+        const { noRefresh, isFilter, ...rest } = item;
+        Object.assign(payload, rest);
+      });
+
+      if (openFilter) {
+        setOpenFilter(false);
+      }
+
+      const response = await postMethod(
+        endpoint,
+        payload,
+        undefined,
+        undefined,
+        baseUrl
+      );
+      onFetch?.(response);
+      setTableRows(response);
     } catch (error: any) {
       setError(error?.message || "خطا در دریافت داده‌ها");
+      // keep console.error for developer debugging
       console.error("API Error:", error);
     } finally {
       setIsFetching(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     pageNum,
     debouncedSearch,
     order,
     pageSizeState,
-    JSON.stringify(refreshableCustomBody),
-    isTestMode,
     endpoint,
     baseUrl,
+    isTestMode,
+    JSON.stringify(refreshableCustomBody),
   ]);
 
   useEffect(() => {
     fetchTableData();
   }, [fetchTableData]);
 
+  // debounce search
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(searchValue);
     }, 400);
 
     return () => clearTimeout(handler);
-  }, [searchValue, setSearchParams]);
+  }, [searchValue]);
 
+  // save/load search in session storage
   useEffect(() => {
     if (saveSearch && tableName) {
       const key = `search_${tableName}`;
@@ -293,6 +357,7 @@ const Table: React.FC<ExtendedTableProps> = ({
     }
   }, [searchValue, saveSearch, tableName]);
 
+  // active filter count
   const activeFilterCount = Array.isArray(customBody)
     ? customBody.reduce((count, item) => {
         if (!item.isFilter) return count;
@@ -303,6 +368,55 @@ const Table: React.FC<ExtendedTableProps> = ({
         return hasValue ? count + 1 : count;
       }, 0)
     : 0;
+
+  // auto page size calculation (useLayoutEffect)
+  useLayoutEffect(() => {
+    if (!isMobile && autoEnabled) {
+      const calcSize = () => {
+        let sumSubtract = 0;
+        for (const sel of subtractSelectors || []) {
+          sumSubtract += Number(document.querySelector(sel)?.clientHeight || 0);
+        }
+        const availableHeight =
+          Number(
+            document.querySelector(containerSelector || "")?.clientHeight || 0
+          ) - sumSubtract;
+
+        const rows = Math.floor(availableHeight / (rowHeight || 51.15));
+        let buffer = baseBufferRows || 2;
+        const hasOptional = (optionalSelectorsForExtraBuffer || []).some(
+          (sel) => Number(document.querySelector(sel)?.clientHeight || 0) > 0
+        );
+        if (hasOptional) buffer += extraBufferRows || 1;
+
+        const newSize = rows - buffer;
+        if (newSize > 0) {
+          setTableHeightPageSize(newSize); // for height calc
+          if (!dynamicPageSize) {
+            setDynamicPageSize(
+              Number(getSearchParams()?.get("pageSize")) || newSize
+            );
+            setPageSizeState(
+              Number(getSearchParams()?.get("pageSize")) || newSize
+            );
+          }
+        }
+      };
+
+      calcSize();
+      const observer = new MutationObserver(calcSize);
+      observer.observe(document.body, { childList: true, subtree: true });
+      return () => observer.disconnect();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [endpoint, isMobile, JSON.stringify(autoConfig)]);
+
+  // sync dynamic page size effect: when user changes page size via control, update pageSizeState
+  useEffect(() => {
+    if (dynamicPageSize && dynamicPageSize !== pageSizeState) {
+      setPageSizeState(dynamicPageSize);
+    }
+  }, [dynamicPageSize, pageSizeState]);
 
   if (error) {
     return (
@@ -331,10 +445,6 @@ const Table: React.FC<ExtendedTableProps> = ({
           id="filters"
           className={`flex items-start gap-2 justify-between mb-2 max-md:items-center flex-wrap-reverse`}
         >
-          {/* {title && (
-          <Title className="md:hidden max-sm:!text-base">{title}</Title>
-        )} */}
-
           <div
             className={`flex md:items-start items-center md:gap-2 gap-3 w-fit md:flex-wrap-reverse max-md:w-full`}
           >
@@ -344,7 +454,7 @@ const Table: React.FC<ExtendedTableProps> = ({
                   value={searchValue}
                   onChange={(e) => {
                     setSearchValue(e.target.value);
-                    if (searchParams?.get("page")) {
+                    if (getSearchParams()?.get("page")) {
                       setSearchParams(
                         (prev) => {
                           const newParams = new URLSearchParams(prev);
@@ -398,20 +508,30 @@ const Table: React.FC<ExtendedTableProps> = ({
                 pageSize={pageSizeInitial}
                 onPageSizeChange={(newSize) => {
                   setDynamicPageSize(newSize);
+                  // update URL params
+                  setSearchParams((prev) => {
+                    const newParams = new URLSearchParams(prev);
+                    newParams.set("pageSize", String(newSize));
+                    return newParams;
+                  });
                 }}
               />
             )}
           </div>
         </div>
+
         <ResponsiveTable
           columns={columnsWithRow}
           isLoading={isFetching}
           rows={tableRows?.data || []}
-          pageSize={pageSize}
+          pageSize={dynamicPageSize || pageSizeState || pageSize}
           maxHeight={
-            height || pageSize >= defaultSize
-              ? `calc(${pageSize * 51.15}px)`
-              : `calc(${pageSize * 51.15}px)`
+            height
+              ? height
+              : `calc(${
+                  (tableHeightPageSize || pageSizeState || pageSize) *
+                  (rowHeight || 51.15)
+                }px)`
           }
           onOrderChange={handleOrderChange}
         />
@@ -423,13 +543,18 @@ const Table: React.FC<ExtendedTableProps> = ({
           <div className="flex items-center max-sm:justify-center justify-between gap-2 md:mt-2 flex-wrap-reverse">
             <Pagination
               totalItems={tableRows?.recordsFiltered || 0}
-              pageSize={dynamicPageSize}
+              pageSize={dynamicPageSize || pageSizeState || pageSize}
             />
             {tableRows?.recordsFiltered > 0 && !isMobile && (
               <p className="sm:mr-auto w-fit font-medium">
-                نمایش {(Number(pageNum) - 1) * dynamicPageSize + 1} تا{" "}
+                نمایش{" "}
+                {(Number(pageNum) - 1) *
+                  (dynamicPageSize || pageSizeState || pageSize) +
+                  1}{" "}
+                تا{" "}
                 {Math.min(
-                  Number(pageNum) * dynamicPageSize,
+                  Number(pageNum) *
+                    (dynamicPageSize || pageSizeState || pageSize),
                   tableRows?.recordsFiltered
                 )}{" "}
                 از {numberWithCommas(tableRows?.recordsFiltered)} رکورد
@@ -452,7 +577,6 @@ const Table: React.FC<ExtendedTableProps> = ({
         <Modal
           size="lg"
           title="فیلتر ها"
-          // childrenClass="!h-[80svh]"
           isOpen={openFilter}
           onClose={() => setOpenFilter(false)}
         >
@@ -470,6 +594,7 @@ const Table: React.FC<ExtendedTableProps> = ({
               outline
               Icon={BiTrash}
               onClick={() => {
+                // remove all params
                 setSearchParams(() => {
                   const newParams = getSearchParams();
                   Array.from(newParams.keys()).forEach((key) =>

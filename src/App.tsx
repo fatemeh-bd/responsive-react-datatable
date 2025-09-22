@@ -34,15 +34,13 @@ const App: React.FC = () => {
     },
   ];
   return (
-    <div className="min-h-screen w-screen  p-6">
+    <div className="min-h-screen w-screen  p-6" id="content-wrapper">
       <Table
         isTestMode={true}
         columns={columns}
         endpoint="api/contracts"
         title="لیست قراردادها"
         tableName="contracts"
-        pageSize={5}
-        height={"400"}
         saveSearch={true}
         searchPlaceholder="Search..."
         // فیلترهای سفارشی

@@ -18,6 +18,18 @@ export type OrderType = {
   name: string;
 } | null;
 
+type ResponsiveTableProps = {
+  columns: ColumnType[];
+  isLoading: boolean;
+  rows: Record<string, any>[];
+  pageSize: number;
+  maxHeight?: string;
+  onOrderChange?: (order: OrderType) => void;
+  noDataImage?: string; // ✅ اختیاری برای نمایش عکس وقتی دیتا نیست
+  skeletonHeight?: string; // ✅ ارتفاع اسکلتون
+  skeletonWidth?: (index: number) => string; // ✅ تابع کنترل عرض اسکلتون
+};
+
 const ResponsiveTable = ({
   columns,
   isLoading,
@@ -25,14 +37,10 @@ const ResponsiveTable = ({
   pageSize,
   maxHeight,
   onOrderChange,
-}: {
-  columns: ColumnType[];
-  isLoading: boolean;
-  rows: Record<string, any>[];
-  pageSize: number;
-  maxHeight?: string;
-  onOrderChange?: (order: OrderType) => void;
-}) => {
+  noDataImage,
+  skeletonHeight = "h-4",
+  skeletonWidth = (index: number) => (index % 2 ? "w-[40%]" : "w-[60%]"),
+}: ResponsiveTableProps) => {
   const isMobile = useIsMobile();
   const [order, setOrder] = useState<OrderType>(null);
   const colors = useFZTableColors();
@@ -86,12 +94,12 @@ const ResponsiveTable = ({
             <React.Fragment key={index}>
               <div className="flex items-center gap-2">
                 <Skeleton
-                  height="h-4"
-                  width={index % 2 ? "w-[40%]" : "w-[60%]"}
+                  height={skeletonHeight}
+                  width={skeletonWidth(index)}
                 />
                 <Skeleton
-                  height="h-4"
-                  width={index % 2 !== 0 ? "w-[60%]" : "w-[40%]"}
+                  height={skeletonHeight}
+                  width={skeletonWidth(index + 1)}
                 />
               </div>
 
@@ -165,9 +173,14 @@ const ResponsiveTable = ({
           ))}
         </Swiper>
       ) : (
-        <p className="text-center py-6" style={{ color: colors.secondary700 }}>
-          اطلاعاتی برای نمایش وجود ندارد
-        </p>
+        <div className="flex flex-col items-center gap-2 py-6">
+          {noDataImage && (
+            <img src={noDataImage} alt="no-data" className="size-20" />
+          )}
+          <p style={{ color: colors.secondary700 }}>
+            اطلاعاتی برای نمایش وجود ندارد
+          </p>
+        </div>
       )}
     </div>
   ) : (
@@ -184,7 +197,7 @@ const ResponsiveTable = ({
                 <tr>
                   {columns.map((column, colIndex) => (
                     <th
-                      key={column?.data}
+                      key={column?.data || colIndex}
                       onClick={() =>
                         column?.orderable && handleSort(colIndex, column)
                       }
@@ -244,7 +257,6 @@ const ResponsiveTable = ({
             </table>
           </div>
           {isLoading && <LoaderScreen />}
-          {/* Scrollable body */}
           <div
             ref={bodyContainerRef}
             className="overflow-auto w-full"
@@ -318,6 +330,13 @@ const ResponsiveTable = ({
                       className="p-6 text-center"
                       style={{ color: colors.secondary700 }}
                     >
+                      {noDataImage && (
+                        <img
+                          src={noDataImage}
+                          alt="no-data"
+                          className="size-20 mx-auto mb-2"
+                        />
+                      )}
                       اطلاعاتی برای نمایش وجود ندارد
                     </td>
                   </tr>
