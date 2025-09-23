@@ -138,7 +138,7 @@ const Table: React.FC<TableProps> = (props) => {
               ) : null
             ),
             orderable: false,
-            width: 30,
+            width: 50,
             searchable: false,
           },
         ]

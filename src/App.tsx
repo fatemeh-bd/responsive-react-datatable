@@ -94,7 +94,7 @@ const App: React.FC = () => {
       orderable: false,
       title: "عملیات",
       searchable: false,
-      width: 200,
+      width: 120,
       render: rowRenderer((_cell, _row) => (
         <>
           <button className="py-2 px-6 text-sm bg-amber-300 text-black rounded-full">
@@ -108,6 +108,7 @@ const App: React.FC = () => {
     <div className="min-h-screen w-6xl mx-auto p-6" id="content-wrapper">
       <Table
         lang="fa"
+        pageSize={12}
         mode="internal"
         internalApiConfig={{
           baseUrl: "http://10.10.10.22:8090",

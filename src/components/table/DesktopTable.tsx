@@ -69,7 +69,7 @@ const DesktopTable = ({
                     }}
                     className={`${
                       column?.orderable ? "cursor-pointer" : ""
-                    } py-2 px-1 text-center min-w-max`}
+                    } py-2 px-1 text-center min-w-max text-xs`}
                     onClick={() =>
                       column?.orderable && handleSort(colIndex, column)
                     }
@@ -88,18 +88,28 @@ const DesktopTable = ({
                         {column?.orderable && (
                           <span className="flex flex-col items-center">
                             <ArrowUpIcon
+                              style={{
+                                color:
+                                  order?.dir === "asc" ? theme?.headerText : "",
+                              }}
                               className={`h-2 translate-y-[1px] ${
                                 order?.column === colIndex &&
                                 order?.dir === "asc"
-                                  ? "opacity-100 text-secondary-900"
+                                  ? "opacity-100"
                                   : "opacity-20"
                               }`}
                             />
                             <ArrowUpIcon
+                              style={{
+                                color:
+                                  order?.dir === "desc"
+                                    ? theme?.headerText
+                                    : "",
+                              }}
                               className={`h-2 rotate-180 ${
                                 order?.column === colIndex &&
                                 order?.dir === "desc"
-                                  ? "opacity-100 text-secondary-900"
+                                  ? "opacity-100"
                                   : "opacity-20"
                               }`}
                             />
@@ -174,7 +184,7 @@ const DesktopTable = ({
                               cellKey === null
                                 ? "flex items-center justify-center gap-1.5"
                                 : "mx-auto"
-                            } overflow-visible h-auto`}
+                            } h-auto text-sm`}
                           >
                             {content}
                           </div>
