@@ -35,7 +35,7 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen w-screen p-6" id="content-wrapper">
+    <div className="min-h-screen w-6xl mx-auto p-6" id="content-wrapper">
       <Table
         columns={columns}
         isSelectable
