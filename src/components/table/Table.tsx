@@ -46,12 +46,7 @@ const Table: React.FC<TableProps> = (props) => {
     mode,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
-  const [tableRows, _setTableRows] = useState<any[]>(
-    mode === "static" ? (props as StaticModeProps).staticRows || [] : []
-  );
-  const [totalItems, _setTotalItems] = useState<number>(
-    mode === "static" ? (props as StaticModeProps).totalItems || 0 : 0
-  );
+
   const theme: ColorTheme = useMemo(
     () => ({
       borderColor: "#e7e7e7",
@@ -84,7 +79,12 @@ const Table: React.FC<TableProps> = (props) => {
   const [currentPage, setCurrentPage] = useState(
     () => Number(getParams(pageQueryName)) || 1
   );
-
+  const [tableRows, _setTableRows] = useState<any[]>(
+    mode === "static" ? (props as StaticModeProps).staticRows || [] : []
+  );
+  const [totalItems, _setTotalItems] = useState<number>(
+    mode === "static" ? (props as StaticModeProps).totalItems || 0 : 0
+  );
   // functions
   const onChangePage = (page: number) => {
     updateParams(pageQueryName, page.toString());
@@ -124,7 +124,10 @@ const Table: React.FC<TableProps> = (props) => {
       {
         data: "id",
         title: mergedTexts.row,
-        render: rowRenderer((_cell, _row, index?: number) => index! + 1),
+        render: rowRenderer(
+          (_cell, _row, index?: number) =>
+            (Number(currentPage) - 1) * pageSize + (index! + 1)
+        ),
         orderable: true,
         width: 70,
         searchable: false,
