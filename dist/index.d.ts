@@ -50,7 +50,7 @@ interface InternalModeProps {
         saveSearch?: boolean;
         onFetch?: (data: any) => void;
         method?: "POST" | "GET";
-        token?: string;
+        headers?: Record<string, string>;
     };
 }
 interface StaticModeProps {

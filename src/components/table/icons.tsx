@@ -1,6 +1,13 @@
-export const ArrowUpIcon = ({ className }: { className?: string }) => {
+export const ArrowUpIcon = ({
+  className,
+  style = {},
+}: {
+  className?: string;
+  style?: Object;
+}) => {
   return (
     <svg
+      style={style}
       stroke="currentColor"
       fill="currentColor"
       strokeWidth="0"

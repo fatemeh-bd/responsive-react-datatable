@@ -48,7 +48,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         className={`checkbox-control w-[22px] h-[22px] min-w-[22px] min-h-[22px] rounded-md border transition-all
     `}
       ></span>
-      <span className="checkbox-label">{label}</span>
+      {label && <span className="checkbox-label">{label}</span>}
     </label>
   )
 );
