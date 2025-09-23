@@ -1,5 +1,5 @@
-import { useRef } from "react";
-import { ColorTheme, ColumnType, TextsConfig } from "./types";
+import { useRef, useState } from "react";
+import { ColorTheme, ColumnType, OrderType, TextsConfig } from "./types";
 import { ArrowUpIcon } from "./icons";
 import Checkbox from "./CheckBox";
 
@@ -12,6 +12,7 @@ const DesktopTable = ({
   theme,
   textsConfig,
   onAllSelect,
+  onOrderChange,
 }: {
   columns: ColumnType[];
   isLoading?: boolean;
@@ -21,9 +22,28 @@ const DesktopTable = ({
   theme: ColorTheme;
   textsConfig: TextsConfig;
   onAllSelect?: () => void;
+  onOrderChange?: (order: OrderType) => void;
 }) => {
   const headerContainerRef = useRef<HTMLDivElement>(null);
   const bodyContainerRef = useRef<HTMLDivElement>(null);
+  const [order, setOrder] = useState<OrderType>(null);
+
+  const handleSort = (colIndex: number, column: ColumnType) => {
+    if (!column.orderable || !column.data) return;
+
+    setOrder((prev) => {
+      let newOrder: OrderType;
+      if (!prev || prev.column !== colIndex) {
+        newOrder = { column: colIndex, dir: "desc", name: column.data! };
+      } else if (prev.dir === "desc") {
+        newOrder = { column: colIndex, dir: "asc", name: column.data! };
+      } else {
+        newOrder = null;
+      }
+      onOrderChange?.(newOrder);
+      return newOrder;
+    });
+  };
   return (
     <div
       className="w-full overflow-hidden rounded-xl"
@@ -50,6 +70,9 @@ const DesktopTable = ({
                     className={`${
                       column?.orderable ? "cursor-pointer" : ""
                     } py-2 px-1 text-center min-w-max`}
+                    onClick={() =>
+                      column?.orderable && handleSort(colIndex, column)
+                    }
                   >
                     {column?.data === "selectableTable" ? (
                       <Checkbox
@@ -64,8 +87,22 @@ const DesktopTable = ({
                       >
                         {column?.orderable && (
                           <span className="flex flex-col items-center">
-                            <ArrowUpIcon className="h-2 translate-y-[1px]" />
-                            <ArrowUpIcon className="h-2 rotate-180" />
+                            <ArrowUpIcon
+                              className={`h-2 translate-y-[1px] ${
+                                order?.column === colIndex &&
+                                order?.dir === "asc"
+                                  ? "opacity-100 text-secondary-900"
+                                  : "opacity-20"
+                              }`}
+                            />
+                            <ArrowUpIcon
+                              className={`h-2 rotate-180 ${
+                                order?.column === colIndex &&
+                                order?.dir === "desc"
+                                  ? "opacity-100 text-secondary-900"
+                                  : "opacity-20"
+                              }`}
+                            />
                           </span>
                         )}
                         {column?.title}

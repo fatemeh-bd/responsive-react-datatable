@@ -18,6 +18,8 @@ interface ColorTheme {
     paginationActiveColor?: string;
     paginationTextColor?: string;
     paginationDisabledBackgroundColor?: string;
+    searchBoxBorderColor?: string;
+    errorColor?: string;
 }
 interface ColumnType {
     data: string | null;
@@ -30,19 +32,26 @@ interface ColumnType {
     dontShowDataInMobile?: boolean;
 }
 interface TextsConfig {
-    row: string;
-    noDataText: string;
+    row?: string;
+    noDataText?: string;
+    searchPlaceholder?: string;
+    firstPaging?: string;
+    lastPaging?: string;
 }
 type TableMode = "static" | "external" | "internal";
 interface InternalModeProps {
-    endpoint: string;
-    baseUrl?: string;
-    customBody?: Record<string, any>[];
-    tableName?: string;
-    defaultSortBy?: string;
-    sortType?: "asc" | "desc";
-    saveSearch?: boolean;
-    onFetch?: (data: any) => void;
+    internalApiConfig: {
+        endpoint: string;
+        baseUrl?: string;
+        customBody?: Record<string, any>[];
+        tableName?: string;
+        defaultSortBy?: string;
+        sortType?: "asc" | "desc";
+        saveSearch?: boolean;
+        onFetch?: (data: any) => void;
+        method?: "POST" | "GET";
+        token?: string;
+    };
 }
 interface StaticModeProps {
     staticRows: any[];
@@ -60,6 +69,10 @@ interface BaseTableProps {
     pageSize?: number;
     onPageChange?: (page: number) => void;
     onSortChange?: (order: OrderType) => void;
+    hasColumnOrder?: boolean;
+    noSearch?: boolean;
+    saveSearch?: boolean;
+    notify: (text: string, type: "error" | "success" | "warning") => void;
 }
 interface Selectable extends BaseTableProps {
     isSelectable: true;
