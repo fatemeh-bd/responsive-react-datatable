@@ -8,6 +8,11 @@ interface ColorTheme {
     rowBg?: string;
     cellText?: string;
     primaryColor?: string;
+    paginationBg?: string;
+    paginationBorderColor?: string;
+    paginationActiveColor?: string;
+    paginationTextColor?: string;
+    paginationDisabledBackgroundColor?: string;
 }
 interface ColumnType {
     data: string | null;
@@ -28,8 +33,9 @@ interface BaseTableProps {
     columns: ColumnType[];
     onOrderChange?: (value: any) => void;
     colorTheme?: ColorTheme;
-    lang?: "en" | "fa";
     textsConfig?: TextsConfig;
+    lang?: "en" | "fa";
+    pageQueryName?: string;
 }
 interface NonSelectable extends BaseTableProps {
     isSelectable?: false;

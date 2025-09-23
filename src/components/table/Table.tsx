@@ -12,16 +12,26 @@ import DesktopTable from "./DesktopTable";
 import { rowRenderer } from "./helper";
 import Checkbox from "./CheckBox";
 import mock from "./mockData.json";
+import Pagination from "./Pagination";
 const defaultTexts = {
   en: {
     row: "Row",
     noDataText: "No data available",
+    firstPaging: "First",
+    lastPaging: "Last",
+    showing: (from: number, to: number, total: string) =>
+      `Showing ${from} to ${to} of ${total} records`,
   },
   fa: {
     row: "ردیف",
     noDataText: "اطلاعاتی برای نمایش وجود ندارد",
+    firstPaging: "اولین",
+    lastPaging: "آخرین",
+    showing: (from: number, to: number, total: string) =>
+      `نمایش ${from} تا ${to} از ${total} رکورد`,
   },
 };
+
 const Table: React.FC<TableProps> = (props) => {
   // props
   const {
@@ -29,8 +39,9 @@ const Table: React.FC<TableProps> = (props) => {
     columns = [],
     isSelectable,
     colorTheme,
-    lang = "en",
     textsConfig,
+    lang = "en",
+    pageQueryName = "page",
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
   // default configs
@@ -42,10 +53,16 @@ const Table: React.FC<TableProps> = (props) => {
     rowBg: "#fff",
     cellText: "#333333",
     primaryColor: "#ffd61f",
+    paginationBg: "#fff",
+    paginationBorderColor: "#d9d9d9",
+    paginationActiveColor: "#ffd61f",
+    paginationTextColor: "#333333",
+    paginationDisabledBackgroundColor: "#f9f9f9",
   };
 
   const theme: ColorTheme = { ...defaultColorTheme, ...colorTheme };
   const mergedTexts = { ...defaultTexts[lang], ...textsConfig };
+  const dir = lang === "fa" ? "rtl" : "ltr";
   // hooks
   const isMobile = useIsMobile(startMobileSize);
   // functions
@@ -107,7 +124,7 @@ const Table: React.FC<TableProps> = (props) => {
   }, [columns, selectableProps, isMobile, handleCheckboxChange]);
 
   return (
-    <div dir={lang === "fa" ? "rtl" : "ltr"}>
+    <div dir={dir}>
       {isMobile ? (
         <MobileTable
           columns={columnsWithRow}
@@ -118,26 +135,38 @@ const Table: React.FC<TableProps> = (props) => {
           textsConfig={mergedTexts}
         />
       ) : (
-        <DesktopTable
-          columns={columnsWithRow}
-          isLoading={false}
-          rows={mock.data}
-          pageSize={10}
-          theme={theme}
-          textsConfig={mergedTexts}
-          onAllSelect={() => {
-            if (!selectableProps?.onSelectChange) return;
+        <>
+          <DesktopTable
+            columns={columnsWithRow}
+            isLoading={false}
+            rows={mock.data}
+            pageSize={10}
+            theme={theme}
+            textsConfig={mergedTexts}
+            onAllSelect={() => {
+              if (!selectableProps?.onSelectChange) return;
 
-            const allIds =
-              mock.data?.map(
-                (i) => i[selectableProps.selectedKey as keyof typeof i]
-              ) || [];
-            const isAllSelected =
-              selectableProps.selectedIds?.length === allIds.length;
+              const allIds =
+                mock.data?.map(
+                  (i) => i[selectableProps.selectedKey as keyof typeof i]
+                ) || [];
+              const isAllSelected =
+                selectableProps.selectedIds?.length === allIds.length;
 
-            selectableProps.onSelectChange(isAllSelected ? [] : allIds);
-          }}
-        />
+              selectableProps.onSelectChange(isAllSelected ? [] : allIds);
+            }}
+          />
+
+          <Pagination
+            dir={dir}
+            startMobileSize={startMobileSize}
+            totalItems={mock.recordsFiltered}
+            queryName={pageQueryName}
+            pageSize={12}
+            theme={theme}
+            textsConfig={mergedTexts}
+          />
+        </>
       )}
     </div>
   );
