@@ -20,6 +20,7 @@ interface PaginationProps {
     lastPaging: string;
     showing: (from: number, to: number, total: string) => string;
   };
+  onChangePage?: (value: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -30,6 +31,7 @@ const Pagination: React.FC<PaginationProps> = ({
   theme,
   dir,
   textsConfig,
+  onChangePage,
 }) => {
   const { updateParams, getParams } = useQueryParams();
   const currentPage = Number(getParams(queryName)) || 1;
@@ -98,6 +100,7 @@ const Pagination: React.FC<PaginationProps> = ({
   const updatePage = useCallback(
     (page: number) => {
       updateParams(queryName, page.toString());
+      onChangePage?.(page);
     },
     [updateParams, queryName]
   );

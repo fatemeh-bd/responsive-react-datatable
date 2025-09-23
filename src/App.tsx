@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Table from "./components/table/Table";
 import { ColumnType } from "./components/table/types";
+import mock from "./components/table/mockData.json";
+
 const App: React.FC = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const columns: ColumnType[] = [
@@ -37,6 +39,9 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen w-6xl mx-auto p-6" id="content-wrapper">
       <Table
+        mode="static"
+        staticRows={mock?.data}
+        totalItems={mock?.recordsFiltered}
         columns={columns}
         isSelectable
         selectedIds={selectedIds}

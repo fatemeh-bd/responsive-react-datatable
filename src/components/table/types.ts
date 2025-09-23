@@ -50,7 +50,23 @@ export interface TextsConfig {
   row: string;
   noDataText: string;
 }
+export type TableMode = "static" | "external" | "internal";
+export interface InternalModeProps {
+  endpoint: string;
+  baseUrl?: string;
+  customBody?: Record<string, any>[];
+  tableName?: string;
+  defaultSortBy?: string;
+  sortType?: "asc" | "desc";
+  saveSearch?: boolean;
+  onFetch?: (data: any) => void;
+}
+export interface StaticModeProps {
+  staticRows: any[];
+  totalItems: number;
+}
 export interface BaseTableProps {
+  mode: TableMode;
   startMobileSize?: number;
   columns: ColumnType[];
   onOrderChange?: (value: any) => void;
@@ -58,6 +74,9 @@ export interface BaseTableProps {
   textsConfig?: TextsConfig;
   lang?: "en" | "fa";
   pageQueryName?: string;
+  pageSize?: number;
+  onPageChange?: (page: number) => void;
+  onSortChange?: (order: OrderType) => void;
 }
 
 interface NonSelectable extends BaseTableProps {
@@ -71,4 +90,26 @@ export interface Selectable extends BaseTableProps {
   onSelectChange?: (value: any) => void;
 }
 
-export type TableProps = NonSelectable | Selectable;
+// حالت internal
+export interface InternalTableProps extends BaseTableProps, InternalModeProps {
+  mode: "internal";
+}
+
+// حالت static
+export interface StaticTableProps extends BaseTableProps, StaticModeProps {
+  mode: "static";
+}
+
+// حالت external (بدون پراپس اضافی)
+export interface ExternalTableProps extends BaseTableProps {
+  mode: "external";
+}
+
+// union نهایی با قابلیت انتخابی بودن ردیف‌ها
+export type TableProps =
+  | (InternalTableProps & { isSelectable?: false })
+  | (InternalTableProps & Selectable)
+  | (StaticTableProps & { isSelectable?: false })
+  | (StaticTableProps & Selectable)
+  | (ExternalTableProps & { isSelectable?: false })
+  | (ExternalTableProps & Selectable);
