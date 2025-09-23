@@ -1,18 +1,18 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ColorTheme,
   ColumnType,
   Selectable,
+  StaticModeProps,
   TableProps,
-  TextsConfig,
 } from "./types";
 import { useIsMobile } from "./useIsMobile";
 import MobileTable from "./MobileTable";
 import DesktopTable from "./DesktopTable";
 import { rowRenderer } from "./helper";
-import Checkbox from "./CheckBox";
-import mock from "./mockData.json";
 import Pagination from "./Pagination";
+import { useQueryParams } from "./useQueryParams";
+import { SelectableCheckbox } from "./SelectableCheckbox";
 const defaultTexts = {
   en: {
     row: "Row",
@@ -42,74 +42,85 @@ const Table: React.FC<TableProps> = (props) => {
     textsConfig,
     lang = "en",
     pageQueryName = "page",
+    pageSize = 20,
+    mode,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
-  // default configs
-  const defaultColorTheme: ColorTheme = {
-    borderColor: "#e7e7e7",
-    headerBg: "#f9f9f9",
-    headerText: "#333333",
-    rowBorder: "#e7e7e7",
-    rowBg: "#fff",
-    cellText: "#333333",
-    primaryColor: "#ffd61f",
-    paginationBg: "#fff",
-    paginationBorderColor: "#d9d9d9",
-    paginationActiveColor: "#ffd61f",
-    paginationTextColor: "#333333",
-    paginationDisabledBackgroundColor: "#f9f9f9",
-  };
+  const [tableRows, _setTableRows] = useState<any[]>(
+    mode === "static" ? (props as StaticModeProps).staticRows || [] : []
+  );
+  const [totalItems, _setTotalItems] = useState<number>(
+    mode === "static" ? (props as StaticModeProps).totalItems || 0 : 0
+  );
+  const theme: ColorTheme = useMemo(
+    () => ({
+      borderColor: "#e7e7e7",
+      headerBg: "#f9f9f9",
+      headerText: "#333333",
+      rowBorder: "#e7e7e7",
+      rowBg: "#fff",
+      cellText: "#333333",
+      primaryColor: "#ffd61f",
+      paginationBg: "#fff",
+      paginationBorderColor: "#d9d9d9",
+      paginationActiveColor: "#ffd61f",
+      paginationTextColor: "#333333",
+      paginationDisabledBackgroundColor: "#f9f9f9",
+      ...colorTheme,
+    }),
+    [colorTheme]
+  );
 
-  const theme: ColorTheme = { ...defaultColorTheme, ...colorTheme };
-  const mergedTexts = { ...defaultTexts[lang], ...textsConfig };
+  const mergedTexts = useMemo(
+    () => ({ ...defaultTexts[lang], ...textsConfig }),
+    [lang, textsConfig]
+  );
   const dir = lang === "fa" ? "rtl" : "ltr";
+
   // hooks
   const isMobile = useIsMobile(startMobileSize);
-  // functions
-  const handleCheckboxChange = useCallback(
-    (row: any) => {
-      if (!selectableProps) return;
-
-      const { selectedIds, selectedKey, onSelectChange } = selectableProps;
-      const id = row?.[selectedKey];
-      if (!id) return;
-
-      if (selectedIds?.includes(id)) {
-        onSelectChange?.(selectedIds.filter((i) => i !== id));
-      } else {
-        onSelectChange?.([...(selectedIds || []), id]);
-      }
-    },
-    [selectableProps]
+  const { updateParams, getParams } = useQueryParams();
+  // states
+  const [currentPage, setCurrentPage] = useState(
+    () => Number(getParams(pageQueryName)) || 1
   );
-  const columnsWithRow = useMemo<ColumnType[]>(() => {
+
+  // functions
+  const onChangePage = (page: number) => {
+    updateParams(pageQueryName, page.toString());
+    setCurrentPage(page);
+  };
+
+  const paginatedRows = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    return tableRows.slice(start, end);
+  }, [tableRows, currentPage, pageSize]);
+
+  const columnsWithRow: ColumnType[] = useMemo(() => {
+    const selectableColumn: ColumnType[] = isSelectable
+      ? [
+          {
+            data: "selectableTable",
+            title: "",
+            render: rowRenderer((_cell, _row) =>
+              selectableProps ? (
+                <SelectableCheckbox
+                  row={_row}
+                  selectableProps={selectableProps}
+                  theme={theme}
+                />
+              ) : null
+            ),
+            orderable: false,
+            width: 30,
+            searchable: false,
+          },
+        ]
+      : [];
+
     return [
-      ...(isSelectable
-        ? [
-            {
-              data: "selectableTable",
-              title: "",
-              render: rowRenderer((_cell, _row) => {
-                return (
-                  selectableProps && (
-                    <Checkbox
-                      className="mx-auto justify-center"
-                      primaryColor={theme.primaryColor}
-                      checked={selectableProps.selectedIds?.includes(
-                        _row?.[selectableProps.selectedKey]
-                      )}
-                      value={_row?.[selectableProps.selectedKey]}
-                      onChange={() => handleCheckboxChange(_row)}
-                    />
-                  )
-                );
-              }),
-              orderable: false,
-              width: 30,
-              searchable: false,
-            },
-          ]
-        : []),
+      ...selectableColumn,
       {
         data: "id",
         title: mergedTexts.row,
@@ -121,7 +132,15 @@ const Table: React.FC<TableProps> = (props) => {
       },
       ...columns,
     ];
-  }, [columns, selectableProps, isMobile, handleCheckboxChange]);
+  }, [columns, isSelectable, selectableProps, theme, mergedTexts.row]);
+  // useEffects
+  useEffect(() => {
+    const handler = () => {
+      setCurrentPage(Number(getParams(pageQueryName)) || 1);
+    };
+    window.addEventListener("popstate", handler);
+    return () => window.removeEventListener("popstate", handler);
+  }, [getParams, pageQueryName]);
 
   return (
     <div dir={dir}>
@@ -129,8 +148,8 @@ const Table: React.FC<TableProps> = (props) => {
         <MobileTable
           columns={columnsWithRow}
           isLoading={false}
-          rows={mock.data}
-          pageSize={10}
+          rows={paginatedRows}
+          pageSize={pageSize}
           theme={theme}
           textsConfig={mergedTexts}
         />
@@ -139,16 +158,16 @@ const Table: React.FC<TableProps> = (props) => {
           <DesktopTable
             columns={columnsWithRow}
             isLoading={false}
-            rows={mock.data}
-            pageSize={10}
+            rows={paginatedRows}
+            pageSize={pageSize}
             theme={theme}
             textsConfig={mergedTexts}
             onAllSelect={() => {
               if (!selectableProps?.onSelectChange) return;
 
               const allIds =
-                mock.data?.map(
-                  (i) => i[selectableProps.selectedKey as keyof typeof i]
+                tableRows?.map(
+                  (i) => i[selectableProps?.selectedKey as keyof typeof i]
                 ) || [];
               const isAllSelected =
                 selectableProps.selectedIds?.length === allIds.length;
@@ -160,11 +179,12 @@ const Table: React.FC<TableProps> = (props) => {
           <Pagination
             dir={dir}
             startMobileSize={startMobileSize}
-            totalItems={mock.recordsFiltered}
+            totalItems={totalItems}
             queryName={pageQueryName}
-            pageSize={12}
+            pageSize={pageSize}
             theme={theme}
             textsConfig={mergedTexts}
+            onChangePage={onChangePage}
           />
         </>
       )}
