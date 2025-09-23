@@ -273,9 +273,7 @@ const Table: React.FC<TableProps> = (props) => {
             method: props?.internalApiConfig?.method || "POST",
             url: props?.internalApiConfig?.baseUrl + endpoint || "" + endpoint,
             data: payload || null,
-            headers: {
-              Authorization: `Bearer ${props?.internalApiConfig?.token}`,
-            },
+            headers: props?.internalApiConfig?.headers,
           });
 
           props?.internalApiConfig?.onFetch?.(response?.data);
