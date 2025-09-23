@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 export function useQueryParams() {
   const [search, setSearch] = useState(() => window.location.search);
 
-  // وقتی history تغییر کرد گوش بده
   useEffect(() => {
     const onPopState = () => {
       setSearch(window.location.search);
@@ -24,15 +23,29 @@ export function useQueryParams() {
 
   const updateParams = useCallback((key: string, value: string) => {
     const params = new URLSearchParams(window.location.search);
-    if (value) params.set(key, value);
-    else params.delete(key);
+    params.set(key, value);
 
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    const queryString = params.toString();
+    const newUrl = queryString
+      ? `${window.location.pathname}?${queryString}`
+      : window.location.pathname;
+
     window.history.pushState({}, "", newUrl);
-
-    // دستی state رو آپدیت می‌کنیم تا re-render بشه
     setSearch(window.location.search);
   }, []);
 
-  return { getParams, updateParams };
+  const removeParams = useCallback((key: string) => {
+    const params = new URLSearchParams(window.location.search);
+    params.delete(key);
+
+    const queryString = params.toString();
+    const newUrl = queryString
+      ? `${window.location.pathname}?${queryString}`
+      : window.location.pathname;
+
+    window.history.pushState({}, "", newUrl);
+    setSearch(window.location.search);
+  }, []);
+
+  return { getParams, updateParams, removeParams };
 }

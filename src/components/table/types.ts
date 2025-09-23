@@ -21,6 +21,8 @@ export interface ColorTheme {
   paginationActiveColor?: string;
   paginationTextColor?: string;
   paginationDisabledBackgroundColor?: string;
+  searchBoxBorderColor?: string;
+  errorColor?: string;
 }
 
 export interface DesktopTableProps {
@@ -47,19 +49,26 @@ export interface ColumnType {
   dontShowDataInMobile?: boolean;
 }
 export interface TextsConfig {
-  row: string;
-  noDataText: string;
+  row?: string;
+  noDataText?: string;
+  searchPlaceholder?: string;
+  firstPaging?: string;
+  lastPaging?: string;
 }
 export type TableMode = "static" | "external" | "internal";
 export interface InternalModeProps {
-  endpoint: string;
-  baseUrl?: string;
-  customBody?: Record<string, any>[];
-  tableName?: string;
-  defaultSortBy?: string;
-  sortType?: "asc" | "desc";
-  saveSearch?: boolean;
-  onFetch?: (data: any) => void;
+  internalApiConfig: {
+    endpoint: string;
+    baseUrl?: string;
+    customBody?: Record<string, any>[];
+    tableName?: string;
+    defaultSortBy?: string;
+    sortType?: "asc" | "desc";
+    saveSearch?: boolean;
+    onFetch?: (data: any) => void;
+    method?: "POST" | "GET";
+    token?: string;
+  };
 }
 export interface StaticModeProps {
   staticRows: any[];
@@ -77,6 +86,10 @@ export interface BaseTableProps {
   pageSize?: number;
   onPageChange?: (page: number) => void;
   onSortChange?: (order: OrderType) => void;
+  hasColumnOrder?: boolean;
+  noSearch?: boolean;
+  saveSearch?: boolean;
+  notify: (text: string, type: "error" | "success" | "warning") => void;
 }
 
 interface NonSelectable extends BaseTableProps {
