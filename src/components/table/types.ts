@@ -96,6 +96,7 @@ export interface BaseTableProps {
   onPageChange?: (page: number) => void;
   onSortChange?: (order: OrderType) => void;
   onSearch?: (value: string) => void;
+  onPageSizeChange?: (order: number) => void;
   height?: string;
   hasColumnOrder?: boolean;
   noSearch?: boolean;

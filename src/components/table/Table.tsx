@@ -70,6 +70,7 @@ const Table: React.FC<TableProps> = (props) => {
     isLoading,
     autoPageSizeConfig: customAutoPageSizeConfig,
     height,
+    onPageSizeChange,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
 
@@ -104,8 +105,8 @@ const Table: React.FC<TableProps> = (props) => {
     enabled: true,
     containerSelector: "#content-wrapper",
     subtractSelectors: [
-      "#table-header-actions",
-      "#paging",
+      // "#table-header-actions",
+      // "#paging",
       "#filters",
       "#topFilter",
       "#tabPage",
@@ -126,7 +127,7 @@ const Table: React.FC<TableProps> = (props) => {
     ...defaultAutoConfig,
     ...customAutoPageSizeConfig,
     subtractSelectors: [
-      "#table-header-actions",
+      // "#table-header-actions",
       "#paging",
       ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
     ],
@@ -498,6 +499,7 @@ const Table: React.FC<TableProps> = (props) => {
             pageSize={pageSizeInitial}
             onPageSizeChange={(newSize) => {
               setDynamicPageSize(newSize);
+              onPageSizeChange?.(newSize);
             }}
           />
         )}
@@ -520,6 +522,7 @@ const Table: React.FC<TableProps> = (props) => {
       ) : (
         <>
           <DesktopTable
+            rowHeight={`${rowHeight}px` || "51.15px"}
             maxHeight={
               height
                 ? height
