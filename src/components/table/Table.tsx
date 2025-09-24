@@ -220,6 +220,31 @@ const Table: React.FC<TableProps> = (props) => {
       sessionStorage.setItem(key, JSON.stringify({ value: searchValue }));
     }
   }, [searchValue, saveSearch, props?.mode]);
+  useEffect(() => {
+    if (mode === "static" && order?.length > 0) {
+      const { name, dir } = order[0];
+
+      if (!name) return;
+
+      const sorted = [...(props as StaticModeProps).staticRows].sort((a, b) => {
+        const aValue = a[name];
+        const bValue = b[name];
+
+        if (aValue === null || aValue === undefined) return 1;
+        if (bValue === null || bValue === undefined) return -1;
+
+        if (typeof aValue === "number" && typeof bValue === "number") {
+          return dir === "asc" ? aValue - bValue : bValue - aValue;
+        }
+
+        return dir === "asc"
+          ? String(aValue).localeCompare(String(bValue))
+          : String(bValue).localeCompare(String(aValue));
+      });
+
+      setTableRows(sorted);
+    }
+  }, [order, mode, props]);
 
   // internal api call
   if (mode === "internal") {
