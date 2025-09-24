@@ -104,10 +104,11 @@ const Table: React.FC<TableProps> = (props) => {
     enabled: true,
     containerSelector: "#content-wrapper",
     subtractSelectors: [
+      "#table-header-actions",
+      "#paging",
       "#filters",
       "#topFilter",
       "#tabPage",
-      "#paging",
       "#userCards",
       "#title",
     ],
@@ -121,7 +122,15 @@ const Table: React.FC<TableProps> = (props) => {
     baseBufferRows: 2,
     extraBufferRows: 1,
   };
-  const autoConfig = { ...defaultAutoConfig, ...customAutoPageSizeConfig };
+  const autoConfig = {
+    ...defaultAutoConfig,
+    ...customAutoPageSizeConfig,
+    subtractSelectors: [
+      "#table-header-actions",
+      "#paging",
+      ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
+    ],
+  };
 
   const {
     enabled: autoEnabled,
