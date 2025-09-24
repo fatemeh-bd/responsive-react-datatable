@@ -57,11 +57,19 @@ interface StaticModeProps {
     staticRows: any[];
     totalItems: number;
 }
+interface AutoPageSizeConfig {
+    enabled?: boolean;
+    containerSelector?: string;
+    subtractSelectors?: string[];
+    optionalSelectorsForExtraBuffer?: string[];
+    rowHeight?: number;
+    baseBufferRows?: number;
+    extraBufferRows?: number;
+}
 interface BaseTableProps {
     mode: TableMode;
     startMobileSize?: number;
     columns: ColumnType[];
-    onOrderChange?: (value: any) => void;
     colorTheme?: ColorTheme;
     textsConfig?: TextsConfig;
     lang?: "en" | "fa";
@@ -69,10 +77,15 @@ interface BaseTableProps {
     pageSize?: number;
     onPageChange?: (page: number) => void;
     onSortChange?: (order: OrderType) => void;
+    onSearch?: (value: string) => void;
+    onPageSizeChange?: (order: number) => void;
+    height?: string;
     hasColumnOrder?: boolean;
     noSearch?: boolean;
     saveSearch?: boolean;
     notify: (text: string, type: "error" | "success" | "warning") => void;
+    isLoading?: boolean;
+    autoPageSizeConfig?: AutoPageSizeConfig;
 }
 interface Selectable extends BaseTableProps {
     isSelectable: true;
@@ -88,6 +101,9 @@ interface StaticTableProps extends BaseTableProps, StaticModeProps {
 }
 interface ExternalTableProps extends BaseTableProps {
     mode: "external";
+    externalRows: any[];
+    totalItems: number;
+    isLoading?: boolean;
 }
 type TableProps = (InternalTableProps & {
     isSelectable?: false;

@@ -13,6 +13,7 @@ const DesktopTable = ({
   textsConfig,
   onAllSelect,
   onOrderChange,
+  rowHeight,
 }: {
   columns: ColumnType[];
   isLoading?: boolean;
@@ -23,6 +24,7 @@ const DesktopTable = ({
   textsConfig: TextsConfig;
   onAllSelect?: () => void;
   onOrderChange?: (order: OrderType) => void;
+  rowHeight?: string;
 }) => {
   const headerContainerRef = useRef<HTMLDivElement>(null);
   const bodyContainerRef = useRef<HTMLDivElement>(null);
@@ -153,6 +155,7 @@ const DesktopTable = ({
                     style={{
                       borderBottom: `1px solid ${theme.rowBorder}`,
                       backgroundColor: theme.rowBg,
+                      height: rowHeight,
                     }}
                   >
                     {columns.map((column, colIndex) => {

@@ -70,15 +70,24 @@ export interface InternalModeProps {
     headers?: Record<string, string>;
   };
 }
+
 export interface StaticModeProps {
   staticRows: any[];
   totalItems: number;
+}
+export interface AutoPageSizeConfig {
+  enabled?: boolean;
+  containerSelector?: string;
+  subtractSelectors?: string[];
+  optionalSelectorsForExtraBuffer?: string[];
+  rowHeight?: number;
+  baseBufferRows?: number;
+  extraBufferRows?: number;
 }
 export interface BaseTableProps {
   mode: TableMode;
   startMobileSize?: number;
   columns: ColumnType[];
-  onOrderChange?: (value: any) => void;
   colorTheme?: ColorTheme;
   textsConfig?: TextsConfig;
   lang?: "en" | "fa";
@@ -86,14 +95,15 @@ export interface BaseTableProps {
   pageSize?: number;
   onPageChange?: (page: number) => void;
   onSortChange?: (order: OrderType) => void;
+  onSearch?: (value: string) => void;
+  onPageSizeChange?: (order: number) => void;
+  height?: string;
   hasColumnOrder?: boolean;
   noSearch?: boolean;
   saveSearch?: boolean;
   notify: (text: string, type: "error" | "success" | "warning") => void;
-}
-
-interface NonSelectable extends BaseTableProps {
-  isSelectable?: false;
+  isLoading?: boolean;
+  autoPageSizeConfig?: AutoPageSizeConfig;
 }
 
 export interface Selectable extends BaseTableProps {
@@ -116,6 +126,9 @@ export interface StaticTableProps extends BaseTableProps, StaticModeProps {
 // حالت external (بدون پراپس اضافی)
 export interface ExternalTableProps extends BaseTableProps {
   mode: "external";
+  externalRows: any[];
+  totalItems: number;
+  isLoading?: boolean;
 }
 
 // union نهایی با قابلیت انتخابی بودن ردیف‌ها

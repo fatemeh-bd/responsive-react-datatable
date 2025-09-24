@@ -205,8 +205,11 @@ const Pagination: React.FC<PaginationProps> = ({
       </button>
     </>
   ) : (
-    <div className="w-full flex items-center justify-between gap-2 md:mt-2 flex-wrap-reverse">
-      <nav id="paging">
+    <div
+      id="paging"
+      className="w-full flex items-center justify-between gap-2 md:mt-2 flex-wrap-reverse"
+    >
+      <nav>
         <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
           <button
             style={{

@@ -1,7 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
+  AutoPageSizeConfig,
   ColorTheme,
   ColumnType,
+  ExternalTableProps,
   OrderType,
   Selectable,
   StaticModeProps,
@@ -17,6 +25,7 @@ import { SelectableCheckbox } from "./SelectableCheckbox";
 import { useQuery } from "@tanstack/react-query";
 import { CloseIcon, SearchIcon } from "./icons";
 import axios from "axios";
+import PageSizeSelect from "./PageSizeSelect";
 const defaultTexts = {
   en: {
     row: "Row",
@@ -37,6 +46,7 @@ const defaultTexts = {
     searchPlaceholder: "جستجو کنید...",
   },
 };
+export const defaultSize = 10;
 
 const Table: React.FC<TableProps> = (props) => {
   // props
@@ -48,12 +58,19 @@ const Table: React.FC<TableProps> = (props) => {
     textsConfig,
     lang = "en",
     pageQueryName = "page",
-    pageSize = 8,
+    pageSize = defaultSize,
     mode,
     hasColumnOrder,
     noSearch,
     saveSearch,
     notify,
+    onPageChange,
+    onSortChange,
+    onSearch,
+    isLoading,
+    autoPageSizeConfig: customAutoPageSizeConfig,
+    height,
+    onPageSizeChange,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
 
@@ -84,6 +101,48 @@ const Table: React.FC<TableProps> = (props) => {
   );
   const dir = lang === "fa" ? "rtl" : "ltr";
 
+  const defaultAutoConfig: AutoPageSizeConfig = {
+    enabled: true,
+    containerSelector: "#content-wrapper",
+    subtractSelectors: [
+      // "#table-header-actions",
+      // "#paging",
+      "#filters",
+      "#topFilter",
+      "#tabPage",
+      "#userCards",
+      "#title",
+    ],
+    optionalSelectorsForExtraBuffer: [
+      "#tabPage",
+      "#topFilter",
+      "#userCards",
+      "#title",
+    ],
+    rowHeight: 51.15,
+    baseBufferRows: 2,
+    extraBufferRows: 1,
+  };
+  const autoConfig = {
+    ...defaultAutoConfig,
+    ...customAutoPageSizeConfig,
+    subtractSelectors: [
+      // "#table-header-actions",
+      "#paging",
+      ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
+    ],
+  };
+
+  const {
+    enabled: autoEnabled,
+    containerSelector,
+    subtractSelectors,
+    optionalSelectorsForExtraBuffer,
+    rowHeight,
+    baseBufferRows,
+    extraBufferRows,
+  } = autoConfig;
+
   // hooks
   const isMobile = useIsMobile(startMobileSize);
   const { updateParams, getParams, removeParams } = useQueryParams();
@@ -96,6 +155,15 @@ const Table: React.FC<TableProps> = (props) => {
   );
   const [totalItems, setTotalItems] = useState<number>(
     mode === "static" ? (props as StaticModeProps).totalItems || 0 : 0
+  );
+  const pageSizeInitial = Number(getParams("pageSize")) || pageSize;
+
+  const [dynamicPageSize, setDynamicPageSize] = useState(
+    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSizeInitial
+  );
+
+  const [tableHeightPageSize, setTableHeightPageSize] = useState(
+    isMobile ? pageSizeInitial : 0
   );
   const [order, setOrder] = useState<any>([
     {
@@ -112,15 +180,22 @@ const Table: React.FC<TableProps> = (props) => {
   const onChangePage = (page: number) => {
     updateParams(pageQueryName, page.toString());
     setCurrentPage(page);
+
+    onPageChange?.(page);
   };
-  const handleOrderChange = useCallback((newOrder: OrderType) => {
-    setOrder(newOrder ? [newOrder] : []);
-  }, []);
+  const handleOrderChange = useCallback(
+    (newOrder: OrderType) => {
+      setOrder(newOrder ? [newOrder] : []);
+
+      onSortChange?.(newOrder);
+    },
+    [mode, onSortChange]
+  );
   const paginatedRows = useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
-    const end = start + pageSize;
+    const start = (currentPage - 1) * dynamicPageSize;
+    const end = start + dynamicPageSize;
     return tableRows.slice(start, end);
-  }, [tableRows, currentPage, pageSize]);
+  }, [tableRows, currentPage, dynamicPageSize]);
 
   const columnsWithRow: ColumnType[] = useMemo(() => {
     const selectableColumn: ColumnType[] = isSelectable
@@ -151,7 +226,7 @@ const Table: React.FC<TableProps> = (props) => {
         title: mergedTexts.row,
         render: rowRenderer(
           (_cell, _row, index?: number) =>
-            (Number(currentPage) - 1) * pageSize + (index! + 1)
+            (Number(currentPage) - 1) * dynamicPageSize + (index! + 1)
         ),
         orderable: true,
         width: 70,
@@ -186,10 +261,45 @@ const Table: React.FC<TableProps> = (props) => {
     (props as StaticModeProps).staticRows,
     (props as StaticModeProps).totalItems,
   ]);
+  useLayoutEffect(() => {
+    if (!isMobile && autoEnabled) {
+      const calcSize = () => {
+        let sumSubtract = 0;
+        for (const sel of subtractSelectors || []) {
+          sumSubtract += Number(document.querySelector(sel)?.clientHeight || 0);
+        }
+        const availableHeight =
+          Number(
+            document.querySelector(containerSelector || "")?.clientHeight || 0
+          ) - sumSubtract;
+
+        const rows = Math.floor(availableHeight / (rowHeight || 51.15));
+        let buffer = baseBufferRows || 2;
+        const hasOptional = (optionalSelectorsForExtraBuffer || []).some(
+          (sel) => Number(document.querySelector(sel)?.clientHeight || 0) > 0
+        );
+        if (hasOptional) buffer += extraBufferRows || 1;
+
+        const newSize = rows - buffer;
+        if (newSize > 0) {
+          setTableHeightPageSize(newSize);
+          if (!dynamicPageSize) {
+            setDynamicPageSize(Number(getParams("pageSize")) || newSize);
+          }
+        }
+      };
+
+      calcSize();
+      const observer = new MutationObserver(calcSize);
+      observer.observe(document.body, { childList: true, subtree: true });
+      return () => observer.disconnect();
+    }
+  }, [isMobile, autoEnabled]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(searchValue);
+      onSearch?.(searchValue);
     }, 400);
 
     return () => clearTimeout(handler);
@@ -220,6 +330,42 @@ const Table: React.FC<TableProps> = (props) => {
       sessionStorage.setItem(key, JSON.stringify({ value: searchValue }));
     }
   }, [searchValue, saveSearch, props?.mode]);
+  useEffect(() => {
+    if (mode === "static" && order?.length > 0) {
+      const { name, dir } = order[0];
+
+      if (!name) return;
+
+      const sorted = [...(props as StaticModeProps).staticRows].sort((a, b) => {
+        const aValue = a[name];
+        const bValue = b[name];
+
+        if (aValue === null || aValue === undefined) return 1;
+        if (bValue === null || bValue === undefined) return -1;
+
+        if (typeof aValue === "number" && typeof bValue === "number") {
+          return dir === "asc" ? aValue - bValue : bValue - aValue;
+        }
+
+        return dir === "asc"
+          ? String(aValue).localeCompare(String(bValue))
+          : String(bValue).localeCompare(String(aValue));
+      });
+
+      setTableRows(sorted);
+    }
+  }, [order, mode, props]);
+  // ✅ mode === "external"
+  useEffect(() => {
+    if (mode === "external") {
+      setTableRows((props as ExternalTableProps).externalRows || []);
+      setTotalItems((props as ExternalTableProps).totalItems || 0);
+    }
+  }, [
+    mode,
+    (props as ExternalTableProps).externalRows,
+    (props as ExternalTableProps).totalItems,
+  ]);
 
   // internal api call
   if (mode === "internal") {
@@ -229,13 +375,13 @@ const Table: React.FC<TableProps> = (props) => {
       ? props?.internalApiConfig?.customBody.filter((item) => !item.noRefresh)
       : [];
     const { isFetching } = useQuery({
-      enabled: Boolean(pageSize && mode === "internal"),
+      enabled: Boolean(dynamicPageSize && mode === "internal"),
       queryKey: [
         props?.internalApiConfig?.tableName,
         currentPage,
         debouncedSearch,
         order,
-        pageSize,
+        dynamicPageSize,
         refreshableCustomBody,
       ],
       refetchOnWindowFocus: false,
@@ -258,8 +404,8 @@ const Table: React.FC<TableProps> = (props) => {
             draw: currentPage,
             columns: makeCurrentCols,
             order: order || [],
-            start: (currentPage - 1) * pageSize,
-            length: pageSize,
+            start: (currentPage - 1) * dynamicPageSize,
+            length: dynamicPageSize,
             search: { value: debouncedSearch || "", regex: false, fixed: [] },
           };
 
@@ -290,6 +436,7 @@ const Table: React.FC<TableProps> = (props) => {
   return (
     <div dir={dir}>
       <div
+        id="table-header-actions"
         className={`mb-2 flex md:items-start items-center md:gap-2 gap-3 w-fit md:flex-wrap-reverse max-md:w-full`}
       >
         {!noSearch && (
@@ -345,23 +492,52 @@ const Table: React.FC<TableProps> = (props) => {
             </div>
           </div>
         )}
+        {!isMobile && (
+          <PageSizeSelect
+            theme={theme}
+            initialPageSize={tableHeightPageSize}
+            pageSize={pageSizeInitial}
+            onPageSizeChange={(newSize) => {
+              setDynamicPageSize(newSize);
+              onPageSizeChange?.(newSize);
+            }}
+          />
+        )}
       </div>
       {isMobile ? (
         <MobileTable
           columns={columnsWithRow}
           isLoading={false}
-          rows={mode === "internal" ? tableRows : paginatedRows}
-          pageSize={pageSize}
+          rows={
+            mode === "internal"
+              ? tableRows
+              : mode === "external"
+              ? tableRows
+              : paginatedRows
+          }
+          pageSize={dynamicPageSize}
           theme={theme}
           textsConfig={mergedTexts}
         />
       ) : (
         <>
           <DesktopTable
+            rowHeight={`${rowHeight}px` || "51.15px"}
+            maxHeight={
+              height
+                ? height
+                : `calc(${tableHeightPageSize * (rowHeight || 51.15)}px)`
+            }
             columns={columnsWithRow}
-            isLoading={false}
-            rows={mode === "internal" ? tableRows : paginatedRows}
-            pageSize={pageSize}
+            isLoading={isLoading}
+            rows={
+              mode === "internal"
+                ? tableRows
+                : mode === "external"
+                ? tableRows
+                : paginatedRows
+            }
+            pageSize={dynamicPageSize}
             theme={theme}
             textsConfig={mergedTexts}
             onOrderChange={handleOrderChange}
@@ -384,7 +560,7 @@ const Table: React.FC<TableProps> = (props) => {
             startMobileSize={startMobileSize}
             totalItems={totalItems}
             queryName={pageQueryName}
-            pageSize={pageSize}
+            pageSize={dynamicPageSize}
             theme={theme}
             textsConfig={mergedTexts}
             onChangePage={onChangePage}
