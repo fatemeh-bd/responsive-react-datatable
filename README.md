@@ -62,7 +62,7 @@ const columns = [
 - `actionButtonsLeft`: Custom action buttons on the left.
 - `saveSearch`: Save search query in sessionStorage (default: `false`).
 - `tableName`: Name for saving search queries (default: `"table"`).
-- `deafaultSortBy`: Default column for sorting (default: `"id"`).
+- `defaultSortBy`: Default column for sorting (default: `"id"`).
 - `sortType`: Default sort direction (`"asc"` or `"desc"`, default: `"desc"`).
 - `height`: Custom table height.
 - `removeFilterKey`: Key for clearing filters in sessionStorage.
