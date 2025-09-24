@@ -70,6 +70,7 @@ export interface InternalModeProps {
     headers?: Record<string, string>;
   };
 }
+
 export interface StaticModeProps {
   staticRows: any[];
   totalItems: number;
@@ -78,7 +79,6 @@ export interface BaseTableProps {
   mode: TableMode;
   startMobileSize?: number;
   columns: ColumnType[];
-  onOrderChange?: (value: any) => void;
   colorTheme?: ColorTheme;
   textsConfig?: TextsConfig;
   lang?: "en" | "fa";
@@ -90,6 +90,7 @@ export interface BaseTableProps {
   noSearch?: boolean;
   saveSearch?: boolean;
   notify: (text: string, type: "error" | "success" | "warning") => void;
+  isLoading?: boolean;
 }
 
 interface NonSelectable extends BaseTableProps {
@@ -116,6 +117,9 @@ export interface StaticTableProps extends BaseTableProps, StaticModeProps {
 // حالت external (بدون پراپس اضافی)
 export interface ExternalTableProps extends BaseTableProps {
   mode: "external";
+  externalRows: any[];
+  totalItems: number;
+  isLoading?: boolean;
 }
 
 // union نهایی با قابلیت انتخابی بودن ردیف‌ها

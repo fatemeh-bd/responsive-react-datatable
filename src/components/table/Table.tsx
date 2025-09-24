@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ColorTheme,
   ColumnType,
+  ExternalTableProps,
   OrderType,
   Selectable,
   StaticModeProps,
@@ -54,6 +55,8 @@ const Table: React.FC<TableProps> = (props) => {
     noSearch,
     saveSearch,
     notify,
+    onPageChange,
+    onSortChange,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
 
@@ -112,10 +115,21 @@ const Table: React.FC<TableProps> = (props) => {
   const onChangePage = (page: number) => {
     updateParams(pageQueryName, page.toString());
     setCurrentPage(page);
+
+    if (mode === "external" && onPageChange) {
+      onPageChange(page); // 📤 به والد
+    }
   };
-  const handleOrderChange = useCallback((newOrder: OrderType) => {
-    setOrder(newOrder ? [newOrder] : []);
-  }, []);
+  const handleOrderChange = useCallback(
+    (newOrder: OrderType) => {
+      setOrder(newOrder ? [newOrder] : []);
+
+      if (mode === "external" && onSortChange) {
+        onSortChange(newOrder); // 📤 به والد
+      }
+    },
+    [mode, onSortChange]
+  );
   const paginatedRows = useMemo(() => {
     const start = (currentPage - 1) * pageSize;
     const end = start + pageSize;
@@ -245,6 +259,17 @@ const Table: React.FC<TableProps> = (props) => {
       setTableRows(sorted);
     }
   }, [order, mode, props]);
+  // ✅ mode === "external"
+  useEffect(() => {
+    if (mode === "external") {
+      setTableRows((props as ExternalTableProps).externalRows || []);
+      setTotalItems((props as ExternalTableProps).totalItems || 0);
+    }
+  }, [
+    mode,
+    (props as ExternalTableProps).externalRows,
+    (props as ExternalTableProps).totalItems,
+  ]);
 
   // internal api call
   if (mode === "internal") {
@@ -375,7 +400,13 @@ const Table: React.FC<TableProps> = (props) => {
         <MobileTable
           columns={columnsWithRow}
           isLoading={false}
-          rows={mode === "internal" ? tableRows : paginatedRows}
+          rows={
+            mode === "internal"
+              ? tableRows
+              : mode === "external"
+              ? tableRows
+              : paginatedRows
+          }
           pageSize={pageSize}
           theme={theme}
           textsConfig={mergedTexts}
@@ -385,7 +416,13 @@ const Table: React.FC<TableProps> = (props) => {
           <DesktopTable
             columns={columnsWithRow}
             isLoading={false}
-            rows={mode === "internal" ? tableRows : paginatedRows}
+            rows={
+              mode === "internal"
+                ? tableRows
+                : mode === "external"
+                ? tableRows
+                : paginatedRows
+            }
             pageSize={pageSize}
             theme={theme}
             textsConfig={mergedTexts}
