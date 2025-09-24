@@ -88,7 +88,7 @@ interface BaseTableProps {
     autoPageSizeConfig?: AutoPageSizeConfig;
 }
 interface Selectable extends BaseTableProps {
-    isSelectable: true;
+    isSelectable: boolean;
     selectedIds: Array<string | number>;
     selectedKey: string;
     onSelectChange?: (value: any) => void;
