@@ -46,8 +46,10 @@ const App: React.FC = () => {
     },
   ]);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+
   const { isLoading, data } = useQuery({
-    queryKey: ["", sort, page],
+    queryKey: ["", sort, page, search],
     queryFn: async () => {
       const response = await axios.post(
         "http://10.10.10.22:8090/v1/Company/GetCompanyPaging",
@@ -79,7 +81,7 @@ const App: React.FC = () => {
           order: sort,
           start: (page - 1) * 10,
           length: 10,
-          search: { value: "", regex: false, fixed: [] },
+          search: { value: search || "", regex: false, fixed: [] },
         },
         {
           headers: {
@@ -161,6 +163,7 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen w-6xl mx-auto p-6" id="content-wrapper">
       <Table
+        onSearch={(value) => setSearch(value)}
         lang="fa"
         mode="external"
         // internalApiConfig={{

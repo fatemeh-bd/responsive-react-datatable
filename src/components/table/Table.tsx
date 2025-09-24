@@ -57,6 +57,7 @@ const Table: React.FC<TableProps> = (props) => {
     notify,
     onPageChange,
     onSortChange,
+    onSearch,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
 
@@ -116,17 +117,13 @@ const Table: React.FC<TableProps> = (props) => {
     updateParams(pageQueryName, page.toString());
     setCurrentPage(page);
 
-    if (mode === "external" && onPageChange) {
-      onPageChange(page); // 📤 به والد
-    }
+    onPageChange?.(page);
   };
   const handleOrderChange = useCallback(
     (newOrder: OrderType) => {
       setOrder(newOrder ? [newOrder] : []);
 
-      if (mode === "external" && onSortChange) {
-        onSortChange(newOrder); // 📤 به والد
-      }
+      onSortChange?.(newOrder);
     },
     [mode, onSortChange]
   );
@@ -204,6 +201,7 @@ const Table: React.FC<TableProps> = (props) => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(searchValue);
+      onSearch?.(searchValue);
     }, 400);
 
     return () => clearTimeout(handler);
