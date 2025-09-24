@@ -75,6 +75,15 @@ export interface StaticModeProps {
   staticRows: any[];
   totalItems: number;
 }
+export interface AutoPageSizeConfig {
+  enabled?: boolean;
+  containerSelector?: string;
+  subtractSelectors?: string[];
+  optionalSelectorsForExtraBuffer?: string[];
+  rowHeight?: number;
+  baseBufferRows?: number;
+  extraBufferRows?: number;
+}
 export interface BaseTableProps {
   mode: TableMode;
   startMobileSize?: number;
@@ -87,16 +96,13 @@ export interface BaseTableProps {
   onPageChange?: (page: number) => void;
   onSortChange?: (order: OrderType) => void;
   onSearch?: (value: string) => void;
-
+  height?: string;
   hasColumnOrder?: boolean;
   noSearch?: boolean;
   saveSearch?: boolean;
   notify: (text: string, type: "error" | "success" | "warning") => void;
   isLoading?: boolean;
-}
-
-interface NonSelectable extends BaseTableProps {
-  isSelectable?: false;
+  autoPageSizeConfig?: AutoPageSizeConfig;
 }
 
 export interface Selectable extends BaseTableProps {
