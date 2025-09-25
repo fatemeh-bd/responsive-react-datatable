@@ -64,7 +64,7 @@ const Table: React.FC<TableProps> = (props) => {
     mode,
     hasColumnOrder,
     noSearch,
-    saveSearch,
+    saveSearch = false,
     notify,
     onPageChange,
     onSortChange,
@@ -74,6 +74,7 @@ const Table: React.FC<TableProps> = (props) => {
     height,
     onPageSizeChange,
     listMode,
+    tableName,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
 
@@ -181,7 +182,21 @@ const Table: React.FC<TableProps> = (props) => {
         mode === "internal" ? props?.internalApiConfig?.defaultSortBy : "id",
     },
   ]);
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState(() => {
+    if (saveSearch && tableName) {
+      const key = `search_${tableName}`;
+      const savedData = sessionStorage.getItem(key);
+      if (savedData) {
+        try {
+          return JSON.parse(savedData).value || "";
+        } catch {
+          return "";
+        }
+      }
+    }
+    return "";
+  });
+
   const [debouncedSearch, setDebouncedSearch] = useState(searchValue);
 
   // functions
@@ -341,32 +356,22 @@ const Table: React.FC<TableProps> = (props) => {
 
     return () => clearTimeout(handler);
   }, [searchValue]);
-  useEffect(() => {
-    if (
-      mode === "internal" &&
-      saveSearch &&
-      props.internalApiConfig?.tableName
-    ) {
-      const key = `search_${props.internalApiConfig.tableName}`;
-      const savedData = sessionStorage.getItem(key);
-      if (savedData) {
-        const { value } = JSON.parse(savedData);
-        setSearchValue(value);
-        setDebouncedSearch(value);
-      }
-    }
-  }, [mode, saveSearch, props]);
 
   useEffect(() => {
-    if (
-      mode === "internal" &&
-      saveSearch &&
-      props?.internalApiConfig?.tableName
-    ) {
-      const key = `search_${props?.internalApiConfig?.tableName}`;
+    if (saveSearch && tableName) {
+      const key = `search_${tableName}`;
       sessionStorage.setItem(key, JSON.stringify({ value: searchValue }));
     }
-  }, [searchValue, saveSearch, props?.mode]);
+  }, [searchValue, saveSearch, tableName]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchValue);
+      onSearch?.(searchValue);
+    }, 400);
+
+    return () => clearTimeout(handler);
+  }, [searchValue, onSearch]);
   useEffect(() => {
     if (mode === "static" && order?.length > 0) {
       const { name, dir } = order[0];
@@ -414,7 +419,7 @@ const Table: React.FC<TableProps> = (props) => {
     const { isFetching } = useQuery({
       enabled: Boolean(dynamicPageSize && mode === "internal"),
       queryKey: [
-        props?.internalApiConfig?.tableName,
+        tableName,
         currentPage,
         debouncedSearch,
         order,

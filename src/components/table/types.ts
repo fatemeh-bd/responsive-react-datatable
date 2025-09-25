@@ -42,7 +42,7 @@ export interface ColumnType {
   render?: (
     cell?: unknown,
     row?: Record<string, any>,
-    index?: number,
+    index?: number
   ) => React.ReactNode;
   width?: number;
   orderable?: boolean;
@@ -63,7 +63,6 @@ export interface InternalModeProps {
     endpoint: string;
     baseUrl?: string;
     customBody?: Record<string, any>[];
-    tableName?: string;
     defaultSortBy?: string;
     sortType?: "asc" | "desc";
     saveSearch?: boolean;
@@ -107,6 +106,7 @@ export interface BaseTableProps {
   isLoading?: boolean;
   autoPageSizeConfig?: AutoPageSizeConfig;
   listMode?: boolean;
+  tableName: string;
 }
 
 export interface Selectable extends BaseTableProps {

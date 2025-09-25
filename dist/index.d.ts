@@ -46,7 +46,6 @@ interface InternalModeProps {
         endpoint: string;
         baseUrl?: string;
         customBody?: Record<string, any>[];
-        tableName?: string;
         defaultSortBy?: string;
         sortType?: "asc" | "desc";
         saveSearch?: boolean;
@@ -89,6 +88,7 @@ interface BaseTableProps {
     isLoading?: boolean;
     autoPageSizeConfig?: AutoPageSizeConfig;
     listMode?: boolean;
+    tableName: string;
 }
 interface Selectable extends BaseTableProps {
     isSelectable: boolean;
