@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Table from "./components/table/Table";
 import { ColumnType } from "./components/table/types";
 import { rowRenderer } from "./components/table/helper";
+import GithubReadmeFetcher from "./components/githubReadmeFetcher/GithubReadmeFetcher";
+import Particles from "./components/particles/Particles";
 
 const App: React.FC = () => {
   const [selectedIds, setSelectedIds] = useState([]);
@@ -96,7 +98,7 @@ const App: React.FC = () => {
       width: 120,
       render: rowRenderer((_cell, _row) => (
         <>
-          <button className="py-2 px-6 text-sm bg-amber-300 text-black rounded-full">
+          <button className="py-2 px-6 text-sm bg-[#d24670] text-black rounded-full">
             قرارداد ها
           </button>
         </>
@@ -105,6 +107,21 @@ const App: React.FC = () => {
   ];
   return (
     <div className="min-h-screen w-6xl mx-auto p-6" id="content-wrapper">
+      <div
+        style={{ width: "100%", height: "100vh", position: "absolute" }}
+        className="top-0"
+      >
+        <Particles
+          particleColors={["#ffffff", "#ffffff"]}
+          particleCount={200}
+          particleSpread={10}
+          speed={0.1}
+          particleBaseSize={100}
+          moveParticlesOnHover={false}
+          alphaParticles={false}
+          disableRotation={false}
+        />
+      </div>
       <Table
         lang="fa"
         mode="internal"
@@ -147,6 +164,9 @@ const App: React.FC = () => {
         onSelectChange={(value) => setSelectedIds(value)}
         notify={(text) => alert(text)}
       />
+      <div className="mt-8">
+        <GithubReadmeFetcher readmeUrl="https://github.com/fatemeh-bd/responsive-react-datatable/blob/main/README.md" />
+      </div>
     </div>
   );
 };
