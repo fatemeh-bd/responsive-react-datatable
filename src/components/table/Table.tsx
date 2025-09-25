@@ -148,7 +148,6 @@ const Table: React.FC<TableProps> = (props) => {
     baseBufferRows,
     extraBufferRows,
   } = autoConfig;
-  const internalConfig = (props as InternalTableProps).internalApiConfig;
 
   // hooks
   const isMobile = useIsMobile(startMobileSize);
@@ -179,8 +178,9 @@ const Table: React.FC<TableProps> = (props) => {
   const [order, setOrder] = useState<any>([
     {
       column: hasColumnOrder ? 8 : 0,
-      dir: mode === "internal" ? internalConfig?.sortType : "desc",
-      name: mode === "internal" ? internalConfig?.defaultSortBy : "id",
+      dir: mode === "internal" ? props?.internalApiConfig?.sortType : "desc",
+      name:
+        mode === "internal" ? props?.internalApiConfig?.defaultSortBy : "id",
     },
   ]);
   const [searchValue, setSearchValue] = useState(() => {
@@ -412,8 +412,10 @@ const Table: React.FC<TableProps> = (props) => {
 
   // internal api call
   if (mode === "internal") {
-    const refreshableCustomBody = Array.isArray(internalConfig?.customBody)
-      ? internalConfig?.customBody.filter((item) => !item.noRefresh)
+    const refreshableCustomBody = Array.isArray(
+      props?.internalApiConfig?.customBody
+    )
+      ? props?.internalApiConfig?.customBody.filter((item) => !item.noRefresh)
       : [];
     const { isFetching } = useQuery({
       enabled: Boolean(dynamicPageSize && mode === "internal"),
@@ -429,7 +431,7 @@ const Table: React.FC<TableProps> = (props) => {
       refetchIntervalInBackground: false,
       queryFn: async () => {
         try {
-          const payloadCustomBody = internalConfig?.customBody || [];
+          const payloadCustomBody = props?.internalApiConfig?.customBody || [];
 
           const makeCurrentCols = columnsWithRow
             ?.filter((i) => i.data !== null)
@@ -455,15 +457,15 @@ const Table: React.FC<TableProps> = (props) => {
             Object.assign(payload, rest);
           });
 
-          const endpoint = internalConfig?.endpoint || "";
+          const endpoint = props?.internalApiConfig?.endpoint || "";
           const response = await axios({
-            method: internalConfig?.method || "POST",
-            url: internalConfig?.baseUrl + endpoint || "" + endpoint,
+            method: props?.internalApiConfig?.method || "POST",
+            url: props?.internalApiConfig?.baseUrl + endpoint || "" + endpoint,
             data: payload || null,
-            headers: internalConfig?.headers,
+            headers: props?.internalApiConfig?.headers,
           });
 
-          internalConfig?.onFetch?.(response?.data);
+          props?.internalApiConfig?.onFetch?.(response?.data);
           setTableRows(response?.data?.data);
           setTotalItems(response?.data?.recordsFiltered);
 
@@ -474,6 +476,8 @@ const Table: React.FC<TableProps> = (props) => {
       },
     });
   }
+  const internalConfig = (props as InternalTableProps).internalApiConfig;
+
   const activeFilterCount = Array.isArray(internalConfig?.customBody)
     ? internalConfig?.customBody?.reduce((count, item) => {
         if (!item.isFilter) return count;
