@@ -35,6 +35,7 @@ const defaultTexts = {
     showing: (from: number, to: number, total: string) =>
       `Showing ${from} to ${to} of ${total} records`,
     searchPlaceholder: "search ...",
+    pageSize: "page Size",
   },
   fa: {
     row: "ردیف",
@@ -44,6 +45,7 @@ const defaultTexts = {
     showing: (from: number, to: number, total: string) =>
       `نمایش ${from} تا ${to} از ${total} رکورد`,
     searchPlaceholder: "جستجو کنید...",
+    pageSize: "نمایش",
   },
 };
 export const defaultSize = 10;
@@ -95,17 +97,17 @@ const Table: React.FC<TableProps> = (props) => {
       errorColor: "#f43f5e",
       ...colorTheme,
     }),
-    [colorTheme],
+    [colorTheme]
   );
 
   const mergedTexts = useMemo(
     () => ({ ...defaultTexts[lang], ...textsConfig }),
-    [lang, textsConfig],
+    [lang, textsConfig]
   );
   const dir = lang === "fa" ? "rtl" : "ltr";
 
   const defaultAutoConfig: AutoPageSizeConfig = {
-    enabled: true,
+    enabled: false,
     containerSelector: "#content-wrapper",
     subtractSelectors: [
       // "#table-header-actions",
@@ -151,23 +153,26 @@ const Table: React.FC<TableProps> = (props) => {
   const { updateParams, getParams, removeParams } = useQueryParams();
   // states
   const [currentPage, setCurrentPage] = useState(
-    () => Number(getParams(pageQueryName)) || 1,
+    () => Number(getParams(pageQueryName)) || 1
   );
   const [tableRows, setTableRows] = useState<any[]>(
-    mode === "static" ? (props as StaticModeProps).staticRows || [] : [],
+    mode === "static" ? (props as StaticModeProps).staticRows || [] : []
   );
+  const [filteredRows, setFilteredRows] = useState<any[]>(tableRows);
+
   const [totalItems, setTotalItems] = useState<number>(
-    mode === "static" ? (props as StaticModeProps).totalItems || 0 : 0,
+    mode === "static" ? (props as StaticModeProps).totalItems || 0 : 0
   );
   const pageSizeInitial = Number(getParams("pageSize")) || pageSize;
 
   const [dynamicPageSize, setDynamicPageSize] = useState(
-    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSizeInitial,
+    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSizeInitial
   );
 
   const [tableHeightPageSize, setTableHeightPageSize] = useState(
-    isMobile ? pageSizeInitial : 0,
+    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSize
   );
+
   const [order, setOrder] = useState<any>([
     {
       column: hasColumnOrder ? 8 : 0,
@@ -192,14 +197,13 @@ const Table: React.FC<TableProps> = (props) => {
 
       onSortChange?.(newOrder);
     },
-    [mode, onSortChange],
+    [mode, onSortChange]
   );
   const paginatedRows = useMemo(() => {
     const start = (currentPage - 1) * dynamicPageSize;
     const end = start + dynamicPageSize;
-    return tableRows.slice(start, end);
-  }, [tableRows, currentPage, dynamicPageSize]);
-
+    return filteredRows.slice(start, end);
+  }, [filteredRows, currentPage, dynamicPageSize]);
   const columnsWithRow: ColumnType[] = useMemo(() => {
     const selectableColumn: ColumnType[] = isSelectable
       ? [
@@ -213,7 +217,7 @@ const Table: React.FC<TableProps> = (props) => {
                   selectableProps={selectableProps}
                   theme={theme}
                 />
-              ) : null,
+              ) : null
             ),
             orderable: false,
             width: 50,
@@ -229,7 +233,7 @@ const Table: React.FC<TableProps> = (props) => {
         title: mergedTexts.row,
         render: rowRenderer(
           (_cell, _row, index?: number) =>
-            (Number(currentPage) - 1) * dynamicPageSize + (index! + 1),
+            (Number(currentPage) - 1) * dynamicPageSize + (index! + 1)
         ),
         orderable: true,
         width: 70,
@@ -247,6 +251,37 @@ const Table: React.FC<TableProps> = (props) => {
   ]);
 
   // useEffects
+  useEffect(() => {
+    if (mode === "static") {
+      if (!debouncedSearch) {
+        setFilteredRows(tableRows);
+        setTotalItems(tableRows.length);
+      } else {
+        const lowered = debouncedSearch.toLowerCase();
+        const searched = tableRows.filter((row) =>
+          columns.some((col) => {
+            if (!col.data || col.searchable === false) return false;
+            const val = row[col.data];
+            return val?.toString().toLowerCase().includes(lowered);
+          })
+        );
+        setFilteredRows(searched);
+        setTotalItems(searched.length);
+      }
+    }
+  }, [debouncedSearch, tableRows, columns, mode]);
+  useEffect(() => {
+    if (mode === "static") {
+      const rows = (props as StaticModeProps).staticRows || [];
+      setTableRows(rows);
+      setFilteredRows(rows);
+      setTotalItems((props as StaticModeProps).totalItems || rows.length);
+    }
+  }, [
+    (props as StaticModeProps).staticRows,
+    (props as StaticModeProps).totalItems,
+  ]);
+
   useEffect(() => {
     const handler = () => {
       setCurrentPage(Number(getParams(pageQueryName)) || 1);
@@ -272,13 +307,13 @@ const Table: React.FC<TableProps> = (props) => {
         }
         const availableHeight =
           Number(
-            document.querySelector(containerSelector || "")?.clientHeight || 0,
+            document.querySelector(containerSelector || "")?.clientHeight || 0
           ) - sumSubtract;
 
         const rows = Math.floor(availableHeight / (rowHeight || 51.15));
         let buffer = baseBufferRows || 2;
         const hasOptional = (optionalSelectorsForExtraBuffer || []).some(
-          (sel) => Number(document.querySelector(sel)?.clientHeight || 0) > 0,
+          (sel) => Number(document.querySelector(sel)?.clientHeight || 0) > 0
         );
         if (hasOptional) buffer += extraBufferRows || 1;
 
@@ -372,7 +407,7 @@ const Table: React.FC<TableProps> = (props) => {
   // internal api call
   if (mode === "internal") {
     const refreshableCustomBody = Array.isArray(
-      props?.internalApiConfig?.customBody,
+      props?.internalApiConfig?.customBody
     )
       ? props?.internalApiConfig?.customBody.filter((item) => !item.noRefresh)
       : [];
@@ -501,6 +536,7 @@ const Table: React.FC<TableProps> = (props) => {
         )}
         {!isMobile && (
           <PageSizeSelect
+            text={mergedTexts?.pageSize}
             theme={theme}
             initialPageSize={tableHeightPageSize}
             pageSize={pageSizeInitial}
@@ -519,8 +555,8 @@ const Table: React.FC<TableProps> = (props) => {
             mode === "internal"
               ? tableRows
               : mode === "external"
-                ? tableRows
-                : paginatedRows
+              ? tableRows
+              : paginatedRows
           }
           pageSize={dynamicPageSize}
           theme={theme}
@@ -542,8 +578,8 @@ const Table: React.FC<TableProps> = (props) => {
               mode === "internal"
                 ? tableRows
                 : mode === "external"
-                  ? tableRows
-                  : paginatedRows
+                ? tableRows
+                : paginatedRows
             }
             pageSize={dynamicPageSize}
             theme={theme}
@@ -554,7 +590,7 @@ const Table: React.FC<TableProps> = (props) => {
 
               const allIds =
                 tableRows?.map(
-                  (i) => i[selectableProps?.selectedKey as keyof typeof i],
+                  (i) => i[selectableProps?.selectedKey as keyof typeof i]
                 ) || [];
               const isAllSelected =
                 selectableProps.selectedIds?.length === allIds.length;
