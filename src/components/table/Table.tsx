@@ -437,7 +437,7 @@ const Table: React.FC<TableProps> = (props) => {
     <div dir={dir}>
       <div
         id="table-header-actions"
-        className={`mb-2 flex md:items-start items-center md:gap-2 gap-3 w-fit md:flex-wrap-reverse max-md:w-full`}
+        className={`mb-2 flex md:items-start justify-between w-full items-center md:gap-2 gap-3  md:flex-wrap-reverse max-md:w-full`}
       >
         {!noSearch && (
           <div className="max-md:w-full">
