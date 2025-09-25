@@ -35,6 +35,7 @@ const defaultTexts = {
     showing: (from: number, to: number, total: string) =>
       `Showing ${from} to ${to} of ${total} records`,
     searchPlaceholder: "search ...",
+    pageSize: "page Size",
   },
   fa: {
     row: "ردیف",
@@ -44,6 +45,7 @@ const defaultTexts = {
     showing: (from: number, to: number, total: string) =>
       `نمایش ${from} تا ${to} از ${total} رکورد`,
     searchPlaceholder: "جستجو کنید...",
+    pageSize: "نمایش",
   },
 };
 export const defaultSize = 10;
@@ -501,6 +503,7 @@ const Table: React.FC<TableProps> = (props) => {
         )}
         {!isMobile && (
           <PageSizeSelect
+            text={mergedTexts?.pageSize}
             theme={theme}
             initialPageSize={tableHeightPageSize}
             pageSize={pageSizeInitial}

@@ -8,11 +8,13 @@ const PageSizeSelect = ({
   onPageSizeChange,
   initialPageSize,
   theme,
+  text,
 }: {
   pageSize: number;
   onPageSizeChange: (size: number) => void;
   initialPageSize?: number;
   theme: ColorTheme;
+  text: string;
 }) => {
   const [size, setSize] = useState(pageSize);
   const { updateParams, removeParams } = useQueryParams();
@@ -26,12 +28,29 @@ const PageSizeSelect = ({
 
   return (
     <div className="relative flex items-center gap-1">
-      <span className="md:text-base text-xs">نمایش</span>
+      <BiChevronDown
+        style={{
+          color: theme?.searchBoxTextColor,
+        }}
+        className="pointer-events-none shrink-0"
+      />
+      <span
+        style={{
+          color: theme?.searchBoxTextColor,
+        }}
+        className="md:text-base text-xs text-nowrap"
+      >
+        {text}
+      </span>
       <select
         value={size}
         onChange={handleChange}
-        style={{ borderColor: theme?.searchBoxBorderColor }}
-        className={`my-0 flex items-center justify-between  gap-3 text-right text-base bg-white rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70 appearance-none pl-6 cursor-pointer max-md:py-1 max-md:h-8 max-md:min-w-12 max-md:text-sm`}
+        style={{
+          borderColor: theme?.searchBoxBorderColor,
+          backgroundColor: theme?.searchBoxBgColor,
+          color: theme?.searchBoxTextColor,
+        }}
+        className={`my-0 flex items-center justify-between  gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70 appearance-none pl-6 cursor-pointer max-md:py-1 max-md:h-8 max-md:min-w-12 max-md:text-sm`}
       >
         <option value={initialPageSize}>{initialPageSize}</option>
         <option value={20}>20</option>
@@ -40,7 +59,6 @@ const PageSizeSelect = ({
         <option value={200}>200</option>
         <option value={300}>300</option>
       </select>
-      <BiChevronDown className="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500" />
     </div>
   );
 };
