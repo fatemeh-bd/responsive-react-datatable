@@ -128,8 +128,10 @@ const App: React.FC = () => {
       >
         <Table
           lang="en"
+          saveSearch
           mode="static"
           pageSize={11}
+          tableName="sdsdsd"
           autoPageSizeConfig={{
             enabled: false,
             containerSelector: "#content-wrapper",
