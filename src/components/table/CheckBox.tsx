@@ -44,8 +44,10 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         style={{
           backgroundColor: checked ? primaryColor : "transparent",
           borderColor: checked ? primaryColor : "#b8b8b8",
+          width: 22,
+          height: 22,
         }}
-        className={`checkbox-control w-[22px] h-[22px] min-w-[22px] min-h-[22px] rounded-md border transition-all
+        className={`checkbox-control rounded-md border transition-all
     `}
       ></span>
       {label && <span className="checkbox-label">{label}</span>}
