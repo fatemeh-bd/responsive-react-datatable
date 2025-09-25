@@ -117,7 +117,7 @@ const MobileTable = ({
         )
       ) : (
         <p className="text-center text-secondary-700 py-6">
-          اطلاعاتی برای نمایش وجود ندارد
+          {textsConfig?.noDataText}
         </p>
       )}
     </div>
