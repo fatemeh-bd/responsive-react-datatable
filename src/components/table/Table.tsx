@@ -89,15 +89,17 @@ const Table: React.FC<TableProps> = (props) => {
       paginationTextColor: "#333333",
       paginationDisabledBackgroundColor: "#f9f9f9",
       searchBoxBorderColor: "#d9d9d9",
+      searchBoxBgColor: "#fff",
+      searchBoxTextColor: "#fff",
       errorColor: "#f43f5e",
       ...colorTheme,
     }),
-    [colorTheme]
+    [colorTheme],
   );
 
   const mergedTexts = useMemo(
     () => ({ ...defaultTexts[lang], ...textsConfig }),
-    [lang, textsConfig]
+    [lang, textsConfig],
   );
   const dir = lang === "fa" ? "rtl" : "ltr";
 
@@ -148,22 +150,22 @@ const Table: React.FC<TableProps> = (props) => {
   const { updateParams, getParams, removeParams } = useQueryParams();
   // states
   const [currentPage, setCurrentPage] = useState(
-    () => Number(getParams(pageQueryName)) || 1
+    () => Number(getParams(pageQueryName)) || 1,
   );
   const [tableRows, setTableRows] = useState<any[]>(
-    mode === "static" ? (props as StaticModeProps).staticRows || [] : []
+    mode === "static" ? (props as StaticModeProps).staticRows || [] : [],
   );
   const [totalItems, setTotalItems] = useState<number>(
-    mode === "static" ? (props as StaticModeProps).totalItems || 0 : 0
+    mode === "static" ? (props as StaticModeProps).totalItems || 0 : 0,
   );
   const pageSizeInitial = Number(getParams("pageSize")) || pageSize;
 
   const [dynamicPageSize, setDynamicPageSize] = useState(
-    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSizeInitial
+    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSizeInitial,
   );
 
   const [tableHeightPageSize, setTableHeightPageSize] = useState(
-    isMobile ? pageSizeInitial : 0
+    isMobile ? pageSizeInitial : 0,
   );
   const [order, setOrder] = useState<any>([
     {
@@ -189,7 +191,7 @@ const Table: React.FC<TableProps> = (props) => {
 
       onSortChange?.(newOrder);
     },
-    [mode, onSortChange]
+    [mode, onSortChange],
   );
   const paginatedRows = useMemo(() => {
     const start = (currentPage - 1) * dynamicPageSize;
@@ -210,7 +212,7 @@ const Table: React.FC<TableProps> = (props) => {
                   selectableProps={selectableProps}
                   theme={theme}
                 />
-              ) : null
+              ) : null,
             ),
             orderable: false,
             width: 50,
@@ -226,7 +228,7 @@ const Table: React.FC<TableProps> = (props) => {
         title: mergedTexts.row,
         render: rowRenderer(
           (_cell, _row, index?: number) =>
-            (Number(currentPage) - 1) * dynamicPageSize + (index! + 1)
+            (Number(currentPage) - 1) * dynamicPageSize + (index! + 1),
         ),
         orderable: true,
         width: 70,
@@ -270,13 +272,13 @@ const Table: React.FC<TableProps> = (props) => {
         }
         const availableHeight =
           Number(
-            document.querySelector(containerSelector || "")?.clientHeight || 0
+            document.querySelector(containerSelector || "")?.clientHeight || 0,
           ) - sumSubtract;
 
         const rows = Math.floor(availableHeight / (rowHeight || 51.15));
         let buffer = baseBufferRows || 2;
         const hasOptional = (optionalSelectorsForExtraBuffer || []).some(
-          (sel) => Number(document.querySelector(sel)?.clientHeight || 0) > 0
+          (sel) => Number(document.querySelector(sel)?.clientHeight || 0) > 0,
         );
         if (hasOptional) buffer += extraBufferRows || 1;
 
@@ -370,7 +372,7 @@ const Table: React.FC<TableProps> = (props) => {
   // internal api call
   if (mode === "internal") {
     const refreshableCustomBody = Array.isArray(
-      props?.internalApiConfig?.customBody
+      props?.internalApiConfig?.customBody,
     )
       ? props?.internalApiConfig?.customBody.filter((item) => !item.noRefresh)
       : [];
@@ -446,8 +448,12 @@ const Table: React.FC<TableProps> = (props) => {
               className={`flex flex-col gap-1 [&>div]:!gap-1 [&>div]:!flex-row-reverse`}
             >
               <div
-                style={{ borderColor: theme?.searchBoxBorderColor }}
-                className={`my-0 flex items-center justify-between  gap-3 text-right text-base bg-white rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70`}
+                style={{
+                  borderColor: theme?.searchBoxBorderColor,
+                  backgroundColor: theme?.searchBoxBgColor,
+                  color: theme?.searchBoxTextColor,
+                }}
+                className={`my-0 flex items-center justify-between  gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70`}
               >
                 {searchValue ? (
                   <CloseIcon
@@ -513,8 +519,8 @@ const Table: React.FC<TableProps> = (props) => {
             mode === "internal"
               ? tableRows
               : mode === "external"
-              ? tableRows
-              : paginatedRows
+                ? tableRows
+                : paginatedRows
           }
           pageSize={dynamicPageSize}
           theme={theme}
@@ -535,8 +541,8 @@ const Table: React.FC<TableProps> = (props) => {
               mode === "internal"
                 ? tableRows
                 : mode === "external"
-                ? tableRows
-                : paginatedRows
+                  ? tableRows
+                  : paginatedRows
             }
             pageSize={dynamicPageSize}
             theme={theme}
@@ -547,7 +553,7 @@ const Table: React.FC<TableProps> = (props) => {
 
               const allIds =
                 tableRows?.map(
-                  (i) => i[selectableProps?.selectedKey as keyof typeof i]
+                  (i) => i[selectableProps?.selectedKey as keyof typeof i],
                 ) || [];
               const isAllSelected =
                 selectableProps.selectedIds?.length === allIds.length;
