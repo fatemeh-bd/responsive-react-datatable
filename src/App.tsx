@@ -12,14 +12,14 @@ const App: React.FC = () => {
       data: "contractName",
       orderable: true,
       title: "contract Name",
-      searchable: false,
+      searchable: true,
       width: 200,
     },
     {
       data: "startDate",
       orderable: true,
       title: "start Date",
-      searchable: false,
+      searchable: true,
       width: 140,
     },
     {
@@ -109,10 +109,10 @@ const App: React.FC = () => {
     <div className="min-h-screen relative" id="content-wrapper">
       <div
         style={{ width: "100%", height: "100svh", position: "absolute" }}
-        className="top-0"
+        className="top-0 -z-40"
       >
         <Particles
-          particleColors={["#f5f5f5", "#f5f5f5"]}
+          particleColors={["#fafafa", "#fafafa"]}
           particleCount={200}
           particleSpread={10}
           speed={0.1}
@@ -124,7 +124,7 @@ const App: React.FC = () => {
       </div>
       <div
         id="content-wrapper"
-        className="flex flex-col gap-6 max-w-7xl mx-auto h-screen"
+        className="flex flex-col gap-6 max-w-7xl mx-auto h-screen overflow-auto"
       >
         <Table
           lang="en"
@@ -138,15 +138,8 @@ const App: React.FC = () => {
               "#topFilter",
               "#tabPage",
               "#paging",
-              "#userCards",
-              "#title",
             ],
-            optionalSelectorsForExtraBuffer: [
-              "#tabPage",
-              "#topFilter",
-              "#userCards",
-              "#title",
-            ],
+            optionalSelectorsForExtraBuffer: ["#tabPage", "#topFilter"],
             rowHeight: 51.15,
             baseBufferRows: 2,
             extraBufferRows: 1,
@@ -186,6 +179,7 @@ const App: React.FC = () => {
           selectedKey="id"
           onSelectChange={(value) => setSelectedIds(value)}
           notify={(text) => alert(text)}
+          listMode
         />
 
         <GithubReadmeFetcher readmeUrl="https://github.com/fatemeh-bd/responsive-react-datatable/blob/main/README.md" />
@@ -211,7 +205,7 @@ const App: React.FC = () => {
           href="https://github.com/fatemeh-bd"
           className="underline cursor-pointer"
         >
-          Fateme baridaryan
+          Fatemeh baridaryan
         </a>{" "}
         &{" "}
         <a
