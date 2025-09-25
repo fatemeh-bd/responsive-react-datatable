@@ -1,3 +1,5 @@
+import "./table.css";
+
 import React, {
   useCallback,
   useEffect,
@@ -80,8 +82,8 @@ const Table: React.FC<TableProps> = (props) => {
     tableName,
     filters,
     topFilter,
-    topFilterContainerClassName = "sm:mb-4 flex items-center flex-wrap md:gap-2 gap-3 [&>div]:md:w-[200px] [&>div]:w-full",
-    filterContainerClassName = "flex flex-wrap md:gap-2 gap-3 [&>div]:md:w-[200px] [&>div]:w-full",
+    topFilterContainerClassName = "sm:mb-4 flex items-center flex-wrap md:gap-2 gap-3 [&>div]:w-full",
+    filterContainerClassName = "flex flex-wrap md:gap-2 gap-3 [&>div]:w-full",
     removeFilterKey,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
@@ -491,7 +493,10 @@ const Table: React.FC<TableProps> = (props) => {
   return (
     <div className="table-container" dir={dir}>
       {!isMobile && topFilter && (
-        <div className={topFilterContainerClassName} id="topFilter">
+        <div
+          className={`${topFilterContainerClassName} top-filter-container`}
+          id="topFilter"
+        >
           {topFilter}
         </div>
       )}
@@ -572,7 +577,11 @@ const Table: React.FC<TableProps> = (props) => {
           </button>
         )}
         {!isMobile && filters && (
-          <div className={filterContainerClassName}>{filters}</div>
+          <div
+            className={`${filterContainerClassName} filter-container-className`}
+          >
+            {filters}
+          </div>
         )}
         {!isMobile && (
           <PageSizeSelect
@@ -659,7 +668,7 @@ const Table: React.FC<TableProps> = (props) => {
         isOpen={openFilter}
         onClose={() => setOpenFilter(false)}
       >
-        <div className={filterContainerClassName}>
+        <div>
           {filters}
           {topFilter}
         </div>
