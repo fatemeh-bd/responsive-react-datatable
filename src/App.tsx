@@ -106,13 +106,13 @@ const App: React.FC = () => {
   //   },
   // ];
   return (
-    <div className="min-h-screen" id="content-wrapper">
+    <div className="min-h-screen relative" id="content-wrapper">
       <div
-        style={{ width: "100%", height: "100vh", position: "absolute" }}
+        style={{ width: "100%", height: "100svh", position: "absolute" }}
         className="top-0"
       >
         <Particles
-          particleColors={["#ffffff", "#ffffff"]}
+          particleColors={["#f5f5f5", "#f5f5f5"]}
           particleCount={200}
           particleSpread={10}
           speed={0.1}
@@ -122,13 +122,16 @@ const App: React.FC = () => {
           disableRotation={false}
         />
       </div>
-      <div className="flex flex-col gap-6 max-w-7xl mx-auto">
+      <div
+        id="content-wrapper"
+        className="flex flex-col gap-6 max-w-7xl mx-auto h-screen"
+      >
         <Table
           lang="en"
           mode="static"
           pageSize={11}
           autoPageSizeConfig={{
-            enabled: true,
+            enabled: false,
             containerSelector: "#content-wrapper",
             subtractSelectors: [
               "#filters",
