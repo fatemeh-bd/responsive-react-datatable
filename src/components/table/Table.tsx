@@ -81,7 +81,7 @@ const Table: React.FC<TableProps> = (props) => {
       headerText: "#333333",
       rowBorder: "#e7e7e7",
       rowBg: "#fff",
-      cellText: "#333333",
+      cellText: "#7a7a7a",
       primaryColor: "#ffd61f",
       paginationBg: "#fff",
       paginationBorderColor: "#d9d9d9",
@@ -442,7 +442,7 @@ const Table: React.FC<TableProps> = (props) => {
         {!noSearch && (
           <div className="max-md:w-full">
             <div
-              className={`flex flex-col gap-1 md:!w-[320px] !w-full [&>div]:!gap-1 [&>div]:!flex-row-reverse`}
+              className={`flex flex-col gap-1 md:!w-[320px] [&>div]:!gap-1 [&>div]:!flex-row-reverse`}
             >
               <div
                 style={{ borderColor: theme?.searchBoxBorderColor }}
@@ -480,7 +480,7 @@ const Table: React.FC<TableProps> = (props) => {
                   type="text"
                   value={searchValue}
                   placeholder={mergedTexts?.searchPlaceholder}
-                  className={`w-full border-none bg-transparent !outline-none placeholder:!text-[10.5pt] max-sm:placeholder:!text-[9pt]`}
+                  className={`w-full border-none bg-transparent !outline-none text-sm placeholder:!text-[10.5pt] max-sm:placeholder:!text-[9pt]`}
                   onChange={(e) => {
                     setSearchValue(e.target.value);
                     if (currentPage) {

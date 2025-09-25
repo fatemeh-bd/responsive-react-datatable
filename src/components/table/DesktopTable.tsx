@@ -60,7 +60,11 @@ const DesktopTable = ({
         >
           <table className="w-full table-fixed border-collapse">
             <thead style={{ backgroundColor: theme.headerBg }}>
-              <tr>
+              <tr
+                style={{
+                  height: rowHeight,
+                }}
+              >
                 {columns.map((column, colIndex) => (
                   <th
                     key={column?.data || colIndex}
