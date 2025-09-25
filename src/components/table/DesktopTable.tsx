@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ColorTheme, ColumnType, OrderType, TextsConfig } from "./types";
 import { ArrowUpIcon } from "./icons";
 import Checkbox from "./CheckBox";
@@ -27,10 +27,10 @@ const DesktopTable = ({
   onOrderChange?: (order: OrderType) => void;
   rowHeight?: string;
 }) => {
-  const headerContainerRef = useRef<HTMLDivElement>(null);
-  const bodyContainerRef = useRef<HTMLDivElement>(null);
   const [order, setOrder] = useState<OrderType>(null);
 
+  const headerContainerRef = useRef<HTMLDivElement>(null);
+  const bodyContainerRef = useRef<HTMLDivElement>(null);
   const handleSort = (colIndex: number, column: ColumnType) => {
     if (!column.orderable || !column.data) return;
 
@@ -47,6 +47,24 @@ const DesktopTable = ({
       return newOrder;
     });
   };
+
+  useEffect(() => {
+    const bodyContainer = bodyContainerRef.current;
+    const headerContainer = headerContainerRef.current;
+
+    if (!bodyContainer || !headerContainer) return;
+
+    const handleScroll = () => {
+      headerContainer.scrollLeft = bodyContainer.scrollLeft;
+    };
+
+    bodyContainer.addEventListener("scroll", handleScroll);
+
+    return () => {
+      bodyContainer.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div
       className="desktop-table-container w-full overflow-hidden rounded-xl"
@@ -178,11 +196,11 @@ const DesktopTable = ({
                         ? column?.render(
                             cellKey ? row[cellKey] : undefined,
                             row,
-                            rowIndex
+                            rowIndex,
                           )
                         : cellKey
-                        ? row[cellKey]
-                        : null;
+                          ? row[cellKey]
+                          : null;
 
                       return (
                         <td
