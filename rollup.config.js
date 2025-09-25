@@ -35,7 +35,14 @@ export default [
       }),
       terser(),
     ],
-    external: ["react", "react-dom", "react-icons", "axios", "swiper"],
+    external: [
+      "react",
+      "react-dom",
+      "react-icons",
+      "axios",
+      "swiper",
+      "@tanstack/react-query",
+    ],
   },
   {
     input: "./src/index.ts",
