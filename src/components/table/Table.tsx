@@ -158,6 +158,8 @@ const Table: React.FC<TableProps> = (props) => {
   const [tableRows, setTableRows] = useState<any[]>(
     mode === "static" ? (props as StaticModeProps).staticRows || [] : []
   );
+  const [filteredRows, setFilteredRows] = useState<any[]>(tableRows);
+
   const [totalItems, setTotalItems] = useState<number>(
     mode === "static" ? (props as StaticModeProps).totalItems || 0 : 0
   );
@@ -168,7 +170,7 @@ const Table: React.FC<TableProps> = (props) => {
   );
 
   const [tableHeightPageSize, setTableHeightPageSize] = useState(
-    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSizeInitial
+    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSize
   );
 
   const [order, setOrder] = useState<any>([
@@ -200,9 +202,8 @@ const Table: React.FC<TableProps> = (props) => {
   const paginatedRows = useMemo(() => {
     const start = (currentPage - 1) * dynamicPageSize;
     const end = start + dynamicPageSize;
-    return tableRows.slice(start, end);
-  }, [tableRows, currentPage, dynamicPageSize]);
-
+    return filteredRows.slice(start, end);
+  }, [filteredRows, currentPage, dynamicPageSize]);
   const columnsWithRow: ColumnType[] = useMemo(() => {
     const selectableColumn: ColumnType[] = isSelectable
       ? [
@@ -250,6 +251,37 @@ const Table: React.FC<TableProps> = (props) => {
   ]);
 
   // useEffects
+  useEffect(() => {
+    if (mode === "static") {
+      if (!debouncedSearch) {
+        setFilteredRows(tableRows);
+        setTotalItems(tableRows.length);
+      } else {
+        const lowered = debouncedSearch.toLowerCase();
+        const searched = tableRows.filter((row) =>
+          columns.some((col) => {
+            if (!col.data || col.searchable === false) return false;
+            const val = row[col.data];
+            return val?.toString().toLowerCase().includes(lowered);
+          })
+        );
+        setFilteredRows(searched);
+        setTotalItems(searched.length);
+      }
+    }
+  }, [debouncedSearch, tableRows, columns, mode]);
+  useEffect(() => {
+    if (mode === "static") {
+      const rows = (props as StaticModeProps).staticRows || [];
+      setTableRows(rows);
+      setFilteredRows(rows);
+      setTotalItems((props as StaticModeProps).totalItems || rows.length);
+    }
+  }, [
+    (props as StaticModeProps).staticRows,
+    (props as StaticModeProps).totalItems,
+  ]);
+
   useEffect(() => {
     const handler = () => {
       setCurrentPage(Number(getParams(pageQueryName)) || 1);
