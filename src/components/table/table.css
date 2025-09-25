@@ -1,0 +1,6 @@
+@media (max-width: 768px) {
+  .top-filter-container > div,
+  .filter-container-className > div {
+    width: 200px;
+  }
+}
