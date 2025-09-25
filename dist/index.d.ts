@@ -1,4 +1,4 @@
-import React$1 from 'react';
+import React$1, { ReactNode } from 'react';
 
 type OrderType = {
     column: number;
@@ -89,6 +89,11 @@ interface BaseTableProps {
     autoPageSizeConfig?: AutoPageSizeConfig;
     listMode?: boolean;
     tableName: string;
+    filters?: ReactNode;
+    topFilter?: ReactNode;
+    filterContainerClassName?: string;
+    topFilterContainerClassName?: string;
+    removeFilterKey?: string;
 }
 interface Selectable extends BaseTableProps {
     isSelectable: boolean;

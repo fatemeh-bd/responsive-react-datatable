@@ -28,7 +28,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     },
     ref
   ) => (
-    <label className={`${className} checkbox`}>
+    <label className={`${className} checkbox checkbox-container`}>
       <input
         className="checkbox-input"
         type="checkbox"
@@ -47,10 +47,11 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           width: 22,
           height: 22,
         }}
-        className={`checkbox-control rounded-md border transition-all
-    `}
+        className={`checkbox-control checkbox-visual-control rounded-md border transition-all`}
       ></span>
-      {label && <span className="checkbox-label">{label}</span>}
+      {label && (
+        <span className="checkbox-label checkbox-text-label">{label}</span>
+      )}
     </label>
   )
 );

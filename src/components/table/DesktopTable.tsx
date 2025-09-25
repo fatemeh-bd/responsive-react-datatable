@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ColorTheme, ColumnType, OrderType, TextsConfig } from "./types";
 import { ArrowUpIcon } from "./icons";
 import Checkbox from "./CheckBox";
@@ -27,10 +27,10 @@ const DesktopTable = ({
   onOrderChange?: (order: OrderType) => void;
   rowHeight?: string;
 }) => {
-  const headerContainerRef = useRef<HTMLDivElement>(null);
-  const bodyContainerRef = useRef<HTMLDivElement>(null);
   const [order, setOrder] = useState<OrderType>(null);
 
+  const headerContainerRef = useRef<HTMLDivElement>(null);
+  const bodyContainerRef = useRef<HTMLDivElement>(null);
   const handleSort = (colIndex: number, column: ColumnType) => {
     if (!column.orderable || !column.data) return;
 
@@ -47,21 +47,43 @@ const DesktopTable = ({
       return newOrder;
     });
   };
+
+  useEffect(() => {
+    const bodyContainer = bodyContainerRef.current;
+    const headerContainer = headerContainerRef.current;
+
+    if (!bodyContainer || !headerContainer) return;
+
+    const handleScroll = () => {
+      headerContainer.scrollLeft = bodyContainer.scrollLeft;
+    };
+
+    bodyContainer.addEventListener("scroll", handleScroll);
+
+    return () => {
+      bodyContainer.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div
-      className="w-full overflow-hidden rounded-xl"
+      className="desktop-table-container w-full overflow-hidden rounded-xl"
       style={{ border: `1px solid ${theme.borderColor}` }}
     >
-      <div className="relative">
+      <div className="desktop-table-inner relative">
         {/* Header table (fixed) */}
         <div
           ref={headerContainerRef}
-          className="overflow-x-auto overflow-y-hidden scrollbar-hide"
+          className="desktop-table-header-container overflow-x-auto overflow-y-hidden scrollbar-hide"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          <table className="w-full table-fixed border-collapse">
-            <thead style={{ backgroundColor: theme.headerBg }}>
+          <table className="desktop-table w-full table-fixed border-collapse">
+            <thead
+              className="desktop-table-head"
+              style={{ backgroundColor: theme.headerBg }}
+            >
               <tr
+                className="desktop-table-header-row"
                 style={{
                   height: rowHeight,
                 }}
@@ -69,37 +91,39 @@ const DesktopTable = ({
                 {columns.map((column, colIndex) => (
                   <th
                     key={column?.data || colIndex}
+                    className={`desktop-table-header-cell ${
+                      column?.orderable
+                        ? "desktop-table-header-cell--sortable cursor-pointer"
+                        : ""
+                    } py-2 px-1 text-center min-w-max text-xs`}
                     style={{
                       width: column?.width,
                       color: theme.headerText,
                       borderBottom: `1px solid ${theme.rowBorder}`,
                     }}
-                    className={`${
-                      column?.orderable ? "cursor-pointer" : ""
-                    } py-2 px-1 text-center min-w-max text-xs`}
                     onClick={() =>
                       column?.orderable && handleSort(colIndex, column)
                     }
                   >
                     {column?.data === "selectableTable" ? (
                       <Checkbox
-                        className="mx-auto justify-center"
+                        className="desktop-table-select-all-checkbox mx-auto justify-center"
                         primaryColor={theme.primaryColor}
                         onChange={() => onAllSelect?.()}
                       />
                     ) : (
                       <div
-                        className="truncate mx-auto m-auto text-center line-clamp-1 flex items-center justify-center gap-1"
+                        className="desktop-table-header-content truncate mx-auto m-auto text-center line-clamp-1 flex items-center justify-center gap-1"
                         title={column?.width ? column?.title : ""}
                       >
                         {column?.orderable && (
-                          <span className="flex flex-col items-center">
+                          <span className="desktop-table-sort-icons flex flex-col items-center">
                             <ArrowUpIcon
                               style={{
                                 color:
                                   order?.dir === "asc" ? theme?.headerText : "",
                               }}
-                              className={`h-2 translate-y-[1px] ${
+                              className={`desktop-table-sort-icon desktop-table-sort-icon--asc h-2 translate-y-[1px] ${
                                 order?.column === colIndex &&
                                 order?.dir === "asc"
                                   ? "opacity-100"
@@ -113,7 +137,7 @@ const DesktopTable = ({
                                     ? theme?.headerText
                                     : "",
                               }}
-                              className={`h-2 rotate-180 ${
+                              className={`desktop-table-sort-icon desktop-table-sort-icon--desc h-2 rotate-180 ${
                                 order?.column === colIndex &&
                                 order?.dir === "desc"
                                   ? "opacity-100"
@@ -122,7 +146,9 @@ const DesktopTable = ({
                             />
                           </span>
                         )}
-                        {column?.title}
+                        <span className="desktop-table-header-title">
+                          {column?.title}
+                        </span>
                       </div>
                     )}
                   </th>
@@ -135,17 +161,20 @@ const DesktopTable = ({
         {/* Scrollable body */}
         <div
           ref={bodyContainerRef}
-          className="overflow-auto w-full"
+          className="desktop-table-body-container overflow-auto w-full"
           style={{ maxHeight }}
         >
-          <table className="w-full table-fixed border-collapse">
-            <tbody>
+          <table className="desktop-table-body w-full table-fixed border-collapse">
+            <tbody className="desktop-table-body-inner">
               {isLoading ? (
                 Array.from({ length: pageSize }).map((_, i) => (
-                  <tr key={i}>
+                  <tr key={i} className="desktop-table-skeleton-row">
                     {columns.map((_, colIndex) => (
-                      <td key={colIndex}>
-                        <Skeleton />
+                      <td
+                        key={colIndex}
+                        className="desktop-table-skeleton-cell"
+                      >
+                        <Skeleton className="desktop-table-skeleton" />
                       </td>
                     ))}
                   </tr>
@@ -154,6 +183,7 @@ const DesktopTable = ({
                 rows.map((row, rowIndex) => (
                   <tr
                     key={rowIndex}
+                    className="desktop-table-data-row"
                     style={{
                       borderBottom: `1px solid ${theme.rowBorder}`,
                       backgroundColor: theme.rowBg,
@@ -166,26 +196,26 @@ const DesktopTable = ({
                         ? column?.render(
                             cellKey ? row[cellKey] : undefined,
                             row,
-                            rowIndex
+                            rowIndex,
                           )
                         : cellKey
-                        ? row[cellKey]
-                        : null;
+                          ? row[cellKey]
+                          : null;
 
                       return (
                         <td
                           key={colIndex}
+                          className="desktop-table-data-cell py-1 px-1 text-center"
                           style={{
                             width: column?.width,
                             color: theme.cellText,
                           }}
-                          className="py-1 px-1 text-center"
                         >
                           <div
                             title={
                               cellKey ? row[cellKey]?.toString() : undefined
                             }
-                            className={`block truncate mx-auto text-center ${
+                            className={`desktop-table-cell-content block truncate mx-auto text-center ${
                               cellKey === null
                                 ? "flex items-center justify-center gap-1.5"
                                 : "mx-auto"
@@ -199,10 +229,10 @@ const DesktopTable = ({
                   </tr>
                 ))
               ) : (
-                <tr>
+                <tr className="desktop-table-empty-row">
                   <td
                     colSpan={columns.length}
-                    className="p-6 text-center"
+                    className="desktop-table-empty-cell p-6 text-center"
                     style={{ color: theme.headerText }}
                   >
                     {textsConfig.noDataText}

@@ -27,18 +27,18 @@ const PageSizeSelect = ({
   };
 
   return (
-    <div className="relative flex items-center gap-1">
+    <div className="page-size-select-container relative flex items-center gap-1">
       <BiChevronDown
         style={{
           color: theme?.searchBoxTextColor,
         }}
-        className="pointer-events-none shrink-0"
+        className="page-size-select-icon pointer-events-none shrink-0"
       />
       <span
         style={{
           color: theme?.searchBoxTextColor,
         }}
-        className="md:text-base text-xs text-nowrap"
+        className="page-size-select-label md:text-base text-xs text-nowrap"
       >
         {text}
       </span>
@@ -50,14 +50,26 @@ const PageSizeSelect = ({
           backgroundColor: theme?.searchBoxBgColor,
           color: theme?.searchBoxTextColor,
         }}
-        className={`my-0 flex items-center justify-between  gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70 appearance-none pl-6 cursor-pointer max-md:py-1 max-md:h-8 max-md:min-w-12 max-md:text-sm`}
+        className={`page-size-select my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70 appearance-none pl-6 cursor-pointer max-md:py-1 max-md:h-8 max-md:min-w-12 max-md:text-sm`}
       >
-        <option value={initialPageSize}>{initialPageSize}</option>
-        <option value={20}>20</option>
-        <option value={50}>50</option>
-        <option value={100}>100</option>
-        <option value={200}>200</option>
-        <option value={300}>300</option>
+        <option className="page-size-option" value={initialPageSize}>
+          {initialPageSize}
+        </option>
+        <option className="page-size-option" value={20}>
+          20
+        </option>
+        <option className="page-size-option" value={50}>
+          50
+        </option>
+        <option className="page-size-option" value={100}>
+          100
+        </option>
+        <option className="page-size-option" value={200}>
+          200
+        </option>
+        <option className="page-size-option" value={300}>
+          300
+        </option>
       </select>
     </div>
   );
