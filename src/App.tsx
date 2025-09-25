@@ -158,6 +158,13 @@ const App: React.FC = () => {
             searchBoxBorderColor: "#364153",
             searchBoxBgColor: "",
             searchBoxTextColor: "#fff",
+            paginationActiveColor: "#d24670",
+            paginationBorderColor: "#364153",
+            paginationTextColor: "#fff",
+            primaryColor: "#d24670",
+            paginationBg: "#364153",
+            paginationDisabledBackgroundColor: "#364153",
+            errorColor: "#d24670",
           }}
           // internalApiConfig={{
           //   baseUrl: "http://10.10.10.22:8090",
