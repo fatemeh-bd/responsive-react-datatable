@@ -104,6 +104,7 @@ export interface BaseTableProps {
   notify: (text: string, type: "error" | "success" | "warning") => void;
   isLoading?: boolean;
   autoPageSizeConfig?: AutoPageSizeConfig;
+  listMode?: boolean;
 }
 
 export interface Selectable extends BaseTableProps {

@@ -71,6 +71,7 @@ const Table: React.FC<TableProps> = (props) => {
     autoPageSizeConfig: customAutoPageSizeConfig,
     height,
     onPageSizeChange,
+    listMode,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
 
@@ -231,7 +232,6 @@ const Table: React.FC<TableProps> = (props) => {
         orderable: true,
         width: 70,
         searchable: false,
-        dontShowTitleInMobile: true,
       },
       ...columns,
     ];
@@ -519,6 +519,7 @@ const Table: React.FC<TableProps> = (props) => {
           pageSize={dynamicPageSize}
           theme={theme}
           textsConfig={mergedTexts}
+          listMode={listMode}
         />
       ) : (
         <>
