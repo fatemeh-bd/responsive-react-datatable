@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface PaginationProps {
   totalItems: number;
   pageSize: number;
@@ -107,6 +109,11 @@ export interface BaseTableProps {
   autoPageSizeConfig?: AutoPageSizeConfig;
   listMode?: boolean;
   tableName: string;
+  filters?: ReactNode;
+  topFilter?: ReactNode;
+  filterContainerClassName?: string;
+  topFilterContainerClassName?: string;
+  removeFilterKey?: string;
 }
 
 export interface Selectable extends BaseTableProps {

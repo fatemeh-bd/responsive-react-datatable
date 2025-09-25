@@ -10,6 +10,7 @@ import {
   ColorTheme,
   ColumnType,
   ExternalTableProps,
+  InternalTableProps,
   OrderType,
   Selectable,
   StaticModeProps,
@@ -23,9 +24,10 @@ import Pagination from "./Pagination";
 import { useQueryParams } from "./useQueryParams";
 import { SelectableCheckbox } from "./SelectableCheckbox";
 import { useQuery } from "@tanstack/react-query";
-import { CloseIcon, SearchIcon } from "./icons";
+import { CloseIcon, FilterIcon, SearchIcon, TrashIcon } from "./icons";
 import axios from "axios";
 import PageSizeSelect from "./PageSizeSelect";
+import Modal from "./Modal";
 
 const defaultTexts = {
   en: {
@@ -76,6 +78,11 @@ const Table: React.FC<TableProps> = (props) => {
     onPageSizeChange,
     listMode,
     tableName,
+    filters,
+    topFilter,
+    topFilterContainerClassName = "sm:mb-4 flex items-center flex-wrap md:gap-2 gap-3 [&>div]:md:w-[200px] [&>div]:w-full",
+    filterContainerClassName = "flex flex-wrap md:gap-2 gap-3 [&>div]:md:w-[200px] [&>div]:w-full",
+    removeFilterKey,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
 
@@ -114,18 +121,9 @@ const Table: React.FC<TableProps> = (props) => {
     subtractSelectors: [
       // "#table-header-actions",
       // "#paging",
-      "#filters",
-      "#topFilter",
-      "#tabPage",
-      "#userCards",
-      "#title",
+      // "#topFilter",
     ],
-    optionalSelectorsForExtraBuffer: [
-      "#tabPage",
-      "#topFilter",
-      "#userCards",
-      "#title",
-    ],
+    optionalSelectorsForExtraBuffer: ["#topFilter"],
     rowHeight: 51.15,
     baseBufferRows: 2,
     extraBufferRows: 1,
@@ -134,8 +132,9 @@ const Table: React.FC<TableProps> = (props) => {
     ...defaultAutoConfig,
     ...customAutoPageSizeConfig,
     subtractSelectors: [
-      // "#table-header-actions",
-      "#paging",
+      "#table-header-actions",
+      // "#paging",
+      "#topFilter",
       ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
     ],
   };
@@ -149,11 +148,13 @@ const Table: React.FC<TableProps> = (props) => {
     baseBufferRows,
     extraBufferRows,
   } = autoConfig;
+  const internalConfig = (props as InternalTableProps).internalApiConfig;
 
   // hooks
   const isMobile = useIsMobile(startMobileSize);
   const { updateParams, getParams, removeParams } = useQueryParams();
   // states
+  const [openFilter, setOpenFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(
     () => Number(getParams(pageQueryName)) || 1
   );
@@ -178,9 +179,8 @@ const Table: React.FC<TableProps> = (props) => {
   const [order, setOrder] = useState<any>([
     {
       column: hasColumnOrder ? 8 : 0,
-      dir: mode === "internal" ? props?.internalApiConfig?.sortType : "desc",
-      name:
-        mode === "internal" ? props?.internalApiConfig?.defaultSortBy : "id",
+      dir: mode === "internal" ? internalConfig?.sortType : "desc",
+      name: mode === "internal" ? internalConfig?.defaultSortBy : "id",
     },
   ]);
   const [searchValue, setSearchValue] = useState(() => {
@@ -412,10 +412,8 @@ const Table: React.FC<TableProps> = (props) => {
 
   // internal api call
   if (mode === "internal") {
-    const refreshableCustomBody = Array.isArray(
-      props?.internalApiConfig?.customBody
-    )
-      ? props?.internalApiConfig?.customBody.filter((item) => !item.noRefresh)
+    const refreshableCustomBody = Array.isArray(internalConfig?.customBody)
+      ? internalConfig?.customBody.filter((item) => !item.noRefresh)
       : [];
     const { isFetching } = useQuery({
       enabled: Boolean(dynamicPageSize && mode === "internal"),
@@ -431,7 +429,7 @@ const Table: React.FC<TableProps> = (props) => {
       refetchIntervalInBackground: false,
       queryFn: async () => {
         try {
-          const payloadCustomBody = props?.internalApiConfig?.customBody || [];
+          const payloadCustomBody = internalConfig?.customBody || [];
 
           const makeCurrentCols = columnsWithRow
             ?.filter((i) => i.data !== null)
@@ -457,15 +455,15 @@ const Table: React.FC<TableProps> = (props) => {
             Object.assign(payload, rest);
           });
 
-          const endpoint = props?.internalApiConfig?.endpoint || "";
+          const endpoint = internalConfig?.endpoint || "";
           const response = await axios({
-            method: props?.internalApiConfig?.method || "POST",
-            url: props?.internalApiConfig?.baseUrl + endpoint || "" + endpoint,
+            method: internalConfig?.method || "POST",
+            url: internalConfig?.baseUrl + endpoint || "" + endpoint,
             data: payload || null,
-            headers: props?.internalApiConfig?.headers,
+            headers: internalConfig?.headers,
           });
 
-          props?.internalApiConfig?.onFetch?.(response?.data);
+          internalConfig?.onFetch?.(response?.data);
           setTableRows(response?.data?.data);
           setTotalItems(response?.data?.recordsFiltered);
 
@@ -476,9 +474,23 @@ const Table: React.FC<TableProps> = (props) => {
       },
     });
   }
-
+  const activeFilterCount = Array.isArray(internalConfig?.customBody)
+    ? internalConfig?.customBody?.reduce((count, item) => {
+        if (!item.isFilter) return count;
+        const { noRefresh, isFilter, ...rest } = item;
+        const hasValue = Object.values(rest).some(
+          (val) => val !== null && val !== undefined && val !== ""
+        );
+        return hasValue ? count + 1 : count;
+      }, 0)
+    : 0;
   return (
     <div className="table-container" dir={dir}>
+      {!isMobile && topFilter && (
+        <div className={topFilterContainerClassName} id="topFilter">
+          {topFilter}
+        </div>
+      )}
       <div
         id="table-header-actions"
         className={`table-header-actions mb-2 flex md:items-start justify-between w-full items-center md:gap-2 gap-3 md:flex-wrap-reverse max-md:w-full`}
@@ -540,6 +552,23 @@ const Table: React.FC<TableProps> = (props) => {
               </div>
             </div>
           </div>
+        )}
+        {isMobile && (filters || topFilter) && (
+          <button
+            onClick={() => setOpenFilter(true)}
+            className="relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 min-h-[43px] justify-center rounded-md"
+          >
+            {activeFilterCount > 0 && (
+              <span className="absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">
+                {activeFilterCount}
+              </span>
+            )}
+            فیلتر
+            <FilterIcon />
+          </button>
+        )}
+        {!isMobile && filters && (
+          <div className={filterContainerClassName}>{filters}</div>
         )}
         {!isMobile && (
           <PageSizeSelect
@@ -618,6 +647,45 @@ const Table: React.FC<TableProps> = (props) => {
           />
         </>
       )}
+
+      <Modal
+        size="lg"
+        title="فیلتر ها"
+        // childrenClass="!h-[80svh]"
+        isOpen={openFilter}
+        onClose={() => setOpenFilter(false)}
+      >
+        <div className={filterContainerClassName}>
+          {filters}
+          {topFilter}
+        </div>
+        <div className="flex items-center gap-2 mt-8">
+          <button onClick={() => setOpenFilter(false)} className="w-full">
+            بستن
+          </button>
+          <button
+            onClick={() => {
+              // پاک کردن تمام query ها
+              window.history.replaceState({}, "", window.location.pathname);
+
+              // اگه کل sessionStorage مرتبط با فیلترها رو هم می‌خوای پاک کنی
+              if (removeFilterKey) {
+                sessionStorage.removeItem(removeFilterKey);
+              }
+
+              // اگه searchValue هم ذخیره میشه، اونم خالی کن
+              if (tableName) {
+                sessionStorage.removeItem(`search_${tableName}`);
+              }
+
+              location.reload();
+            }}
+          >
+            حذف فیلتر ها
+            <TrashIcon />
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };
