@@ -158,7 +158,7 @@ const Pagination: React.FC<PaginationProps> = ({
   if (totalPages <= 1) return null;
 
   return isMobile ? (
-    <>
+    <div className="pagination-mobile-container">
       <button
         style={{
           ...baseStyle,
@@ -166,6 +166,7 @@ const Pagination: React.FC<PaginationProps> = ({
         }}
         disabled={currentPage === 1}
         onClick={goToPrevPage}
+        className="pagination-mobile-nav pagination-mobile-prev"
       >
         {dir === "rtl" ? (
           <MdOutlineArrowForwardIos style={{ fontSize: "16px" }} />
@@ -186,9 +187,15 @@ const Pagination: React.FC<PaginationProps> = ({
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
+        className="pagination-mobile-input"
       />
-      <span style={{ color: theme.paginationTextColor }}>/</span>
-      <span>{totalPages}</span>
+      <span
+        style={{ color: theme.paginationTextColor }}
+        className="pagination-mobile-separator"
+      >
+        /
+      </span>
+      <span className="pagination-mobile-total">{totalPages}</span>
       <button
         style={{
           ...baseStyle,
@@ -196,6 +203,7 @@ const Pagination: React.FC<PaginationProps> = ({
         }}
         disabled={currentPage === totalPages}
         onClick={goToNextPage}
+        className="pagination-mobile-nav pagination-mobile-next"
       >
         {dir === "rtl" ? (
           <MdOutlineArrowBackIos style={{ fontSize: "16px" }} />
@@ -203,14 +211,17 @@ const Pagination: React.FC<PaginationProps> = ({
           <MdOutlineArrowForwardIos style={{ fontSize: "16px" }} />
         )}
       </button>
-    </>
+    </div>
   ) : (
     <div
       id="paging"
-      className="w-full flex items-center justify-between gap-2 md:!mt-2 flex-wrap-reverse"
+      className="pagination-container w-full flex items-center justify-between gap-2 md:!mt-2 flex-wrap-reverse"
     >
-      <nav>
-        <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
+      <nav className="pagination-nav">
+        <div
+          style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}
+          className="pagination-buttons-container"
+        >
           <button
             style={{
               ...baseStyle,
@@ -218,7 +229,7 @@ const Pagination: React.FC<PaginationProps> = ({
             }}
             disabled={currentPage === 1}
             onClick={goToFirstPage}
-            className="first-paging"
+            className="pagination-button pagination-first"
           >
             {textsConfig?.firstPaging}
           </button>
@@ -230,7 +241,7 @@ const Pagination: React.FC<PaginationProps> = ({
             }}
             disabled={currentPage === 1}
             onClick={goToPrevPage}
-            className="next-paging"
+            className="pagination-button pagination-prev"
           >
             {dir === "rtl" ? (
               <MdOutlineArrowForwardIos style={{ fontSize: "16px" }} />
@@ -245,12 +256,16 @@ const Pagination: React.FC<PaginationProps> = ({
               ...(1 === currentPage ? activeStyle : {}),
             }}
             onClick={() => updatePage(1)}
-            className="paging-button"
+            className="pagination-button pagination-page"
           >
             {1}
           </button>
 
-          {showLeftEllipsis && <span style={baseStyle}>...</span>}
+          {showLeftEllipsis && (
+            <span style={baseStyle} className="pagination-ellipsis">
+              ...
+            </span>
+          )}
 
           {middlePages.map((pageNum) => (
             <button
@@ -260,13 +275,17 @@ const Pagination: React.FC<PaginationProps> = ({
                 ...(pageNum === currentPage ? activeStyle : {}),
               }}
               onClick={() => updatePage(pageNum)}
-              className="paging-button"
+              className="pagination-button pagination-page"
             >
               {numberWithCommas(pageNum) || ""}
             </button>
           ))}
 
-          {showRightEllipsis && <span style={baseStyle}>...</span>}
+          {showRightEllipsis && (
+            <span style={baseStyle} className="pagination-ellipsis">
+              ...
+            </span>
+          )}
 
           <button
             style={{
@@ -274,7 +293,7 @@ const Pagination: React.FC<PaginationProps> = ({
               ...(totalPages === currentPage ? activeStyle : {}),
             }}
             onClick={() => updatePage(totalPages)}
-            className="paging-button"
+            className="pagination-button pagination-page"
           >
             {numberWithCommas(totalPages) || ""}
           </button>
@@ -286,7 +305,7 @@ const Pagination: React.FC<PaginationProps> = ({
             }}
             disabled={currentPage === totalPages}
             onClick={goToNextPage}
-            className="prev-paging"
+            className="pagination-button pagination-next"
           >
             {dir === "rtl" ? (
               <MdOutlineArrowBackIos style={{ fontSize: "16px" }} />
@@ -302,14 +321,14 @@ const Pagination: React.FC<PaginationProps> = ({
             }}
             disabled={currentPage === totalPages}
             onClick={goToLastPage}
-            className="last-paging"
+            className="pagination-button pagination-last"
           >
             {textsConfig?.lastPaging}
           </button>
         </div>
       </nav>
       {totalItems > 0 && !isMobile && (
-        <p>
+        <p className="pagination-info">
           {textsConfig?.showing(
             (Number(currentPage) - 1) * pageSize + 1,
             Math.min(Number(currentPage) * pageSize, totalItems),

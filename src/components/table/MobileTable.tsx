@@ -27,7 +27,7 @@ const MobileTable = ({
   const renderCard = (row: Record<string, any>, rowIndex: number) => (
     <div
       key={rowIndex}
-      className="p-4 !h-auto mb-3 rounded-xl overflow-hidden border border-secondary-300 bg-white shadow-sm"
+      className="mobile-table-card p-4 !h-auto mb-3 rounded-xl overflow-hidden border border-secondary-300 bg-white shadow-sm"
     >
       {columns.map((column, colIndex) => {
         const cellKey = column.data;
@@ -40,11 +40,11 @@ const MobileTable = ({
         return column?.dontShowDataInMobile ? null : (
           <div
             key={colIndex}
-            className="flex items-start justify-between py-1 gap-4 w-full flex-wrap"
+            className="mobile-table-card-row flex items-start justify-between py-1 gap-4 w-full flex-wrap"
           >
             {column?.title === "عملیات" ||
             column?.dontShowTitleInMobile ? null : (
-              <span className="text-xs text-secondary-600 min-w-[80px]">
+              <span className="mobile-table-card-label text-xs text-secondary-600 min-w-[80px]">
                 {column?.title}
                 {column?.title && ":"}
               </span>
@@ -52,7 +52,7 @@ const MobileTable = ({
 
             <div
               title={cellKey ? row[cellKey]?.toString() : undefined}
-              className={`truncate text-center overflow-visible h-auto text-sm flex text-wrap items-center justify-center gap-2 !mx-0 flex-wrap ${
+              className={`mobile-table-card-content truncate text-center overflow-visible h-auto text-sm flex text-wrap items-center justify-center gap-2 !mx-0 flex-wrap ${
                 column?.title === "عملیات"
                   ? "[&>button]:flex-1 [&>div]:flex-1 !w-full [&>a]:flex-1"
                   : ""
@@ -67,29 +67,39 @@ const MobileTable = ({
   );
 
   return (
-    <div className="block md:hidden">
+    <div className="mobile-table-container block md:hidden">
       {isLoading ? (
-        <div className="border rounded-xl border-secondary-400 p-4 space-y-2 mb-2">
+        <div className="mobile-table-skeleton-container border rounded-xl border-secondary-400 p-4 space-y-2 mb-2">
           {columns?.map((_item, index) => (
             <React.Fragment key={index}>
-              <div className="flex items-center gap-2">
+              <div className="mobile-table-skeleton-row flex items-center gap-2">
                 <Skeleton
+                  className="mobile-table-skeleton-item"
                   style={{ width: index % 2 ? "40%" : "60%" }}
                   height="h-5"
                 />
                 <Skeleton
+                  className="mobile-table-skeleton-item"
                   style={{ width: index % 2 ? "60%" : "40%" }}
                   height="h-5"
                 />
               </div>
               {_item?.data === null && (
-                <div className="flex items-center gap-2">
+                <div className="mobile-table-skeleton-action-row flex items-center gap-2">
                   <div
                     style={{ width: index % 2 ? "60%" : "40%" }}
-                    className="h-5 my-2 w-full animate-pulse bg-gray-200 dark:bg-gray-800"
+                    className="mobile-table-skeleton-placeholder h-5 my-2 w-full animate-pulse bg-gray-200 dark:bg-gray-800"
                   />
-                  <Skeleton height="h-9" style={{ width: "50%" }} />
-                  <Skeleton height="h-9" style={{ width: "50%" }} />
+                  <Skeleton
+                    className="mobile-table-skeleton-action"
+                    height="h-9"
+                    style={{ width: "50%" }}
+                  />
+                  <Skeleton
+                    className="mobile-table-skeleton-action"
+                    height="h-9"
+                    style={{ width: "50%" }}
+                  />
                 </div>
               )}
             </React.Fragment>
@@ -97,26 +107,26 @@ const MobileTable = ({
         </div>
       ) : rows?.length > 0 ? (
         listMode ? (
-          <div className="flex flex-col px-1 my-2">
+          <div className="mobile-table-list-container flex flex-col px-1 my-2">
             {rows.map((row, rowIndex) => renderCard(row, rowIndex))}
           </div>
         ) : (
           <Swiper
-            className="swiper px-1 my-2 flex-col"
+            className="mobile-table-swiper swiper px-1 my-2 flex-col"
             slidesPerView={rows?.length === 1 ? 1 : 1.1}
             spaceBetween={10}
             modules={[Virtual]}
             virtual
           >
             {rows.map((row, rowIndex) => (
-              <SwiperSlide key={rowIndex}>
+              <SwiperSlide key={rowIndex} className="mobile-table-swiper-slide">
                 {renderCard(row, rowIndex)}
               </SwiperSlide>
             ))}
           </Swiper>
         )
       ) : (
-        <p className="text-center text-secondary-700 py-6">
+        <p className="mobile-table-empty-message text-center text-secondary-700 py-6">
           {textsConfig?.noDataText}
         </p>
       )}

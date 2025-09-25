@@ -26,6 +26,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CloseIcon, SearchIcon } from "./icons";
 import axios from "axios";
 import PageSizeSelect from "./PageSizeSelect";
+
 const defaultTexts = {
   en: {
     row: "Row",
@@ -475,17 +476,18 @@ const Table: React.FC<TableProps> = (props) => {
       },
     });
   }
+
   return (
-    <div dir={dir}>
+    <div className="table-container" dir={dir}>
       <div
         id="table-header-actions"
-        className={`mb-2 flex md:items-start justify-between w-full items-center md:gap-2 gap-3  md:flex-wrap-reverse max-md:w-full`}
+        className={`table-header-actions mb-2 flex md:items-start justify-between w-full items-center md:gap-2 gap-3 md:flex-wrap-reverse max-md:w-full`}
       >
         {!noSearch && (
-          <div className="max-md:w-full">
+          <div className="table-search-container max-md:w-full">
             <div
               style={{ width: 320 }}
-              className={`flex flex-col gap-1 [&>div]:!gap-1 [&>div]:!flex-row-reverse`}
+              className={`table-search-wrapper flex flex-col gap-1 [&>div]:!gap-1 [&>div]:!flex-row-reverse`}
             >
               <div
                 style={{
@@ -493,7 +495,7 @@ const Table: React.FC<TableProps> = (props) => {
                   backgroundColor: theme?.searchBoxBgColor,
                   color: theme?.searchBoxTextColor,
                 }}
-                className={`my-0 flex items-center justify-between  gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70`}
+                className={`table-search-input-container my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70`}
               >
                 {searchValue ? (
                   <CloseIcon
@@ -504,7 +506,7 @@ const Table: React.FC<TableProps> = (props) => {
                         : theme?.searchBoxBorderColor,
                     }}
                     onClick={() => setSearchValue("")}
-                    className={`size-6 font-bold scale-125 cursor-pointer ${
+                    className={`table-search-clear-icon size-6 font-bold scale-125 cursor-pointer ${
                       dir === "rtl"
                         ? "border-r pr-1 pl-0.5"
                         : "border-l pl-1 pr-0.5"
@@ -516,7 +518,7 @@ const Table: React.FC<TableProps> = (props) => {
                       borderColor: theme?.searchBoxBorderColor,
                       color: theme?.searchBoxBorderColor,
                     }}
-                    className={`size-6 scale-125 opacity-70 ${
+                    className={`table-search-icon size-6 scale-125 opacity-70 ${
                       dir === "rtl"
                         ? "border-r pr-1 pl-0.5"
                         : "border-l pl-1 pr-0.5"
@@ -527,7 +529,7 @@ const Table: React.FC<TableProps> = (props) => {
                   type="text"
                   value={searchValue}
                   placeholder={mergedTexts?.searchPlaceholder}
-                  className={`w-full border-none bg-transparent !outline-none text-sm placeholder:!text-sm max-sm:placeholder:!text-xs`}
+                  className={`table-search-input w-full border-none bg-transparent !outline-none text-sm placeholder:!text-sm max-sm:placeholder:!text-xs`}
                   onChange={(e) => {
                     setSearchValue(e.target.value);
                     if (currentPage) {
