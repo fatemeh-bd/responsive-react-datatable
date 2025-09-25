@@ -22,6 +22,8 @@ export interface ColorTheme {
   paginationTextColor?: string;
   paginationDisabledBackgroundColor?: string;
   searchBoxBorderColor?: string;
+  searchBoxBgColor?: string;
+  searchBoxTextColor?: string;
   errorColor?: string;
 }
 
@@ -40,7 +42,7 @@ export interface ColumnType {
   render?: (
     cell?: unknown,
     row?: Record<string, any>,
-    index?: number
+    index?: number,
   ) => React.ReactNode;
   width?: number;
   orderable?: boolean;
@@ -104,6 +106,7 @@ export interface BaseTableProps {
   notify: (text: string, type: "error" | "success" | "warning") => void;
   isLoading?: boolean;
   autoPageSizeConfig?: AutoPageSizeConfig;
+  listMode?: boolean;
 }
 
 export interface Selectable extends BaseTableProps {

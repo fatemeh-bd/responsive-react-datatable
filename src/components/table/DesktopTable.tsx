@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { ColorTheme, ColumnType, OrderType, TextsConfig } from "./types";
 import { ArrowUpIcon } from "./icons";
 import Checkbox from "./CheckBox";
+import Skeleton from "./Skeleton";
 
 const DesktopTable = ({
   columns,
@@ -144,10 +145,7 @@ const DesktopTable = ({
                   <tr key={i}>
                     {columns.map((_, colIndex) => (
                       <td key={colIndex}>
-                        <div
-                          className="h-9 w-full animate-pulse"
-                          style={{ backgroundColor: theme.rowBg }}
-                        />
+                        <Skeleton />
                       </td>
                     ))}
                   </tr>

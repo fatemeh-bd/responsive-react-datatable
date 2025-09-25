@@ -19,6 +19,8 @@ interface ColorTheme {
     paginationTextColor?: string;
     paginationDisabledBackgroundColor?: string;
     searchBoxBorderColor?: string;
+    searchBoxBgColor?: string;
+    searchBoxTextColor?: string;
     errorColor?: string;
 }
 interface ColumnType {
@@ -86,6 +88,7 @@ interface BaseTableProps {
     notify: (text: string, type: "error" | "success" | "warning") => void;
     isLoading?: boolean;
     autoPageSizeConfig?: AutoPageSizeConfig;
+    listMode?: boolean;
 }
 interface Selectable extends BaseTableProps {
     isSelectable: boolean;
