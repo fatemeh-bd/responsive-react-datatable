@@ -51,7 +51,6 @@ const Table: React.FC<TableProps> = (props) => {
     mode,
     hasColumnOrder,
     noSearch,
-    saveSearch = false,
     notify,
     onPageChange,
     onSortChange,
@@ -401,13 +400,7 @@ const Table: React.FC<TableProps> = (props) => {
       >
         {!noSearch && (
           <SearchBox
-            dir={dir}
-            mergedTexts={mergedTexts}
-            columns={columns}
-            theme={theme}
-            saveSearch={saveSearch}
-            tableName={tableName}
-            mode={mode}
+            {...props}
             onSearch={(value) => {
               onSearch?.(value);
               setSearchText(value);
@@ -422,7 +415,9 @@ const Table: React.FC<TableProps> = (props) => {
             }}
             tableRows={tableRows}
             currentPage={currentPage}
-            pageQueryName={pageQueryName}
+            dir={dir}
+            mergedTexts={mergedTexts}
+            theme={theme}
           />
         )}
         {isMobile && (filters || topFilter) && (
@@ -462,7 +457,7 @@ const Table: React.FC<TableProps> = (props) => {
       {isMobile ? (
         <MobileTable
           columns={columnsWithRow}
-          isLoading={false}
+          isLoading={isLoading}
           rows={
             mode === "internal"
               ? tableRows
