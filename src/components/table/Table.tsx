@@ -565,10 +565,10 @@ const Table: React.FC<TableProps> = (props) => {
         {isMobile && (filters || topFilter) && (
           <button
             onClick={() => setOpenFilter(true)}
-            className="relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 min-h-[43px] justify-center rounded-md"
+            className="mobile-filter-button relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 min-h-[43px] justify-center rounded-md"
           >
             {activeFilterCount > 0 && (
-              <span className="absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">
+              <span className="mobile-filter-badge absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">
                 {activeFilterCount}
               </span>
             )}
@@ -578,7 +578,7 @@ const Table: React.FC<TableProps> = (props) => {
         )}
         {!isMobile && filters && (
           <div
-            className={`${filterContainerClassName} filter-container-className`}
+            className={`${filterContainerClassName} filter-container-className desktop-filter-container`}
           >
             {filters}
           </div>
@@ -667,13 +667,17 @@ const Table: React.FC<TableProps> = (props) => {
         // childrenClass="!h-[80svh]"
         isOpen={openFilter}
         onClose={() => setOpenFilter(false)}
+        className="filter-modal"
       >
-        <div>
+        <div className="filter-modal-content">
           {filters}
           {topFilter}
         </div>
-        <div className="flex items-center gap-2 mt-8">
-          <button onClick={() => setOpenFilter(false)} className="w-full">
+        <div className="filter-modal-actions flex items-center gap-2 mt-8">
+          <button
+            onClick={() => setOpenFilter(false)}
+            className="filter-modal-close-button w-full"
+          >
             بستن
           </button>
           <button
@@ -693,6 +697,7 @@ const Table: React.FC<TableProps> = (props) => {
 
               location.reload();
             }}
+            className="filter-modal-clear-button"
           >
             حذف فیلتر ها
             <TrashIcon />
