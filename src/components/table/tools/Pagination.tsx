@@ -215,7 +215,7 @@ const Pagination: React.FC<PaginationProps> = ({
   ) : (
     <div
       id="paging"
-      className="pagination-container w-full flex items-center justify-between gap-2 md:!mt-2 flex-wrap-reverse"
+      className="pagination-container w-full flex items-center justify-between gap-2 mt-2 flex-wrap-reverse"
     >
       <nav className="pagination-nav">
         <div

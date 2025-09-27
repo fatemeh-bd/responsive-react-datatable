@@ -95,7 +95,7 @@ const DesktopTable = ({
                       column?.orderable
                         ? "desktop-table-header-cell--sortable cursor-pointer"
                         : ""
-                    } py-2 px-1 text-center min-w-max text-xs`}
+                    } py-2 px-1 text-center min-w-max text-sm`}
                     style={{
                       width: column?.width,
                       color: theme.headerText,

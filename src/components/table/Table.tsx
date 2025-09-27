@@ -388,7 +388,7 @@ const Table: React.FC<TableProps> = (props) => {
     <div className="table-container" dir={dir}>
       {!isMobile && topFilter && (
         <div
-          className={`${topFilterContainerClassName} top-filter-container`}
+          className={`top-filter-container mb-2 ${topFilterContainerClassName}`}
           id="topFilter"
         >
           {topFilter}
