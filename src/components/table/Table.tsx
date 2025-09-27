@@ -63,8 +63,8 @@ const Table: React.FC<TableProps> = (props) => {
     tableName,
     filters,
     topFilter,
-    topFilterContainerClassName = "flex items-center flex-wrap md:gap-2 gap-3 [&>div]:w-full",
-    filterContainerClassName = "flex flex-wrap md:gap-2 gap-3 [&>div]:w-full",
+    topFilterContainerClassName = "flex items-center flex-wrap md:gap-2 gap-3 sm:[&>div]:w-full",
+    filterContainerClassName = "flex flex-wrap md:gap-2 gap-3 sm:[&>div]:w-full",
     removeFilterKey,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
@@ -90,6 +90,11 @@ const Table: React.FC<TableProps> = (props) => {
       // "#paging",
       "#topFilter",
       ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
+    ],
+    optionalSelectorsForExtraBuffer: [
+      "#paging",
+      ...((customAutoPageSizeConfig?.optionalSelectorsForExtraBuffer as string[]) ||
+        []),
     ],
   };
 
@@ -423,7 +428,8 @@ const Table: React.FC<TableProps> = (props) => {
         {isMobile && (filters || topFilter) && (
           <button
             onClick={() => setOpenFilter(true)}
-            className="mobile-filter-button relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 min-h-[43px] justify-center rounded-md"
+            style={{ minHeight: 43 }}
+            className="mobile-filter-button relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 justify-center rounded-md"
           >
             {activeFilterCount > 0 && (
               <span className="mobile-filter-badge absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">

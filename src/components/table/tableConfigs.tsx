@@ -40,7 +40,7 @@ export const defaultColorTheme = {
   paginationDisabledBackgroundColor: "#f9f9f9",
   searchBoxBorderColor: "#d9d9d9",
   searchBoxBgColor: "#fff",
-  searchBoxTextColor: "#fff",
+  searchBoxTextColor: "#000",
   errorColor: "#f43f5e",
 };
 
