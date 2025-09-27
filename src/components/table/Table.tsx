@@ -527,7 +527,6 @@ const Table: React.FC<TableProps> = (props) => {
       <Modal
         size="lg"
         title="فیلتر ها"
-        // childrenClass="!h-[80svh]"
         isOpen={openFilter}
         onClose={() => setOpenFilter(false)}
         className="filter-modal"
@@ -545,19 +544,13 @@ const Table: React.FC<TableProps> = (props) => {
           </button>
           <button
             onClick={() => {
-              // پاک کردن تمام query ها
               window.history.replaceState({}, "", window.location.pathname);
-
-              // اگه کل sessionStorage مرتبط با فیلترها رو هم می‌خوای پاک کنی
               if (removeFilterKey) {
                 sessionStorage.removeItem(removeFilterKey);
               }
-
-              // اگه searchValue هم ذخیره میشه، اونم خالی کن
               if (tableName) {
                 sessionStorage.removeItem(`search_${tableName}`);
               }
-
               location.reload();
             }}
             className="filter-modal-clear-button"
