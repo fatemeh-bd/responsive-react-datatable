@@ -51,7 +51,6 @@ const Table: React.FC<TableProps> = (props) => {
     mode,
     hasColumnOrder,
     noSearch,
-    saveSearch = false,
     notify,
     onPageChange,
     onSortChange,
@@ -401,13 +400,7 @@ const Table: React.FC<TableProps> = (props) => {
       >
         {!noSearch && (
           <SearchBox
-            dir={dir}
-            mergedTexts={mergedTexts}
-            columns={columns}
-            theme={theme}
-            saveSearch={saveSearch}
-            tableName={tableName}
-            mode={mode}
+            {...props}
             onSearch={(value) => {
               onSearch?.(value);
               setSearchText(value);
@@ -422,7 +415,9 @@ const Table: React.FC<TableProps> = (props) => {
             }}
             tableRows={tableRows}
             currentPage={currentPage}
-            pageQueryName={pageQueryName}
+            dir={dir}
+            mergedTexts={mergedTexts}
+            theme={theme}
           />
         )}
         {isMobile && (filters || topFilter) && (
@@ -441,7 +436,7 @@ const Table: React.FC<TableProps> = (props) => {
         )}
         {!isMobile && filters && (
           <div
-            className={`${filterContainerClassName} filter-container-className desktop-filter-container`}
+            className={`${filterContainerClassName} filter-container-className`}
           >
             {filters}
           </div>
@@ -462,7 +457,7 @@ const Table: React.FC<TableProps> = (props) => {
       {isMobile ? (
         <MobileTable
           columns={columnsWithRow}
-          isLoading={false}
+          isLoading={isLoading}
           rows={
             mode === "internal"
               ? tableRows
@@ -527,7 +522,6 @@ const Table: React.FC<TableProps> = (props) => {
       <Modal
         size="lg"
         title="فیلتر ها"
-        // childrenClass="!h-[80svh]"
         isOpen={openFilter}
         onClose={() => setOpenFilter(false)}
         className="filter-modal"
@@ -545,19 +539,13 @@ const Table: React.FC<TableProps> = (props) => {
           </button>
           <button
             onClick={() => {
-              // پاک کردن تمام query ها
               window.history.replaceState({}, "", window.location.pathname);
-
-              // اگه کل sessionStorage مرتبط با فیلترها رو هم می‌خوای پاک کنی
               if (removeFilterKey) {
                 sessionStorage.removeItem(removeFilterKey);
               }
-
-              // اگه searchValue هم ذخیره میشه، اونم خالی کن
               if (tableName) {
                 sessionStorage.removeItem(`search_${tableName}`);
               }
-
               location.reload();
             }}
             className="filter-modal-clear-button"

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { CloseIcon, SearchIcon } from "../icons";
-import { ColorTheme, ColumnType, TableMode, TextsConfig } from "../types";
+import { ColorTheme, TableProps, TextsConfig } from "../types";
 import { useQueryParams } from "../hooks/useQueryParams";
-
 const SearchBox = ({
   theme,
   saveSearch,
@@ -17,20 +16,14 @@ const SearchBox = ({
   mergedTexts,
   currentPage,
   pageQueryName,
-}: {
-  theme: ColorTheme;
-  saveSearch: boolean;
-  tableName: string;
-  mode: TableMode;
+}: TableProps & {
   tableRows: any[];
-  columns: ColumnType[];
   onStaticNoSearch: () => void;
   onStaticSearching: (value: any) => void;
-  onSearch?: (value: string) => void;
+  currentPage: number;
   dir: "rtl" | "ltr";
   mergedTexts: TextsConfig;
-  currentPage: number;
-  pageQueryName: string;
+  theme: ColorTheme;
 }) => {
   const { removeParams } = useQueryParams();
   const [searchValue, setSearchValue] = useState(() => {
@@ -136,7 +129,7 @@ const SearchBox = ({
             onChange={(e) => {
               setSearchValue(e.target.value);
               if (currentPage) {
-                removeParams(pageQueryName);
+                removeParams(pageQueryName || "page");
               }
             }}
           />
