@@ -95,7 +95,8 @@ const SearchBox = ({
             backgroundColor: theme?.searchBoxBgColor,
             color: theme?.searchBoxTextColor,
           }}
-          className={`table-search-input-container my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2.5 border disabled:opacity-70`}
+          className="my-0 flex items-center justify-between  gap-3 text-right text-base bg-white rounded-lg placeholder:text-sm !outline-none block w-full p-2.5 border border-secondary-500 focus:border-primary disabled:opacity-70 disabled:cursor-not-allowed disabled:bg-secondary-200   bg-transparent"
+          // className={`table-search-input-container my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2.5 border disabled:opacity-70`}
         >
           {searchValue ? (
             <CloseIcon
@@ -106,7 +107,7 @@ const SearchBox = ({
                   : theme?.searchBoxBorderColor,
               }}
               onClick={() => setSearchValue("")}
-              className={`table-search-clear-icon size-5 font-bold scale-125 cursor-pointer ${
+              className={`table-search-clear-icon size-5 font-bold scale-150 cursor-pointer ${
                 dir === "rtl" ? "border-r pr-1 pl-0" : "border-l pl-1 pr-0"
               }`}
             />
@@ -116,7 +117,7 @@ const SearchBox = ({
                 borderColor: theme?.searchBoxBorderColor,
                 color: theme?.searchBoxTextColor,
               }}
-              className={`table-search-icon size-5 scale-125 opacity-70 ${
+              className={`table-search-icon size-5 scale-150 opacity-70 ${
                 dir === "rtl" ? "border-r pr-1 pl-0" : "border-l pl-1 pr-0"
               }`}
             />
