@@ -436,7 +436,7 @@ const Table: React.FC<TableProps> = (props) => {
         )}
         {!isMobile && filters && (
           <div
-            className={`${filterContainerClassName} filter-container-className desktop-filter-container`}
+            className={`${filterContainerClassName} filter-container-className`}
           >
             {filters}
           </div>

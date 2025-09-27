@@ -1,4 +1,5 @@
-@media (max-width: 768px) {
+@media (min-width: 768px) {
+  .desktop-filter-container > div,
   .top-filter-container > div,
   .filter-container-className > div {
     width: 200px;
