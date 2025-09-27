@@ -68,9 +68,9 @@ const PageSizeSelect = ({
         </select>
         <ChevronDown
           style={{
-            color: theme?.searchBoxTextColor,
+            color: theme?.searchBoxBorderColor,
           }}
-          className="page-size-select-icon pointer-events-none shrink-0 absolute left-1 top-0 bottom-0 my-auto"
+          className="page-size-select-icon pointer-events-none size-5 shrink-0 absolute left-1 top-0 bottom-0 my-auto"
         />
       </div>
     </div>
