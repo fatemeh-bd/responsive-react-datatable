@@ -91,6 +91,11 @@ const Table: React.FC<TableProps> = (props) => {
       "#topFilter",
       ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
     ],
+    optionalSelectorsForExtraBuffer: [
+      "#paging",
+      ...((customAutoPageSizeConfig?.optionalSelectorsForExtraBuffer as string[]) ||
+        []),
+    ],
   };
 
   const {
