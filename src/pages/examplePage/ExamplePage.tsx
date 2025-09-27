@@ -131,7 +131,7 @@ const ExamplePage = () => {
           headerText: "#fff",
           headerBg: "#364153",
           searchBoxBorderColor: "#364153",
-          searchBoxBgColor: "",
+          searchBoxBgColor: "#364153",
           searchBoxTextColor: "#fff",
           paginationActiveColor: "#d24670",
           paginationBorderColor: "#364153",

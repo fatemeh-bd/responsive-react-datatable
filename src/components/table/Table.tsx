@@ -66,6 +66,7 @@ const Table: React.FC<TableProps> = (props) => {
     topFilterContainerClassName = "flex items-center flex-wrap md:gap-2 gap-3 sm:[&>div]:w-full",
     filterContainerClassName = "flex flex-wrap md:gap-2 gap-3 sm:[&>div]:w-full",
     removeFilterKey,
+    actionButtons,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
   const theme: ColorTheme = useMemo(
@@ -447,18 +448,21 @@ const Table: React.FC<TableProps> = (props) => {
             {filters}
           </div>
         )}
-        {!isMobile && (
-          <PageSizeSelect
-            text={mergedTexts?.pageSize}
-            theme={theme}
-            initialPageSize={tableHeightPageSize}
-            pageSize={pageSizeInitial}
-            onPageSizeChange={(newSize) => {
-              setDynamicPageSize(newSize);
-              onPageSizeChange?.(newSize);
-            }}
-          />
-        )}
+        <div className="flex items-center gap-3 flex-wrap max-sm:w-full justify-between">
+          {actionButtons && actionButtons}
+          {!isMobile && (
+            <PageSizeSelect
+              text={mergedTexts?.pageSize}
+              theme={theme}
+              initialPageSize={tableHeightPageSize}
+              pageSize={pageSizeInitial}
+              onPageSizeChange={(newSize) => {
+                setDynamicPageSize(newSize);
+                onPageSizeChange?.(newSize);
+              }}
+            />
+          )}
+        </div>
       </div>
       {isMobile ? (
         <MobileTable
