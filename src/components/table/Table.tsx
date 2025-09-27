@@ -1,4 +1,4 @@
-import "./table.css";
+import "./tableStyle.css";
 
 import React, {
   useCallback,
@@ -70,7 +70,7 @@ const Table: React.FC<TableProps> = (props) => {
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
   const theme: ColorTheme = useMemo(
     () => ({
-      defaultColorTheme,
+      ...defaultColorTheme,
       ...colorTheme,
     }),
     [colorTheme]
