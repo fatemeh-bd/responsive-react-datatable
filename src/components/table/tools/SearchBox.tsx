@@ -104,10 +104,12 @@ const SearchBox = ({
                 color: searchValue
                   ? theme?.errorColor
                   : theme?.searchBoxBorderColor,
+                paddingLeft: dir === "rtl" ? 0 : 4,
+                paddingRight: dir === "rtl" ? 4 : 0,
               }}
               onClick={() => setSearchValue("")}
               className={`table-search-clear-icon size-5 font-bold scale-150 cursor-pointer ${
-                dir === "rtl" ? "border-r pr-1 pl-0" : "border-l pl-1 pr-0"
+                dir === "rtl" ? "border-r" : "border-l"
               }`}
             />
           ) : (
@@ -115,9 +117,11 @@ const SearchBox = ({
               style={{
                 borderColor: theme?.searchBoxBorderColor,
                 color: theme?.searchBoxTextColor,
+                paddingLeft: dir === "rtl" ? 0 : 4,
+                paddingRight: dir === "rtl" ? 4 : 2,
               }}
               className={`table-search-icon size-5 scale-150 opacity-70 ${
-                dir === "rtl" ? "border-r pr-1 pl-0" : "border-l pl-1 pr-0"
+                dir === "rtl" ? "border-r" : "border-l"
               }`}
             />
           )}
