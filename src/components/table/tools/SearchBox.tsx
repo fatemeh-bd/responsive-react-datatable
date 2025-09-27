@@ -95,7 +95,7 @@ const SearchBox = ({
             backgroundColor: theme?.searchBoxBgColor,
             color: theme?.searchBoxTextColor,
           }}
-          className={`table-search-input-container my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70`}
+          className={`table-search-input-container my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2.5 border disabled:opacity-70`}
         >
           {searchValue ? (
             <CloseIcon
@@ -125,7 +125,7 @@ const SearchBox = ({
             type="text"
             value={searchValue}
             placeholder={mergedTexts?.searchPlaceholder}
-            className={`table-search-input w-full border-none bg-transparent !outline-none text-sm placeholder:!text-sm max-sm:placeholder:!text-xs`}
+            className={`table-search-input w-full text-inherit border-none bg-transparent !outline-none text-sm placeholder:!text-sm max-sm:placeholder:!text-xs`}
             onChange={(e) => {
               setSearchValue(e.target.value);
               if (currentPage) {

@@ -328,7 +328,7 @@ const Pagination: React.FC<PaginationProps> = ({
         </div>
       </nav>
       {totalItems > 0 && !isMobile && (
-        <p className="pagination-info">
+        <p className="pagination-info text-inherit">
           {textsConfig?.showing(
             (Number(currentPage) - 1) * pageSize + 1,
             Math.min(Number(currentPage) * pageSize, totalItems),
