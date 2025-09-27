@@ -26,7 +26,9 @@ export default [
       json(),
       typescript({ tsconfig: "./tsconfig.json" }),
       postcss({
-        inject: true,
+        inject: {
+          insertAt: "top",
+        },
         extract: false,
         minimize: true,
         config: {
