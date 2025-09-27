@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { BiChevronDown } from "react-icons/bi";
 import { useQueryParams } from "../hooks/useQueryParams";
 import { ColorTheme } from "../types";
+import { ChevronDown } from "../icons";
 
 const PageSizeSelect = ({
   pageSize,
@@ -45,7 +45,7 @@ const PageSizeSelect = ({
             backgroundColor: theme?.searchBoxBgColor,
             color: theme?.searchBoxTextColor,
           }}
-          className={`page-size-select my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70 appearance-none pl-6 cursor-pointer max-md:py-1 max-md:h-8 max-md:min-w-12 max-md:text-sm`}
+          className={`page-size-select my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70 appearance-none pl-6 cursor-pointer max-md:py-1 max-md:min-w-12 max-md:text-sm`}
         >
           <option className="page-size-option" value={initialPageSize}>
             {initialPageSize}
@@ -66,11 +66,11 @@ const PageSizeSelect = ({
             300
           </option>
         </select>
-        <BiChevronDown
+        <ChevronDown
           style={{
             color: theme?.searchBoxTextColor,
           }}
-          className="page-size-select-icon pointer-events-none shrink-0 absolute left-2 top-0 bottom-0 my-auto"
+          className="page-size-select-icon pointer-events-none shrink-0 absolute left-1 top-0 bottom-0 my-auto"
         />
       </div>
     </div>

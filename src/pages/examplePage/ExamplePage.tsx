@@ -109,7 +109,7 @@ const ExamplePage = () => {
       className="flex flex-col gap-6 max-w-7xl mx-auto overflow-auto mt-8"
     >
       <Table
-        lang="en"
+        lang="fa"
         saveSearch
         mode="static"
         pageSize={11}
@@ -130,7 +130,7 @@ const ExamplePage = () => {
           cellText: "#fff",
           headerText: "#fff",
           headerBg: "#364153",
-          searchBoxBorderColor: "#364153",
+          searchBoxBorderColor: "#5e6d87",
           searchBoxBgColor: "#364153",
           searchBoxTextColor: "#fff",
           paginationActiveColor: "#d24670",
