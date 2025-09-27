@@ -2,7 +2,7 @@ import { useState } from "react";
 import Table from "../../components/table/Table";
 import mock from "../../components/table/mockData.json";
 import { ColumnType } from "../../components/table/types";
-const examplePage = () => {
+const ExamplePage = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const columns: ColumnType[] = [
     {
@@ -162,4 +162,4 @@ const examplePage = () => {
     </div>
   );
 };
-export default examplePage;
+export default ExamplePage;
