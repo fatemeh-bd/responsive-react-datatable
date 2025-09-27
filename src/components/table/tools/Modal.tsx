@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import ReactDOM from "react-dom";
-import { useIsMobile } from "./useIsMobile";
-import { CloseIcon } from "./icons";
+import { useIsMobile } from "../hooks/useIsMobile";
+import { CloseIcon } from "../icons";
 interface ModalProps {
   title: string | ReactNode;
   isOpen: boolean;
@@ -9,7 +9,6 @@ interface ModalProps {
   children: ReactNode;
   className?: string;
   childrenClass?: string;
-
   overflowY?:
     | "overflow-y-auto"
     | "overflow-y-hidden"

@@ -1,6 +1,6 @@
 import React from "react";
 import { ColorTheme, ColumnType, TextsConfig } from "./types";
-import Skeleton from "./Skeleton";
+import Skeleton from "./tools/Skeleton";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";

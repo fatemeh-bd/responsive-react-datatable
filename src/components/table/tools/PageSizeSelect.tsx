@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
-import { useQueryParams } from "./useQueryParams";
-import { ColorTheme } from "./types";
+import { useQueryParams } from "../hooks/useQueryParams";
+import { ColorTheme } from "../types";
 
 const PageSizeSelect = ({
   pageSize,

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { ColorTheme, ColumnType, OrderType, TextsConfig } from "./types";
 import { ArrowUpIcon } from "./icons";
-import Checkbox from "./CheckBox";
-import Skeleton from "./Skeleton";
+import Checkbox from "./tools/checkbox/CheckBox";
+import Skeleton from "./tools/Skeleton";
 
 const DesktopTable = ({
   columns,
@@ -196,11 +196,11 @@ const DesktopTable = ({
                         ? column?.render(
                             cellKey ? row[cellKey] : undefined,
                             row,
-                            rowIndex,
+                            rowIndex
                           )
                         : cellKey
-                          ? row[cellKey]
-                          : null;
+                        ? row[cellKey]
+                        : null;
 
                       return (
                         <td
