@@ -114,6 +114,7 @@ export interface BaseTableProps {
   filterContainerClassName?: string;
   topFilterContainerClassName?: string;
   removeFilterKey?: string;
+  actionButtons?: ReactNode;
 }
 
 export interface Selectable extends BaseTableProps {

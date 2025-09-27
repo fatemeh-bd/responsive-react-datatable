@@ -28,12 +28,6 @@ const PageSizeSelect = ({
 
   return (
     <div className="page-size-select-container relative flex items-center gap-1">
-      <BiChevronDown
-        style={{
-          color: theme?.searchBoxTextColor,
-        }}
-        className="page-size-select-icon pointer-events-none shrink-0"
-      />
       <span
         style={{
           color: theme?.searchBoxTextColor,
@@ -42,35 +36,43 @@ const PageSizeSelect = ({
       >
         {text}
       </span>
-      <select
-        value={size}
-        onChange={handleChange}
-        style={{
-          borderColor: theme?.searchBoxBorderColor,
-          backgroundColor: theme?.searchBoxBgColor,
-          color: theme?.searchBoxTextColor,
-        }}
-        className={`page-size-select my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70 appearance-none pl-6 cursor-pointer max-md:py-1 max-md:h-8 max-md:min-w-12 max-md:text-sm`}
-      >
-        <option className="page-size-option" value={initialPageSize}>
-          {initialPageSize}
-        </option>
-        <option className="page-size-option" value={20}>
-          20
-        </option>
-        <option className="page-size-option" value={50}>
-          50
-        </option>
-        <option className="page-size-option" value={100}>
-          100
-        </option>
-        <option className="page-size-option" value={200}>
-          200
-        </option>
-        <option className="page-size-option" value={300}>
-          300
-        </option>
-      </select>
+      <div className="relative ">
+        <select
+          value={size}
+          onChange={handleChange}
+          style={{
+            borderColor: theme?.searchBoxBorderColor,
+            backgroundColor: theme?.searchBoxBgColor,
+            color: theme?.searchBoxTextColor,
+          }}
+          className={`page-size-select my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70 appearance-none pl-6 cursor-pointer max-md:py-1 max-md:h-8 max-md:min-w-12 max-md:text-sm`}
+        >
+          <option className="page-size-option" value={initialPageSize}>
+            {initialPageSize}
+          </option>
+          <option className="page-size-option" value={20}>
+            20
+          </option>
+          <option className="page-size-option" value={50}>
+            50
+          </option>
+          <option className="page-size-option" value={100}>
+            100
+          </option>
+          <option className="page-size-option" value={200}>
+            200
+          </option>
+          <option className="page-size-option" value={300}>
+            300
+          </option>
+        </select>
+        <BiChevronDown
+          style={{
+            color: theme?.searchBoxTextColor,
+          }}
+          className="page-size-select-icon pointer-events-none shrink-0 absolute left-2 top-0 bottom-0 my-auto"
+        />
+      </div>
     </div>
   );
 };

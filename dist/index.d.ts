@@ -94,6 +94,7 @@ interface BaseTableProps {
     filterContainerClassName?: string;
     topFilterContainerClassName?: string;
     removeFilterKey?: string;
+    actionButtons?: ReactNode;
 }
 interface Selectable extends BaseTableProps {
     isSelectable: boolean;
