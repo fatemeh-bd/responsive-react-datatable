@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { CloseIcon, SearchIcon } from "./icons";
-import { ColorTheme, ColumnType, TableMode, TextsConfig } from "./types";
-import { useQueryParams } from "./useQueryParams";
+import { CloseIcon, SearchIcon } from "../icons";
+import { ColorTheme, ColumnType, TableMode, TextsConfig } from "../types";
+import { useQueryParams } from "../hooks/useQueryParams";
 
 const SearchBox = ({
   theme,

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import Checkbox from "./CheckBox";
-import { ColorTheme, Selectable } from "./types";
+import Checkbox from "./checkbox/CheckBox";
+import { ColorTheme, Selectable } from "../types";
 
 interface SelectableCheckboxProps {
   row: any;

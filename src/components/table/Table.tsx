@@ -17,25 +17,25 @@ import {
   StaticModeProps,
   TableProps,
 } from "./types";
-import { useIsMobile } from "./useIsMobile";
+import { useIsMobile } from "./hooks/useIsMobile";
 import MobileTable from "./MobileTable";
 import DesktopTable from "./DesktopTable";
 import { rowRenderer } from "./helper";
-import Pagination from "./Pagination";
-import { useQueryParams } from "./useQueryParams";
-import { SelectableCheckbox } from "./SelectableCheckbox";
+import Pagination from "./tools/Pagination";
+import { useQueryParams } from "./hooks/useQueryParams";
+import { SelectableCheckbox } from "./tools/SelectableCheckbox";
 import { useQuery } from "@tanstack/react-query";
 import { FilterIcon, TrashIcon } from "./icons";
 import axios from "axios";
-import PageSizeSelect from "./PageSizeSelect";
-import Modal from "./Modal";
+import PageSizeSelect from "./tools/PageSizeSelect";
+import Modal from "./tools/Modal";
 import {
   defaultAutoConfig,
   defaultColorTheme,
   defaultSize,
   defaultTexts,
 } from "./tableConfigs";
-import SearchBox from "./SearchBox";
+import SearchBox from "./tools/SearchBox";
 
 const Table: React.FC<TableProps> = (props) => {
   // props
