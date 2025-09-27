@@ -4,7 +4,8 @@ import "./index.css";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HashRouter, NavLink } from "react-router-dom";
-
+import { routes } from "./routes";
+import Sidebar from "./components/sidebar/Sidebar";
 const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
@@ -14,45 +15,10 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <HashRouter>
         <div className="flex">
-          {/* سایدبار با ترکیب ساختار قبلی و دکمه‌های جدید */}
-          <aside className="bg-black border-r border-[#364153] w-[300px] h-screen p-4 fixed">
-            <div className="flex items-center mx-auto gap-2">
-              <img src="logo.svg" alt="logo" height={50} width={50} />
-              <h2 className="font-semibold text-white">React Table</h2>
-            </div>
-            {/* دکمه‌های ناوبری */}
-            <nav className="mt-8 flex flex-col gap-2">
-              <NavLink
-                to="/"
-                className={({ isActive }) =>
-                  `text-white py-2 px-4 rounded-lg transition-colors ${
-                    isActive
-                      ? "!text-[#d24670] outline outline-[#d24670]"
-                      : "hover:bg-gray-700"
-                  }`
-                }
-              >
-                Documentation
-              </NavLink>
-              <div></div>
+          <div className="w-[300px]">
+            <Sidebar />
+          </div>
 
-              <NavLink
-                to="/example"
-                className={({ isActive }) =>
-                  `text-white py-2 px-4 rounded-lg transition-colors ${
-                    isActive
-                      ? "!text-[#d24670] outline outline-[#d24670]"
-                      : "hover:bg-gray-700"
-                  }`
-                }
-              >
-                Example
-              </NavLink>
-            </nav>
-          </aside>
-          {/* فضای خالی برای جلوگیری از تداخل محتوا با سایدبار */}
-          <div className="w-[300px] shrink-0"></div>
-          {/* محتوای اصلی */}
           <div className="flex-1 px-4 py-12 max-w-7xl mx-auto">
             <App />
             <h2 className="text-xl text-[#d24670] font-bold text-center mt-8">
