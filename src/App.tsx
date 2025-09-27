@@ -3,6 +3,7 @@ import { rowRenderer } from "./components/table/helper";
 import Particles from "./components/particles/Particles";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/homePage/HomePage";
+import ExamplePage from "./pages/examplePage/ExamplePage";
 
 const App: React.FC = () => {
   return (
@@ -24,6 +25,7 @@ const App: React.FC = () => {
       </div>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/example" element={<ExamplePage />} />
       </Routes>
     </div>
   );
