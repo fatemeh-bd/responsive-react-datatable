@@ -63,7 +63,7 @@ const Table: React.FC<TableProps> = (props) => {
     tableName,
     filters,
     topFilter,
-    topFilterContainerClassName = "sm:mb-4 flex items-center flex-wrap md:gap-2 gap-3 [&>div]:w-full",
+    topFilterContainerClassName = "flex items-center flex-wrap md:gap-2 gap-3 [&>div]:w-full",
     filterContainerClassName = "flex flex-wrap md:gap-2 gap-3 [&>div]:w-full",
     removeFilterKey,
   } = props;
@@ -388,7 +388,7 @@ const Table: React.FC<TableProps> = (props) => {
     <div className="table-container" dir={dir}>
       {!isMobile && topFilter && (
         <div
-          className={`top-filter-container mb-2 ${topFilterContainerClassName}`}
+          className={`top-filter-container mb-4 ${topFilterContainerClassName}`}
           id="topFilter"
         >
           {topFilter}
