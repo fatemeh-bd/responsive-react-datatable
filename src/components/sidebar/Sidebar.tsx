@@ -4,7 +4,7 @@ import { routes } from "../../routes";
 
 const Sidebar: React.FC = () => {
   return (
-    <aside className="bg-black border-r border-[#364153] w-[300px] min-h-screen p-4 sticky h-full">
+    <aside className="bg-black border-r border-[#364153] w-[300px] min-h-screen p-4 h-full">
       <div className="flex flex-col items-center mx-auto gap-2 my-8">
         <img src="logo.svg" alt="logo" height={50} width={50} />
         <h2 className="font-semibold text-white text-2xl">React Table</h2>
