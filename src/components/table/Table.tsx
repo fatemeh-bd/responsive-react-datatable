@@ -404,50 +404,52 @@ const Table: React.FC<TableProps> = (props) => {
         id="table-header-actions"
         className={`table-header-actions mb-2 flex md:items-start justify-between w-full items-center md:gap-2 gap-3 md:flex-wrap-reverse max-md:w-full`}
       >
-        {!noSearch && (
-          <SearchBox
-            {...props}
-            onSearch={(value) => {
-              onSearch?.(value);
-              setSearchText(value);
-            }}
-            onStaticNoSearch={() => {
-              setFilteredRows(tableRows);
-              setTotalItems(tableRows.length);
-            }}
-            onStaticSearching={(searched: any) => {
-              setFilteredRows(searched);
-              setTotalItems(searched.length);
-            }}
-            tableRows={tableRows}
-            currentPage={currentPage}
-            dir={dir}
-            mergedTexts={mergedTexts}
-            theme={theme}
-          />
-        )}
-        {isMobile && (filters || topFilter) && (
-          <button
-            onClick={() => setOpenFilter(true)}
-            style={{ minHeight: 43 }}
-            className="mobile-filter-button relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 justify-center rounded-md"
-          >
-            {activeFilterCount > 0 && (
-              <span className="mobile-filter-badge absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">
-                {activeFilterCount}
-              </span>
-            )}
-            فیلتر
-            <FilterIcon />
-          </button>
-        )}
-        {!isMobile && filters && (
-          <div
-            className={`${filterContainerClassName} filter-container-className`}
-          >
-            {filters}
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          {!noSearch && (
+            <SearchBox
+              {...props}
+              onSearch={(value) => {
+                onSearch?.(value);
+                setSearchText(value);
+              }}
+              onStaticNoSearch={() => {
+                setFilteredRows(tableRows);
+                setTotalItems(tableRows.length);
+              }}
+              onStaticSearching={(searched: any) => {
+                setFilteredRows(searched);
+                setTotalItems(searched.length);
+              }}
+              tableRows={tableRows}
+              currentPage={currentPage}
+              dir={dir}
+              mergedTexts={mergedTexts}
+              theme={theme}
+            />
+          )}
+          {isMobile && (filters || topFilter) && (
+            <button
+              onClick={() => setOpenFilter(true)}
+              style={{ minHeight: 43 }}
+              className="mobile-filter-button relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 justify-center rounded-md"
+            >
+              {activeFilterCount > 0 && (
+                <span className="mobile-filter-badge absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">
+                  {activeFilterCount}
+                </span>
+              )}
+              فیلتر
+              <FilterIcon />
+            </button>
+          )}
+          {!isMobile && filters && (
+            <div
+              className={`${filterContainerClassName} filter-container-className`}
+            >
+              {filters}
+            </div>
+          )}
+        </div>
         <div className="flex items-center gap-3 flex-wrap max-sm:w-full justify-between">
           {actionButtons && actionButtons}
           {!isMobile && (

@@ -106,18 +106,18 @@ const SearchBox = ({
                   : theme?.searchBoxBorderColor,
               }}
               onClick={() => setSearchValue("")}
-              className={`table-search-clear-icon size-6 font-bold scale-125 cursor-pointer ${
-                dir === "rtl" ? "border-r pr-1 pl-0.5" : "border-l pl-1 pr-0.5"
+              className={`table-search-clear-icon size-5 font-bold scale-125 cursor-pointer ${
+                dir === "rtl" ? "border-r pr-1 pl-0" : "border-l pl-1 pr-0"
               }`}
             />
           ) : (
             <SearchIcon
               style={{
                 borderColor: theme?.searchBoxBorderColor,
-                color: theme?.searchBoxBorderColor,
+                color: theme?.searchBoxTextColor,
               }}
-              className={`table-search-icon size-6 scale-125 opacity-70 ${
-                dir === "rtl" ? "border-r pr-1 pl-0.5" : "border-l pl-1 pr-0.5"
+              className={`table-search-icon size-5 scale-125 opacity-70 ${
+                dir === "rtl" ? "border-r pr-1 pl-0" : "border-l pl-1 pr-0"
               }`}
             />
           )}
