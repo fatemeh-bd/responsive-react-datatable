@@ -8,3 +8,8 @@
     width: 320px;
   }
 }
+@media (max-width: 768px) {
+  .table-header-actions {
+    flex-direction: column-reverse;
+  }
+}
