@@ -47,6 +47,7 @@ export const defaultColorTheme: ColorTheme = {
   errorColor: "#ef4444",
   filterBackgroundColor: "#427bd225",
   filterTextColor: "#427bd2",
+  modalBackgroundColor: "#fff",
 };
 
 export const defaultAutoConfig: AutoPageSizeConfig = {

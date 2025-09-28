@@ -133,6 +133,7 @@ const ExamplePage = () => {
           paginationBorderColor: "#364153",
           primaryColor: "#d24670",
           paginationBackgroundColor: "#364153",
+          modalBackgroundColor: "#222",
         }}
         // internalApiConfig={{
         //   baseUrl: "http://10.10.10.22:8090",
@@ -151,15 +152,6 @@ const ExamplePage = () => {
         onSelectChange={(value) => setSelectedIds(value)}
         notify={(text) => alert(text)}
         listMode
-        filters={
-          <select>
-            <option value={"test"}>test</option>
-            <option value={"test2"}>test2</option>
-            <option value={"test3"}>test3</option>
-            <option value={"test4"}>test4</option>
-            <option value={"test5"}>test5</option>
-          </select>
-        }
       />
     </div>
   );

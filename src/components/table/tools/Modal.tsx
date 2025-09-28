@@ -2,7 +2,9 @@ import React, { ReactNode } from "react";
 import ReactDOM from "react-dom";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { CloseIcon } from "../icons";
+import { ColorTheme } from "../types";
 interface ModalProps {
+  theme: ColorTheme;
   title: string | ReactNode;
   isOpen: boolean;
   onClose: () => void;
@@ -27,6 +29,7 @@ const Modal: React.FC<ModalProps> = ({
   size = "fit",
   overflowY = "overflow-y-auto",
   childrenClass,
+  theme,
 }) => {
   const handleClose = () => {
     onClose();
@@ -45,7 +48,8 @@ const Modal: React.FC<ModalProps> = ({
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className={`relative bg-inherit z-50 rounded-t-2xl md:rounded-lg border-secondary-200 mx-0  transition-all duration-300 delay-200 ${
+          style={{ backgroundColor: theme?.modalBackgroundColor }}
+          className={`relative z-50 rounded-t-2xl md:rounded-lg border-secondary-200 mx-0  transition-all duration-300 delay-200 ${
             isOpen ? "opacity-100" : "opacity-0"
           } md:max-w-[90%] ${
             size === "sm"
@@ -64,7 +68,10 @@ const Modal: React.FC<ModalProps> = ({
           }  max-md:!w-full ${className || ""}`}
         >
           <div className="px-5">
-            <div className="flex pt-5 pb-2 justify-between bg-white items-center">
+            <div
+              style={{ background: theme?.modalBackgroundColor }}
+              className="flex pt-5 pb-2 justify-between items-center"
+            >
               {typeof title === "string" ? (
                 <p className="!mb-0">{title}</p>
               ) : (

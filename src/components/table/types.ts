@@ -23,6 +23,7 @@ export interface ColorTheme {
   errorColor?: string;
   filterTextColor?: string;
   filterBackgroundColor?: string;
+  modalBackgroundColor?: string;
 }
 
 export interface DesktopTableProps {
