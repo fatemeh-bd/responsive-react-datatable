@@ -38,7 +38,7 @@ interface TextsConfig {
     firstPaging?: string;
     lastPaging?: string;
     filterText?: string;
-    showing: (from: number, to: number, total: string) => string;
+    showing?: (from: number, to: number, total: string) => string;
     pageSize?: string;
     removeFilterText?: string;
     close?: string;

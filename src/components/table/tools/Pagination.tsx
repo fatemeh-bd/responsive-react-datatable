@@ -1,12 +1,10 @@
 import { useMemo, useCallback, useState, useEffect } from "react";
-import {
-  MdOutlineArrowBackIos,
-  MdOutlineArrowForwardIos,
-} from "react-icons/md";
+
 import { useIsMobile } from "../hooks/useIsMobile";
 import { numberWithCommas } from "../helper";
 import { useQueryParams } from "../hooks/useQueryParams";
 import { ColorTheme, TextsConfig } from "../types";
+import { MdOutlineArrowBackIos, MdOutlineArrowForwardIos } from "../icons";
 
 interface PaginationProps {
   totalItems: number;
@@ -42,11 +40,11 @@ const Pagination: React.FC<PaginationProps> = ({
     color: "inherit",
     border: `1px solid ${theme.paginationBorderColor}`,
     backgroundColor: theme.paginationBackgroundColor || "transparent",
-    padding: "0 8px",
+    padding: isMobile ? "0 4px" : "0 8px",
     borderRadius: "6px",
     fontSize: "14px",
     minWidth: "32px",
-    height: "32px",
+    height: isMobile ? "27px" : "32px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -154,7 +152,7 @@ const Pagination: React.FC<PaginationProps> = ({
   if (totalPages <= 1) return null;
 
   return isMobile ? (
-    <div className="pagination-mobile-container">
+    <div className="pagination-mobile-container flex items-center max-sm:justify-center justify-between gap-2 md:mt-2 flex-wrap-reverse">
       <button
         style={{
           ...baseStyle,
@@ -325,11 +323,12 @@ const Pagination: React.FC<PaginationProps> = ({
       </nav>
       {totalItems > 0 && !isMobile && (
         <p className="pagination-info text-inherit">
-          {textsConfig?.showing(
-            (Number(currentPage) - 1) * pageSize + 1,
-            Math.min(Number(currentPage) * pageSize, totalItems),
-            numberWithCommas(totalItems)
-          )}
+          {textsConfig?.showing &&
+            textsConfig?.showing(
+              (Number(currentPage) - 1) * pageSize + 1,
+              Math.min(Number(currentPage) * pageSize, totalItems),
+              numberWithCommas(totalItems)
+            )}
         </p>
       )}
     </div>

@@ -403,7 +403,7 @@ const Table: React.FC<TableProps> = (props) => {
         id="table-header-actions"
         className={`table-header-actions mb-2 flex items-end justify-between w-full md:gap-2 gap-3 max-sm:gap-2.5 md:flex-wrap-reverse max-md:w-full`}
       >
-        <div className="flex items-end gap-2 w-full">
+        <div className="flex items-end flex-wrap gap-2 max-sm:w-full">
           {!noSearch && (
             <SearchBox
               {...props}
@@ -524,22 +524,37 @@ const Table: React.FC<TableProps> = (props) => {
               selectableProps.onSelectChange(isAllSelected ? [] : allIds);
             }}
           />
-          {totalItems && (
-            <Pagination
-              dir={dir}
-              startMobileSize={startMobileSize}
-              totalItems={totalItems}
-              queryName={pageQueryName}
-              pageSize={dynamicPageSize}
-              theme={theme}
-              textsConfig={mergedTexts}
-              currentPage={currentPage}
-              onChangePage={onChangePage}
-            />
-          )}
         </>
       )}
-
+      <div className="flex items-center gap-2 justify-between">
+        {totalItems ? (
+          <Pagination
+            dir={dir}
+            startMobileSize={startMobileSize}
+            totalItems={totalItems}
+            queryName={pageQueryName}
+            pageSize={dynamicPageSize}
+            theme={theme}
+            textsConfig={mergedTexts}
+            currentPage={currentPage}
+            onChangePage={onChangePage}
+          />
+        ) : null}
+        {isMobile && (
+          <PageSizeSelect
+            pageQueryName={pageQueryName}
+            textsConfig={mergedTexts}
+            theme={theme}
+            initialPageSize={tableHeightPageSize}
+            pageSize={pageSizeInitial}
+            onPageSizeChange={(newSize) => {
+              setDynamicPageSize(newSize);
+              setCurrentPage(1);
+              onPageSizeChange?.(newSize);
+            }}
+          />
+        )}
+      </div>
       <Modal
         size="lg"
         title={mergedTexts?.filterText}
