@@ -527,6 +527,7 @@ const Table: React.FC<TableProps> = (props) => {
             pageSize={dynamicPageSize}
             theme={theme}
             textsConfig={mergedTexts}
+            currentPage={currentPage}
             onChangePage={onChangePage}
           />
         </>
