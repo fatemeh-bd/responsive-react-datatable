@@ -186,7 +186,7 @@ const Table: React.FC<TableProps> = (props) => {
       ...selectableColumn,
       {
         data: "id",
-        title: mergedTexts.row,
+        title: mergedTexts.row || "",
         render: rowRenderer(
           (_cell, _row, index?: number) =>
             (Number(currentPage) - 1) * dynamicPageSize + (index! + 1)
@@ -438,35 +438,41 @@ const Table: React.FC<TableProps> = (props) => {
         {isMobile && (filters || topFilter) && (
           <button
             onClick={() => setOpenFilter(true)}
-            style={{ minHeight: 43 }}
-            className="mobile-filter-button relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 justify-center rounded-md"
+            style={{
+              minHeight: 43,
+              background: theme?.filterBackgroundColor,
+              color: theme?.filterTextColor,
+            }}
+            className="mobile-filter-button relative mr-auto min-w-[70px] text-sm font-bold flex items-center gap-0.5 p-1 justify-center rounded-md"
           >
             {activeFilterCount > 0 && (
               <span className="mobile-filter-badge absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">
                 {activeFilterCount}
               </span>
             )}
-            فیلتر
+            {mergedTexts?.filterText}
             <FilterIcon />
           </button>
         )}
-        <div className="flex items-center gap-3 flex-wrap max-sm:w-full justify-between">
-          {actionButtons && actionButtons}
-          {!isMobile && (
-            <PageSizeSelect
-              pageQueryName={pageQueryName}
-              text={mergedTexts?.pageSize}
-              theme={theme}
-              initialPageSize={tableHeightPageSize}
-              pageSize={pageSizeInitial}
-              onPageSizeChange={(newSize) => {
-                setDynamicPageSize(newSize);
-                setCurrentPage(1);
-                onPageSizeChange?.(newSize);
-              }}
-            />
-          )}
-        </div>
+        {(actionButtons || !isMobile) && (
+          <div className="flex items-center gap-3 flex-wrap max-sm:w-full justify-between">
+            {actionButtons && actionButtons}
+            {!isMobile && (
+              <PageSizeSelect
+                pageQueryName={pageQueryName}
+                textsConfig={mergedTexts}
+                theme={theme}
+                initialPageSize={tableHeightPageSize}
+                pageSize={pageSizeInitial}
+                onPageSizeChange={(newSize) => {
+                  setDynamicPageSize(newSize);
+                  setCurrentPage(1);
+                  onPageSizeChange?.(newSize);
+                }}
+              />
+            )}
+          </div>
+        )}
       </div>
       {isMobile ? (
         <MobileTable
@@ -479,7 +485,6 @@ const Table: React.FC<TableProps> = (props) => {
               ? tableRows
               : paginatedRows
           }
-          pageSize={dynamicPageSize}
           theme={theme}
           textsConfig={mergedTexts}
           listMode={listMode}
@@ -549,9 +554,10 @@ const Table: React.FC<TableProps> = (props) => {
         <div className="filter-modal-actions flex items-center gap-2 mt-8">
           <button
             onClick={() => setOpenFilter(false)}
-            className="filter-modal-close-button w-full"
+            style={{ borderColor: theme?.primaryColor }}
+            className="flex-1 filter-modal-close-button p-2 rounded-lg bg-transparent border"
           >
-            بستن
+            {mergedTexts?.close}
           </button>
           <button
             onClick={() => {
@@ -564,9 +570,10 @@ const Table: React.FC<TableProps> = (props) => {
               }
               location.reload();
             }}
-            className="filter-modal-clear-button"
+            style={{ background: theme?.errorColor }}
+            className="flex-1 p-2 rounded-lg filter-modal-clear-button text-white flex items-center gap-2 justify-center"
           >
-            حذف فیلتر ها
+            {mergedTexts?.removeFilterText}
             <TrashIcon />
           </button>
         </div>

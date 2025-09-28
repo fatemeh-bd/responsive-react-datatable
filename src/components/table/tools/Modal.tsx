@@ -45,7 +45,7 @@ const Modal: React.FC<ModalProps> = ({
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className={`relative bg-white z-50 rounded-t-2xl md:rounded-lg border-secondary-200 mx-0  transition-all duration-300 delay-200 ${
+          className={`relative bg-inherit z-50 rounded-t-2xl md:rounded-lg border-secondary-200 mx-0  transition-all duration-300 delay-200 ${
             isOpen ? "opacity-100" : "opacity-0"
           } md:max-w-[90%] ${
             size === "sm"

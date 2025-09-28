@@ -8,21 +8,17 @@ type OrderType = {
 } | null;
 interface ColorTheme {
     borderColor?: string;
-    headerBg?: string;
-    headerText?: string;
-    rowBorder?: string;
-    rowBg?: string;
-    cellText?: string;
+    headerBackgroundColor?: string;
+    rowBackgroundColor?: string;
+    headerTextColor?: string;
+    cellTextColor?: string;
     primaryColor?: string;
-    paginationBg?: string;
+    paginationBackgroundColor?: string;
     paginationBorderColor?: string;
-    paginationActiveColor?: string;
-    paginationTextColor?: string;
-    paginationDisabledBackgroundColor?: string;
-    searchBoxBorderColor?: string;
     searchBoxBgColor?: string;
-    searchBoxTextColor?: string;
     errorColor?: string;
+    filterTextColor?: string;
+    filterBackgroundColor?: string;
 }
 interface ColumnType {
     data: string | null;
@@ -40,6 +36,11 @@ interface TextsConfig {
     searchPlaceholder?: string;
     firstPaging?: string;
     lastPaging?: string;
+    filterText?: string;
+    showing: (from: number, to: number, total: string) => string;
+    pageSize?: string;
+    removeFilterText?: string;
+    close?: string;
 }
 type TableMode = "static" | "external" | "internal";
 interface InternalModeProps {

@@ -10,7 +10,6 @@ import { Virtual } from "swiper/modules";
 const MobileTable = ({
   columns,
   isLoading,
-  pageSize,
   rows,
   theme,
   textsConfig,
@@ -18,7 +17,6 @@ const MobileTable = ({
 }: {
   columns: ColumnType[];
   isLoading?: boolean;
-  pageSize: number;
   rows: Record<string, any>[];
   theme: ColorTheme;
   textsConfig: TextsConfig;
@@ -27,7 +25,8 @@ const MobileTable = ({
   const renderCard = (row: Record<string, any>, rowIndex: number) => (
     <div
       key={rowIndex}
-      className="mobile-table-card p-4 !h-auto mb-3 rounded-xl overflow-hidden border border-secondary-300 bg-white shadow-sm"
+      style={{ background: theme?.rowBackgroundColor }}
+      className="mobile-table-card p-4 !h-auto mb-3 rounded-xl overflow-hidden border border-secondary-300 shadow-sm"
     >
       {columns.map((column, colIndex) => {
         const cellKey = column.data;

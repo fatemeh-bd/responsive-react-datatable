@@ -80,7 +80,7 @@ const DesktopTable = ({
           <table className="desktop-table w-full table-fixed border-collapse">
             <thead
               className="desktop-table-head"
-              style={{ backgroundColor: theme.headerBg }}
+              style={{ backgroundColor: theme.headerBackgroundColor }}
             >
               <tr
                 className="desktop-table-header-row"
@@ -98,8 +98,8 @@ const DesktopTable = ({
                     } py-2 px-1 text-center min-w-max text-sm`}
                     style={{
                       width: column?.width,
-                      color: theme.headerText,
-                      borderBottom: `1px solid ${theme.rowBorder}`,
+                      color: theme.headerTextColor,
+                      borderBottom: `1px solid ${theme.borderColor}`,
                     }}
                     onClick={() =>
                       column?.orderable && handleSort(colIndex, column)
@@ -121,7 +121,9 @@ const DesktopTable = ({
                             <ArrowUpIcon
                               style={{
                                 color:
-                                  order?.dir === "asc" ? theme?.headerText : "",
+                                  order?.dir === "asc"
+                                    ? theme?.headerTextColor
+                                    : "",
                               }}
                               className={`desktop-table-sort-icon desktop-table-sort-icon--asc h-2 translate-y-[1px] ${
                                 order?.column === colIndex &&
@@ -134,7 +136,7 @@ const DesktopTable = ({
                               style={{
                                 color:
                                   order?.dir === "desc"
-                                    ? theme?.headerText
+                                    ? theme?.headerTextColor
                                     : "",
                               }}
                               className={`desktop-table-sort-icon desktop-table-sort-icon--desc h-2 rotate-180 ${
@@ -185,8 +187,8 @@ const DesktopTable = ({
                     key={rowIndex}
                     className="desktop-table-data-row"
                     style={{
-                      borderBottom: `1px solid ${theme.rowBorder}`,
-                      backgroundColor: theme.rowBg,
+                      borderBottom: `1px solid ${theme.borderColor}`,
+                      backgroundColor: theme.rowBackgroundColor,
                       height: rowHeight,
                     }}
                   >
@@ -208,7 +210,7 @@ const DesktopTable = ({
                           className="desktop-table-data-cell py-1 px-1 text-center"
                           style={{
                             width: column?.width,
-                            color: theme.cellText,
+                            color: theme.cellTextColor,
                           }}
                         >
                           <div
@@ -233,7 +235,7 @@ const DesktopTable = ({
                   <td
                     colSpan={columns.length}
                     className="desktop-table-empty-cell p-6 text-center"
-                    style={{ color: theme.headerText }}
+                    style={{ color: theme.headerTextColor }}
                   >
                     {textsConfig.noDataText}
                   </td>
