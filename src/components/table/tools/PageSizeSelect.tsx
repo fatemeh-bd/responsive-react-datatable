@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQueryParams } from "../hooks/useQueryParams";
-import { ColorTheme } from "../types";
+import { ColorTheme, TextsConfig } from "../types";
 import { ChevronDown } from "../icons";
 
 const PageSizeSelect = ({
@@ -8,14 +8,14 @@ const PageSizeSelect = ({
   onPageSizeChange,
   initialPageSize,
   theme,
-  text,
+  textsConfig,
   pageQueryName,
 }: {
   pageSize: number;
   onPageSizeChange: (size: number) => void;
   initialPageSize?: number;
   theme: ColorTheme;
-  text: string;
+  textsConfig: TextsConfig;
   pageQueryName: string;
 }) => {
   const [size, setSize] = useState(pageSize);
@@ -30,24 +30,18 @@ const PageSizeSelect = ({
 
   return (
     <div className="page-size-select-container relative flex items-center gap-1">
-      <span
-        style={{
-          color: theme?.searchBoxTextColor,
-        }}
-        className="page-size-select-label md:text-base text-xs text-nowrap"
-      >
-        {text}
+      <span className="page-size-select-label md:text-base text-xs text-nowrap text-inherit">
+        {textsConfig?.pageSize}
       </span>
       <div className="relative ">
         <select
           value={size}
           onChange={handleChange}
           style={{
-            borderColor: theme?.searchBoxBorderColor,
+            borderColor: theme?.borderColor,
             backgroundColor: theme?.searchBoxBgColor,
-            color: theme?.searchBoxTextColor,
           }}
-          className={`page-size-select my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70 appearance-none pl-6 cursor-pointer max-md:py-1 max-md:min-w-12 max-md:text-sm`}
+          className={`page-size-select text-inherit my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70 appearance-none pl-6 cursor-pointer max-md:py-1 max-md:min-w-12 max-md:text-sm`}
         >
           <option className="page-size-option" value={initialPageSize}>
             {initialPageSize}
@@ -70,7 +64,7 @@ const PageSizeSelect = ({
         </select>
         <ChevronDown
           style={{
-            color: theme?.searchBoxBorderColor,
+            color: theme?.borderColor,
           }}
           className="page-size-select-icon pointer-events-none size-5 shrink-0 absolute left-1 top-0 bottom-0 my-auto"
         />

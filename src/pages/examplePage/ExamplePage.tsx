@@ -124,22 +124,15 @@ const ExamplePage = () => {
           extraBufferRows: 1,
         }}
         colorTheme={{
-          rowBg: "",
+          rowBackgroundColor: "",
           borderColor: "#364153",
-          rowBorder: "#364153",
-          cellText: "#fff",
-          headerText: "#fff",
-          headerBg: "#364153",
-          searchBoxBorderColor: "#5e6d87",
+          cellTextColor: "#fff",
+          headerTextColor: "#fff",
+          headerBackgroundColor: "#364153",
           searchBoxBgColor: "#364153",
-          searchBoxTextColor: "#fff",
-          paginationActiveColor: "#d24670",
           paginationBorderColor: "#364153",
-          paginationTextColor: "#fff",
           primaryColor: "#d24670",
-          paginationBg: "#364153",
-          paginationDisabledBackgroundColor: "#364153",
-          errorColor: "#d24670",
+          paginationBackgroundColor: "#364153",
         }}
         // internalApiConfig={{
         //   baseUrl: "http://10.10.10.22:8090",
@@ -158,6 +151,15 @@ const ExamplePage = () => {
         onSelectChange={(value) => setSelectedIds(value)}
         notify={(text) => alert(text)}
         listMode
+        filters={
+          <select>
+            <option value={"test"}>test</option>
+            <option value={"test2"}>test2</option>
+            <option value={"test3"}>test3</option>
+            <option value={"test4"}>test4</option>
+            <option value={"test5"}>test5</option>
+          </select>
+        }
       />
     </div>
   );

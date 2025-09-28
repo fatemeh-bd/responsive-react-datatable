@@ -90,19 +90,16 @@ const SearchBox = ({
       >
         <div
           style={{
-            borderColor: theme?.searchBoxBorderColor,
+            borderColor: theme?.borderColor,
             backgroundColor: theme?.searchBoxBgColor,
-            color: theme?.searchBoxTextColor,
           }}
           className={`table-search-input-container my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2.5 border disabled:opacity-70`}
         >
           {searchValue ? (
             <CloseIcon
               style={{
-                borderColor: theme?.searchBoxBorderColor,
-                color: searchValue
-                  ? theme?.errorColor
-                  : theme?.searchBoxBorderColor,
+                borderColor: theme?.borderColor,
+                color: searchValue ? theme?.errorColor : theme?.borderColor,
                 paddingLeft: dir === "rtl" ? 0 : 4,
                 paddingRight: dir === "rtl" ? 4 : 0,
               }}
@@ -114,12 +111,10 @@ const SearchBox = ({
           ) : (
             <SearchIcon
               style={{
-                borderColor: theme?.searchBoxBorderColor,
-                color: theme?.searchBoxTextColor,
                 paddingLeft: dir === "rtl" ? 0 : 4,
                 paddingRight: dir === "rtl" ? 4 : 2,
               }}
-              className={`table-search-icon size-5 scale-150 opacity-70 ${
+              className={`table-search-icon size-5 scale-150 opacity-60 ${
                 dir === "rtl" ? "border-r" : "border-l"
               }`}
             />

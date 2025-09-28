@@ -6,7 +6,7 @@ import {
 import { useIsMobile } from "../hooks/useIsMobile";
 import { numberWithCommas } from "../helper";
 import { useQueryParams } from "../hooks/useQueryParams";
-import { ColorTheme } from "../types";
+import { ColorTheme, TextsConfig } from "../types";
 
 interface PaginationProps {
   totalItems: number;
@@ -16,11 +16,7 @@ interface PaginationProps {
   theme: ColorTheme;
   dir?: "ltr" | "rtl";
   currentPage: number;
-  textsConfig?: {
-    firstPaging: string;
-    lastPaging: string;
-    showing: (from: number, to: number, total: string) => string;
-  };
+  textsConfig?: TextsConfig;
   onChangePage?: (value: number) => void;
 }
 
@@ -43,9 +39,9 @@ const Pagination: React.FC<PaginationProps> = ({
 
   // === Styles
   const baseStyle: React.CSSProperties = {
-    color: theme.paginationTextColor,
+    color: "inherit",
     border: `1px solid ${theme.paginationBorderColor}`,
-    backgroundColor: theme.paginationBg || "transparent",
+    backgroundColor: theme.paginationBackgroundColor || "transparent",
     padding: "0 8px",
     borderRadius: "6px",
     fontSize: "14px",
@@ -59,15 +55,14 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   const activeStyle: React.CSSProperties = {
-    backgroundColor: theme.paginationActiveColor,
-    border: `1px solid ${theme.paginationActiveColor}`,
-    color: theme.paginationTextColor,
+    backgroundColor: theme.primaryColor,
+    border: `1px solid ${theme.primaryColor}`,
+    color: "inherit",
   };
 
   const disabledStyle: React.CSSProperties = {
-    backgroundColor: theme.paginationDisabledBackgroundColor,
     cursor: "not-allowed",
-    opacity: 0.6,
+    opacity: 0.5,
   };
 
   // === Logic
@@ -191,7 +186,7 @@ const Pagination: React.FC<PaginationProps> = ({
         className="pagination-mobile-input"
       />
       <span
-        style={{ color: theme.paginationTextColor }}
+        style={{ color: "inherit" }}
         className="pagination-mobile-separator"
       >
         /
