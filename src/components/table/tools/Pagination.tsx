@@ -15,6 +15,7 @@ interface PaginationProps {
   startMobileSize?: number;
   theme: ColorTheme;
   dir?: "ltr" | "rtl";
+  currentPage: number;
   textsConfig?: {
     firstPaging: string;
     lastPaging: string;
@@ -31,10 +32,10 @@ const Pagination: React.FC<PaginationProps> = ({
   theme,
   dir,
   textsConfig,
+  currentPage,
   onChangePage,
 }) => {
-  const { updateParams, getParams } = useQueryParams();
-  const currentPage = Number(getParams(queryName)) || 1;
+  const { updateParams } = useQueryParams();
   const totalPages = Math.ceil(totalItems / pageSize);
   const isMobile = useIsMobile(startMobileSize);
   const [pageInput, setPageInput] = useState(currentPage.toString());
