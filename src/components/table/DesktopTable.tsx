@@ -188,7 +188,7 @@ const DesktopTable = ({
                     className="desktop-table-data-row"
                     style={{
                       borderBottom: `1px solid ${theme.borderColor}`,
-                      backgroundColor: theme.rowBackgroundColor,
+                      backgroundColor: theme.backgroundColor,
                       height: rowHeight,
                     }}
                   >

@@ -48,7 +48,7 @@ const Modal: React.FC<ModalProps> = ({
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          style={{ backgroundColor: theme?.modalBackgroundColor }}
+          style={{ backgroundColor: theme?.backgroundColor }}
           className={`relative z-50 rounded-t-2xl md:rounded-lg border-secondary-200 mx-0  transition-all duration-300 delay-200 ${
             isOpen ? "opacity-100" : "opacity-0"
           } md:max-w-[90%] ${
@@ -69,7 +69,7 @@ const Modal: React.FC<ModalProps> = ({
         >
           <div className="px-5">
             <div
-              style={{ background: theme?.modalBackgroundColor }}
+              style={{ background: theme?.backgroundColor }}
               className="flex pt-5 pb-2 justify-between items-center"
             >
               {typeof title === "string" ? (

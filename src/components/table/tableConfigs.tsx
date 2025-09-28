@@ -38,16 +38,9 @@ export const defaultColorTheme: ColorTheme = {
   borderColor: "#e7e7e7",
   headerBackgroundColor: "#f9f9f9",
   headerTextColor: "#333333",
-  rowBackgroundColor: "#fff",
+  backgroundColor: "#fff",
   cellTextColor: "#7a7a7a",
   primaryColor: "#ffd61f",
-  paginationBackgroundColor: "#fff",
-  paginationBorderColor: "#d9d9d9",
-  searchBoxBgColor: "#fff",
-  errorColor: "#ef4444",
-  filterBackgroundColor: "#427bd225",
-  filterTextColor: "#427bd2",
-  modalBackgroundColor: "#fff",
 };
 
 export const defaultAutoConfig: AutoPageSizeConfig = {

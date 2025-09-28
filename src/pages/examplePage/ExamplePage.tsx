@@ -124,16 +124,12 @@ const ExamplePage = () => {
           extraBufferRows: 1,
         }}
         colorTheme={{
-          rowBackgroundColor: "",
+          backgroundColor: "",
           borderColor: "#364153",
           cellTextColor: "#fff",
           headerTextColor: "#fff",
           headerBackgroundColor: "#364153",
-          searchBoxBgColor: "#364153",
-          paginationBorderColor: "#364153",
           primaryColor: "#d24670",
-          paginationBackgroundColor: "#364153",
-          modalBackgroundColor: "#222",
         }}
         // internalApiConfig={{
         //   baseUrl: "http://10.10.10.22:8090",
