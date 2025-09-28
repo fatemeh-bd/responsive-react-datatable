@@ -9,19 +9,21 @@ const PageSizeSelect = ({
   initialPageSize,
   theme,
   text,
+  pageQueryName,
 }: {
   pageSize: number;
   onPageSizeChange: (size: number) => void;
   initialPageSize?: number;
   theme: ColorTheme;
   text: string;
+  pageQueryName: string;
 }) => {
   const [size, setSize] = useState(pageSize);
   const { updateParams, removeParams } = useQueryParams();
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newSize = Number(e.target.value);
     setSize(newSize);
-    removeParams("page");
+    removeParams(pageQueryName);
     updateParams("pageSize", newSize?.toString());
     onPageSizeChange(newSize);
   };

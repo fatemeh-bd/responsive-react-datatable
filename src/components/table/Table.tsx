@@ -126,9 +126,7 @@ const Table: React.FC<TableProps> = (props) => {
   const [totalItems, setTotalItems] = useState<number>(
     mode === "static" ? (props as StaticModeProps).totalItems || 0 : 0
   );
-  const [dynamicPageSize, setDynamicPageSize] = useState(
-    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSizeInitial
-  );
+  const [dynamicPageSize, setDynamicPageSize] = useState(pageSizeInitial);
   const [tableHeightPageSize, setTableHeightPageSize] = useState(
     isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSize
   );
@@ -262,9 +260,9 @@ const Table: React.FC<TableProps> = (props) => {
         const newSize = rows - buffer;
         if (newSize > 0) {
           setTableHeightPageSize(newSize);
-          if (!dynamicPageSize) {
-            setDynamicPageSize(Number(getParams("pageSize")) || newSize);
-          }
+          // if (!dynamicPageSize) {
+          //   setDynamicPageSize(Number(getParams("pageSize")) || newSize);
+          // }
         }
       };
 
@@ -319,7 +317,7 @@ const Table: React.FC<TableProps> = (props) => {
     )
       ? props?.internalApiConfig?.customBody.filter((item) => !item.noRefresh)
       : [];
-    const { isFetching } = useQuery({
+    useQuery({
       enabled: Boolean(dynamicPageSize && mode === "internal"),
       queryKey: [
         tableName,
@@ -334,6 +332,7 @@ const Table: React.FC<TableProps> = (props) => {
       queryFn: async () => {
         try {
           const payloadCustomBody = props?.internalApiConfig?.customBody || [];
+          console.log(dynamicPageSize);
 
           const makeCurrentCols = columnsWithRow
             ?.filter((i) => i.data !== null)
@@ -344,7 +343,6 @@ const Table: React.FC<TableProps> = (props) => {
               orderable: item?.orderable,
               search: { value: "", regex: false, fixed: [] },
             }));
-
           let payload: Record<string, any> = {
             draw: currentPage,
             columns: makeCurrentCols,
@@ -390,6 +388,7 @@ const Table: React.FC<TableProps> = (props) => {
         return hasValue ? count + 1 : count;
       }, 0)
     : 0;
+
   return (
     <div className="table-container" dir={dir}>
       {!isMobile && topFilter && (
@@ -454,12 +453,14 @@ const Table: React.FC<TableProps> = (props) => {
           {actionButtons && actionButtons}
           {!isMobile && (
             <PageSizeSelect
+              pageQueryName={pageQueryName}
               text={mergedTexts?.pageSize}
               theme={theme}
               initialPageSize={tableHeightPageSize}
               pageSize={pageSizeInitial}
               onPageSizeChange={(newSize) => {
                 setDynamicPageSize(newSize);
+                setCurrentPage(1);
                 onPageSizeChange?.(newSize);
               }}
             />
