@@ -86,7 +86,6 @@ const SearchBox = ({
   return (
     <div className="table-search-container max-md:w-full">
       <div
-        style={{ width: 320 }}
         className={`table-search-wrapper flex flex-col gap-1 [&>div]:!gap-1 [&>div]:!flex-row-reverse`}
       >
         <div

@@ -446,27 +446,29 @@ const Table: React.FC<TableProps> = (props) => {
                 {activeFilterCount}
               </span>
             )}
-            فیلتر
+            {textsConfig?.filterText}
             <FilterIcon />
           </button>
         )}
-        <div className="flex items-center gap-3 flex-wrap max-sm:w-full justify-between">
-          {actionButtons && actionButtons}
-          {!isMobile && (
-            <PageSizeSelect
-              pageQueryName={pageQueryName}
-              text={mergedTexts?.pageSize}
-              theme={theme}
-              initialPageSize={tableHeightPageSize}
-              pageSize={pageSizeInitial}
-              onPageSizeChange={(newSize) => {
-                setDynamicPageSize(newSize);
-                setCurrentPage(1);
-                onPageSizeChange?.(newSize);
-              }}
-            />
-          )}
-        </div>
+        {(actionButtons || !isMobile) && (
+          <div className="flex items-center gap-3 flex-wrap max-sm:w-full justify-between">
+            {actionButtons && actionButtons}
+            {!isMobile && (
+              <PageSizeSelect
+                pageQueryName={pageQueryName}
+                text={mergedTexts?.pageSize}
+                theme={theme}
+                initialPageSize={tableHeightPageSize}
+                pageSize={pageSizeInitial}
+                onPageSizeChange={(newSize) => {
+                  setDynamicPageSize(newSize);
+                  setCurrentPage(1);
+                  onPageSizeChange?.(newSize);
+                }}
+              />
+            )}
+          </div>
+        )}
       </div>
       {isMobile ? (
         <MobileTable

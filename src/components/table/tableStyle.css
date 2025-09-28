@@ -4,4 +4,7 @@
   .filter-container-className > div {
     width: 200px;
   }
+  .table-search-wrapper {
+    width: 320px;
+  }
 }

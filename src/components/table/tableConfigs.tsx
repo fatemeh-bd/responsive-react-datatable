@@ -1,8 +1,12 @@
-import { AutoPageSizeConfig } from "./types";
+import { AutoPageSizeConfig, TextsConfig } from "./types";
 
 export const defaultSize = 10;
+type StrictTextsConfig = Required<TextsConfig>;
 
-export const defaultTexts = {
+export const defaultTexts: {
+  en: StrictTextsConfig;
+  fa: StrictTextsConfig;
+} = {
   en: {
     row: "Row",
     noDataText: "No data available",
@@ -12,6 +16,7 @@ export const defaultTexts = {
       `Showing ${from} to ${to} of ${total} records`,
     searchPlaceholder: "search ...",
     pageSize: "page Size",
+    filterText: "filter",
   },
   fa: {
     row: "ردیف",
@@ -22,6 +27,7 @@ export const defaultTexts = {
       `نمایش ${from} تا ${to} از ${total} رکورد`,
     searchPlaceholder: "جستجو کنید...",
     pageSize: "نمایش",
+    filterText: "فیلتر",
   },
 };
 

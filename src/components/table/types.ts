@@ -58,6 +58,9 @@ export interface TextsConfig {
   searchPlaceholder?: string;
   firstPaging?: string;
   lastPaging?: string;
+  filterText?: string;
+  showing: (from: number, to: number, total: string) => string;
+  pageSize?: string;
 }
 export type TableMode = "static" | "external" | "internal";
 export interface InternalModeProps {
