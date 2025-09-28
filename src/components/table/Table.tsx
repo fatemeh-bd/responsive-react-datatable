@@ -446,7 +446,12 @@ const Table: React.FC<TableProps> = (props) => {
             className="mobile-filter-button relative mr-auto min-w-[70px] text-sm font-bold flex items-center gap-0.5 p-1 justify-center rounded-md"
           >
             {activeFilterCount > 0 && (
-              <span className="mobile-filter-badge absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">
+              <span
+                style={{
+                  right: "-10px",
+                }}
+                className="mobile-filter-badge absolute top-0 bg-white text-xs size-5 content-center rounded-full text-inherit"
+              >
                 {activeFilterCount}
               </span>
             )}
