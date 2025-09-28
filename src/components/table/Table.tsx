@@ -427,6 +427,13 @@ const Table: React.FC<TableProps> = (props) => {
               theme={theme}
             />
           )}
+          {!isMobile && filters && (
+            <div
+              className={`${filterContainerClassName} filter-container-className`}
+            >
+              {filters}
+            </div>
+          )}
         </div>
         {isMobile && (filters || topFilter) && (
           <button
@@ -447,13 +454,7 @@ const Table: React.FC<TableProps> = (props) => {
             <FilterIcon />
           </button>
         )}
-        {!isMobile && filters && (
-          <div
-            className={`${filterContainerClassName} filter-container-className`}
-          >
-            {filters}
-          </div>
-        )}
+
         {(actionButtons || !isMobile) && (
           <div className="flex items-center gap-3 flex-wrap max-md:w-full justify-between">
             {actionButtons && actionButtons}
