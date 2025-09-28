@@ -401,9 +401,9 @@ const Table: React.FC<TableProps> = (props) => {
       )}
       <div
         id="table-header-actions"
-        className={`table-header-actions mb-2 flex items-end justify-between w-full md:gap-2 gap-3 md:flex-wrap-reverse max-md:w-full`}
+        className={`table-header-actions mb-2 flex items-end justify-between w-full md:gap-2 gap-3 max-sm:gap-2.5 md:flex-wrap-reverse max-md:w-full`}
       >
-        <div className="flex items-end gap-2">
+        <div className="flex items-end gap-2 w-full">
           {!noSearch && (
             <SearchBox
               {...props}
@@ -542,10 +542,11 @@ const Table: React.FC<TableProps> = (props) => {
 
       <Modal
         size="lg"
-        title="فیلتر ها"
+        title={mergedTexts?.filterText}
         isOpen={openFilter}
         onClose={() => setOpenFilter(false)}
         className="filter-modal"
+        theme={theme}
       >
         <div className="filter-modal-content">
           {filters}

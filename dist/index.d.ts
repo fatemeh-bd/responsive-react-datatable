@@ -19,6 +19,7 @@ interface ColorTheme {
     errorColor?: string;
     filterTextColor?: string;
     filterBackgroundColor?: string;
+    modalBackgroundColor?: string;
 }
 interface ColumnType {
     data: string | null;
