@@ -361,7 +361,7 @@ const Table: React.FC<TableProps> = (props) => {
           const response = await axios({
             method: props?.internalApiConfig?.method || "POST",
             url: props?.internalApiConfig?.baseUrl + endpoint || "" + endpoint,
-            data: payload || null,
+            data: props?.internalApiConfig?.payload || payload || null,
             headers: props?.internalApiConfig?.headers,
           });
 
