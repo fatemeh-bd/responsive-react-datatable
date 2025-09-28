@@ -48,6 +48,7 @@ interface InternalModeProps {
     internalApiConfig: {
         endpoint: string;
         baseUrl?: string;
+        payload?: any;
         customBody?: Record<string, any>[];
         defaultSortBy?: string;
         sortType?: "asc" | "desc";
