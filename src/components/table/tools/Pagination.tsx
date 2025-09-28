@@ -152,7 +152,7 @@ const Pagination: React.FC<PaginationProps> = ({
   if (totalPages <= 1) return null;
 
   return isMobile ? (
-    <div className="pagination-mobile-container flex items-center max-sm:justify-center justify-between gap-2 md:mt-2 flex-wrap-reverse">
+    <div className="pagination-mobile-container flex items-center max-md:justify-center justify-between gap-2 md:mt-2 flex-wrap-reverse">
       <button
         style={{
           ...baseStyle,
