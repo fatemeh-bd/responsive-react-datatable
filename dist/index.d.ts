@@ -9,17 +9,10 @@ type OrderType = {
 interface ColorTheme {
     borderColor?: string;
     headerBackgroundColor?: string;
-    rowBackgroundColor?: string;
+    backgroundColor?: string;
     headerTextColor?: string;
     cellTextColor?: string;
     primaryColor?: string;
-    paginationBackgroundColor?: string;
-    paginationBorderColor?: string;
-    searchBoxBgColor?: string;
-    errorColor?: string;
-    filterTextColor?: string;
-    filterBackgroundColor?: string;
-    modalBackgroundColor?: string;
 }
 interface ColumnType {
     data: string | null;

@@ -440,8 +440,8 @@ const Table: React.FC<TableProps> = (props) => {
             onClick={() => setOpenFilter(true)}
             style={{
               minHeight: 43,
-              background: theme?.filterBackgroundColor,
-              color: theme?.filterTextColor,
+              background: "#427bd225",
+              color: "#427bd2",
             }}
             className="mobile-filter-button relative mr-auto min-w-[70px] text-sm font-bold flex items-center gap-0.5 p-1 justify-center rounded-md"
           >
@@ -569,7 +569,7 @@ const Table: React.FC<TableProps> = (props) => {
         className="filter-modal"
         theme={theme}
       >
-        <div className="filter-modal-content">
+        <div className="filter-modal-content space-y-2">
           {filters}
           {topFilter}
         </div>
@@ -592,8 +592,7 @@ const Table: React.FC<TableProps> = (props) => {
               }
               location.reload();
             }}
-            style={{ background: theme?.errorColor }}
-            className="flex-1 p-2 rounded-lg filter-modal-clear-button text-white flex items-center gap-2 justify-center"
+            className="flex-1 p-2 rounded-lg bg-red-500 filter-modal-clear-button text-white flex items-center gap-2 justify-center"
           >
             {mergedTexts?.removeFilterText}
             <TrashIcon />

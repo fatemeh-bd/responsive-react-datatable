@@ -38,8 +38,8 @@ const Pagination: React.FC<PaginationProps> = ({
   // === Styles
   const baseStyle: React.CSSProperties = {
     color: "inherit",
-    border: `1px solid ${theme.paginationBorderColor}`,
-    backgroundColor: theme.paginationBackgroundColor || "transparent",
+    border: `1px solid ${theme.borderColor}`,
+    backgroundColor: theme.backgroundColor || "transparent",
     padding: isMobile ? "0 4px" : "0 8px",
     borderRadius: "6px",
     fontSize: "14px",
@@ -172,7 +172,7 @@ const Pagination: React.FC<PaginationProps> = ({
         style={{
           width: "40px",
           textAlign: "center",
-          border: `1px solid ${theme.paginationBorderColor}`,
+          border: `1px solid ${theme.borderColor}`,
           borderRadius: "6px",
         }}
         type="number"

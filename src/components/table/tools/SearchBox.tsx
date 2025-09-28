@@ -91,7 +91,7 @@ const SearchBox = ({
         <div
           style={{
             borderColor: theme?.borderColor,
-            backgroundColor: theme?.searchBoxBgColor,
+            backgroundColor: theme?.backgroundColor,
           }}
           className={`table-search-input-container my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2.5 border disabled:opacity-70`}
         >
@@ -99,7 +99,7 @@ const SearchBox = ({
             <CloseIcon
               style={{
                 borderColor: theme?.borderColor,
-                color: searchValue ? theme?.errorColor : theme?.borderColor,
+                color: searchValue ? "#fb2c36" : theme?.borderColor,
                 paddingLeft: dir === "rtl" ? 0 : 4,
                 paddingRight: dir === "rtl" ? 4 : 0,
               }}
