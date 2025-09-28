@@ -401,9 +401,9 @@ const Table: React.FC<TableProps> = (props) => {
       )}
       <div
         id="table-header-actions"
-        className={`table-header-actions mb-2 flex md:items-start justify-between w-full items-center md:gap-2 gap-3 md:flex-wrap-reverse max-md:w-full`}
+        className={`table-header-actions mb-2 flex items-end justify-between w-full md:gap-2 gap-3 md:flex-wrap-reverse max-md:w-full`}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-end gap-2">
           {!noSearch && (
             <SearchBox
               {...props}
@@ -426,21 +426,7 @@ const Table: React.FC<TableProps> = (props) => {
               theme={theme}
             />
           )}
-          {isMobile && (filters || topFilter) && (
-            <button
-              onClick={() => setOpenFilter(true)}
-              style={{ minHeight: 43 }}
-              className="mobile-filter-button relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 justify-center rounded-md"
-            >
-              {activeFilterCount > 0 && (
-                <span className="mobile-filter-badge absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">
-                  {activeFilterCount}
-                </span>
-              )}
-              فیلتر
-              <FilterIcon />
-            </button>
-          )}
+
           {!isMobile && filters && (
             <div
               className={`${filterContainerClassName} filter-container-className`}
@@ -449,6 +435,21 @@ const Table: React.FC<TableProps> = (props) => {
             </div>
           )}
         </div>
+        {isMobile && (filters || topFilter) && (
+          <button
+            onClick={() => setOpenFilter(true)}
+            style={{ minHeight: 43 }}
+            className="mobile-filter-button relative mr-auto min-w-[70px] text-sm bg-blue/15 font-bold text-blue flex items-center gap-0.5 p-1 justify-center rounded-md"
+          >
+            {activeFilterCount > 0 && (
+              <span className="mobile-filter-badge absolute top-0 -right-2.5 bg-white text-xs border-2  border-blue/15 size-5 content-center rounded-full text-black">
+                {activeFilterCount}
+              </span>
+            )}
+            فیلتر
+            <FilterIcon />
+          </button>
+        )}
         <div className="flex items-center gap-3 flex-wrap max-sm:w-full justify-between">
           {actionButtons && actionButtons}
           {!isMobile && (
@@ -518,18 +519,19 @@ const Table: React.FC<TableProps> = (props) => {
               selectableProps.onSelectChange(isAllSelected ? [] : allIds);
             }}
           />
-
-          <Pagination
-            dir={dir}
-            startMobileSize={startMobileSize}
-            totalItems={totalItems}
-            queryName={pageQueryName}
-            pageSize={dynamicPageSize}
-            theme={theme}
-            textsConfig={mergedTexts}
-            currentPage={currentPage}
-            onChangePage={onChangePage}
-          />
+          {totalItems && (
+            <Pagination
+              dir={dir}
+              startMobileSize={startMobileSize}
+              totalItems={totalItems}
+              queryName={pageQueryName}
+              pageSize={dynamicPageSize}
+              theme={theme}
+              textsConfig={mergedTexts}
+              currentPage={currentPage}
+              onChangePage={onChangePage}
+            />
+          )}
         </>
       )}
 
