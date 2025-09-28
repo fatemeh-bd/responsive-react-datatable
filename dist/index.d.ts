@@ -1,4 +1,5 @@
-import React$1, { ReactNode } from 'react';
+import * as React$1 from 'react';
+import React__default, { ReactNode } from 'react';
 
 type OrderType = {
     column: number;
@@ -122,6 +123,8 @@ type TableProps = (InternalTableProps & {
     isSelectable?: false;
 }) | (ExternalTableProps & Selectable);
 
-declare const _default: React$1.NamedExoticComponent<TableProps>;
+declare const _default: React__default.NamedExoticComponent<TableProps>;
 
-export { _default as default };
+declare const rowRenderer: (fn: (cell?: any, row?: any, index?: number) => React.ReactNode) => (cell?: any, row?: any, index?: number) => React$1.ReactNode;
+
+export { _default as Table, _default as default, rowRenderer };
