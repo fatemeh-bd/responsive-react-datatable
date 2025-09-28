@@ -399,11 +399,12 @@ const Table: React.FC<TableProps> = (props) => {
           {topFilter}
         </div>
       )}
+
       <div
         id="table-header-actions"
-        className={`table-header-actions mb-2 flex items-end justify-between w-full md:gap-2 gap-3 max-sm:gap-2.5 md:flex-wrap-reverse max-md:w-full`}
+        className={`table-header-actions flex items-end justify-between mb-2 gap-3 w-full`}
       >
-        <div className="flex items-end flex-wrap gap-2 max-sm:w-full">
+        <div className="flex items-end flex-wrap gap-2 max-md:w-full">
           {!noSearch && (
             <SearchBox
               {...props}
@@ -426,14 +427,6 @@ const Table: React.FC<TableProps> = (props) => {
               theme={theme}
             />
           )}
-
-          {!isMobile && filters && (
-            <div
-              className={`${filterContainerClassName} filter-container-className`}
-            >
-              {filters}
-            </div>
-          )}
         </div>
         {isMobile && (filters || topFilter) && (
           <button
@@ -454,8 +447,15 @@ const Table: React.FC<TableProps> = (props) => {
             <FilterIcon />
           </button>
         )}
+        {!isMobile && filters && (
+          <div
+            className={`${filterContainerClassName} filter-container-className`}
+          >
+            {filters}
+          </div>
+        )}
         {(actionButtons || !isMobile) && (
-          <div className="flex items-center gap-3 flex-wrap max-sm:w-full justify-between">
+          <div className="flex items-center gap-3 flex-wrap max-md:w-full justify-between">
             {actionButtons && actionButtons}
             {!isMobile && (
               <PageSizeSelect

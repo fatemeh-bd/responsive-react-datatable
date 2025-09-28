@@ -123,7 +123,7 @@ const SearchBox = ({
             type="text"
             value={searchValue}
             placeholder={mergedTexts?.searchPlaceholder}
-            className={`table-search-input w-full text-inherit border-none bg-transparent !outline-none text-sm placeholder:!text-sm max-sm:placeholder:!text-xs`}
+            className={`table-search-input w-full text-inherit border-none bg-transparent !outline-none text-sm placeholder:!text-sm max-md:placeholder:!text-xs`}
             onChange={(e) => {
               setSearchValue(e.target.value);
               if (currentPage) {
