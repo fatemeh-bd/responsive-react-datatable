@@ -57,5 +57,5 @@ root.render(
         </div>
       </HashRouter>
     </QueryClientProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
