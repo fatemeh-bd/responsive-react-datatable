@@ -335,7 +335,7 @@ const Table: React.FC<TableProps> = (props) => {
           console.log(dynamicPageSize);
 
           const makeCurrentCols = columnsWithRow
-            ?.filter((i) => i.data !== null)
+            ?.filter((i) => i.data !== null && i.data !== "selectableTable")
             ?.map((item) => ({
               data: item?.data,
               name: item?.data,
