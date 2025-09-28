@@ -402,7 +402,7 @@ const Table: React.FC<TableProps> = (props) => {
 
       <div
         id="table-header-actions"
-        className={`table-header-actions max-md:flex-col-reverse flex items-end justify-between mb-2 gap-3 w-full`}
+        className={`table-header-actions flex items-end justify-between mb-2 gap-3 w-full`}
       >
         <div className="flex items-end flex-wrap gap-2 max-md:w-full">
           {!noSearch && (
