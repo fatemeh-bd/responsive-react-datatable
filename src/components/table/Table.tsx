@@ -113,6 +113,7 @@ const Table: React.FC<TableProps> = (props) => {
   const isMobile = useIsMobile(startMobileSize);
   const { updateParams, getParams } = useQueryParams();
   // states
+  const [tableLoading, setTableLoading] = useState(false);
   const pageSizeInitial = Number(getParams("pageSize")) || pageSize;
   const [openFilter, setOpenFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(
@@ -331,6 +332,7 @@ const Table: React.FC<TableProps> = (props) => {
       refetchIntervalInBackground: false,
       queryFn: async () => {
         try {
+          setTableLoading(true);
           const payloadCustomBody = props?.internalApiConfig?.customBody || [];
           console.log(dynamicPageSize);
 
@@ -368,10 +370,12 @@ const Table: React.FC<TableProps> = (props) => {
           props?.internalApiConfig?.onFetch?.(response?.data);
           setTableRows(response?.data?.data);
           setTotalItems(response?.data?.recordsFiltered);
+          setTableLoading(false);
 
           return response?.data;
         } catch (error: any) {
           notify(error?.message, "error");
+          setTableLoading(false);
         }
       },
     });
@@ -483,7 +487,7 @@ const Table: React.FC<TableProps> = (props) => {
       {isMobile ? (
         <MobileTable
           columns={columnsWithRow}
-          isLoading={isLoading}
+          isLoading={isLoading || tableLoading}
           rows={
             mode === "internal"
               ? tableRows
@@ -505,7 +509,7 @@ const Table: React.FC<TableProps> = (props) => {
                 : `calc(${tableHeightPageSize * (rowHeight || 51.15)}px)`
             }
             columns={columnsWithRow}
-            isLoading={isLoading}
+            isLoading={isLoading || tableLoading}
             rows={
               mode === "internal"
                 ? tableRows
