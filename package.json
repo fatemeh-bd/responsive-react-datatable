@@ -1,6 +1,6 @@
 {
   "name": "responsive-react-datatable",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A responsive React DataTable component for displaying and managing tabular data. Easily handle sorting, filtering, pagination, and dynamic columns, with support for selectable rows and inline editing. Perfect for building interactive, data-driven interfaces that look great on any screen size.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
@@ -48,7 +48,6 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.61.3",
-    "react-icons": ">=4.7.0 <6",
     "axios": ">=0.22.0 <2",
     "swiper": "^11.2.10"
   },
@@ -68,7 +67,6 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@tailwindcss/postcss": "^4.1.13",
-    "tailwindcss": "^4.0.0",
     "@types/react": "^18.3.24",
     "@types/react-dom": "^18.3.7",
     "autoprefixer": "^10.4.21",
@@ -79,6 +77,7 @@
     "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
+    "tailwindcss": "^4.0.0",
     "tslib": "^2.6.3",
     "typescript": "^5.5.3"
   },
