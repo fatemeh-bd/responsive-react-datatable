@@ -49,13 +49,15 @@ import Table from "responsive-react-datatable";
 const columns = [
   { data: "name", title: "Name", searchable: true, orderable: true },
 ];
-
 const internalApiConfig = {
-  endpoint: "/api/users",
+  endpoint: "/api/data",
   baseUrl: "https://example.com",
   method: "POST",
   defaultSortBy: "id",
   sortType: "desc",
+  customBody: [{ someFilter: "value" }],
+  headers: { Authorization: "Bearer token" },
+  onFetch: (data) => console.log("Fetched:", data),
 };
 
 <Table
@@ -64,6 +66,7 @@ const internalApiConfig = {
   internalApiConfig={internalApiConfig}
   pageSize={10}
   lang="en"
+  notify={(message, type) => console.log(`${type}: ${message}`)}
 />;
 ```
 
