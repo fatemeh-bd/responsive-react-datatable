@@ -44,9 +44,8 @@ npm install @tanstack/react-query axios swiper
 ### Internal Mode
 
 ```jsx
-import Table from "responsive-react-datatable";
-
-const columns = [
+import Table, { ColumnType } from "responsive-react-datatable";
+const columns: ColumnType[] = [
   {
     data: "avatar",
     title: "Profile",
