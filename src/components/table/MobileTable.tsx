@@ -85,10 +85,6 @@ const MobileTable = ({
               </div>
               {_item?.data === null && (
                 <div className="mobile-table-skeleton-action-row flex items-center gap-2">
-                  <div
-                    style={{ width: index % 2 ? "60%" : "40%" }}
-                    className="mobile-table-skeleton-placeholder h-5 my-2 w-full animate-pulse bg-gray-200 dark:bg-gray-800"
-                  />
                   <Skeleton
                     className="mobile-table-skeleton-action"
                     height="h-9"
