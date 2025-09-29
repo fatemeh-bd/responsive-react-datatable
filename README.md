@@ -33,7 +33,6 @@ const internalApiConfig = {
   endpoint: "/api/users",
   baseUrl: "https://example.com",
   method: "POST",
-  tableName: "users",
   defaultSortBy: "id",
   sortType: "desc",
 };
@@ -43,9 +42,24 @@ const internalApiConfig = {
   mode="internal"
   internalApiConfig={internalApiConfig}
   pageSize={10}
-  lang="fa"
+  lang="en"
 />;
 ```
+
+## Note on Internal Mode Payload
+
+In **Internal Mode**, the table generates a default payload for server requests, inspired by [DataTables.net](https://datatables.net/) structure:
+
+````typescript
+let payload: Record<string, any> = {
+  draw: currentPage,
+  columns: makeCurrentCols,
+  order: order || [],
+  start: (currentPage - 1) * dynamicPageSize,
+  length: dynamicPageSize,
+  search: { value: searchText || "", regex: false, fixed: [] },
+};
+
 
 ### Static Mode
 
@@ -59,7 +73,7 @@ const staticRows = [{ id: 1, name: "Ali", age: 30 }];
   totalItems={staticRows.length}
   pageSize={5}
 />;
-```
+````
 
 ## Props
 
