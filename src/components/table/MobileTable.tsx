@@ -90,12 +90,12 @@ const MobileTable = ({
                     className="mobile-table-skeleton-placeholder h-5 w-full animate-pulse bg-gray-200 dark:bg-gray-800"
                   />
                   <Skeleton
-                    className="mobile-table-skeleton-action"
+                    className="mobile-table-skeleton-action max-md:my-0.5"
                     height="h-9"
                     style={{ width: "50%" }}
                   />
                   <Skeleton
-                    className="mobile-table-skeleton-action"
+                    className="mobile-table-skeleton-action max-md:my-0.5"
                     height="h-9"
                     style={{ width: "50%" }}
                   />
