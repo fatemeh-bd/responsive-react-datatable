@@ -46,7 +46,6 @@ const internalApiConfig = {
 />;
 ```
 
-````
 ## Note on Internal Mode Payload
 
 In **Internal Mode**, the table generates a default payload for server requests, inspired by [DataTables.net](https://datatables.net/) structure:
@@ -60,8 +59,7 @@ let payload: Record<string, any> = {
   length: dynamicPageSize,
   search: { value: searchText || "", regex: false, fixed: [] },
 };
-
-````
+```
 
 ### Static Mode
 
