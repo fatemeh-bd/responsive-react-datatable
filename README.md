@@ -2,6 +2,23 @@
 
 A modern, flexible, and high-performance table component for React applications.
 
+# 📊 Responsive React DataTable
+
+![npm](https://img.shields.io/npm/dm/responsive-react-datatable)  
+![npm version](https://img.shields.io/npm/v/responsive-react-datatable)  
+![license](https://img.shields.io/npm/l/responsive-react-datatable)
+
+A modern, flexible, and high-performance table component for React applications.
+
+---
+
+## 🌐 Demo
+
+Try it out here:  
+🔗 [Responsive React DataTable Demo](https://fatemeh-bd.github.io/responsive-react-datatable/#/example)
+
+---
+
 ## Features
 
 - Responsive design for desktop and mobile.
