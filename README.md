@@ -22,7 +22,7 @@ npm install responsive-react-datatable
 
 ### Internal Mode
 
-```jsx
+````jsx
 import Table from "responsive-react-datatable";
 
 const columns = [
@@ -44,13 +44,11 @@ const internalApiConfig = {
   pageSize={10}
   lang="en"
 />;
-```
-
 ## Note on Internal Mode Payload
 
 In **Internal Mode**, the table generates a default payload for server requests, inspired by [DataTables.net](https://datatables.net/) structure:
 
-````typescript
+```typescript
 let payload: Record<string, any> = {
   draw: currentPage,
   columns: makeCurrentCols,
@@ -60,6 +58,7 @@ let payload: Record<string, any> = {
   search: { value: searchText || "", regex: false, fixed: [] },
 };
 
+````
 
 ### Static Mode
 
@@ -73,7 +72,7 @@ const staticRows = [{ id: 1, name: "Ali", age: 30 }];
   totalItems={staticRows.length}
   pageSize={5}
 />;
-````
+```
 
 ## Props
 
