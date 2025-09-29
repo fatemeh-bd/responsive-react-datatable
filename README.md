@@ -36,13 +36,13 @@ npm install responsive-react-datatable
 Ensure the following dependencies are installed:
 
 ```bash
-npm install @tanstack/react-query axios sswiper
+npm install @tanstack/react-query axios swiper
 ```
 
 or with Yarn:
 
 ```bash
-yarn add @tanstack/react-query axios sswiper
+yarn add @tanstack/react-query axios swiper
 ```
 
 ## Usage
