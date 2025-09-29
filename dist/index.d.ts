@@ -37,12 +37,17 @@ interface TextsConfig {
     close?: string;
 }
 type TableMode = "static" | "external" | "internal";
+interface CustomBody {
+    noRefresh?: boolean;
+    isFilter?: boolean;
+    [key: string]: string | number | boolean | null | undefined | Object;
+}
 interface InternalModeProps {
     internalApiConfig: {
         endpoint: string;
         baseUrl?: string;
         payload?: any;
-        customBody?: Record<string, any>[];
+        customBody?: CustomBody[];
         defaultSortBy?: string;
         sortType?: "asc" | "desc";
         saveSearch?: boolean;
