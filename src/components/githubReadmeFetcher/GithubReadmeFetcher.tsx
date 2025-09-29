@@ -89,7 +89,7 @@ const GithubReadmeFetcher = ({ readmeUrl }: { readmeUrl: string }) => {
             ),
             p: ({ children, ...props }) => (
               <p
-                className={`text-gray-300 mb-3 leading-relaxed ${
+                className={`text-gray-300 mb-3 leading-relaxed flex items-center justify-center gap-2 ${
                   props.style?.textAlign === "center" ? "text-center" : ""
                 }`}
                 {...props}
