@@ -21,7 +21,6 @@ Try it out here:
 - Auto page size calculation.
 - Customizable themes.
 - Multi-language support (English, Persian, RTL).
-- Notifications via callback.
 
 ## Installation
 
@@ -110,7 +109,7 @@ let payload: Record<string, any> = {
 ### Static Mode
 
 ```jsx
-const staticRows = [{ id: 1, name: "Ali", age: 30 }];
+const staticRows = [{ id: 1, name: "max", age: 30 }];
 
 <Table
   columns={columns}
@@ -123,32 +122,32 @@ const staticRows = [{ id: 1, name: "Ali", age: 30 }];
 
 ## Props
 
-| Prop               | Type                                 | Default    | Description                                  |
-| ------------------ | ------------------------------------ | ---------- | -------------------------------------------- |
-| columns            | ColumnType[]                         | []         | Column definitions                           |
-| mode               | 'internal' \| 'external' \| 'static' | 'internal' | Table mode                                   |
-| internalApiConfig  | object                               | —          | Internal API config                          |
-| staticRows         | any[]                                | []         | Static rows                                  |
-| externalRows       | any[]                                | []         | External rows                                |
-| totalItems         | number                               | 0          | Total row count                              |
-| pageSize           | number                               | 10         | Rows per page                                |
-| isSelectable       | boolean                              | false      | Enable row selection                         |
-| selectedKey        | string                               | 'id'       | Key for selected rows                        |
-| onSelectChange     | '(selectedIds: any[]) => void'       | -          | Callback for selection                       |
-| pageQueryName      | string                               | 'page'     | Query param name for pagination.             |
-| startMobileSize    | number                               | 768        | Breakpoint for mobile detection (e.g., 768). |
-| colorTheme         | ColorTheme                           | Default    | Custom theme colors                          |
-| textsConfig        | object                               | Default    | Override table texts                         |
-| lang               | 'en' \| 'fa'                         | 'en'       | Language                                     |
-| noSearch           | boolean                              | false      | Disable search                               |
-| saveSearch         | boolean                              | false      | Persist search                               |
-| hasColumnOrder     | boolean                              | false      | Enable column reordering                     |
-| notify             | function                             | —          | Notifications                                |
-| isLoading          | boolean                              | false      | Loading state                                |
-| autoPageSizeConfig | AutoPageSizeConfig                   | Default    | Auto page size settings                      |
-| height             | string                               | Auto       | Table height                                 |
-| onPageChange       | function                             | —          | Page change callback                         |
-| onSortChange       | function                             | —          | Sort change callback                         |
-| onSearch           | function                             | —          | Search callback                              |
-| onPageSizeChange   | '(size: number) => void'             | -          | Page size change callback.                   |
-| listMode           | boolean                              | false      | Mobile list view mode.                       |
+| Prop               | Type                                 | Default        | Description                                                           |
+| ------------------ | ------------------------------------ | -------------- | --------------------------------------------------------------------- | --------------------------------------------------------- |
+| columns            | ColumnType[]                         | []             | Column definitions                                                    |
+| mode               | 'internal' \| 'external' \| 'static' | -              | Table mode                                                            |
+| internalApiConfig  | object                               | —              | Internal API config                                                   |
+| staticRows         | any[]                                | []             | Static rows                                                           |
+| externalRows       | any[]                                | []             | External rows                                                         |
+| totalItems         | number                               | 0              | Total row count                                                       |
+| pageSize           | number                               | 10             | Rows per page                                                         |
+| isSelectable       | boolean                              | false          | Enable row selection                                                  |
+| selectedKey        | string                               | 'id'           | Key for selected rows                                                 |
+| onSelectChange     | (selectedIds: any[]) => void         | -              | Callback for selection                                                |
+| pageQueryName      | string                               | 'page'         | Query param name for pagination.                                      |
+| startMobileSize    | number                               | 768            | Breakpoint for mobile detection (e.g., 768).                          |
+| colorTheme         | ColorTheme                           | Default        | Custom theme colors                                                   |
+| textsConfig        | object                               | Default        | Override table texts                                                  |
+| lang               | 'en' \| 'fa'                         | 'en'           | Language                                                              |
+| noSearch           | boolean                              | false          | don't show search box                                                 |
+| saveSearch         | boolean                              | false          | save search value in sesssionStorage                                  |
+| hasColumnOrder     | boolean                              | false          | Enable column reordering ( column: hasColumnOrder ? 8 : 0)            |
+| notify             | (text:string,type:"warning"          | "error")=>void | —                                                                     | return error message after calling api in "internal" mode |
+| isLoading          | boolean                              | false          | Loading state                                                         |
+| autoPageSizeConfig | AutoPageSizeConfig                   | Default        | Auto page size settings (Show number of rows relative to page height) |
+| height             | string                               | Auto           | Table max-height (example:"80vh")                                     |
+| onPageChange       | function                             | —              | Page change callback                                                  |
+| onSortChange       | function                             | —              | Sort change callback                                                  |
+| onSearch           | function                             | —              | Search callback                                                       |
+| onPageSizeChange   | '(size: number) => void'             | -              | Page size change callback.                                            |
+| listMode           | boolean                              | false          | Mobile list view mode.                                                |
