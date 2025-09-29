@@ -124,3 +124,4 @@ declare const _default: React__default.NamedExoticComponent<TableProps>;
 declare const rowRenderer: (fn: (cell?: any, row?: any, index?: number) => React.ReactNode) => (cell?: any, row?: any, index?: number) => React$1.ReactNode;
 
 export { _default as Table, _default as default, rowRenderer };
+export type { ColumnType };
