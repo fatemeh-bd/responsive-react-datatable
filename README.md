@@ -47,7 +47,32 @@ npm install @tanstack/react-query axios swiper
 import Table from "responsive-react-datatable";
 
 const columns = [
-  { data: "name", title: "Name", searchable: true, orderable: true },
+  {
+    data: "avatar",
+    title: "Profile",
+    searchable: false,
+    orderable: false,
+    width: 80,
+    render: rowRenderer((_cell, _row) => (
+      <img src={_cell} alt={_row?.profileAlt} />
+    )),
+  },
+  {
+    data: "name",
+    title: "Name",
+    searchable: true,
+    orderable: true,
+    width: 150,
+  },
+  // if it is an operation column, it must be null.
+  {
+    data: null,
+    orderable: false,
+    title: "Operation",
+    searchable: false,
+    width: 140,
+    render: rowRenderer(() => <button>details</button>),
+  },
 ];
 const internalApiConfig = {
   endpoint: "/api/data",
