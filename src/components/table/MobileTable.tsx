@@ -74,12 +74,12 @@ const MobileTable = ({
               <div className="mobile-table-skeleton-row flex items-center gap-2">
                 <Skeleton
                   className="mobile-table-skeleton-item"
-                  style={{ width: index % 2 ? "40%" : "60%" }}
+                  style={{ width: index % 2 ? "40%" : "60%", margin: 0 }}
                   height="h-5"
                 />
                 <Skeleton
                   className="mobile-table-skeleton-item"
-                  style={{ width: index % 2 ? "60%" : "40%" }}
+                  style={{ width: index % 2 ? "60%" : "40%", margin: 0 }}
                   height="h-5"
                 />
               </div>
@@ -87,17 +87,17 @@ const MobileTable = ({
                 <div className="mobile-table-skeleton-action-row flex items-center gap-2">
                   <div
                     style={{ width: index % 2 ? "60%" : "40%" }}
-                    className="mobile-table-skeleton-placeholder h-5 w-full animate-pulse bg-gray-200 dark:bg-gray-800"
+                    className="mobile-table-skeleton-placeholder h-5 my-2 w-full animate-pulse bg-gray-200 dark:bg-gray-800"
                   />
                   <Skeleton
-                    className="mobile-table-skeleton-action max-md:my-0.5"
+                    className="mobile-table-skeleton-action"
                     height="h-9"
-                    style={{ width: "50%" }}
+                    style={{ width: "50%", margin: 0 }}
                   />
                   <Skeleton
-                    className="mobile-table-skeleton-action max-md:my-0.5"
+                    className="mobile-table-skeleton-action"
                     height="h-9"
-                    style={{ width: "50%" }}
+                    style={{ width: "50%", margin: 0 }}
                   />
                 </div>
               )}
