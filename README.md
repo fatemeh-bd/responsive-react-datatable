@@ -114,7 +114,7 @@ const staticRows = [{ id: 1, name: "Ali", age: 30 }];
 | selectedKey        | string                               | 'id'       | Key for selected rows                        |
 | onSelectChange     | '(selectedIds: any[]) => void'       | -          | Callback for selection                       |
 | pageQueryName      | string                               | 'page'     | Query param name for pagination.             |
-| `startMobileSize   | number                               | 768        | Breakpoint for mobile detection (e.g., 768). |
+| startMobileSize    | number                               | 768        | Breakpoint for mobile detection (e.g., 768). |
 | colorTheme         | ColorTheme                           | Default    | Custom theme colors                          |
 | textsConfig        | object                               | Default    | Override table texts                         |
 | lang               | 'en' \| 'fa'                         | 'en'       | Language                                     |
