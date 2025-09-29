@@ -39,12 +39,6 @@ Ensure the following dependencies are installed:
 npm install @tanstack/react-query axios swiper
 ```
 
-or with Yarn:
-
-```bash
-yarn add @tanstack/react-query axios swiper
-```
-
 ## Usage
 
 ### Internal Mode
