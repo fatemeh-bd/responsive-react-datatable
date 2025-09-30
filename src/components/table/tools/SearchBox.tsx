@@ -113,6 +113,7 @@ const SearchBox = ({
               style={{
                 paddingLeft: dir === "rtl" ? 0 : 4,
                 paddingRight: dir === "rtl" ? 4 : 2,
+                borderColor: theme?.borderColor,
               }}
               className={`table-search-icon size-5 scale-150 opacity-60 ${
                 dir === "rtl" ? "border-r" : "border-l"
