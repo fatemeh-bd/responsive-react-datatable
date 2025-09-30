@@ -10,7 +10,7 @@ const Skeleton = ({
   return (
     <div
       style={style}
-      className={`${height} my-2 w-full animate-pulse bg-gray-200 dark:bg-gray-800 ${className}`}
+      className={`${height} my-2 w-full animate-pulse bg-gray-200 skleton-class ${className}`}
     />
   );
 };
