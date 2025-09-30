@@ -109,7 +109,7 @@ const ExamplePage = () => {
       className="flex flex-col gap-6 max-w-7xl mx-auto overflow-auto mt-8"
     >
       <Table
-        lang="fa"
+        lang="en"
         saveSearch
         mode="static"
         pageSize={11}
