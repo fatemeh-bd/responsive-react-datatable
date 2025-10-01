@@ -83,31 +83,31 @@ const Table: React.FC<TableProps> = (props) => {
   );
   const dir = lang === "fa" ? "rtl" : "ltr";
 
-  const autoConfig = {
-    ...defaultAutoConfig,
-    ...customAutoPageSizeConfig,
-    subtractSelectors: [
-      "#table-header-actions",
-      // "#paging",
-      "#topFilter",
-      ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
-    ],
-    optionalSelectorsForExtraBuffer: [
-      "#paging",
-      ...((customAutoPageSizeConfig?.optionalSelectorsForExtraBuffer as string[]) ||
-        []),
-    ],
-  };
+  // const autoConfig = {
+  //   ...defaultAutoConfig,
+  //   ...customAutoPageSizeConfig,
+  //   subtractSelectors: [
+  //     "#table-header-actions",
+  //     // "#paging",
+  //     "#topFilter",
+  //     ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
+  //   ],
+  //   optionalSelectorsForExtraBuffer: [
+  //     "#paging",
+  //     ...((customAutoPageSizeConfig?.optionalSelectorsForExtraBuffer as string[]) ||
+  //       []),
+  //   ],
+  // };
 
-  const {
-    enabled: autoEnabled,
-    containerSelector,
-    subtractSelectors,
-    optionalSelectorsForExtraBuffer,
-    rowHeight,
-    baseBufferRows,
-    extraBufferRows,
-  } = autoConfig;
+  // const {
+  //   enabled: autoEnabled,
+  //   containerSelector,
+  //   subtractSelectors,
+  //   optionalSelectorsForExtraBuffer,
+  //   rowHeight,
+  //   baseBufferRows,
+  //   extraBufferRows,
+  // } = autoConfig;
 
   // hooks
   const isMobile = useIsMobile(startMobileSize);
@@ -127,10 +127,76 @@ const Table: React.FC<TableProps> = (props) => {
   const [totalItems, setTotalItems] = useState<number>(
     mode === "static" ? (props as StaticModeProps).totalItems || 0 : 0
   );
-  const [dynamicPageSize, setDynamicPageSize] = useState(pageSizeInitial);
-  const [tableHeightPageSize, setTableHeightPageSize] = useState(
-    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSize
+  // const [dynamicPageSize, setDynamicPageSize] = useState(pageSizeInitial);
+  // const [tableHeightPageSize, setTableHeightPageSize] = useState(
+  //   isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSize
+  // );
+  // const autoConfig = { ...defaultAutoConfig, ...customAutoPageSizeConfig };
+  const autoConfig = {
+    ...defaultAutoConfig,
+    ...customAutoPageSizeConfig,
+    subtractSelectors: [
+      "#table-header-actions",
+      // "#paging",
+      ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
+    ],
+    optionalSelectorsForExtraBuffer: [
+      "#topFilter",
+      "#paging",
+      ...((customAutoPageSizeConfig?.optionalSelectorsForExtraBuffer as string[]) ||
+        []),
+    ],
+  };
+  const {
+    enabled: autoEnabled,
+    containerSelector,
+    subtractSelectors,
+    optionalSelectorsForExtraBuffer,
+    rowHeight,
+    baseBufferRows,
+    extraBufferRows,
+  } = autoConfig;
+  const [dynamicPageSize, setDynamicPageSize] = useState(
+    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSizeInitial
   );
+  const [tableHeightPageSize, setTableHeightPageSize] = useState(
+    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSizeInitial
+  );
+
+  useLayoutEffect(() => {
+    if (!isMobile && autoEnabled) {
+      const calcSize = () => {
+        let sumSubtract = 0;
+        for (const sel of subtractSelectors || []) {
+          sumSubtract += Number(document.querySelector(sel)?.clientHeight || 0);
+        }
+        const availableHeight =
+          Number(
+            document.querySelector(containerSelector || "")?.clientHeight || 0
+          ) - sumSubtract;
+
+        const rows = Math.floor(availableHeight / (rowHeight || 51.15));
+        let buffer = baseBufferRows || 2;
+        const hasOptional = (optionalSelectorsForExtraBuffer || []).some(
+          (sel) => Number(document.querySelector(sel)?.clientHeight || 0) > 0
+        );
+        if (hasOptional) buffer += extraBufferRows || 1;
+
+        const newSize = rows - buffer;
+        if (newSize > 0) {
+          setTableHeightPageSize(newSize); // 👈 فقط برای ارتفاع
+          if (!dynamicPageSize) {
+            setDynamicPageSize(Number(getParams("pageSize")) || newSize);
+          }
+        }
+      };
+
+      calcSize();
+      const observer = new MutationObserver(calcSize);
+      observer.observe(document.body, { childList: true, subtree: true });
+      return () => observer.disconnect();
+    }
+  }, [isMobile, autoConfig]);
   const [order, setOrder] = useState<any>([
     {
       column: hasColumnOrder ? 8 : 0,
@@ -156,10 +222,10 @@ const Table: React.FC<TableProps> = (props) => {
   );
 
   const paginatedRows = useMemo(() => {
-    const start = (currentPage - 1) * dynamicPageSize;
-    const end = start + dynamicPageSize;
+    const start = (currentPage - 1) * pageSizeInitial;
+    const end = start + pageSizeInitial;
     return filteredRows.slice(start, end);
-  }, [filteredRows, currentPage, dynamicPageSize]);
+  }, [filteredRows, currentPage, pageSizeInitial]);
 
   const columnsWithRow: ColumnType[] = useMemo(() => {
     const selectableColumn: ColumnType[] = isSelectable
@@ -239,40 +305,40 @@ const Table: React.FC<TableProps> = (props) => {
     (props as StaticModeProps).totalItems,
   ]);
 
-  useLayoutEffect(() => {
-    if (!isMobile && autoEnabled) {
-      const calcSize = () => {
-        let sumSubtract = 0;
-        for (const sel of subtractSelectors || []) {
-          sumSubtract += Number(document.querySelector(sel)?.clientHeight || 0);
-        }
-        const availableHeight =
-          Number(
-            document.querySelector(containerSelector || "")?.clientHeight || 0
-          ) - sumSubtract;
+  // useLayoutEffect(() => {
+  //   if (!isMobile && autoEnabled) {
+  //     const calcSize = () => {
+  //       let sumSubtract = 0;
+  //       for (const sel of subtractSelectors || []) {
+  //         sumSubtract += Number(document.querySelector(sel)?.clientHeight || 0);
+  //       }
+  //       const availableHeight =
+  //         Number(
+  //           document.querySelector(containerSelector || "")?.clientHeight || 0
+  //         ) - sumSubtract;
 
-        const rows = Math.floor(availableHeight / (rowHeight || 51.15));
-        let buffer = baseBufferRows || 2;
-        const hasOptional = (optionalSelectorsForExtraBuffer || []).some(
-          (sel) => Number(document.querySelector(sel)?.clientHeight || 0) > 0
-        );
-        if (hasOptional) buffer += extraBufferRows || 1;
+  //       const rows = Math.floor(availableHeight / (rowHeight || 51.15));
+  //       let buffer = baseBufferRows || 2;
+  //       const hasOptional = (optionalSelectorsForExtraBuffer || []).some(
+  //         (sel) => Number(document.querySelector(sel)?.clientHeight || 0) > 0
+  //       );
+  //       if (hasOptional) buffer += extraBufferRows || 1;
 
-        const newSize = rows - buffer;
-        if (newSize > 0) {
-          setTableHeightPageSize(newSize);
-          // if (!dynamicPageSize) {
-          //   setDynamicPageSize(Number(getParams("pageSize")) || newSize);
-          // }
-        }
-      };
+  //       const newSize = rows - buffer;
+  //       if (newSize > 0) {
+  //         setTableHeightPageSize(newSize);
+  //         // if (!dynamicPageSize) {
+  //         //   setDynamicPageSize(Number(getParams("pageSize")) || newSize);
+  //         // }
+  //       }
+  //     };
 
-      calcSize();
-      const observer = new MutationObserver(calcSize);
-      observer.observe(document.body, { childList: true, subtree: true });
-      return () => observer.disconnect();
-    }
-  }, [isMobile, autoEnabled]);
+  //     calcSize();
+  //     const observer = new MutationObserver(calcSize);
+  //     observer.observe(document.body, { childList: true, subtree: true });
+  //     return () => observer.disconnect();
+  //   }
+  // }, [isMobile, autoEnabled]);
 
   useEffect(() => {
     if (mode === "static" && order?.length > 0) {
@@ -325,8 +391,8 @@ const Table: React.FC<TableProps> = (props) => {
         currentPage,
         searchText,
         order,
-        dynamicPageSize,
         refreshableCustomBody,
+        dynamicPageSize,
       ],
       refetchOnWindowFocus: false,
       refetchIntervalInBackground: false,
@@ -334,7 +400,6 @@ const Table: React.FC<TableProps> = (props) => {
         try {
           setTableLoading(true);
           const payloadCustomBody = props?.internalApiConfig?.customBody || [];
-          console.log(dynamicPageSize);
 
           const makeCurrentCols = columnsWithRow
             ?.filter((i) => i.data !== null && i.data !== "selectableTable")
@@ -483,6 +548,20 @@ const Table: React.FC<TableProps> = (props) => {
                 }}
               />
             )}
+            {/* {!isMobile && (
+              <PageSizeSelect
+                pageQueryName={pageQueryName}
+                textsConfig={mergedTexts}
+                theme={theme}
+                // initialPageSize={tableHeightPageSize}
+                pageSize={pageSizeInitial}
+                onPageSizeChange={(newSize) => {
+                  // setDynamicPageSize(newSize);
+                  setCurrentPage(1);
+                  onPageSizeChange?.(newSize);
+                }}
+              />
+            )} */}
           </div>
         )}
       </div>
@@ -505,6 +584,7 @@ const Table: React.FC<TableProps> = (props) => {
         <>
           <DesktopTable
             rowHeight={`${rowHeight}px` || "51.15px"}
+            pageSize={dynamicPageSize}
             maxHeight={
               height
                 ? height
@@ -519,7 +599,7 @@ const Table: React.FC<TableProps> = (props) => {
                 ? tableRows
                 : paginatedRows
             }
-            pageSize={dynamicPageSize}
+            // pageSize={pageSizeInitial}
             theme={theme}
             textsConfig={mergedTexts}
             onOrderChange={handleOrderChange}
@@ -561,8 +641,6 @@ const Table: React.FC<TableProps> = (props) => {
             pageSize={pageSizeInitial}
             onPageSizeChange={(newSize) => {
               setDynamicPageSize(newSize);
-              setCurrentPage(1);
-              onPageSizeChange?.(newSize);
             }}
           />
         )}
