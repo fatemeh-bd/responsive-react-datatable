@@ -105,22 +105,21 @@ const ExamplePage = () => {
   return (
     <div
       id="content-wrapper"
-      style={{ height: "80svh" }}
       className="flex flex-col gap-6 max-w-7xl mx-auto overflow-auto mt-8"
     >
       <Table
         lang="en"
         saveSearch
         mode="static"
-        pageSize={11}
+        // pageSize={11}
         tableName="sdsdsd"
         autoPageSizeConfig={{
-          enabled: false,
+          enabled: true,
           containerSelector: "#content-wrapper",
-          subtractSelectors: ["#filters", "#topFilter", "#tabPage", "#paging"],
-          optionalSelectorsForExtraBuffer: ["#tabPage", "#topFilter"],
+          subtractSelectors: ["#footer"],
+          optionalSelectorsForExtraBuffer: ["#footer"],
           rowHeight: 51.15,
-          baseBufferRows: 2,
+          baseBufferRows: 3,
           extraBufferRows: 1,
         }}
         colorTheme={{
