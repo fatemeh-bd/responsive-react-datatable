@@ -222,10 +222,11 @@ const Table: React.FC<TableProps> = (props) => {
   );
 
   const paginatedRows = useMemo(() => {
-    const start = (currentPage - 1) * pageSizeInitial;
-    const end = start + pageSizeInitial;
+    const size = autoEnabled ? dynamicPageSize : pageSizeInitial;
+    const start = (currentPage - 1) * size;
+    const end = start + size;
     return filteredRows.slice(start, end);
-  }, [filteredRows, currentPage, pageSizeInitial]);
+  }, [filteredRows, currentPage, pageSizeInitial, dynamicPageSize]);
 
   const columnsWithRow: ColumnType[] = useMemo(() => {
     const selectableColumn: ColumnType[] = isSelectable
