@@ -1,4 +1,4 @@
-const WellcomePage = () => {
+const WelcomePage = () => {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-6">
       <h1 className="text-2xl font-bold mb-4 text-blue-600">
@@ -13,4 +13,4 @@ const WellcomePage = () => {
   );
 };
 
-export default WellcomePage;
+export default WelcomePage;

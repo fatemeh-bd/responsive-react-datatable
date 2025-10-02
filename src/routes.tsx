@@ -2,14 +2,16 @@ import ExamplePage from "./pages/examplePage/ExamplePage";
 import HomePage from "./pages/documentPage/HomePage";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { GrVmMaintenance } from "react-icons/gr";
-import WellcomePage from "./pages/wellcomePage/WellcomePage";
+import WelcomePage from "./pages/welcomePage/WelcomePage";
 import DocumentPage from "./pages/documentPage/HomePage";
+import { BsTerminal } from "react-icons/bs";
+
 export const routes = [
   {
-    icon: IoDocumentTextOutline,
-    name: "Documentation",
+    icon: BsTerminal,
+    name: "Welcome",
     path: "/",
-    element: <WellcomePage />,
+    element: <WelcomePage />,
   },
   {
     icon: IoDocumentTextOutline,
