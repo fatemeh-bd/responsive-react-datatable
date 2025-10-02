@@ -137,12 +137,13 @@ const Table: React.FC<TableProps> = (props) => {
     ...customAutoPageSizeConfig,
     subtractSelectors: [
       "#table-header-actions",
-      // "#paging",
+      "#topFilter",
+      "#paging",
       ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
     ],
     optionalSelectorsForExtraBuffer: [
       "#topFilter",
-      "#paging",
+      // "#paging",
       ...((customAutoPageSizeConfig?.optionalSelectorsForExtraBuffer as string[]) ||
         []),
     ],
@@ -167,24 +168,39 @@ const Table: React.FC<TableProps> = (props) => {
     if (!isMobile && autoEnabled) {
       const calcSize = () => {
         let sumSubtract = 0;
-        for (const sel of subtractSelectors || []) {
-          sumSubtract += Number(document.querySelector(sel)?.clientHeight || 0);
-        }
-        const availableHeight =
-          Number(
-            document.querySelector(containerSelector || "")?.clientHeight || 0
-          ) - sumSubtract;
 
+        // ✅ جمع ارتفاع المنت‌های subtract
+        for (const sel of subtractSelectors || []) {
+          const el = document.querySelector(sel);
+          if (el) {
+            sumSubtract += Number(el.clientHeight || 0);
+          }
+        }
+
+        // ✅ محاسبه ارتفاع قابل استفاده
+        const containerEl = document.querySelector(containerSelector || "");
+        const availableHeight = (containerEl?.clientHeight || 0) - sumSubtract;
+
+        // تعداد ردیف‌ها بر اساس ارتفاع هر ردیف
         const rows = Math.floor(availableHeight / (rowHeight || 51.15));
+
+        // ✅ اضافه کردن buffer
         let buffer = baseBufferRows || 2;
+
+        // فقط وقتی المنت وجود داشت و height > 0 بود، extraBuffer رو اضافه کن
         const hasOptional = (optionalSelectorsForExtraBuffer || []).some(
-          (sel) => Number(document.querySelector(sel)?.clientHeight || 0) > 0
+          (sel) => {
+            const el = document.querySelector(sel);
+            return !!el && el.clientHeight > 0;
+          }
         );
+
         if (hasOptional) buffer += extraBufferRows || 1;
 
         const newSize = rows - buffer;
+
         if (newSize > 0) {
-          setTableHeightPageSize(newSize); // 👈 فقط برای ارتفاع
+          setTableHeightPageSize(newSize); // ارتفاع جدول
           if (!dynamicPageSize) {
             setDynamicPageSize(Number(getParams("pageSize")) || newSize);
           }
@@ -192,11 +208,14 @@ const Table: React.FC<TableProps> = (props) => {
       };
 
       calcSize();
+
       const observer = new MutationObserver(calcSize);
       observer.observe(document.body, { childList: true, subtree: true });
+
       return () => observer.disconnect();
     }
   }, [isMobile, autoConfig]);
+
   const [order, setOrder] = useState<any>([
     {
       column: hasColumnOrder ? 8 : 0,
@@ -222,10 +241,11 @@ const Table: React.FC<TableProps> = (props) => {
   );
 
   const paginatedRows = useMemo(() => {
-    const start = (currentPage - 1) * pageSizeInitial;
-    const end = start + pageSizeInitial;
+    const size = autoEnabled ? dynamicPageSize : pageSizeInitial;
+    const start = (currentPage - 1) * size;
+    const end = start + size;
     return filteredRows.slice(start, end);
-  }, [filteredRows, currentPage, pageSizeInitial]);
+  }, [filteredRows, currentPage, pageSizeInitial, dynamicPageSize]);
 
   const columnsWithRow: ColumnType[] = useMemo(() => {
     const selectableColumn: ColumnType[] = isSelectable
@@ -475,7 +495,7 @@ const Table: React.FC<TableProps> = (props) => {
         id="table-header-actions"
         className={`table-header-actions flex items-end justify-between mb-2 gap-3 w-full`}
       >
-        <div className="flex items-end flex-wrap gap-2 max-md:w-full">
+        <div className="flex items-end flex-wrap-reverse gap-2 max-md:w-full">
           {!noSearch && (
             <SearchBox
               {...props}
