@@ -84,7 +84,7 @@ const SearchBox = ({
   }, [searchValue, onSearch]);
 
   return (
-    <div className="table-search-container max-md:w-full">
+    <div className="table-search-container max-md:w-full mt-auto">
       <div
         className={`table-search-wrapper flex flex-col gap-1 [&>div]:!gap-1 [&>div]:!flex-row-reverse`}
       >
