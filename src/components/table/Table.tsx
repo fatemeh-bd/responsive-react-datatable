@@ -142,8 +142,8 @@ const Table: React.FC<TableProps> = (props) => {
       ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
     ],
     optionalSelectorsForExtraBuffer: [
-      // "#topFilter",
-      // "#paging",
+      "#topFilter",
+      "#paging",
       ...((customAutoPageSizeConfig?.optionalSelectorsForExtraBuffer as string[]) ||
         []),
     ],
@@ -495,7 +495,7 @@ const Table: React.FC<TableProps> = (props) => {
         id="table-header-actions"
         className={`table-header-actions flex items-end justify-between mb-2 gap-3 w-full`}
       >
-        <div className="flex items-end flex-wrap gap-2 max-md:w-full">
+        <div className="flex items-end flex-wrap-reverse gap-2 max-md:w-full">
           {!noSearch && (
             <SearchBox
               {...props}
