@@ -167,24 +167,39 @@ const Table: React.FC<TableProps> = (props) => {
     if (!isMobile && autoEnabled) {
       const calcSize = () => {
         let sumSubtract = 0;
-        for (const sel of subtractSelectors || []) {
-          sumSubtract += Number(document.querySelector(sel)?.clientHeight || 0);
-        }
-        const availableHeight =
-          Number(
-            document.querySelector(containerSelector || "")?.clientHeight || 0
-          ) - sumSubtract;
 
+        // ✅ جمع ارتفاع المنت‌های subtract
+        for (const sel of subtractSelectors || []) {
+          const el = document.querySelector(sel);
+          if (el) {
+            sumSubtract += Number(el.clientHeight || 0);
+          }
+        }
+
+        // ✅ محاسبه ارتفاع قابل استفاده
+        const containerEl = document.querySelector(containerSelector || "");
+        const availableHeight = (containerEl?.clientHeight || 0) - sumSubtract;
+
+        // تعداد ردیف‌ها بر اساس ارتفاع هر ردیف
         const rows = Math.floor(availableHeight / (rowHeight || 51.15));
+
+        // ✅ اضافه کردن buffer
         let buffer = baseBufferRows || 2;
+
+        // فقط وقتی المنت وجود داشت و height > 0 بود، extraBuffer رو اضافه کن
         const hasOptional = (optionalSelectorsForExtraBuffer || []).some(
-          (sel) => Number(document.querySelector(sel)?.clientHeight || 0) > 0
+          (sel) => {
+            const el = document.querySelector(sel);
+            return !!el && el.clientHeight > 0;
+          }
         );
+
         if (hasOptional) buffer += extraBufferRows || 1;
 
         const newSize = rows - buffer;
+
         if (newSize > 0) {
-          setTableHeightPageSize(newSize); // 👈 فقط برای ارتفاع
+          setTableHeightPageSize(newSize); // ارتفاع جدول
           if (!dynamicPageSize) {
             setDynamicPageSize(Number(getParams("pageSize")) || newSize);
           }
@@ -192,11 +207,14 @@ const Table: React.FC<TableProps> = (props) => {
       };
 
       calcSize();
+
       const observer = new MutationObserver(calcSize);
       observer.observe(document.body, { childList: true, subtree: true });
+
       return () => observer.disconnect();
     }
   }, [isMobile, autoConfig]);
+
   const [order, setOrder] = useState<any>([
     {
       column: hasColumnOrder ? 8 : 0,
