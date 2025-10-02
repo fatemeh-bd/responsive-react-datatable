@@ -27,37 +27,37 @@ const Sidebar: React.FC = () => {
       {/* Sidebar */}
       <aside
         className={`bg-black border-r border-[#364153] w-screen md:w-[300px] min-h-screen p-4 h-full transition-all duration-300 ${
-          isOpen ? "translate-x-0" : "translate-x-[-100%] md:block"
+          isOpen ? "translate-x-0" : "translate-x-[-100%] md:translate-x-0"
         }`}
       >
-        {/* Logo for larger screens */}
-        <div className="hidden md:flex flex-col items-center mx-auto gap-2 my-8">
-          <img src="logo.svg" alt="logo" height={50} width={50} />
-          <h2 className="font-semibold text-white text-2xl">React Table</h2>
-        </div>
+        <div className="sticky top-4">
+          <div className="hidden md:flex flex-col items-center mx-auto gap-2 my-8">
+            <img src="logo.svg" alt="logo" height={50} width={50} />
+            <h2 className="font-semibold text-white text-2xl">React Table</h2>
+          </div>
 
-        {/* Navigation */}
-        <nav className="flex flex-col sticky top-4">
-          {routes.map((item, index) => (
-            <React.Fragment key={index}>
-              <NavLink
-                to={item.path}
-                className={({ isActive }) =>
-                  `text-white flex justify-center gap-2 md:justify-between items-center py-2 px-4 rounded-lg transition-all duration-200 ${
-                    isActive
-                      ? "!text-[#d24670] outline-[#d24670] outline-1"
-                      : "hover:bg-gray-700"
-                  }`
-                }
-                onClick={() => setIsOpen(false)} // Close menu on link click (mobile)
-              >
-                <span className="text-lg md:text-base">{item.name}</span>
-                {item.icon && <item.icon size={20} />}
-              </NavLink>
-              <div className="h-[1px] w-full bg-gray-700 my-2 last:hidden"></div>
-            </React.Fragment>
-          ))}
-        </nav>
+          <nav className="flex flex-col">
+            {routes.map((item, index) => (
+              <React.Fragment key={index}>
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `text-white flex justify-center gap-2 md:justify-between items-center py-2 px-4 rounded-lg transition-all duration-200 ${
+                      isActive
+                        ? "!text-[#d24670] outline-[#d24670] outline-1"
+                        : "hover:bg-gray-700"
+                    }`
+                  }
+                  onClick={() => setIsOpen(false)} // Close menu on link click (mobile)
+                >
+                  <span className="text-lg md:text-base">{item.name}</span>
+                  {item.icon && <item.icon size={20} />}
+                </NavLink>
+                <div className="h-[1px] w-full bg-gray-700 my-2 last:hidden"></div>
+              </React.Fragment>
+            ))}
+          </nav>
+        </div>
       </aside>
     </>
   );
