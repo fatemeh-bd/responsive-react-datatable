@@ -2,50 +2,61 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { routes } from "../../routes";
 import { CgMenuRight } from "react-icons/cg";
+import { IoClose } from "react-icons/io5";
+
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      <aside className="bg-black border-r border-[#364153] pointer-events-none w-[300px] min-h-screen p-0 md:p-4 h-full">
-        <div
-          className="flex justify-between md:hidden w-screen bg-red-700 px-4 py-2.5"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <div className="flex items-center gap-2">
-            <img src="logo.svg" alt="logo" height={40} width={40} />
-            <h2 className="font-semibold text-white text-lg">React Table</h2>
-          </div>
-          <button>
-            <CgMenuRight size={28} />
-          </button>
+      {/* Mobile Header */}
+      <div className="flex w-screen justify-between items-center md:hidden bg-[#364153] px-4 py-2.5">
+        <div className="flex items-center gap-2">
+          <img src="logo.svg" alt="logo" height={40} width={40} />
+          <h2 className="font-semibold text-white text-lg">React Table</h2>
         </div>
-        <div className="hidden lg:flex flex-col items-center mx-auto gap-2 my-8">
+        <button onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? (
+            <IoClose size={28} className="text-white" />
+          ) : (
+            <CgMenuRight size={28} className="text-white" />
+          )}
+        </button>
+      </div>
+
+      {/* Sidebar */}
+      <aside
+        className={`bg-black border-r border-[#364153] w-screen md:w-[300px] min-h-screen p-4 h-full transition-all duration-300 ${
+          isOpen ? "translate-x-0" : "translate-x-[-100%] md:block"
+        }`}
+      >
+        {/* Logo for larger screens */}
+        <div className="hidden md:flex flex-col items-center mx-auto gap-2 my-8">
           <img src="logo.svg" alt="logo" height={50} width={50} />
           <h2 className="font-semibold text-white text-2xl">React Table</h2>
         </div>
-        <nav className={`hidden flex-col sticky top-4 p-4 lg:p-0`}>
-          {routes.map((item, index) => {
-            return (
-              <React.Fragment key={index}>
-                <NavLink
-                  to={item.path}
-                  className={({ isActive }) =>
-                    `text-white flex justify-between items-center transition-all py-2 px-4 rounded-lg duration-200 ${
-                      isActive
-                        ? "!text-[#d24670] outline outline-[#d24670]"
-                        : "hover:bg-gray-700"
-                    }`
-                  }
-                >
-                  <span>{item.name}</span>
-                  {item.icon && <item.icon size={20} />}
-                </NavLink>
 
-                <div className="h-[1px] w-full bg-gray-700 my-2"></div>
-              </React.Fragment>
-            );
-          })}
+        {/* Navigation */}
+        <nav className="flex flex-col sticky top-4">
+          {routes.map((item, index) => (
+            <React.Fragment key={index}>
+              <NavLink
+                to={item.path}
+                className={({ isActive }) =>
+                  `text-white flex justify-center gap-2 md:justify-between items-center py-2 px-4 rounded-lg transition-all duration-200 ${
+                    isActive
+                      ? "!text-[#d24670] outline-[#d24670] outline-1"
+                      : "hover:bg-gray-700"
+                  }`
+                }
+                onClick={() => setIsOpen(false)} // Close menu on link click (mobile)
+              >
+                <span className="text-lg md:text-base">{item.name}</span>
+                {item.icon && <item.icon size={20} />}
+              </NavLink>
+              <div className="h-[1px] w-full bg-gray-700 my-2 last:hidden"></div>
+            </React.Fragment>
+          ))}
         </nav>
       </aside>
     </>
