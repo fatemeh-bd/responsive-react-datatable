@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import DocumentPage from "./pages/documentPage/HomePage";
 import ExamplePage from "./pages/examplePage/ExamplePage";
 import WellcomePage from "./pages/wellcomePage/WellcomePage";
+import { routes } from "./routes";
 
 const App: React.FC = () => {
   return (
@@ -25,9 +26,9 @@ const App: React.FC = () => {
         />
       </div>
       <Routes>
-        <Route path="/" element={<WellcomePage />} />
-        <Route path="/document" element={<DocumentPage />} />
-        <Route path="/example" element={<ExamplePage />} />
+        {routes.map((route) => (
+          <Route key={route.path} path={route.path} element={route.element} />
+        ))}
       </Routes>
     </div>
   );
