@@ -137,7 +137,7 @@ const Table: React.FC<TableProps> = (props) => {
     ...customAutoPageSizeConfig,
     subtractSelectors: [
       "#table-header-actions",
-      // "#paging",
+      "#paging",
       ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
     ],
     optionalSelectorsForExtraBuffer: [
