@@ -5,7 +5,12 @@ import { ColumnType } from "../../components/table/types";
 
 const ExamplePage = () => {
   const [selectedIds, setSelectedIds] = useState([]);
-  const [activeTab, setActiveTab] = useState("tab2");
+  const [activeTab, setActiveTab] = useState("firstTab");
+
+  const tabs = [
+    { title: "First Tab", value: "firstTab" },
+    { title: "Second Tab", value: "secondTab" },
+  ];
 
   const columns1: ColumnType[] = [
     {
@@ -50,26 +55,23 @@ const ExamplePage = () => {
     >
       <div className="border-b-2 border-[#364153]">
         <div className="flex justify-end gap-1">
-          <button
-            className={`${tabStyle} ${
-              activeTab === "tab1" ? activeTabStyle : inactiveTabStyle
-            }`}
-            onClick={() => setActiveTab("tab1")}
-          >
-            Second Tab
-          </button>
-          <button
-            className={`${tabStyle} ${
-              activeTab === "tab2" ? activeTabStyle : inactiveTabStyle
-            }`}
-            onClick={() => setActiveTab("tab2")}
-          >
-            First Tab
-          </button>
+          {tabs.reverse().map((item, index) => {
+            return (
+              <button
+                key={index}
+                className={`${tabStyle} ${
+                  activeTab === item.value ? activeTabStyle : inactiveTabStyle
+                }`}
+                onClick={() => setActiveTab(item.value)}
+              >
+                {item.title}
+              </button>
+            );
+          })}
         </div>
       </div>
       <div className="mt-4">
-        {activeTab === "tab1" && (
+        {activeTab === "firstTab" && (
           <div>
             <Table
               lang="en"
@@ -106,7 +108,7 @@ const ExamplePage = () => {
           </div>
         )}
 
-        {activeTab === "tab2" && (
+        {activeTab === "secondTab" && (
           <div>
             <Table
               lang="en"
