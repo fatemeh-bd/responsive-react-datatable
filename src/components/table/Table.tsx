@@ -214,7 +214,7 @@ const Table: React.FC<TableProps> = (props) => {
 
       return () => observer.disconnect();
     }
-  }, [isMobile, autoConfig]);
+  }, [autoConfig]);
 
   const [order, setOrder] = useState<any>([
     {
