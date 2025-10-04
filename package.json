@@ -49,7 +49,6 @@
   "dependencies": {
     "@tanstack/react-query": "^5.61.3",
     "axios": ">=0.22.0 <2",
-    "responsive-react-datatable": "^1.0.27",
     "swiper": "^11.2.10"
   },
   "sideEffects": [
