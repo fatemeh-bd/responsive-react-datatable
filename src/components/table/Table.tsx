@@ -164,50 +164,49 @@ const Table: React.FC<TableProps> = (props) => {
     isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSizeInitial
   );
 
-  useLayoutEffect(() => {
-    if (!isMobile && autoEnabled) {
+  const [isManualPageSize, setIsManualPageSize] = useState(false);
+
+  useEffect(() => {
+    if (!isMobile && autoEnabled && !isManualPageSize) {
       const calcSize = () => {
         let sumSubtract = 0;
         for (const sel of subtractSelectors || []) {
           const el = document.querySelector(sel);
           if (el) sumSubtract += Number(el.clientHeight || 0);
         }
-
         const containerEl = document.querySelector(containerSelector || "");
         const availableHeight = (containerEl?.clientHeight || 0) - sumSubtract;
         const rows = Math.floor(availableHeight / (rowHeight || 51.15));
+        let buffer = baseBufferRows || 2;
 
-        let buffer = baseBufferRows || 2; // حداقل همیشه ۲ ردیف کم کن
-
-        // بررسی کن فقط وقتی فیلتر هست، extraBufferRows اضافه بشه
         const hasOptional = (optionalSelectorsForExtraBuffer || []).some(
           (sel) => {
             const el = document.querySelector(sel);
             return !!el && el.clientHeight > 0;
           }
         );
+        if (hasOptional) buffer += extraBufferRows || 1;
 
-        if (hasOptional) {
-          buffer += extraBufferRows || 1;
-        }
-
-        const newSize = Math.max(1, rows - buffer); // جلوگیری از صفر یا منفی
-        setTableHeightPageSize(newSize);
-
-        if (!dynamicPageSize) {
+        const newSize = rows - buffer;
+        console.log("Auto Page Size calculated:", newSize);
+        if (newSize > 0 && newSize !== dynamicPageSize) {
+          setTableHeightPageSize(newSize);
           setDynamicPageSize(Number(getParams("pageSize")) || newSize);
         }
       };
 
+      // محاسبه اولیه
       calcSize();
 
-      const observer = new MutationObserver(calcSize);
-      observer.observe(document.body, { childList: true, subtree: true });
+      const containerEl = document.querySelector(containerSelector || "");
+      if (containerEl) {
+        const resizeObserver = new ResizeObserver(calcSize);
+        resizeObserver.observe(containerEl);
 
-      return () => observer.disconnect();
+        return () => resizeObserver.disconnect();
+      }
     }
-  }, [autoConfig]);
-
+  }, [dynamicPageSize, isMobile, autoEnabled, isManualPageSize]);
   const [order, setOrder] = useState<any>([
     {
       column: hasColumnOrder ? 8 : 0,
@@ -555,6 +554,7 @@ const Table: React.FC<TableProps> = (props) => {
                 pageSize={pageSizeInitial}
                 onPageSizeChange={(newSize) => {
                   setDynamicPageSize(newSize);
+                  setIsManualPageSize(true); // ← تغییر دستی کاربر
                   setCurrentPage(1);
                   onPageSizeChange?.(newSize);
                 }}
@@ -653,6 +653,9 @@ const Table: React.FC<TableProps> = (props) => {
             pageSize={pageSizeInitial}
             onPageSizeChange={(newSize) => {
               setDynamicPageSize(newSize);
+              setIsManualPageSize(true); // ← تغییر دستی کاربر
+              setCurrentPage(1);
+              onPageSizeChange?.(newSize);
             }}
           />
         )}
