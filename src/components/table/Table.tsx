@@ -143,7 +143,7 @@ const Table: React.FC<TableProps> = (props) => {
     ],
     optionalSelectorsForExtraBuffer: [
       "#topFilter",
-      // "#paging",
+      "#filters",
       ...((customAutoPageSizeConfig?.optionalSelectorsForExtraBuffer as string[]) ||
         []),
     ],
@@ -520,6 +520,7 @@ const Table: React.FC<TableProps> = (props) => {
           )}
           {!isMobile && filters && (
             <div
+              id="filters"
               className={`${filterContainerClassName} filter-container-className`}
             >
               {filters}

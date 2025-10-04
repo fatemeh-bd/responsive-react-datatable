@@ -34,7 +34,7 @@ export interface ColumnType {
   render?: (
     cell?: unknown,
     row?: Record<string, any>,
-    index?: number
+    index?: number,
   ) => React.ReactNode;
   width?: number;
   orderable?: boolean;
@@ -55,6 +55,7 @@ export interface TextsConfig {
   close?: string;
 }
 export type TableMode = "static" | "external" | "internal";
+
 export interface CustomBody {
   noRefresh?: boolean;
   isFilter?: boolean;
