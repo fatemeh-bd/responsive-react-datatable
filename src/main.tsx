@@ -20,7 +20,7 @@ root.render(
           </div>
           <div className="flex-1 px-4 pt-18 md:pt-12 pb-12 max-w-7xl overflow-x-auto mx-auto">
             <App />
-            <h2 className="text-xl text-[#d24670] font-bold text-center mt-8">
+            <h2 className="text-lg text-[#d24670] font-bold text-center mt-8">
               Design with{" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Placeholder components for steps (replace with your actual components)
 const Step1 = () => (
   <div className="p-6  rounded-lg shadow-md">
     <h2 className="text-2xl font-bold mb-4">Step 1: Installation</h2>
     <p>Install the package using npm or yarn.</p>
-    <pre className="mt-4 p-4 rounded">
+    <pre className="mt-4 p-4 rounded bg-[#364153]">
       npm install responsive-react-datatable
     </pre>
   </div>
@@ -16,28 +16,59 @@ const Step2 = () => (
   <div className="p-6 rounded-lg shadow-md">
     <h2 className="text-2xl font-bold mb-4">Step 2: Configuration</h2>
     <p>Import and configure the datatable in your component.</p>
-    <pre className="mt-4 p-4 rounded">
-      import {"DataTable"} from 'responsive-react-datatable'
-      {/* Example config */}
+
+    <pre className="mt-4 p-4 rounded bg-[#364153] text-white">
+      {`import { DataTable } from 'responsive-react-datatable'`}
+    </pre>
+    <p className="mt-4">
+      This is the <strong>minimal setup</strong> with the fewest props. For more
+      configuration options, please check the{" "}
+      <Link className="text-[#d24670]" to="/document">
+        documentation
+      </Link>{" "}
+      section.
+    </p>
+    <pre className="mt-4 p-4 rounded bg-[#364153] text-white whitespace-pre-wrap">
+      {`<Table
+  mode="static"
+  tableName="test"
+  staticRows={mock?.data}
+  totalItems={mock?.recordsFiltered}
+  columns={columns}
+  notify={(text) => alert(text)}
+/>`}
     </pre>
   </div>
 );
 
 const Step3 = () => (
   <div className="p-6 rounded-lg shadow-md">
-    <h2 className="text-2xl font-bold mb-4">Step 3: Usage</h2>
-    <p>Render the datatable with your data.</p>
-    {/* Add your actual component demo here */}
-    <div className="mt-4">Demo Table Component</div>
+    <h2 className="text-2xl font-semibold text-center">🎉 Congratulations!</h2>
+    <p className="mt-4">
+      Your datatable is now set up successfully. You can customize its
+      configuration to match your project needs, such as adjusting columns,
+      enabling search and filters, setting up pagination, or adding actions like
+      edit and delete. This way, the table stays flexible and user-friendly for
+      your workflow.
+    </p>
+
+    <div className="mt-4 flex flex-col">
+      <a href="#" className="text-[#d24670]">
+        &gt; Basic Setup
+      </a>
+      <a href="#" className="text-[#d24670]">
+        &gt; Advanced Setup
+      </a>
+    </div>
   </div>
 );
 
-const steps = [Step1, Step2, Step3]; // Add more steps as needed
+const steps = [Step1, Step2, Step3];
 
 const WelcomePage = () => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
-
+  const navigate = useNavigate();
   const handleGetStarted = () => {
     setShowWelcome(false);
     setCurrentStep(0);
@@ -56,8 +87,7 @@ const WelcomePage = () => {
   };
 
   const handleFinish = () => {
-    // Redirect or show completion, e.g., to /document
-    window.location.href = "/document"; // Or use navigate from react-router
+    navigate("/document");
   };
 
   if (showWelcome) {
@@ -100,14 +130,18 @@ const WelcomePage = () => {
       {/* Step Content */}
       <div className="w-full max-w-4xl mb-8">
         <div className="flex justify-center mb-4">
-          <div className="flex space-x-2">
+          <div className="flex relative gap-6 before:content-[''] before:w-full before:h-[2px] before:bg-[#364169] before:z-[-1] before:absolute before:-top-[-50%]">
             {steps.map((_, index) => (
               <div
                 key={index}
-                className={`w-3 h-3 rounded-full ${
-                  index <= currentStep ? "bg-[#364169]" : "bg-gray-300"
+                className={`w-8 h-8 z-10 rounded-full flex items-center justify-center ${
+                  index <= currentStep
+                    ? "bg-[#364169]"
+                    : "border-2 border-[#364169] bg-black"
                 }`}
-              />
+              >
+                <span>{index}</span>
+              </div>
             ))}
           </div>
         </div>
@@ -121,8 +155,8 @@ const WelcomePage = () => {
           disabled={isFirstStep}
           className={`px-6 py-3 font-semibold rounded-lg shadow-md transition-all duration-300 ${
             isFirstStep
-              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-              : "bg-gray-500 text-white hover:bg-gray-600 hover:scale-105"
+              ? "opacity-0"
+              : "bg-[#364153] text-white hover:bg-gray-600 hover:scale-105"
           }`}
         >
           Previous
@@ -131,8 +165,8 @@ const WelcomePage = () => {
           onClick={isLastStep ? handleFinish : handleNext}
           className={`px-6 py-3 font-semibold rounded-lg shadow-md transition-all duration-300 ${
             isLastStep
-              ? "bg-green-600 text-white hover:bg-green-700 hover:scale-105"
-              : "bg-[#364169] text-white hover:bg-[#2d3a5f] hover:scale-105"
+              ? "bg-green-600 text-white hover:scale-105"
+              : "bg-[#d24670] text-white hover:scale-105"
           }`}
         >
           {isLastStep ? "Finish" : "Next"}

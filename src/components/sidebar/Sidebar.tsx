@@ -48,7 +48,7 @@ const Sidebar: React.FC = () => {
                         : "hover:bg-gray-700"
                     }`
                   }
-                  onClick={() => setIsOpen(false)} // Close menu on link click (mobile)
+                  onClick={() => setIsOpen(false)}
                 >
                   <span className="text-lg md:text-base">{item.name}</span>
                   {item.icon && <item.icon size={20} />}

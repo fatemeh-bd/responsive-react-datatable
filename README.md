@@ -1,15 +1,12 @@
-# 📊 Responsive React DataTable
+<h1 align="center">
+    📊 Responsive React DataTable
+  <br/>
+  <a href="https://fatemeh-bd.github.io/responsive-react-datatable/#/" target="_blank">Click Here To Show Demo</a>
+</h1>
 
 ![npm](https://img.shields.io/npm/dm/responsive-react-datatable) ![npm version](https://img.shields.io/npm/v/responsive-react-datatable) ![license](https://img.shields.io/npm/l/responsive-react-datatable)
 
 A modern, flexible, and high-performance table component for React applications.
-
----
-
-## 🌐 Demo
-
-Try it out here:  
-🔗 [Responsive React DataTable Demo](https://fatemeh-bd.github.io/responsive-react-datatable/#/example)
 
 ---
 
