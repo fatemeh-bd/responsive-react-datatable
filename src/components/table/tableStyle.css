@@ -12,4 +12,26 @@
   .table-header-actions {
     flex-direction: column-reverse;
   }
+  .DropDownMenu {
+    position: fixed !important;
+    inset: 0 !important;
+    margin: auto !important;
+    height: fit-content !important;
+    background-color: inherit;
+    display: block;
+    z-index: 99999999;
+  }
+  .DropDownMenu ul {
+    border-radius: 8px !important;
+    border: 1px solid #fafafa;
+  }
+  .DropDownMenu::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.281);
+    z-index: -1;
+  }
 }
