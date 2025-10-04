@@ -168,26 +168,18 @@ const Table: React.FC<TableProps> = (props) => {
     if (!isMobile && autoEnabled) {
       const calcSize = () => {
         let sumSubtract = 0;
-
-        // ✅ جمع ارتفاع المنت‌های subtract
         for (const sel of subtractSelectors || []) {
           const el = document.querySelector(sel);
-          if (el) {
-            sumSubtract += Number(el.clientHeight || 0);
-          }
+          if (el) sumSubtract += Number(el.clientHeight || 0);
         }
 
-        // ✅ محاسبه ارتفاع قابل استفاده
         const containerEl = document.querySelector(containerSelector || "");
         const availableHeight = (containerEl?.clientHeight || 0) - sumSubtract;
-
-        // تعداد ردیف‌ها بر اساس ارتفاع هر ردیف
         const rows = Math.floor(availableHeight / (rowHeight || 51.15));
 
-        // ✅ اضافه کردن buffer
-        let buffer = baseBufferRows || 2;
+        let buffer = baseBufferRows || 2; // حداقل همیشه ۲ ردیف کم کن
 
-        // فقط وقتی المنت وجود داشت و height > 0 بود، extraBuffer رو اضافه کن
+        // بررسی کن فقط وقتی فیلتر هست، extraBufferRows اضافه بشه
         const hasOptional = (optionalSelectorsForExtraBuffer || []).some(
           (sel) => {
             const el = document.querySelector(sel);
@@ -195,15 +187,15 @@ const Table: React.FC<TableProps> = (props) => {
           }
         );
 
-        if (hasOptional) buffer += extraBufferRows || 1;
+        if (hasOptional) {
+          buffer += extraBufferRows || 1;
+        }
 
-        const newSize = rows - buffer;
+        const newSize = Math.max(1, rows - buffer); // جلوگیری از صفر یا منفی
+        setTableHeightPageSize(newSize);
 
-        if (newSize > 0) {
-          setTableHeightPageSize(newSize); // ارتفاع جدول
-          if (!dynamicPageSize) {
-            setDynamicPageSize(Number(getParams("pageSize")) || newSize);
-          }
+        if (!dynamicPageSize) {
+          setDynamicPageSize(Number(getParams("pageSize")) || newSize);
         }
       };
 
