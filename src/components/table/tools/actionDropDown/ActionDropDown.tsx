@@ -66,7 +66,7 @@ const actionButton = () => {
   return (
     <button
       style={{
-        backgroundColor: "#fff",
+        backgroundColor: "#fefefe",
       }}
       className="cursor-pointer option-button py-2 text-sm rounded-xl !min-w-fit !px-2 !w-full"
     >
