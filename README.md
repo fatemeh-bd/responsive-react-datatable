@@ -1,44 +1,51 @@
-<h1 align="center">
-    📊 Responsive React DataTable
-  <br/>
-  <a href="https://fatemeh-bd.github.io/responsive-react-datatable/#/" target="_blank">Click Here To Show Demo</a>
-</h1>
+# 📊 Responsive React DataTable
 
-![npm](https://img.shields.io/npm/dm/responsive-react-datatable) ![npm version](https://img.shields.io/npm/v/responsive-react-datatable) ![license](https://img.shields.io/npm/l/responsive-react-datatable)
+[![npm](https://img.shields.io/npm/dt/responsive-react-datatable)](https://www.npmjs.com/package/responsive-react-datatable)
+[![npm version](https://img.shields.io/npm/v/responsive-react-datatable)](https://www.npmjs.com/package/responsive-react-datatable)
+![license](https://img.shields.io/npm/l/responsive-react-datatable)
 
-A modern, flexible, and high-performance table component for React applications.
+> **Responsive React DataTable** — A modern, responsive React DataTable component for React applications.  
+> Supports sorting, filtering, pagination, and customizable columns — ideal for building interactive, data-driven interfaces that look great on any screen size.
+
+## 🎯 [**Click here to view the live demo**](https://fatemeh-bd.github.io/responsive-react-datatable/ "Responsive React DataTable Live Demo")
 
 ---
 
-## Features
+## 🚀 Features of Responsive React DataTable
 
-- Responsive design for desktop and mobile.
-- Multiple data modes: Internal, External, Static.
-- Pagination, search, sorting, selection, and column reordering.
-- Auto page size calculation.
-- Customizable themes.
-- Multi-language support (English, Persian, RTL).
+- 📱 Responsive design for desktop and mobile
+- 🔄 Multiple data modes: **Internal**, **External**, **Static**
+- 🔍 Pagination, search, sorting, selection, and column reordering
+- 📏 Auto page size calculation
+- 🎨 Customizable themes
+- 🌐 Multi-language support (**English**, **Persian**, **RTL**)
 
-## Installation
+---
+
+## ⚙️ Installation
 
 ```bash
 npm install responsive-react-datatable
 ```
 
-### Dependencies
+### Required Dependencies
 
-Ensure the following dependencies are installed:
+Make sure you have the following installed:
 
 ```bash
 npm install @tanstack/react-query axios swiper
 ```
 
-## Usage
+---
 
-### Internal Mode
+## 🧩 Usage Example — Internal Mode
 
 ```jsx
-import Table, { ColumnType } from "responsive-react-datatable";
+import Table, {
+  ColumnType,
+  rowRenderer,
+  ActionDropDown,
+} from "responsive-react-datatable";
 const columns: ColumnType[] = [
   {
     data: "avatar",
@@ -64,9 +71,17 @@ const columns: ColumnType[] = [
     title: "Operation",
     searchable: false,
     width: 140,
-    render: rowRenderer(() => <button>details</button>),
+    render: rowRenderer(() => (
+      <ActionDropDown
+        options={[
+          { label: "detail", href: "https://example.com" },
+          { label: "show alert", onClick: () => alert("hi") },
+        ]}
+      />
+    )),
   },
 ];
+
 const internalApiConfig = {
   endpoint: "/api/data",
   baseUrl: "https://example.com",
@@ -88,9 +103,11 @@ const internalApiConfig = {
 />;
 ```
 
-## Note on Internal Mode Payload
+---
 
-In **Internal Mode**, the table generates a default payload for server requests, inspired by [DataTables.net](https://datatables.net/) structure:
+## 📦 Internal Mode Payload Structure
+
+In **Internal Mode**, the table generates a default payload for server requests, inspired by [DataTables.net](https://datatables.net/):
 
 ```typescript
 let payload: Record<string, any> = {
@@ -103,7 +120,9 @@ let payload: Record<string, any> = {
 };
 ```
 
-### Static Mode
+---
+
+## 🗂 Static Mode Example
 
 ```jsx
 const staticRows = [{ id: 1, name: "max", age: 30 }];
@@ -117,7 +136,9 @@ const staticRows = [{ id: 1, name: "max", age: 30 }];
 />;
 ```
 
-## Props
+---
+
+## ⚙️ Props Reference
 
 | Prop               | Type                                          | Default | Description                                                           |
 | ------------------ | --------------------------------------------- | ------- | --------------------------------------------------------------------- |
