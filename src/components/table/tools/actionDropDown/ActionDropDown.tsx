@@ -15,11 +15,6 @@ export function ActionDropDown({
     : text
     ? managementButton(text)
     : actionButton();
-  let RouterLink: React.ElementType = "a";
-  try {
-    // @ts-ignore
-    RouterLink = require("react-router-dom").Link;
-  } catch (e) {}
 
   return (
     <>
@@ -45,13 +40,12 @@ export function ActionDropDown({
                     onClick={option?.onClick}
                   >
                     {option?.href ? (
-                      <RouterLink
-                        to={option?.href}
-                        className="w-full text-center"
-                      >
-                        {option.Icon && <option.Icon className="size-3.5" />}
-                        {option.label}
-                      </RouterLink>
+                      <a href={option?.href} className="w-full text-center">
+                        <>
+                          {option.Icon && <option.Icon className="size-3.5" />}
+                          {option.label}
+                        </>
+                      </a>
                     ) : (
                       <>
                         {option.Icon && <option.Icon className="size-3.5" />}
