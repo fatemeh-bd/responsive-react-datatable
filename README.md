@@ -41,7 +41,11 @@ npm install @tanstack/react-query axios swiper
 ## 🧩 Usage Example — Internal Mode
 
 ```jsx
-import Table, { ColumnType, rowRenderer } from "responsive-react-datatable";
+import Table, {
+  ColumnType,
+  rowRenderer,
+  ActionDropDown,
+} from "responsive-react-datatable";
 const columns: ColumnType[] = [
   {
     data: "avatar",
@@ -67,7 +71,14 @@ const columns: ColumnType[] = [
     title: "Operation",
     searchable: false,
     width: 140,
-    render: rowRenderer(() => <button>details</button>),
+    render: rowRenderer(() => (
+      <ActionDropDown
+        options={[
+          { label: "detail", href: "https://example.com" },
+          { label: "show alert", onClick: () => alert("hi") },
+        ]}
+      />
+    )),
   },
 ];
 
