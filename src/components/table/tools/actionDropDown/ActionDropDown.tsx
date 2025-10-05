@@ -66,7 +66,7 @@ const actionButton = () => {
   return (
     <button
       style={{
-        backgroundColor: "#fff",
+        backgroundColor: "#fefefe",
       }}
       className="cursor-pointer option-button py-2 text-sm rounded-xl !min-w-fit !px-2 !w-full"
     >
@@ -79,7 +79,7 @@ const managementButton = (text: string) => {
   return (
     <button
       style={{
-        backgroundColor: "#fff",
+        backgroundColor: "#fefefe",
       }}
       className="cursor-pointer option-button flex items-center gap-1 !transition-none py-2 text-sm rounded-xl !min-w-fit !px-2 !w-full"
     >
