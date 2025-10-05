@@ -6,3 +6,4 @@ export type {
   AutoPageSizeConfig,
 } from "./components/table/types";
 export { rowRenderer } from "./components/table/helper";
+export { ActionDropDown } from "./components/table/tools/actionDropDown/ActionDropDown";

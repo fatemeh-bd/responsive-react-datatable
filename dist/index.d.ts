@@ -1,5 +1,6 @@
 import * as React$1 from 'react';
 import React__default, { ReactNode } from 'react';
+import * as react_jsx_runtime from 'react/jsx-runtime';
 
 type OrderType = {
     column: number;
@@ -128,5 +129,23 @@ declare const _default: React__default.NamedExoticComponent<TableProps>;
 
 declare const rowRenderer: (fn: (cell?: any, row?: any, index?: number) => React.ReactNode) => (cell?: any, row?: any, index?: number) => React$1.ReactNode;
 
-export { _default as Table, _default as default, rowRenderer };
+type SvgType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
+interface Options {
+    label: string;
+    onClick?: () => void;
+    Icon?: SvgType;
+    hidden?: boolean;
+    permissionIdTab?: string;
+    href?: string;
+}
+interface ActionDropDownProps {
+    options: Options[];
+    button?: React.ReactNode | (() => React.ReactNode);
+    lastItem?: boolean;
+    text?: string;
+}
+
+declare function ActionDropDown({ options, button, lastItem, text, }: ActionDropDownProps): react_jsx_runtime.JSX.Element;
+
+export { ActionDropDown, _default as Table, _default as default, rowRenderer };
 export type { AutoPageSizeConfig, ColumnType, CustomBody };
