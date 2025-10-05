@@ -1,10 +1,10 @@
 # 📊 Responsive React DataTable
 
-[Click Here To Show Demo](https://fatemeh-bd.github.io/responsive-react-datatable/#/)
+[Click Here To Show Demo](https://fatemeh-bd.github.io/responsive-react-datatable/)
 
 ![npm](https://img.shields.io/npm/dm/responsive-react-datatable) ![npm version](https://img.shields.io/npm/v/responsive-react-datatable) ![license](https://img.shields.io/npm/l/responsive-react-datatable)
 
-A modern, flexible, and high-performance table component for React applications.
+A modern, responsive React DataTable component for React applications. Supports sorting, filtering, pagination, and customizable columns — ideal for building interactive, data-driven interfaces that look great on any screen size.
 
 ---
 
