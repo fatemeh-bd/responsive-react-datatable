@@ -1,5 +1,4 @@
 import { ActionDropDownProps } from "./types";
-import { Link } from "react-router-dom";
 import DropDownMenu from "./DropDownMenu";
 import { BiDotsVerticalRounded, ChevronDown } from "../../icons";
 
@@ -41,12 +40,12 @@ export function ActionDropDown({
                     onClick={option?.onClick}
                   >
                     {option?.href ? (
-                      <Link to={option?.href} className="w-full text-center">
+                      <a href={option?.href} className="w-full text-center">
                         <>
                           {option.Icon && <option.Icon className="size-3.5" />}
                           {option.label}
                         </>
-                      </Link>
+                      </a>
                     ) : (
                       <>
                         {option.Icon && <option.Icon className="size-3.5" />}
@@ -65,7 +64,7 @@ export function ActionDropDown({
 
 const actionButton = () => {
   return (
-    <button className="cursor-pointer option-button bg-slate-300 py-2 text-sm rounded-xl !min-w-fit !px-2 !w-full">
+    <button className="cursor-pointer bg-slate-300 option-button py-2 text-sm rounded-xl !min-w-fit !px-2 !w-full">
       <BiDotsVerticalRounded className="size-6 mx-auto" />
     </button>
   );
