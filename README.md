@@ -122,7 +122,7 @@ let payload: Record<string, any> = {
 
 ---
 
-## 🗂 Static Mode Example
+## Static Mode Example
 
 ```jsx
 const staticRows = [{ id: 1, name: "max", age: 30 }];
