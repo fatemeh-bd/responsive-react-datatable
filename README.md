@@ -1,8 +1,6 @@
-<h1 align="center">
-    📊 Responsive React DataTable
-  <br/>
-  <a href="https://fatemeh-bd.github.io/responsive-react-datatable/#/" target="_blank">Click Here To Show Demo</a>
-</h1>
+# 📊 Responsive React DataTable
+
+[Click Here To Show Demo](https://fatemeh-bd.github.io/responsive-react-datatable/#/)
 
 ![npm](https://img.shields.io/npm/dm/responsive-react-datatable) ![npm version](https://img.shields.io/npm/v/responsive-react-datatable) ![license](https://img.shields.io/npm/l/responsive-react-datatable)
 
