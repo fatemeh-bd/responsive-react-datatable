@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { DropDownMenuProps } from "./types";
-import { useClickOutside } from "../../hooks/useClickOutside";
 
 const DropDownMenu: React.FC<DropDownMenuProps> = ({
   button,
@@ -14,10 +13,24 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
     left: 0,
   });
 
-  const menuRef = useClickOutside<HTMLDivElement>(
-    () => setIsOpen(false),
-    [setIsOpen]
-  );
+  const buttonRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleOpen = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -32,8 +45,8 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
     <div className="relative flex items-center justify-center">
       <div
         className="w-full cursor-pointer"
-        onClick={(e) => handleOpen(e)}
-        ref={menuRef}
+        onClick={handleOpen}
+        ref={buttonRef}
       >
         {button}
       </div>
@@ -41,6 +54,7 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
       {createPortal(
         isOpen && (
           <div
+            ref={menuRef}
             style={{
               position: "absolute",
               top: position.top,
