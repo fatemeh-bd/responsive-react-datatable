@@ -2,6 +2,8 @@ import { useState } from "react";
 import Table from "../../components/table/Table";
 import mock from "../../components/table/mockData.json";
 import { ColumnType } from "../../components/table/types";
+import { ActionDropDown } from "../../components/table/tools/actionDropDown/ActionDropDown";
+import { rowRenderer } from "../../components/table/helper";
 
 const ExamplePage = () => {
   const [selectedIds, setSelectedIds] = useState([]);
@@ -40,6 +42,21 @@ const ExamplePage = () => {
       title: "created At",
       searchable: false,
       width: 140,
+    },
+    {
+      data: null,
+      orderable: false,
+      title: "Operation",
+      searchable: false,
+      width: 140,
+      render: rowRenderer(() => (
+        <ActionDropDown
+          options={[
+            { label: "detail", href: "https://example.com" },
+            { label: "show alert", onClick: () => alert("hi") },
+          ]}
+        />
+      )),
     },
   ];
 
