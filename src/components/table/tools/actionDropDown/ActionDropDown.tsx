@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import DropDownMenu from "./DropDownMenu";
 import { BiDotsVerticalRounded, ChevronDown } from "../../icons";
 
-export default function ActionDropDown({
+export function ActionDropDown({
   options,
   button,
   lastItem,
