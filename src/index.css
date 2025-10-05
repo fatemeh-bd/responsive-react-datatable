@@ -10,3 +10,6 @@ body {
 .page-size-select {
   background-color: rgb(0, 0, 0);
 }
+.option-button {
+  background-color: rgb(37, 37, 37);
+}
