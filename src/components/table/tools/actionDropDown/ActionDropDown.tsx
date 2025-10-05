@@ -64,7 +64,12 @@ export function ActionDropDown({
 
 const actionButton = () => {
   return (
-    <button className="cursor-pointer bg-slate-300 option-button py-2 text-sm rounded-xl !min-w-fit !px-2 !w-full">
+    <button
+      style={{
+        backgroundColor: "#fff",
+      }}
+      className="cursor-pointer option-button py-2 text-sm rounded-xl !min-w-fit !px-2 !w-full"
+    >
       <BiDotsVerticalRounded className="size-6 mx-auto" />
     </button>
   );
@@ -72,7 +77,12 @@ const actionButton = () => {
 
 const managementButton = (text: string) => {
   return (
-    <button className="cursor-pointer option-button flex items-center gap-1 !transition-none bg-slate-300 py-2 text-sm rounded-xl !min-w-fit !px-2 !w-full">
+    <button
+      style={{
+        backgroundColor: "#fff",
+      }}
+      className="cursor-pointer option-button flex items-center gap-1 !transition-none py-2 text-sm rounded-xl !min-w-fit !px-2 !w-full"
+    >
       {text}
       <ChevronDown className="size-5" />
     </button>
