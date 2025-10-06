@@ -25,8 +25,11 @@ const MobileTable = ({
   const renderCard = (row: Record<string, any>, rowIndex: number) => (
     <div
       key={rowIndex}
-      style={{ background: theme?.backgroundColor }}
-      className="mobile-table-card p-4 !h-auto mb-3 rounded-xl overflow-hidden border border-secondary-300 shadow-sm"
+      style={{
+        background: theme?.backgroundColor,
+        borderColor: theme?.borderColor,
+      }}
+      className="mobile-table-card p-4 !h-auto mb-3 rounded-xl overflow-hidden border shadow-sm"
     >
       {columns.map((column, colIndex) => {
         const cellKey = column.data;

@@ -34,7 +34,7 @@ export interface ColumnType {
   render?: (
     cell?: unknown,
     row?: Record<string, any>,
-    index?: number,
+    index?: number
   ) => React.ReactNode;
   width?: number;
   orderable?: boolean;
@@ -106,7 +106,7 @@ export interface BaseTableProps {
   hasColumnOrder?: boolean;
   noSearch?: boolean;
   saveSearch?: boolean;
-  notify: (text: string, type: "error" | "success" | "warning") => void;
+  notify?: (text: string, type: "error" | "success" | "warning") => void;
   isLoading?: boolean;
   autoPageSizeConfig?: AutoPageSizeConfig;
   listMode?: boolean;

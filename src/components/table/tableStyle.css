@@ -9,6 +9,9 @@
   }
 }
 @media (max-width: 768px) {
+  table button {
+    min-width: max-content;
+  }
   .table-header-actions {
     flex-direction: column-reverse;
   }
