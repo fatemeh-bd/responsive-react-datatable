@@ -21,20 +21,28 @@ export function useQueryParams() {
     [search]
   );
 
-  const updateParams = useCallback((key: string, value: string) => {
-    const params = new URLSearchParams(window.location.search);
-    params.set(key, value);
+  const updateParams = useCallback(
+    (key: string, value: string, replace: boolean = true) => {
+      const params = new URLSearchParams(window.location.search);
+      params.set(key, value);
 
-    const queryString = params.toString();
-    const newUrl = queryString
-      ? `${window.location.pathname}?${queryString}`
-      : window.location.pathname;
+      const queryString = params.toString();
+      const newUrl = queryString
+        ? `${window.location.pathname}?${queryString}`
+        : window.location.pathname;
 
-    window.history.pushState({}, "", newUrl);
-    setSearch(window.location.search);
-  }, []);
+      if (replace) {
+        window.history.replaceState({}, "", newUrl);
+      } else {
+        window.history.pushState({}, "", newUrl);
+      }
 
-  const removeParams = useCallback((key: string) => {
+      setSearch(window.location.search);
+    },
+    []
+  );
+
+  const removeParams = useCallback((key: string, replace: boolean = true) => {
     const params = new URLSearchParams(window.location.search);
     params.delete(key);
 
@@ -43,7 +51,12 @@ export function useQueryParams() {
       ? `${window.location.pathname}?${queryString}`
       : window.location.pathname;
 
-    window.history.pushState({}, "", newUrl);
+    if (replace) {
+      window.history.replaceState({}, "", newUrl);
+    } else {
+      window.history.pushState({}, "", newUrl);
+    }
+
     setSearch(window.location.search);
   }, []);
 

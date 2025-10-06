@@ -87,7 +87,7 @@ interface BaseTableProps {
     hasColumnOrder?: boolean;
     noSearch?: boolean;
     saveSearch?: boolean;
-    notify: (text: string, type: "error" | "success" | "warning") => void;
+    notify?: (text: string, type: "error" | "success" | "warning") => void;
     isLoading?: boolean;
     autoPageSizeConfig?: AutoPageSizeConfig;
     listMode?: boolean;

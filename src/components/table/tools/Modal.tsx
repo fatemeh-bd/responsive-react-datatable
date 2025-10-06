@@ -85,7 +85,7 @@ const Modal: React.FC<ModalProps> = ({
               </button>
             </div>
           </div>
-          <hr></hr>
+          <hr style={{ color: theme?.borderColor }} />
           <div
             className={`p-5 max-h-svh ${childrenClass} ${
               overflowY === "overflow-y-visible"

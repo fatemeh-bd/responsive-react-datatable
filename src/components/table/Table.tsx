@@ -447,12 +447,17 @@ const Table: React.FC<TableProps> = (props) => {
           setTableRows(response?.data?.data);
           setTotalItems(response?.data?.recordsFiltered);
           setTableLoading(false);
+          if (openFilter) {
+            setOpenFilter(false);
+          }
           if (response?.data?.data === null) {
-            notify(response?.data?.message || "null data", "warning");
+            notify?.(response?.data?.message || "null data", "warning");
+            console.log(response?.data?.message || "null data", "warning");
           }
           return response?.data;
         } catch (error: any) {
-          notify(error?.message, "error");
+          notify?.(error?.message, "error");
+          console.log(error?.message, "error");
           setTableLoading(false);
         }
       },
