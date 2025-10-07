@@ -67,6 +67,7 @@ const Table: React.FC<TableProps> = (props) => {
     filterContainerClassName = "flex flex-wrap md:gap-2 gap-3 sm:[&>div]:w-full",
     removeFilterKey,
     actionButtons,
+    noPageSize,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
   const theme: ColorTheme = useMemo(
@@ -550,7 +551,7 @@ const Table: React.FC<TableProps> = (props) => {
         {(actionButtons || !isMobile) && (
           <div className="flex items-center gap-3 flex-wrap max-md:w-full justify-between">
             {actionButtons && actionButtons}
-            {!isMobile && (
+            {!isMobile && !noPageSize && (
               <PageSizeSelect
                 pageQueryName={pageQueryName}
                 textsConfig={mergedTexts}
@@ -649,7 +650,7 @@ const Table: React.FC<TableProps> = (props) => {
             onChangePage={onChangePage}
           />
         ) : null}
-        {isMobile && (
+        {isMobile && !noPageSize && (
           <PageSizeSelect
             pageQueryName={pageQueryName}
             textsConfig={mergedTexts}
