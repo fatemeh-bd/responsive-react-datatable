@@ -93,7 +93,7 @@ const SearchBox = ({
             borderColor: theme?.borderColor,
             backgroundColor: theme?.backgroundColor,
           }}
-          className="table-search-input-container my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-[10px] border disabled:opacity-70"
+          className="table-search-input-container my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-[9px] border disabled:opacity-70"
         >
           {searchValue ? (
             <CloseIcon
