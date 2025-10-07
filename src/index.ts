@@ -1,3 +1,4 @@
+import "./components/table/tableStyle.css";
 export { default as Table } from "./components/table/Table";
 export { default } from "./components/table/Table";
 export type {
