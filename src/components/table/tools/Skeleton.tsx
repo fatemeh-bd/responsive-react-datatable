@@ -1,5 +1,5 @@
 const Skeleton = ({
-  height = "h-9",
+  height = "30px",
   style = {},
   className,
 }: {
@@ -9,8 +9,8 @@ const Skeleton = ({
 }) => {
   return (
     <div
-      style={style}
-      className={`${height} my-2 w-full animate-pulse bg-gray-200 skleton-class ${className}`}
+      style={{ height, ...style }}
+      className={`my-2 w-full animate-pulse bg-gray-200 skleton-class ${className}`}
     />
   );
 };
