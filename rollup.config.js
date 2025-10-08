@@ -44,6 +44,7 @@ export default [
       "axios",
       "swiper",
       "@tanstack/react-query",
+      "react/jsx-runtime",
     ],
   },
   {
