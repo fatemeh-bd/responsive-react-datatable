@@ -63,8 +63,8 @@ const Table: React.FC<TableProps> = (props) => {
     tableName,
     filters,
     topFilter,
-    topFilterContainerClassName = "flex items-center flex-wrap md:gap-2 gap-3 sm:[&>div]:w-full",
-    filterContainerClassName = "flex flex-wrap md:gap-2 gap-3 sm:[&>div]:w-full",
+    topFilterContainerClassName,
+    filterContainerClassName,
     removeFilterKey,
     actionButtons,
     noPageSize,
@@ -481,18 +481,15 @@ const Table: React.FC<TableProps> = (props) => {
     <div className="table-container" dir={dir}>
       {!isMobile && topFilter && (
         <div
-          className={`top-filter-container mb-4 ${topFilterContainerClassName}`}
+          className={`top-filter-container ${topFilterContainerClassName}`}
           id="topFilter"
         >
           {topFilter}
         </div>
       )}
 
-      <div
-        id="table-header-actions"
-        className={`table-header-actions flex items-end justify-between mb-2 gap-3 w-full`}
-      >
-        <div className="flex items-end flex-wrap-reverse gap-2 max-md:w-full">
+      <div id="table-header-actions" className={`table-header-actions`}>
+        <div className="search-container-table">
           {!noSearch && (
             <SearchBox
               {...props}
@@ -531,14 +528,14 @@ const Table: React.FC<TableProps> = (props) => {
               background: "#427bd225",
               color: "#427bd2",
             }}
-            className="mobile-filter-button relative mr-auto min-w-[70px] text-sm font-bold flex items-center gap-0.5 p-1 justify-center rounded-md"
+            className="mobile-filter-button"
           >
             {activeFilterCount > 0 && (
               <span
                 style={{
                   right: "-10px",
                 }}
-                className="mobile-filter-badge absolute top-0 bg-white text-xs size-5 content-center rounded-full text-inherit"
+                className="mobile-filter-badge"
               >
                 {activeFilterCount}
               </span>
@@ -549,7 +546,7 @@ const Table: React.FC<TableProps> = (props) => {
         )}
 
         {(actionButtons || !isMobile) && (
-          <div className="flex items-center gap-3 flex-wrap max-md:w-full justify-between">
+          <div className="actionButtons">
             {actionButtons && actionButtons}
             {!isMobile && !noPageSize && (
               <PageSizeSelect
@@ -636,7 +633,7 @@ const Table: React.FC<TableProps> = (props) => {
           />
         </>
       )}
-      <div className="flex items-center gap-2 justify-between">
+      <div className="table-footer">
         {totalItems ? (
           <Pagination
             dir={dir}
@@ -674,15 +671,15 @@ const Table: React.FC<TableProps> = (props) => {
         className="filter-modal"
         theme={theme}
       >
-        <div className="filter-modal-content space-y-2">
+        <div className="filter-modal-content space-items">
           {filters}
           {topFilter}
         </div>
-        <div className="filter-modal-actions flex items-center gap-2 mt-8">
+        <div className="filter-modal-actions">
           <button
             onClick={() => setOpenFilter(false)}
             style={{ borderColor: theme?.primaryColor }}
-            className="flex-1 filter-modal-close-button p-2 rounded-lg bg-transparent border"
+            className="filter-modal-close-button"
           >
             {mergedTexts?.close}
           </button>
@@ -697,7 +694,7 @@ const Table: React.FC<TableProps> = (props) => {
               }
               location.reload();
             }}
-            className="flex-1 p-2 rounded-lg bg-red-500 filter-modal-clear-button text-white flex items-center gap-2 justify-center"
+            className="filter-modal-clear-button"
           >
             {mergedTexts?.removeFilterText}
             <TrashIcon />

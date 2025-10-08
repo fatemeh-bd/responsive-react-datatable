@@ -73,7 +73,11 @@
   user-select: none;
   transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
+.checkbox-control {
+  border-radius: 6px;
+  border: 1px solid;
+  transition-property: all;
+}
 @keyframes ripple {
   0% {
     transform: translate(-50%, -50%) scale(0.35);

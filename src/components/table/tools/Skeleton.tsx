@@ -10,7 +10,7 @@ const Skeleton = ({
   return (
     <div
       style={{ height, ...style }}
-      className={`my-2 w-full animate-pulse bg-gray-200 skleton-class ${className}`}
+      className={`skleton-class ${className}`}
     />
   );
 };
