@@ -33,7 +33,7 @@ export const SelectableCheckbox: React.FC<SelectableCheckboxProps> = ({
   );
   return (
     <Checkbox
-      className="mx-auto justify-center"
+      className="selectableCheckbox"
       primaryColor={theme.primaryColor}
       checked={selectedIds.includes(id)}
       value={id}

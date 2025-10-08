@@ -84,16 +84,14 @@ const SearchBox = ({
   }, [searchValue, onSearch]);
 
   return (
-    <div className="table-search-container max-md:w-full mt-auto">
-      <div
-        className={`table-search-wrapper flex flex-col gap-1 [&>div]:!gap-1 [&>div]:!flex-row-reverse`}
-      >
+    <div className="table-search-container">
+      <div className={`table-search-wrapper`}>
         <div
           style={{
             borderColor: theme?.borderColor,
             backgroundColor: theme?.backgroundColor,
           }}
-          className={`table-search-input-container my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2.5 border disabled:opacity-70`}
+          className={`table-search-input-container`}
         >
           {searchValue ? (
             <CloseIcon
@@ -104,8 +102,8 @@ const SearchBox = ({
                 paddingRight: dir === "rtl" ? 4 : 0,
               }}
               onClick={() => setSearchValue("")}
-              className={`table-search-clear-icon size-5 font-bold scale-150 cursor-pointer ${
-                dir === "rtl" ? "border-r" : "border-l"
+              className={`table-search-clear-icon ${
+                dir === "rtl" ? "borderRight" : "borderLeft"
               }`}
             />
           ) : (
@@ -115,8 +113,8 @@ const SearchBox = ({
                 paddingRight: dir === "rtl" ? 4 : 2,
                 borderColor: theme?.borderColor,
               }}
-              className={`table-search-icon size-5 scale-150 opacity-60 ${
-                dir === "rtl" ? "border-r" : "border-l"
+              className={`table-search-icon ${
+                dir === "rtl" ? "borderRight" : "borderLeft"
               }`}
             />
           )}
@@ -124,7 +122,7 @@ const SearchBox = ({
             type="text"
             value={searchValue}
             placeholder={mergedTexts?.searchPlaceholder}
-            className={`table-search-input w-full text-inherit border-none bg-transparent !outline-none text-sm placeholder:!text-sm max-md:placeholder:!text-xs`}
+            className={`table-search-input`}
             onChange={(e) => {
               setSearchValue(e.target.value);
               if (currentPage) {

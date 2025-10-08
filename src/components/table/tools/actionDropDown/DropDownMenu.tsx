@@ -42,12 +42,8 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
   };
 
   return (
-    <div className="relative flex items-center justify-center">
-      <div
-        className="w-full cursor-pointer"
-        onClick={handleOpen}
-        ref={buttonRef}
-      >
+    <div className="dropdown-container">
+      <div className="dropdown-trigger" onClick={handleOpen} ref={buttonRef}>
         {button}
       </div>
 
@@ -61,7 +57,7 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
               left: position.left,
               zIndex: 9999,
             }}
-            className={`w-fit bg-inherit shadow-lg rounded-xl ${className}`}
+            className={`dropdown-menu ${className || ""}`}
           >
             {children}
           </div>

@@ -12,11 +12,11 @@ interface ModalProps {
   className?: string;
   childrenClass?: string;
   overflowY?:
-    | "overflow-y-auto"
-    | "overflow-y-hidden"
-    | "overflow-y-visible"
-    | "overflow-y-scroll"
-    | "overflow-y-clip";
+    | "overflow__auto"
+    | "overflow__hidden"
+    | "overflow__visible"
+    | "overflow__scroll"
+    | "overflow__clip";
   size?: "sm" | "md" | "lg" | "xl" | "2xl" | "full" | "fit";
 }
 
@@ -27,7 +27,7 @@ const Modal: React.FC<ModalProps> = ({
   children,
   className,
   size = "fit",
-  overflowY = "overflow-y-auto",
+  overflowY = "overflow__auto",
   childrenClass,
   theme,
 }) => {
@@ -42,56 +42,52 @@ const Modal: React.FC<ModalProps> = ({
         onClick={() => {
           if (isMobile) handleClose();
         }}
-        className={`fixed inset-0 z-[999] bg-black/30 backdrop-blur-xs flex items-end md:items-center justify-center ${
-          isOpen ? "translate-y-0" : "translate-y-full delay-500"
-        }`}
+        className={`modal-overlay ${isOpen ? "show" : "hide"}`}
       >
         <div
           onClick={(e) => e.stopPropagation()}
           style={{ backgroundColor: theme?.backgroundColor }}
-          className={`relative z-50 rounded-t-2xl md:rounded-lg border-secondary-200 mx-0  transition-all duration-300 delay-200 ${
-            isOpen ? "opacity-100" : "opacity-0"
-          } md:max-w-[90%] ${
+          className={`modal-container ${
             size === "sm"
-              ? "w-[370px]"
+              ? "sm"
               : size === "md"
-              ? "w-[750px]"
+              ? "md"
               : size === "lg"
-              ? "w-[1100px]"
+              ? "lg"
               : size === "xl"
-              ? "w-[80%]"
+              ? "xl"
               : size === "2xl"
-              ? "w-[90%]"
+              ? "xxl"
               : size === "full"
-              ? "w-[90%]"
+              ? "full"
+              : size === "fit"
+              ? "fit"
               : ""
-          }  max-md:!w-full ${className || ""}`}
+          } ${isOpen ? "open" : ""} ${className || ""}`}
         >
-          <div className="px-5">
+          <div className="modal-header-wrapper">
             <div
               style={{ background: theme?.backgroundColor }}
-              className="flex pt-5 pb-2 justify-between items-center"
+              className="modal-header"
             >
               {typeof title === "string" ? (
-                <p className="!mb-0">{title}</p>
+                <p className="modal-title">{title}</p>
               ) : (
                 title
               )}
-              <button
-                onClick={handleClose}
-                className="ml-0 block cursor-pointer"
-              >
-                <CloseIcon className="w-6 h-6 text-secondary-600" />
+              <button onClick={handleClose} className="modal-close-btn">
+                <CloseIcon className="icon-close" />
               </button>
             </div>
           </div>
+
           <hr style={{ color: theme?.borderColor }} />
+
           <div
-            className={`p-5 max-h-svh ${childrenClass} ${
-              overflowY === "overflow-y-visible"
-                ? `${"md:" + overflowY} overflow-y-auto`
-                : overflowY
-            }`}
+            className={`modal-body ${overflowY} ${childrenClass || ""}`}
+            style={{
+              backgroundColor: theme?.backgroundColor,
+            }}
           >
             {children}
           </div>

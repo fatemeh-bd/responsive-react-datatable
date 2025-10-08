@@ -29,11 +29,9 @@ const PageSizeSelect = ({
   };
 
   return (
-    <div className="page-size-select-container relative flex items-center gap-1">
-      <span className="page-size-select-label md:text-base text-xs text-nowrap text-inherit">
-        {textsConfig?.pageSize}
-      </span>
-      <div className="relative w-max">
+    <div className="page-size-select-container">
+      <span className="page-size-select-label">{textsConfig?.pageSize}</span>
+      <div className="pageSizeParent">
         <select
           value={size}
           onChange={handleChange}
@@ -41,7 +39,7 @@ const PageSizeSelect = ({
             borderColor: theme?.borderColor,
             backgroundColor: theme?.backgroundColor,
           }}
-          className={`page-size-select text-inherit my-0 flex items-center justify-between gap-3 text-right text-base rounded-lg placeholder:text-sm !outline-none w-full p-2 border focus:border-primary disabled:opacity-70 appearance-none pl-6 max-md:pl-4 cursor-pointer max-md:py-1 max-md:min-w-12 max-md:text-sm`}
+          className={`page-size-select cursorPointer`}
         >
           <option className="page-size-option" value={initialPageSize}>
             {initialPageSize}
@@ -62,7 +60,7 @@ const PageSizeSelect = ({
             300
           </option>
         </select>
-        <ChevronDown className="page-size-select-icon pointer-events-none text-inherit size-5 shrink-0 absolute left-1 top-0 bottom-0 my-auto" />
+        <ChevronDown className="page-size-select-icon" />
       </div>
     </div>
   );

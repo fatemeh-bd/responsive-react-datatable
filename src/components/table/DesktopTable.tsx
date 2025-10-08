@@ -67,17 +67,17 @@ const DesktopTable = ({
 
   return (
     <div
-      className="desktop-table-container w-full overflow-hidden rounded-xl"
+      className="desktop-table-container"
       style={{ border: `1px solid ${theme.borderColor}` }}
     >
-      <div className="desktop-table-inner relative">
+      <div className="desktop-table-inner">
         {/* Header table (fixed) */}
         <div
           ref={headerContainerRef}
-          className="desktop-table-header-container overflow-x-auto overflow-y-hidden scrollbar-hide"
+          className="desktop-table-header-container scrollbar-hide"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          <table className="desktop-table w-full table-fixed border-collapse">
+          <table className="desktop-table">
             <thead
               className="desktop-table-head"
               style={{ backgroundColor: theme.headerBackgroundColor }}
@@ -93,9 +93,9 @@ const DesktopTable = ({
                     key={column?.data || colIndex}
                     className={`desktop-table-header-cell ${
                       column?.orderable
-                        ? "desktop-table-header-cell--sortable cursor-pointer"
+                        ? "desktop-table-header-cell--sortable cursorPointer"
                         : ""
-                    } py-2 px-1 text-center min-w-max text-sm`}
+                    }`}
                     style={{
                       width: column?.width,
                       color: theme.headerTextColor,
@@ -107,17 +107,17 @@ const DesktopTable = ({
                   >
                     {column?.data === "selectableTable" ? (
                       <Checkbox
-                        className="desktop-table-select-all-checkbox mx-auto justify-center"
+                        className="desktop-table-select-all-checkbox"
                         primaryColor={theme.primaryColor}
                         onChange={() => onAllSelect?.()}
                       />
                     ) : (
                       <div
-                        className="desktop-table-header-content truncate mx-auto m-auto text-center line-clamp-1 flex items-center justify-center gap-1"
+                        className="desktop-table-header-content"
                         title={column?.width ? column?.title : ""}
                       >
                         {column?.orderable && (
-                          <span className="desktop-table-sort-icons flex flex-col items-center">
+                          <span className="desktop-table-sort-icons">
                             <ArrowUpIcon
                               style={{
                                 color:
@@ -125,11 +125,11 @@ const DesktopTable = ({
                                     ? theme?.headerTextColor
                                     : "",
                               }}
-                              className={`desktop-table-sort-icon desktop-table-sort-icon--asc h-2 translate-y-[1px] ${
+                              className={`desktop-table-sort-icon desktop-table-sort-icon--asc ${
                                 order?.column === colIndex &&
                                 order?.dir === "asc"
-                                  ? "opacity-100"
-                                  : "opacity-20"
+                                  ? "opacityFull"
+                                  : "opacityHalf"
                               }`}
                             />
                             <ArrowUpIcon
@@ -139,11 +139,11 @@ const DesktopTable = ({
                                     ? theme?.headerTextColor
                                     : "",
                               }}
-                              className={`desktop-table-sort-icon desktop-table-sort-icon--desc h-2 rotate-180 ${
+                              className={`desktop-table-sort-icon desktop-table-sort-icon--desc ${
                                 order?.column === colIndex &&
                                 order?.dir === "desc"
-                                  ? "opacity-100"
-                                  : "opacity-20"
+                                  ? "opacityFull"
+                                  : "opacityHalf"
                               }`}
                             />
                           </span>
@@ -163,10 +163,10 @@ const DesktopTable = ({
         {/* Scrollable body */}
         <div
           ref={bodyContainerRef}
-          className="desktop-table-body-container overflow-auto w-full"
+          className="desktop-table-body-container"
           style={{ maxHeight }}
         >
-          <table className="desktop-table-body w-full table-fixed border-collapse">
+          <table className="desktop-table-body">
             <tbody className="desktop-table-body-inner">
               {isLoading ? (
                 Array.from({ length: pageSize }).map((_, i) => (
@@ -207,7 +207,7 @@ const DesktopTable = ({
                       return (
                         <td
                           key={colIndex}
-                          className="desktop-table-data-cell py-1 px-1 text-center"
+                          className="desktop-table-data-cell"
                           style={{
                             width: column?.width,
                             color: theme.cellTextColor,
@@ -217,11 +217,9 @@ const DesktopTable = ({
                             title={
                               cellKey ? row[cellKey]?.toString() : undefined
                             }
-                            className={`desktop-table-cell-content block truncate mx-auto text-center ${
-                              cellKey === null
-                                ? "flex items-center justify-center gap-1.5"
-                                : "mx-auto"
-                            } h-auto text-sm`}
+                            className={`desktop-table-cell-content ${
+                              cellKey === null ? "isContent" : "noContent"
+                            }`}
                           >
                             {content}
                           </div>
@@ -234,7 +232,7 @@ const DesktopTable = ({
                 <tr className="desktop-table-empty-row">
                   <td
                     colSpan={columns.length}
-                    className="desktop-table-empty-cell p-6 text-center"
+                    className="desktop-table-empty-cell"
                     style={{ color: theme.headerTextColor }}
                   >
                     {textsConfig.noDataText}

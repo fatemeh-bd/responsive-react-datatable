@@ -29,7 +29,7 @@ const MobileTable = ({
         background: theme?.backgroundColor,
         borderColor: theme?.borderColor,
       }}
-      className="mobile-table-card p-4 !h-auto mb-3 rounded-xl overflow-hidden border shadow-sm"
+      className="mobile-table-card shadowSmall"
     >
       {columns.map((column, colIndex) => {
         const cellKey = column.data;
@@ -40,13 +40,13 @@ const MobileTable = ({
           : null;
 
         return column?.dontShowDataInMobile ? null : (
-          <div
-            key={colIndex}
-            className="mobile-table-card-row flex items-start justify-between py-1 gap-4 w-full flex-wrap"
-          >
+          <div key={colIndex} className="mobile-table-card-row">
             {column?.title === "عملیات" ||
             column?.dontShowTitleInMobile ? null : (
-              <span className="mobile-table-card-label text-xs text-secondary-600 min-w-[80px]">
+              <span
+                style={{ color: theme?.headerTextColor }}
+                className="mobile-table-card-label"
+              >
                 {column?.title}
                 {column?.title && ":"}
               </span>
@@ -54,10 +54,8 @@ const MobileTable = ({
 
             <div
               title={cellKey ? row[cellKey]?.toString() : undefined}
-              className={`mobile-table-card-content truncate text-center overflow-visible h-auto text-sm flex text-wrap items-center justify-center gap-2 !mx-0 flex-wrap ${
-                column?.title === "عملیات"
-                  ? "[&>button]:flex-1 [&>div]:flex-1 !w-full [&>a]:flex-1"
-                  : ""
+              className={`mobile-table-card-content ${
+                column?.title === "عملیات" ? "isOperation" : ""
               }`}
             >
               {content}
@@ -69,33 +67,33 @@ const MobileTable = ({
   );
 
   return (
-    <div className="mobile-table-container block md:hidden">
+    <div className="mobile-table-container">
       {isLoading ? (
-        <div className="mobile-table-skeleton-container border rounded-xl border-secondary-400 p-4 space-y-2 mb-2">
+        <div className="mobile-table-skeleton-container space-items">
           {columns?.map((_item, index) => (
             <React.Fragment key={index}>
-              <div className="mobile-table-skeleton-row flex items-center gap-2">
+              <div className="mobile-table-skeleton-row">
                 <Skeleton
                   className="mobile-table-skeleton-item"
                   style={{ width: index % 2 ? "40%" : "60%", margin: 0 }}
-                  height="h-5"
+                  height="20px"
                 />
                 <Skeleton
                   className="mobile-table-skeleton-item"
                   style={{ width: index % 2 ? "60%" : "40%", margin: 0 }}
-                  height="h-5"
+                  height="20px"
                 />
               </div>
               {_item?.data === null && (
-                <div className="mobile-table-skeleton-action-row flex items-center gap-2">
+                <div className="mobile-table-skeleton-action-row">
                   <Skeleton
                     className="mobile-table-skeleton-action"
-                    height="h-9"
+                    height="36px"
                     style={{ width: "50%", margin: 0 }}
                   />
                   <Skeleton
                     className="mobile-table-skeleton-action"
-                    height="h-9"
+                    height="36px"
                     style={{ width: "50%", margin: 0 }}
                   />
                 </div>
@@ -105,12 +103,12 @@ const MobileTable = ({
         </div>
       ) : rows?.length > 0 ? (
         listMode ? (
-          <div className="mobile-table-list-container flex flex-col px-1 my-2">
+          <div className="mobile-table-list-container">
             {rows.map((row, rowIndex) => renderCard(row, rowIndex))}
           </div>
         ) : (
           <Swiper
-            className="mobile-table-swiper swiper px-1 my-2 flex-col"
+            className="mobile-table-swiper"
             slidesPerView={rows?.length === 1 ? 1 : 1.1}
             spaceBetween={10}
             modules={[Virtual]}
@@ -124,9 +122,7 @@ const MobileTable = ({
           </Swiper>
         )
       ) : (
-        <p className="mobile-table-empty-message text-center text-secondary-700 py-6">
-          {textsConfig?.noDataText}
-        </p>
+        <p className="mobile-table-empty-message">{textsConfig?.noDataText}</p>
       )}
     </div>
   );

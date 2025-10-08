@@ -125,8 +125,8 @@ export const ChevronDown = ({
       fill="currentColor"
       strokeWidth="0"
       viewBox="0 0 24 24"
-      height="24px"
-      width="24px"
+      height="20px"
+      width="20px"
       className={className}
       style={style}
       xmlns="http://www.w3.org/2000/svg"
@@ -176,11 +176,7 @@ export const MdOutlineArrowBackIos = ({ style = {} }: { style?: Object }) => {
   );
 };
 
-export const BiDotsVerticalRounded = ({
-  className,
-}: {
-  className?: string;
-}) => {
+export const BiDotsVerticalRounded = () => {
   return (
     <svg
       stroke="currentColor"
@@ -188,7 +184,12 @@ export const BiDotsVerticalRounded = ({
       strokeWidth="0"
       viewBox="0 0 24 24"
       height="20px"
-      className={className}
+      style={{
+        marginLeft: "auto",
+        marginRight: "auto",
+        width: 24,
+        height: 24,
+      }}
       width="20px"
       xmlns="http://www.w3.org/2000/svg"
     >
