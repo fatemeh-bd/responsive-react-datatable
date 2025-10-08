@@ -125,7 +125,7 @@ const DesktopTable = ({
                                     ? theme?.headerTextColor
                                     : "",
                               }}
-                              className={`desktop-table-sort-icon desktop-table-sort-icon--asc h-[8px] translate-y-[1px] ${
+                              className={`desktop-table-sort-icon desktop-table-sort-icon--asc h-2 translate-y-[1px] ${
                                 order?.column === colIndex &&
                                 order?.dir === "asc"
                                   ? "opacity-100"
@@ -139,7 +139,7 @@ const DesktopTable = ({
                                     ? theme?.headerTextColor
                                     : "",
                               }}
-                              className={`desktop-table-sort-icon desktop-table-sort-icon--desc h-[8px] rotate-180 ${
+                              className={`desktop-table-sort-icon desktop-table-sort-icon--desc h-2 rotate-180 ${
                                 order?.column === colIndex &&
                                 order?.dir === "desc"
                                   ? "opacity-100"
@@ -198,11 +198,11 @@ const DesktopTable = ({
                         ? column?.render(
                             cellKey ? row[cellKey] : undefined,
                             row,
-                            rowIndex,
+                            rowIndex
                           )
                         : cellKey
-                          ? row[cellKey]
-                          : null;
+                        ? row[cellKey]
+                        : null;
 
                       return (
                         <td
