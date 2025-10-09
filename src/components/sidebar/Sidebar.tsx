@@ -53,6 +53,30 @@ const Sidebar: React.FC = () => {
                   <span className="text-lg md:text-base">{item.name}</span>
                   {item.icon && <item.icon size={20} />}
                 </NavLink>
+
+                {item.children && (
+                  <ul className="flex flex-col ml-8 list-disc mt-4">
+                    {item.children.map((child, cIndex) => (
+                      <li>
+                        <NavLink
+                          key={cIndex}
+                          to={child.path}
+                          className={({ isActive }) =>
+                            `text-white flex justify-center gap-2 md:justify-between items-center py-2 pr-4 rounded-lg transition-all duration-200 ${
+                              isActive
+                                ? "!text-[#d24670]"
+                                : "hover:text-rose-300"
+                            }`
+                          }
+                          onClick={() => setIsOpen(false)}
+                        >
+                          <span className="text-base">{child.name}</span>
+                        </NavLink>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
                 <div className="h-[1px] w-full bg-gray-700 my-2 last:hidden"></div>
               </React.Fragment>
             ))}

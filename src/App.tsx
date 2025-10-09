@@ -1,10 +1,6 @@
-import React, { useState } from "react";
-import { rowRenderer } from "./components/table/helper";
+import React from "react";
 import Particles from "./components/particles/Particles";
 import { Route, Routes } from "react-router-dom";
-import DocumentPage from "./pages/documentPage/HomePage";
-import ExamplePage from "./pages/examplePage/ExamplePage";
-import WellcomePage from "./pages/welcomePage/WelcomePage";
 import { routes } from "./routes";
 
 const App: React.FC = () => {
@@ -27,7 +23,12 @@ const App: React.FC = () => {
       </div>
       <Routes>
         {routes.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
+          <>
+            <Route key={route.path} path={route.path} element={route.element} />
+            {route?.children?.map((item) => (
+              <Route key={item.path} path={item.path} element={item.element} />
+            ))}
+          </>
         ))}
       </Routes>
     </div>

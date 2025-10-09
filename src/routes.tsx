@@ -1,10 +1,14 @@
 import ExamplePage from "./pages/examplePage/ExamplePage";
-import HomePage from "./pages/documentPage/HomePage";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { GrVmMaintenance } from "react-icons/gr";
 import WelcomePage from "./pages/welcomePage/WelcomePage";
 import DocumentPage from "./pages/documentPage/HomePage";
 import { BsTerminal } from "react-icons/bs";
+import BasicTable from "./pages/examplePage/BasicTable";
+import StaticAutoPageSizeTable from "./pages/examplePage/StaticAutoPageSizeTable";
+import TabPage from "./pages/examplePage/TabPage";
+import BasicTableCode from "./pages/examplePage/BasicTable.tsx?raw";
+import StaticAutoPageSizeTableCode from "./pages/examplePage/StaticAutoPageSizeTable.tsx?raw";
 
 export const routes = [
   {
@@ -21,8 +25,44 @@ export const routes = [
   },
   {
     icon: GrVmMaintenance,
-    name: "Example",
+    name: "Examples",
     path: "/example",
     element: <ExamplePage />,
+    children: [
+      {
+        name: "Basic",
+        path: "/example/basic",
+        element: (
+          <TabPage
+            headerImports={`import Table, {
+    ColumnType,
+    rowRenderer,
+  } from 'responsive-react-datatable';`}
+            view={<BasicTable />}
+            code={BasicTableCode}
+          />
+        ),
+      },
+      {
+        name: "Static Auto PageSize",
+        path: "/example/staticAutoPageSize",
+        element: (
+          <TabPage
+            headerImports={`import Table, {
+    ColumnType,
+    rowRenderer,
+    ActionDropDown
+  } from 'responsive-react-datatable';`}
+            view={<StaticAutoPageSizeTable />}
+            code={StaticAutoPageSizeTableCode}
+          />
+        ),
+      },
+      // {
+      //   name: "Internal",
+      //   path: "/example/internal",
+      //   element: <ExamplePage />,
+      // },
+    ],
   },
 ];

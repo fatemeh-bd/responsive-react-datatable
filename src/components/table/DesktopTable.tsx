@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ColorTheme, ColumnType, OrderType, TextsConfig } from "./types";
-import { ArrowUpIcon } from "./icons";
+import { ArrowDownIcon, ArrowUpIcon } from "./icons";
 import Checkbox from "./tools/checkbox/CheckBox";
 import Skeleton from "./tools/Skeleton";
 
@@ -132,7 +132,7 @@ const DesktopTable = ({
                                   : "opacityHalf"
                               }`}
                             />
-                            <ArrowUpIcon
+                            <ArrowDownIcon
                               style={{
                                 color:
                                   order?.dir === "desc"

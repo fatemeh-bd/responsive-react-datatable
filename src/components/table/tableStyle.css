@@ -234,7 +234,7 @@
 }
 .desktop-table-sort-icon {
   height: 0.5rem;
-  transform: translateX(10px) translateY(1px);
+  transform: translateY(1px);
 }
 .opacityFull {
   opacity: 100%;
@@ -243,9 +243,9 @@
   opacity: 20%;
 }
 
-.desktop-table-sort-icon--desc {
+/* .desktop-table-sort-icon--desc {
   rotate: 180deg;
-}
+} */
 .desktop-table-body-container {
   width: 100%;
   overflow: auto;

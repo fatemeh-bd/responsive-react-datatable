@@ -233,7 +233,7 @@ const Table: React.FC<TableProps> = (props) => {
   );
 
   const paginatedRows = useMemo(() => {
-    const size = autoEnabled ? dynamicPageSize : pageSizeInitial;
+    const size = dynamicPageSize;
     const start = (currentPage - 1) * size;
     const end = start + size;
     return filteredRows.slice(start, end);
