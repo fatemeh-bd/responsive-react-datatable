@@ -7,7 +7,9 @@ const ExamplePage = () => {
     <div
       id="content-wrapper"
       className="flex flex-col gap-6 max-w-7xl mx-auto overflow-auto mt-8"
-    ></div>
+    >
+      comming soon...
+    </div>
   );
 };
 
