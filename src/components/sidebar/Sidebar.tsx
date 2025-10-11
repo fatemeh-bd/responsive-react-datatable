@@ -12,7 +12,7 @@ const Sidebar: React.FC = () => {
   return (
     <>
       {/* Mobile Header */}
-      <div className="flex w-screen justify-between items-center md:hidden bg-[#364153] px-4 py-2.5">
+      <div className="flex w-screen justify-between items-center md:hidden bg-[#364153] z-[999] px-4 py-2.5">
         <div className="flex items-center gap-2">
           <img src="logo.svg" alt="logo" height={40} width={40} />
           <h2 className="font-semibold text-white text-lg">React Table</h2>
@@ -28,7 +28,7 @@ const Sidebar: React.FC = () => {
 
       {/* Sidebar */}
       <aside
-        className={`bg-black border-r border-[#364153] w-screen md:w-[300px] min-h-screen p-4 h-full transition-all duration-300 ${
+        className={`bg-black border-r border-[#364153] w-screen md:w-[300px] min-h-screen p-4 h-full z-[999] transition-all duration-300 ${
           isOpen ? "translate-x-0" : "translate-x-[-100%] md:translate-x-0"
         }`}
       >
