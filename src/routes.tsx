@@ -10,6 +10,7 @@ import TabPage from "./pages/examplePage/TabPage";
 import BasicTableCode from "./pages/examplePage/BasicTable.tsx?raw";
 import StaticAutoPageSizeTableCode from "./pages/examplePage/StaticAutoPageSizeTable.tsx?raw";
 import PropAutoPageSizeConfig from "./pages/propsPages/PropAutoPageSizeConfig";
+import ExternalTable from "./pages/examplePage/ExternalTable";
 
 export const routes = [
   {
@@ -58,6 +59,11 @@ export const routes = [
             code={StaticAutoPageSizeTableCode}
           />
         ),
+      },
+      {
+        name: "External",
+        path: "/example/external",
+        element: <ExternalTable />,
       },
       // {
       //   name: "Internal",

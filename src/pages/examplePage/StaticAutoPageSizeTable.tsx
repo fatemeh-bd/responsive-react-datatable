@@ -53,6 +53,9 @@ const StaticAutoPageSizeTable = () => {
     <Table
       lang="en"
       mode="static"
+      staticRows={mock?.data}
+      totalItems={mock?.recordsFiltered}
+      columns={columns}
       tableName="table2"
       autoPageSizeConfig={{
         enabled: true,
@@ -69,9 +72,6 @@ const StaticAutoPageSizeTable = () => {
         headerBackgroundColor: "#364153",
         primaryColor: "#d24670",
       }}
-      staticRows={mock?.data}
-      totalItems={mock?.recordsFiltered}
-      columns={columns}
       notify={(text) => alert(text)}
     />
   );

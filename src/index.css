@@ -5,7 +5,7 @@ body {
   color: #fff;
 }
 .skleton-class {
-  background-color: rgb(48, 48, 48);
+  background-color: rgb(29, 29, 29) !important;
 }
 .page-size-select {
   background-color: rgb(0, 0, 0);
