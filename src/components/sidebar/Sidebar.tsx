@@ -67,7 +67,7 @@ const Sidebar: React.FC = () => {
 
                 {/* لیست بچه‌ها */}
                 {item?.children && (
-                  <ul className="flex flex-col ml-8 list-disc">
+                  <ul className="flex flex-col ml-8 md:list-disc">
                     {item.children.map((child, cIndex) => (
                       <li key={cIndex}>
                         <NavLink
