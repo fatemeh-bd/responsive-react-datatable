@@ -1,12 +1,9 @@
-import { useState } from "react";
 import Table from "../../components/table/Table";
 import { ColumnType } from "../../components/table/types";
 import { rowRenderer } from "../../components/table/helper";
 import { ActionDropDown } from "../../components/table/tools/actionDropDown/ActionDropDown";
 import mock from "../../components/table/mockData.json";
 const StaticAutoPageSizeTable = () => {
-  const [selectedIds, setSelectedIds] = useState([]);
-
   const columns: ColumnType[] = [
     {
       data: "contractName",
@@ -55,7 +52,6 @@ const StaticAutoPageSizeTable = () => {
   return (
     <Table
       lang="en"
-      saveSearch
       mode="static"
       tableName="table2"
       autoPageSizeConfig={{
@@ -78,12 +74,7 @@ const StaticAutoPageSizeTable = () => {
       staticRows={mock?.data}
       totalItems={mock?.recordsFiltered}
       columns={columns}
-      isSelectable
-      selectedIds={selectedIds}
-      selectedKey="id"
-      onSelectChange={(value) => setSelectedIds(value)}
       notify={(text) => alert(text)}
-      listMode
     />
   );
 };

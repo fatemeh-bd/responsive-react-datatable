@@ -39,9 +39,9 @@ const BasicTable = () => {
       searchable: false,
       width: 140,
       render: rowRenderer((_cell, _row) => (
-        <button className="bg-rose-200 rounded-2xl py-1.5 font-bold text-base px-4 text-black">
+        <button className="bg-rose-200 rounded-2xl py-1.5 font-bold text-sm px-4 text-black">
           Detail of
-          <span className="ml-1">{_row?.contractName?.slice(0, 5)}</span>{" "}
+          <span className="ml-1">{_row?.contractName?.slice(0, 5)}</span>
         </button>
       )),
     },
@@ -65,7 +65,6 @@ const BasicTable = () => {
       totalItems={mock?.recordsFiltered}
       columns={columns}
       notify={(text) => alert(text)}
-      listMode
     />
   );
 };

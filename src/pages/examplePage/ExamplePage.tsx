@@ -1,7 +1,3 @@
-import { useState, useMemo } from "react";
-import BasicTable from "./BasicTable";
-import StaticAutoPageSizeTable from "./StaticAutoPageSizeTable";
-
 const ExamplePage = () => {
   return (
     <div

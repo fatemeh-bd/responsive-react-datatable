@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import { routes } from "../../routes";
 import { CgMenuRight } from "react-icons/cg";
 import { IoClose } from "react-icons/io5";
+import { useQueryParams } from "../table/hooks/useQueryParams";
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { removeParams } = useQueryParams();
 
   return (
     <>
@@ -64,11 +66,15 @@ const Sidebar: React.FC = () => {
                           className={({ isActive }) =>
                             `text-white flex justify-center gap-2 md:justify-between items-center py-2 pr-4 rounded-lg transition-all duration-200 ${
                               isActive
-                                ? "!text-[#d24670]"
+                                ? "!text-[#d24670] opacity-100"
                                 : "hover:text-rose-300"
                             }`
                           }
-                          onClick={() => setIsOpen(false)}
+                          onClick={() => {
+                            setIsOpen(false);
+                            removeParams("pageSize");
+                            removeParams("page");
+                          }}
                         >
                           <span className="text-base">{child.name}</span>
                         </NavLink>

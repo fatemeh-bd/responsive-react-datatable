@@ -1,6 +1,6 @@
 import ExamplePage from "./pages/examplePage/ExamplePage";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { GrVmMaintenance } from "react-icons/gr";
+import { GrConfigure, GrVmMaintenance } from "react-icons/gr";
 import WelcomePage from "./pages/welcomePage/WelcomePage";
 import DocumentPage from "./pages/documentPage/HomePage";
 import { BsTerminal } from "react-icons/bs";
@@ -9,6 +9,7 @@ import StaticAutoPageSizeTable from "./pages/examplePage/StaticAutoPageSizeTable
 import TabPage from "./pages/examplePage/TabPage";
 import BasicTableCode from "./pages/examplePage/BasicTable.tsx?raw";
 import StaticAutoPageSizeTableCode from "./pages/examplePage/StaticAutoPageSizeTable.tsx?raw";
+import PropAutoPageSizeConfig from "./pages/propsPages/PropAutoPageSizeConfig";
 
 export const routes = [
   {
@@ -35,7 +36,7 @@ export const routes = [
         element: (
           <TabPage
             headerImports={`import Table, {
-    ColumnType,
+    type ColumnType,
     rowRenderer,
   } from 'responsive-react-datatable';`}
             view={<BasicTable />}
@@ -49,7 +50,7 @@ export const routes = [
         element: (
           <TabPage
             headerImports={`import Table, {
-    ColumnType,
+    type ColumnType,
     rowRenderer,
     ActionDropDown
   } from 'responsive-react-datatable';`}
@@ -63,6 +64,18 @@ export const routes = [
       //   path: "/example/internal",
       //   element: <ExamplePage />,
       // },
+    ],
+  },
+  {
+    icon: GrConfigure,
+    name: "Props",
+    path: "/props",
+    children: [
+      {
+        name: "autoPageSizeConfig",
+        path: "/props/autoPageSizeConfig",
+        element: <PropAutoPageSizeConfig />,
+      },
     ],
   },
 ];

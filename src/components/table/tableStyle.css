@@ -15,7 +15,7 @@
   position: relative;
   margin-right: auto;
   min-width: 70px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -91,6 +91,9 @@
   gap: 0.5rem;
 }
 /* mobile table */
+.mobile-table-swiper-slide {
+  height: auto !important;
+}
 .mobile-table-card {
   padding: 16px;
   height: 100%;
@@ -201,7 +204,7 @@
   padding-left: 0.25rem;
   padding-right: 0.25rem;
   text-align: center;
-  font-size: 14px;
+  font-size: 10.5pt;
   min-width: max-content;
 }
 .cursorPointer {
@@ -268,7 +271,7 @@
   margin-right: auto;
   text-align: center;
   height: auto;
-  font-size: 14px;
+  font-size: 10.5pt;
 }
 .isContent {
   display: flex;
@@ -338,7 +341,7 @@
   border: 1px solid;
 }
 .table-search-input-container::placeholder {
-  font-size: 14px;
+  font-size: 10.5pt;
 }
 .table-search-input-container:disabled {
   opacity: 70%;
@@ -367,10 +370,10 @@
   border-style: none;
   background-color: transparent;
   outline-style: none !important;
-  font-size: 14px;
+  font-size: 10.5pt;
 }
 .table-search-input::placeholder {
-  font-size: 14px;
+  font-size: 10.5pt;
 }
 /* pagination */
 .pagination-mobile-container {
@@ -401,7 +404,7 @@
   gap: 0.5rem;
 }
 .page-size-select-label {
-  font-size: 14px;
+  font-size: 10.5pt;
   text-wrap: nowrap;
   color: inherit;
 }
@@ -431,7 +434,7 @@
   opacity: 70%;
 }
 .page-size-select::placeholder {
-  font-size: 14px;
+  font-size: 10.5pt;
 }
 .page-size-select-icon {
   pointer-events: none;
@@ -610,7 +613,7 @@
   justify-content: center;
   gap: 4px;
   padding: 8px 16px;
-  font-size: 14px;
+  font-size: 10.5pt;
   font-weight: 500;
   color: var(--color-secondary-700, #374151);
   border-bottom: 1px solid var(--color-secondary-400, #cbd5e1);
@@ -646,7 +649,7 @@
 }
 .option-button {
   padding: 0.5rem;
-  font-size: 14px;
+  font-size: 10.5pt;
   border-radius: 12px;
   width: 100%;
   min-width: fit-content !important;
@@ -658,7 +661,7 @@
   transition-property: none !important;
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;
-  font-size: 14px;
+  font-size: 10.5pt;
   border-radius: 12px;
   min-width: fit-content !important;
   padding-left: 0.5rem;
@@ -697,7 +700,7 @@
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
     min-width: 3rem;
-    font-size: 14px;
+    font-size: 13px;
   }
   .pagination-mobile-container {
     justify-content: center;

@@ -42,6 +42,7 @@ const MobileTable = ({
         return column?.dontShowDataInMobile ? null : (
           <div key={colIndex} className="mobile-table-card-row">
             {column?.title === "عملیات" ||
+            column?.data === null ||
             column?.dontShowTitleInMobile ? null : (
               <span
                 style={{ color: theme?.headerTextColor }}
@@ -55,7 +56,9 @@ const MobileTable = ({
             <div
               title={cellKey ? row[cellKey]?.toString() : undefined}
               className={`mobile-table-card-content ${
-                column?.title === "عملیات" ? "isOperation" : ""
+                column?.title === "عملیات" || column?.data === null
+                  ? "isOperation"
+                  : ""
               }`}
             >
               {content}
