@@ -69,7 +69,6 @@ export const routes = [
   {
     icon: GrConfigure,
     name: "Props",
-    path: "/props",
     children: [
       {
         name: "autoPageSizeConfig",

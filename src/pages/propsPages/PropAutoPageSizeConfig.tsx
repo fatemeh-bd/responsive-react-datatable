@@ -1,4 +1,3 @@
-import React from "react";
 import Table from "../../components/table/Table";
 import { ColumnType } from "../../components/table/types";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";

@@ -3,8 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HashRouter, NavLink } from "react-router-dom";
-import { routes } from "./routes";
+import { HashRouter } from "react-router-dom";
 import Sidebar from "./components/sidebar/Sidebar";
 const queryClient = new QueryClient();
 
