@@ -40,12 +40,12 @@ const PropAutoPageSizeConfig = () => {
   return (
     <div className="p-6 space-y-8">
       {/* Heading */}
-      <h1 className="text-3xl font-bold">
-        autoPageSizeConfig – Auto Page Size Configuration
+      <h1 className="text-3xl font-bold text-pink-400">
+        AutoPageSizeConfig – Auto Page Size Configuration
       </h1>
 
       {/* Description */}
-      <p className="text-gray-200 text-lg">
+      <p className="text-white text-lg">
         The{" "}
         <code className="bg-blue-400/30 text-blue-400 py-1 px-2  rounded">
           autoPageSizeConfig
@@ -68,19 +68,12 @@ const PropAutoPageSizeConfig = () => {
         }}
       >
         {`<Table
-  tableName="table3"
-  columns={columns}
-  mode="static"
-  staticRows={mock.data}
-  totalItems={mock.recordsFiltered}
   autoPageSizeConfig={{
     enabled: true,
     containerSelector: "#content-wrapper",
-    subtractSelectors: ["#footer", "#tabId"],
-    optionalSelectorsForExtraBuffer: ["#footer", "#tabId"],
+    subtractSelectors: ["#footer", "#tab"],
     rowHeight: 51.15,
-    baseBufferRows: 3,
-    extraBufferRows: 1,
+    baseBufferRows: 2,
   }}
 />`}
       </SyntaxHighlighter>
@@ -113,11 +106,6 @@ const PropAutoPageSizeConfig = () => {
               "Optional. Elements inside the container whose heights should be subtracted (headers, filters, tabs).",
             ],
             [
-              "optionalSelectorsForExtraBuffer",
-              "string[]",
-              "Optional. If present in DOM, extra buffer rows are subtracted to avoid overflow.",
-            ],
-            [
               "rowHeight",
               "number",
               "Height of a single table row in pixels. Default: 51.15.",
@@ -126,11 +114,6 @@ const PropAutoPageSizeConfig = () => {
               "baseBufferRows",
               "number",
               "Rows to subtract from visible rows. Default: 2.",
-            ],
-            [
-              "extraBufferRows",
-              "number",
-              "Extra buffer rows subtracted if optional selectors exist. Default: 1.",
             ],
           ].map(([opt, type, desc]) => (
             <tr key={opt}>
@@ -157,11 +140,6 @@ const PropAutoPageSizeConfig = () => {
           Heights of elements in <code>subtractSelectors</code> are subtracted.
         </li>
         <li>
-          <strong className="!text-pink-400">Optional Buffer:</strong> Extra
-          rows subtracted if <code>optionalSelectorsForExtraBuffer</code>{" "}
-          elements exist.
-        </li>
-        <li>
           <strong className="!text-pink-400">Calculate Rows:</strong> Divide
           available height by <code>rowHeight</code> and subtract buffers.
         </li>
@@ -186,10 +164,8 @@ const PropAutoPageSizeConfig = () => {
               enabled: true,
               containerSelector: "#wrapper",
               subtractSelectors: ["#footer"],
-              optionalSelectorsForExtraBuffer: ["#footer"],
               rowHeight: 51.15,
               baseBufferRows: 2,
-              extraBufferRows: 1,
             }}
             colorTheme={{
               backgroundColor: "",
@@ -204,8 +180,22 @@ const PropAutoPageSizeConfig = () => {
       </div>
 
       {/* Tips */}
-      <h2 className="text-2xl font-semibold">Tips</h2>
-      <ul className="list-disc list-inside space-y-1 text-gray-300">
+      <h2 className="text-2xl flex items-center gap-2 font-bold text-yellow-400">
+        <svg
+          stroke="currentColor"
+          fill="currentColor"
+          stroke-width="0"
+          viewBox="0 0 24 24"
+          height="36px"
+          width="36px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path fill="none" d="M0 0h24v24H0z"></path>
+          <path d="M7 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm-2-1h8v-2H5v2zm11.5-9.5c0 3.82-2.66 5.86-3.77 6.5H5.27c-1.11-.64-3.77-2.68-3.77-6.5C1.5 5.36 4.86 2 9 2s7.5 3.36 7.5 7.5zm4.87-2.13L20 8l1.37.63L22 10l.63-1.37L24 8l-1.37-.63L22 6l-.63 1.37zM19 6l.94-2.06L22 3l-2.06-.94L19 0l-.94 2.06L16 3l2.06.94L19 6z"></path>
+        </svg>
+        Tips
+      </h2>
+      <ul className="list-disc list-inside space-y-1 text-gray-200">
         <li>
           Always point <code>containerSelector</code> to the main wrapper of
           your table.
@@ -213,10 +203,6 @@ const PropAutoPageSizeConfig = () => {
         <li>
           Ensure <code>rowHeight</code> matches your table row styling (
           <code>&lt;tr&gt;</code> height or CSS line-height).
-        </li>
-        <li>
-          <code>baseBufferRows</code> and <code>extraBufferRows</code> prevent
-          overflow when dynamic elements appear above or below the table.
         </li>
       </ul>
 

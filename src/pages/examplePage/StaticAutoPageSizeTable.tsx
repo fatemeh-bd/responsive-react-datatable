@@ -58,10 +58,8 @@ const StaticAutoPageSizeTable = () => {
         enabled: true,
         containerSelector: "#content-wrapper",
         subtractSelectors: ["#footer", "#tabId"],
-        optionalSelectorsForExtraBuffer: ["#footer", "#tabId"],
         rowHeight: 51.15,
         baseBufferRows: 3,
-        extraBufferRows: 1,
       }}
       colorTheme={{
         backgroundColor: "",
