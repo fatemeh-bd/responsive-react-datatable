@@ -11,6 +11,7 @@ import BasicTableCode from "./pages/examplePage/BasicTable.tsx?raw";
 import StaticAutoPageSizeTableCode from "./pages/examplePage/StaticAutoPageSizeTable.tsx?raw";
 import PropAutoPageSizeConfig from "./pages/propsPages/PropAutoPageSizeConfig";
 import ExternalTable from "./pages/examplePage/ExternalTable";
+import ExternalTableCode from "./pages/examplePage/ExternalTable?raw";
 
 export const routes = [
   {
@@ -63,7 +64,16 @@ export const routes = [
       {
         name: "External",
         path: "/example/external",
-        element: <ExternalTable />,
+        element: (
+          <TabPage
+            headerImports={`import Table , { type ColumnType , rowRenderer} from 'responsive-react-datatable';
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useState } from "react";`}
+            view={<ExternalTable />}
+            code={ExternalTableCode}
+          />
+        ),
       },
       // {
       //   name: "Internal",

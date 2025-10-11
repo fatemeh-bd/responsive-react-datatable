@@ -18,7 +18,7 @@ const ExternalTable = () => {
       searchable: false,
       width: 70,
       render: rowRenderer((_cell, _row) => (
-        <img src={_cell[0]} className="size-12" />
+        <img src={_cell[0]} className="size-12 mx-auto" />
       )),
     },
     {
@@ -57,7 +57,7 @@ const ExternalTable = () => {
       width: 140,
       render: rowRenderer((_cell, _row) => (
         <button
-          className="bg-pink-300 text-black rounded-2xl px-4 py-1"
+          className="bg-[#d24670] rounded-2xl px-4 py-1"
           onClick={() => alert(_row?.title)}
         >
           click me
@@ -89,7 +89,7 @@ const ExternalTable = () => {
       onPageSizeChange={(value) => setPageSize(value)}
       onSearch={(value) => setSearch(value)}
       pageSize={10}
-      height="615px"
+      height="570px"
       tableName="table1"
       colorTheme={{
         backgroundColor: "",
