@@ -8,7 +8,7 @@ const App: React.FC = () => {
     <div className="min-h-[95svh] relative" id="content-wrapper">
       <div
         style={{ width: "100%", height: "100svh", position: "absolute" }}
-        className="top-0 -z-40"
+        className="top-0 -z-40 pointer-events-none"
       >
         <Particles
           particleColors={["#fafafa", "#fafafa"]}

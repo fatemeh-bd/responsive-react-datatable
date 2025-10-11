@@ -3,10 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 
 // Placeholder components for steps (replace with your actual components)
 const Step1 = () => (
-  <div className="p-6  rounded-lg shadow-md">
+  <div className="p-4 rounded-lg shadow-md">
     <h2 className="text-2xl font-bold mb-4">Step 1: Installation</h2>
     <p>Install the package using npm or yarn.</p>
-    <pre className="mt-4 p-4 rounded bg-[#364153]">
+    <pre className="mt-4 md:p-4 p-3 text-wrap rounded bg-[#364153]">
       npm install responsive-react-datatable
     </pre>
   </div>
@@ -17,7 +17,7 @@ const Step2 = () => (
     <h2 className="text-2xl font-bold mb-4">Step 2: Configuration</h2>
     <p>Import and configure the datatable in your component.</p>
 
-    <pre className="mt-4 p-4 rounded bg-[#364153] text-white">
+    <pre className="mt-4 p-4 text-wrap rounded bg-[#364153] text-white">
       {`import { DataTable } from 'responsive-react-datatable'`}
     </pre>
     <p className="mt-4">
@@ -28,7 +28,7 @@ const Step2 = () => (
       </Link>{" "}
       section.
     </p>
-    <pre className="mt-4 p-4 rounded bg-[#364153] text-white whitespace-pre-wrap">
+    <pre className="mt-4 text-wrap p-4 overflow-x-auto rounded bg-[#364153] text-white whitespace-pre-wrap">
       {`<Table
   mode="static"
   tableName="test"
@@ -92,7 +92,7 @@ const WelcomePage = () => {
 
   if (showWelcome) {
     return (
-      <div className="w-full min-h-[90vh] flex flex-col items-center justify-center p-6">
+      <div className="w-full min-h-[90vh] flex flex-col items-center justify-center p-2">
         {/* Heading */}
         <h1
           className="text-3xl md:text-4xl font-extrabold mb-6 text-[#d24670] flex items-center text-center gap-2"
