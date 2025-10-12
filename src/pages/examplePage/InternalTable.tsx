@@ -36,7 +36,7 @@ const InternalTable = () => {
       lang="en"
       mode="internal"
       internalApiConfig={{
-        baseUrl: "https://fatemeh-bd.github.io/responsive-react-datatable",
+        baseUrl: "/responsive-react-datatable",
         endpoint: "/mockData.json",
         method: "GET",
         sortType: "desc",
@@ -61,7 +61,7 @@ const InternalTable = () => {
       height="570px"
       tableName="table4"
       colorTheme={{
-        backgroundColor: "",
+        backgroundColor: "#000",
         borderColor: "#364153",
         cellTextColor: "#fff",
         headerTextColor: "#fff",

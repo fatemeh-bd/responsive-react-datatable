@@ -167,7 +167,7 @@ const PropAutoPageSizeConfig = () => {
               baseBufferRows: 2,
             }}
             colorTheme={{
-              backgroundColor: "",
+              backgroundColor: "#000",
               borderColor: "#364153",
               cellTextColor: "#fff",
               headerTextColor: "#fff",

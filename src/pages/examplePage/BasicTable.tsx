@@ -57,7 +57,7 @@ const BasicTable = () => {
       height="615px"
       tableName="table1"
       colorTheme={{
-        backgroundColor: "",
+        backgroundColor: "#000",
         borderColor: "#364153",
         cellTextColor: "#fff",
         headerTextColor: "#fff",

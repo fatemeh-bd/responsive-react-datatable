@@ -65,7 +65,7 @@ const StaticAutoPageSizeTable = () => {
         baseBufferRows: 3,
       }}
       colorTheme={{
-        backgroundColor: "",
+        backgroundColor: "#000",
         borderColor: "#364153",
         cellTextColor: "#fff",
         headerTextColor: "#fff",

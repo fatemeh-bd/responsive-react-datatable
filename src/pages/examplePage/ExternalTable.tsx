@@ -92,7 +92,7 @@ const ExternalTable = () => {
       height="570px"
       tableName="table1"
       colorTheme={{
-        backgroundColor: "",
+        backgroundColor: "#000",
         borderColor: "#364153",
         cellTextColor: "#fff",
         headerTextColor: "#fff",
