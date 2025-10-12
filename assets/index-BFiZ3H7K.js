@@ -436,8 +436,7 @@ const ExternalTable = () => {\r
 };\r
 \r
 export default ExternalTable;\r
-`,uQ=()=>{const e=[{data:"contractName",orderable:!0,title:"contract Name",searchable:!0,width:200},{data:"startDate",orderable:!0,title:"start Date",searchable:!0,width:140},{data:"endDate",orderable:!0,title:"end Date",searchable:!1,width:140},{data:"createdAt",orderable:!0,title:"created At",searchable:!1,width:140}];return I.jsx(ro,{lang:"en",mode:"internal",internalApiConfig:{baseUrl:"https://fatemeh-bd.github.io/responsive-react-datatable",endpoint:"/mockData.json",method:"GET",headers:{"Content-Type":"application/json",Authorization:"Bearer your-token"},onFetch:t=>{console.log(t)}},columns:e,pageSize:10,height:"570px",tableName:"table4",colorTheme:{backgroundColor:"",borderColor:"#364153",cellTextColor:"#fff",headerTextColor:"#fff",headerBackgroundColor:"#364153",primaryColor:"#d24670"},notify:t=>alert(t)})},cQ=`import { rowRenderer } from "../../components/table/helper";\r
-import Table from "../../components/table/Table";\r
+`,uQ=()=>{const e=[{data:"contractName",orderable:!0,title:"contract Name",searchable:!0,width:200},{data:"startDate",orderable:!0,title:"start Date",searchable:!0,width:140},{data:"endDate",orderable:!0,title:"end Date",searchable:!1,width:140},{data:"createdAt",orderable:!0,title:"created At",searchable:!1,width:140}];return I.jsx(ro,{lang:"en",mode:"internal",internalApiConfig:{baseUrl:"https://fatemeh-bd.github.io/responsive-react-datatable",endpoint:"/mockData.json",method:"GET",sortType:"desc",customBody:[{example:"test",isFilter:!0,noRefresh:!0}],defaultSortBy:"id",headers:{"Content-Type":"application/json",Authorization:"Bearer your-token"},onFetch:t=>{console.log(t)}},columns:e,pageSize:10,height:"570px",tableName:"table4",colorTheme:{backgroundColor:"",borderColor:"#364153",cellTextColor:"#fff",headerTextColor:"#fff",headerBackgroundColor:"#364153",primaryColor:"#d24670"},notify:t=>alert(t)})},cQ=`import Table from "../../components/table/Table";\r
 import { ColumnType } from "../../components/table/types";\r
 const InternalTable = () => {\r
   const columns: ColumnType[] = [\r
@@ -478,6 +477,15 @@ const InternalTable = () => {\r
         baseUrl: "https://fatemeh-bd.github.io/responsive-react-datatable",\r
         endpoint: "/mockData.json",\r
         method: "GET",\r
+        sortType: "desc",\r
+        customBody: [\r
+          {\r
+            example: "test",\r
+            isFilter: true, // Needed for mobile filter\r
+            noRefresh: true, // Do not refetch API when this value changes\r
+          },\r
+        ],\r
+        defaultSortBy: "id",\r
         headers: {\r
           "Content-Type": "application/json",\r
           Authorization: \`Bearer your-token\`,\r
@@ -486,16 +494,6 @@ const InternalTable = () => {\r
           console.log(response);\r
         },\r
       }}\r
-      //   internalApiConfig={{\r
-      //     baseUrl: "http://localhost:5173/src/components/table/mockData.json",\r
-      //     endpoint:"",\r
-      //     method:"GET",\r
-      //     headers: {\r
-      //       "Access-Control-Allow-Origin": "*",\r
-      //       "Content-Type": "application/json",\r
-      //       Authorization: \`Bearer\`,\r
-      //     },\r
-      //   }}\r
       columns={columns}\r
       pageSize={10}\r
       height="570px"\r
