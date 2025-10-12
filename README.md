@@ -9,6 +9,9 @@
 
 ## 🎯 [**Click here to view the live demo**](https://fatemeh-bd.github.io/responsive-react-datatable/ "Responsive React DataTable Live Demo")
 
+![Responsive React DataTable Demo](/public/table.gif)
+
+
 ---
 
 ## 🚀 Features of Responsive React DataTable
@@ -122,7 +125,7 @@ let payload: Record<string, any> = {
 
 ---
 
-## Static Mode Example
+## 🗂 Static Mode Example
 
 ```jsx
 const staticRows = [{ id: 1, name: "max", age: 30 }];
