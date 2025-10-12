@@ -59,9 +59,10 @@ const Sidebar: React.FC = () => {
                 {item.children && (
                   <ul className="flex flex-col ml-8 list-disc mt-4">
                     {item.children.map((child, cIndex) => (
-                      <li>
-                        <NavLink
+                      <li
                           key={cIndex}
+                      >
+                        <NavLink
                           to={child.path}
                           className={({ isActive }) =>
                             `text-white flex justify-center gap-2 md:justify-between items-center py-2 pr-4 rounded-lg transition-all duration-200 ${

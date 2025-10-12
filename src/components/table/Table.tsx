@@ -3,7 +3,6 @@ import "./tableStyle.css";
 import React, {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useState,
 } from "react";

@@ -12,6 +12,9 @@ import StaticAutoPageSizeTableCode from "./pages/examplePage/StaticAutoPageSizeT
 import PropAutoPageSizeConfig from "./pages/propsPages/PropAutoPageSizeConfig";
 import ExternalTable from "./pages/examplePage/ExternalTable";
 import ExternalTableCode from "./pages/examplePage/ExternalTable?raw";
+import InternalTable from "./pages/examplePage/InternalTable";
+import InternalTableCode from "./pages/examplePage/InternalTable?raw";
+import InternalNotes from "./pages/examplePage/InternalNotes";
 
 export const routes = [
   {
@@ -46,6 +49,38 @@ export const routes = [
           />
         ),
       },
+
+      {
+        name: "External",
+        path: "/example/external",
+        element: (
+          <TabPage
+            headerImports={`import Table , { type ColumnType , rowRenderer} from 'responsive-react-datatable';
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useState } from "react";`}
+            view={<ExternalTable />}
+            code={ExternalTableCode}
+          />
+        ),
+      },
+      {
+        name: "Internal",
+        path: "/example/internal",
+        element: (
+          <TabPage
+            headerImports={`import Table , { type ColumnType , rowRenderer} from 'responsive-react-datatable';`}
+            view={
+            <>
+            <InternalNotes/>
+            <InternalTable />
+            </>
+            }
+            
+            code={InternalTableCode}
+          />
+        ),
+      },
       {
         name: "Static Auto PageSize",
         path: "/example/staticAutoPageSize",
@@ -61,25 +96,6 @@ export const routes = [
           />
         ),
       },
-      {
-        name: "External",
-        path: "/example/external",
-        element: (
-          <TabPage
-            headerImports={`import Table , { type ColumnType , rowRenderer} from 'responsive-react-datatable';
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useState } from "react";`}
-            view={<ExternalTable />}
-            code={ExternalTableCode}
-          />
-        ),
-      },
-      // {
-      //   name: "Internal",
-      //   path: "/example/internal",
-      //   element: <ExamplePage />,
-      // },
     ],
   },
   {

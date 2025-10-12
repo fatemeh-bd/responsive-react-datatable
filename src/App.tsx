@@ -22,13 +22,13 @@ const App: React.FC = () => {
         />
       </div>
       <Routes>
-        {routes.map((route) => (
-          <>
-            <Route key={route.path} path={route.path} element={route.element} />
+        {routes.map((route,index) => (
+          <React.Fragment key={route.path||index}>
+            <Route  path={route.path} element={route.element} />
             {route?.children?.map((item) => (
               <Route key={item.path} path={item.path} element={item.element} />
             ))}
-          </>
+          </React.Fragment>
         ))}
       </Routes>
     </div>
