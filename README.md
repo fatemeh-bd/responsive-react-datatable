@@ -9,7 +9,7 @@
 
 ## 🎯 [**Click here to view the live demo**](https://fatemeh-bd.github.io/responsive-react-datatable/ "Responsive React DataTable Live Demo")
 
-![Responsive React DataTable Demo](./table.gif)
+![Demo](/images/table.gif)
 
 ---
 
