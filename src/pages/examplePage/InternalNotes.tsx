@@ -24,6 +24,8 @@ const InternalNotes = () => {
         <li>Sorting</li>
         <li>Searching</li>
         <li>Pagination</li>
+        <li>Page Size</li>
+
       </ul>
       <p>and send the necessary parameters to your API endpoint.</p>
     </div>
