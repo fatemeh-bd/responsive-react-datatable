@@ -436,7 +436,7 @@ const ExternalTable = () => {\r
 };\r
 \r
 export default ExternalTable;\r
-`,uQ=()=>{const e=[{data:"contractName",orderable:!0,title:"contract Name",searchable:!0,width:200},{data:"startDate",orderable:!0,title:"start Date",searchable:!0,width:140},{data:"endDate",orderable:!0,title:"end Date",searchable:!1,width:140},{data:"createdAt",orderable:!0,title:"created At",searchable:!1,width:140}];return I.jsx(ro,{lang:"en",mode:"internal",internalApiConfig:{baseUrl:"https://fatemeh-bd.github.io/responsive-react-datatable",endpoint:"/mockData.json",method:"GET",sortType:"desc",customBody:[{example:"test",isFilter:!0,noRefresh:!0}],defaultSortBy:"id",headers:{"Content-Type":"application/json",Authorization:"Bearer your-token"},onFetch:t=>{console.log(t)}},columns:e,pageSize:10,height:"570px",tableName:"table4",colorTheme:{backgroundColor:"#000",borderColor:"#364153",cellTextColor:"#fff",headerTextColor:"#fff",headerBackgroundColor:"#364153",primaryColor:"#d24670"},notify:t=>alert(t)})},cQ=`import Table from "../../components/table/Table";\r
+`,uQ=()=>{const e=[{data:"contractName",orderable:!0,title:"contract Name",searchable:!0,width:200},{data:"startDate",orderable:!0,title:"start Date",searchable:!0,width:140},{data:"endDate",orderable:!0,title:"end Date",searchable:!1,width:140},{data:"createdAt",orderable:!0,title:"created At",searchable:!1,width:140}];return I.jsx(ro,{lang:"en",mode:"internal",internalApiConfig:{baseUrl:"/responsive-react-datatable",endpoint:"/mockData.json",method:"GET",sortType:"desc",customBody:[{example:"test",isFilter:!0,noRefresh:!0}],defaultSortBy:"id",headers:{"Content-Type":"application/json",Authorization:"Bearer your-token"},onFetch:t=>{console.log(t)}},columns:e,pageSize:10,height:"570px",tableName:"table4",colorTheme:{backgroundColor:"#000",borderColor:"#364153",cellTextColor:"#fff",headerTextColor:"#fff",headerBackgroundColor:"#364153",primaryColor:"#d24670"},notify:t=>alert(t)})},cQ=`import Table from "../../components/table/Table";\r
 import { ColumnType } from "../../components/table/types";\r
 const InternalTable = () => {\r
   const columns: ColumnType[] = [\r
@@ -474,7 +474,7 @@ const InternalTable = () => {\r
       lang="en"\r
       mode="internal"\r
       internalApiConfig={{\r
-        baseUrl: "https://fatemeh-bd.github.io/responsive-react-datatable",\r
+        baseUrl: "/responsive-react-datatable",\r
         endpoint: "/mockData.json",\r
         method: "GET",\r
         sortType: "desc",\r
