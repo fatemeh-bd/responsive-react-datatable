@@ -18,7 +18,7 @@ const ExternalTable = () => {
       searchable: false,
       width: 70,
       render: rowRenderer((_cell, _row) => (
-        <img src={_cell[0]} className="size-12 mx-auto" />
+        <img src={_cell[0]} className="md:size-12 size-32 mx-auto" />
       )),
     },
     {
