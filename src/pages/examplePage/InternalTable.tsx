@@ -36,7 +36,7 @@ const InternalTable = () => {
       lang="en"
       mode="internal"
       internalApiConfig={{
-        baseUrl: "/responsive-react-datatable",
+        baseUrl: "https://fatemeh-bd.github.io/responsive-react-datatable",
         endpoint: "/mockData.json",
         method: "GET",
         sortType: "desc",

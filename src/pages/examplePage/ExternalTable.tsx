@@ -6,7 +6,7 @@ import axios from "axios";
 import { useState } from "react";
 const ExternalTable = () => {
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState("");
 
   const columns: ColumnType[] = [
@@ -88,7 +88,7 @@ const ExternalTable = () => {
       onPageChange={(value) => setPage(value)}
       onPageSizeChange={(value) => setPageSize(value)}
       onSearch={(value) => setSearch(value)}
-      pageSize={10}
+      pageSize={5}
       height="570px"
       tableName="table1"
       // colorTheme={{
