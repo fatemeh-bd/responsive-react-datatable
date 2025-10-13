@@ -30,7 +30,6 @@ const DesktopTable = ({
   rowHeight?: string;
   isAllSelected?: boolean;
   rowClassName?: (row: any) => void;
-
 }) => {
   const [order, setOrder] = useState<OrderType>(null);
   const [allSelected, setAllSelected] = useState(isAllSelected);
@@ -114,7 +113,7 @@ const DesktopTable = ({
                       column?.orderable && handleSort(colIndex, column)
                     }
                   >
-                    {column?.data === "selectableTable" ? (
+                    {column?.data === "selectableTable" && rows?.length ? (
                       <Checkbox
                         className="desktop-table-select-all-checkbox"
                         primaryColor={theme.primaryColor}
@@ -198,7 +197,9 @@ const DesktopTable = ({
                 rows.map((row, rowIndex) => (
                   <tr
                     key={rowIndex}
-                    className={`desktop-table-data-row ${rowClassName?.(row)||""}`}
+                    className={`desktop-table-data-row ${
+                      rowClassName?.(row) || ""
+                    }`}
                     style={{
                       borderBottom: `1px solid ${theme.borderColor}`,
                       backgroundColor: theme.backgroundColor,
