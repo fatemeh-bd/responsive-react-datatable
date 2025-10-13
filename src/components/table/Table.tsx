@@ -1,11 +1,6 @@
 import "./tableStyle.css";
 
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ColorTheme,
   ColumnType,
@@ -617,6 +612,11 @@ const Table: React.FC<TableProps> = (props) => {
             theme={theme}
             textsConfig={mergedTexts}
             onOrderChange={handleOrderChange}
+            isAllSelected={
+              selectableProps?.isSelectable &&
+              selectableProps?.selectedIds?.length > 0 &&
+              selectableProps?.selectedIds?.length === totalItems
+            }
             onAllSelect={() => {
               if (!selectableProps?.onSelectChange) return;
 

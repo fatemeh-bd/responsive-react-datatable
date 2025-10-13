@@ -15,6 +15,7 @@ const DesktopTable = ({
   onAllSelect,
   onOrderChange,
   rowHeight,
+  isAllSelected = false,
 }: {
   columns: ColumnType[];
   isLoading?: boolean;
@@ -23,12 +24,13 @@ const DesktopTable = ({
   rows: Record<string, any>[];
   theme: ColorTheme;
   textsConfig: TextsConfig;
-  onAllSelect?: () => void;
+  onAllSelect?: (checked?: boolean) => void;
   onOrderChange?: (order: OrderType) => void;
   rowHeight?: string;
+  isAllSelected?: boolean;
 }) => {
   const [order, setOrder] = useState<OrderType>(null);
-
+  const [allSelected, setAllSelected] = useState(isAllSelected);
   const headerContainerRef = useRef<HTMLDivElement>(null);
   const bodyContainerRef = useRef<HTMLDivElement>(null);
   const handleSort = (colIndex: number, column: ColumnType) => {
@@ -109,7 +111,11 @@ const DesktopTable = ({
                       <Checkbox
                         className="desktop-table-select-all-checkbox"
                         primaryColor={theme.primaryColor}
-                        onChange={() => onAllSelect?.()}
+                        onChange={(value) => {
+                          setAllSelected(value?.target.checked);
+                          onAllSelect?.(value?.target.checked);
+                        }}
+                        checked={allSelected}
                       />
                     ) : (
                       <div
