@@ -1,6 +1,6 @@
 {
   "name": "responsive-react-datatable",
-  "version": "2.0.4",
+  "version": "2.0.7",
   "description": "A modern, responsive React DataTable component for React applications. Supports sorting, filtering, pagination, and customizable columns — ideal for building interactive, data-driven interfaces that look great on any screen size.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",

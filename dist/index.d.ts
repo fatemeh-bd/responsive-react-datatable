@@ -97,6 +97,7 @@ interface BaseTableProps {
     removeFilterKey?: string;
     actionButtons?: ReactNode;
     noPageSize?: boolean;
+    rowClassName?: string;
 }
 interface Selectable extends BaseTableProps {
     isSelectable: boolean;

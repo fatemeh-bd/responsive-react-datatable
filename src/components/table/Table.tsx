@@ -62,6 +62,7 @@ const Table: React.FC<TableProps> = (props) => {
     removeFilterKey,
     actionButtons,
     noPageSize,
+    rowClassName,
   } = props;
   const selectableProps = isSelectable ? (props as Selectable) : undefined;
   const theme: ColorTheme = useMemo(
@@ -592,6 +593,7 @@ const Table: React.FC<TableProps> = (props) => {
       ) : (
         <>
           <DesktopTable
+            rowClassName={rowClassName}
             rowHeight={`${rowHeight}px` || "51.15px"}
             pageSize={dynamicPageSize}
             maxHeight={

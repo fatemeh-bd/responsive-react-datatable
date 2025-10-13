@@ -16,6 +16,7 @@ const DesktopTable = ({
   onOrderChange,
   rowHeight,
   isAllSelected = false,
+  rowClassName,
 }: {
   columns: ColumnType[];
   isLoading?: boolean;
@@ -28,6 +29,7 @@ const DesktopTable = ({
   onOrderChange?: (order: OrderType) => void;
   rowHeight?: string;
   isAllSelected?: boolean;
+  rowClassName?: string;
 }) => {
   const [order, setOrder] = useState<OrderType>(null);
   const [allSelected, setAllSelected] = useState(isAllSelected);
@@ -49,7 +51,11 @@ const DesktopTable = ({
       return newOrder;
     });
   };
-
+  useEffect(() => {
+    if (isAllSelected) {
+      setAllSelected(true);
+    }
+  }, [isAllSelected]);
   useEffect(() => {
     const bodyContainer = bodyContainerRef.current;
     const headerContainer = headerContainerRef.current;
@@ -191,7 +197,7 @@ const DesktopTable = ({
                 rows.map((row, rowIndex) => (
                   <tr
                     key={rowIndex}
-                    className="desktop-table-data-row"
+                    className={`desktop-table-data-row ${rowClassName}`}
                     style={{
                       borderBottom: `1px solid ${theme.borderColor}`,
                       backgroundColor: theme.backgroundColor,
