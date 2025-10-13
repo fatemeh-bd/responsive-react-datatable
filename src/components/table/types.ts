@@ -84,10 +84,10 @@ export interface AutoPageSizeConfig {
   enabled?: boolean;
   containerSelector?: string;
   subtractSelectors?: string[];
-  optionalSelectorsForExtraBuffer?: string[];
+  // optionalSelectorsForExtraBuffer?: string[];
   rowHeight?: number;
   baseBufferRows?: number;
-  extraBufferRows?: number;
+  // extraBufferRows?: number;
 }
 export interface BaseTableProps {
   mode: TableMode;

@@ -1,12 +1,6 @@
 import "./tableStyle.css";
 
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ColorTheme,
   ColumnType,
@@ -145,9 +139,9 @@ const Table: React.FC<TableProps> = (props) => {
     optionalSelectorsForExtraBuffer: [
       "#topFilter",
       // "#paging",
-      ...((customAutoPageSizeConfig?.optionalSelectorsForExtraBuffer as string[]) ||
-        []),
+      ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
     ],
+    extraBufferRows: 1,
   };
   const {
     enabled: autoEnabled,
@@ -233,7 +227,7 @@ const Table: React.FC<TableProps> = (props) => {
   );
 
   const paginatedRows = useMemo(() => {
-    const size = autoEnabled ? dynamicPageSize : pageSizeInitial;
+    const size = dynamicPageSize;
     const start = (currentPage - 1) * size;
     const end = start + size;
     return filteredRows.slice(start, end);
@@ -618,6 +612,11 @@ const Table: React.FC<TableProps> = (props) => {
             theme={theme}
             textsConfig={mergedTexts}
             onOrderChange={handleOrderChange}
+            isAllSelected={
+              selectableProps?.isSelectable &&
+              selectableProps?.selectedIds?.length > 0 &&
+              selectableProps?.selectedIds?.length === totalItems
+            }
             onAllSelect={() => {
               if (!selectableProps?.onSelectChange) return;
 
