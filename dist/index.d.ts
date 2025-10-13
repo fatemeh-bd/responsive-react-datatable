@@ -65,10 +65,8 @@ interface AutoPageSizeConfig {
     enabled?: boolean;
     containerSelector?: string;
     subtractSelectors?: string[];
-    optionalSelectorsForExtraBuffer?: string[];
     rowHeight?: number;
     baseBufferRows?: number;
-    extraBufferRows?: number;
 }
 interface BaseTableProps {
     mode: TableMode;
