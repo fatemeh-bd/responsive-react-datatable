@@ -29,7 +29,8 @@ const DesktopTable = ({
   onOrderChange?: (order: OrderType) => void;
   rowHeight?: string;
   isAllSelected?: boolean;
-  rowClassName?: string;
+  rowClassName?: (row: any) => void;
+
 }) => {
   const [order, setOrder] = useState<OrderType>(null);
   const [allSelected, setAllSelected] = useState(isAllSelected);
@@ -197,7 +198,7 @@ const DesktopTable = ({
                 rows.map((row, rowIndex) => (
                   <tr
                     key={rowIndex}
-                    className={`desktop-table-data-row ${rowClassName}`}
+                    className={`desktop-table-data-row ${rowClassName?.(row)||""}`}
                     style={{
                       borderBottom: `1px solid ${theme.borderColor}`,
                       backgroundColor: theme.backgroundColor,

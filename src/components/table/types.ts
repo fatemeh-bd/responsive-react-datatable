@@ -118,7 +118,8 @@ export interface BaseTableProps {
   removeFilterKey?: string;
   actionButtons?: ReactNode;
   noPageSize?: boolean;
-  rowClassName?:string
+  rowClassName?: (row: any) => void;
+
 }
 
 export interface Selectable extends BaseTableProps {
