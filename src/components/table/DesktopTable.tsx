@@ -44,13 +44,13 @@ const DesktopTable = ({
       let newOrder: OrderType;
       if (!prev || prev.column !== colIndex) {
         newOrder = {
-          column: isSelectable ? colIndex + 1 : colIndex,
+          column: isSelectable ? colIndex - 1 : colIndex,
           dir: "desc",
           name: column.data!,
         };
       } else if (prev.dir === "desc") {
         newOrder = {
-          column: isSelectable ? colIndex + 1 : colIndex,
+          column: isSelectable ? colIndex - 1 : colIndex,
           dir: "asc",
           name: column.data!,
         };
