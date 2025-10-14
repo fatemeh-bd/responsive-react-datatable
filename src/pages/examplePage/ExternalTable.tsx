@@ -88,7 +88,7 @@ const ExternalTable = () => {
       onPageChange={(value) => setPage(value)}
       onPageSizeChange={(value) => setPageSize(value)}
       onSearch={(value) => setSearch(value)}
-      pageSize={5}
+      pageSize={8}
       height="570px"
       tableName="table1"
       colorTheme={{
