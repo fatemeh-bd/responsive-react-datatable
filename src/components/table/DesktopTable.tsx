@@ -17,6 +17,7 @@ const DesktopTable = ({
   rowHeight,
   isAllSelected = false,
   rowClassName,
+  isSelectable,
 }: {
   columns: ColumnType[];
   isLoading?: boolean;
@@ -30,6 +31,7 @@ const DesktopTable = ({
   rowHeight?: string;
   isAllSelected?: boolean;
   rowClassName?: (row: any) => void;
+  isSelectable?: boolean;
 }) => {
   const [order, setOrder] = useState<OrderType>(null);
   const [allSelected, setAllSelected] = useState(isAllSelected);
@@ -41,9 +43,17 @@ const DesktopTable = ({
     setOrder((prev) => {
       let newOrder: OrderType;
       if (!prev || prev.column !== colIndex) {
-        newOrder = { column: colIndex, dir: "desc", name: column.data! };
+        newOrder = {
+          column: isSelectable ? colIndex + 1 : colIndex,
+          dir: "desc",
+          name: column.data!,
+        };
       } else if (prev.dir === "desc") {
-        newOrder = { column: colIndex, dir: "asc", name: column.data! };
+        newOrder = {
+          column: isSelectable ? colIndex + 1 : colIndex,
+          dir: "asc",
+          name: column.data!,
+        };
       } else {
         newOrder = null;
       }

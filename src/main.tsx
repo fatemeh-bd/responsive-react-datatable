@@ -14,9 +14,7 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <HashRouter>
         <div className="flex">
-          <div className="lg:w-[300px] max-w-[300px] fixed z-[999] md:relative">
-            <Sidebar />
-          </div>
+          <Sidebar />
           <div className="flex-1 px-4 pt-18 md:pt-12 z-[99] pb-12 max-w-7xl overflow-x-auto mx-auto">
             <App />
             <h2 className="text-lg text-[#d24670] font-bold text-center mt-8">
@@ -55,5 +53,5 @@ root.render(
         </div>
       </HashRouter>
     </QueryClientProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

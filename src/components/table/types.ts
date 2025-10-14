@@ -103,7 +103,7 @@ export interface BaseTableProps {
   onSearch?: (value: string) => void;
   onPageSizeChange?: (order: number) => void;
   height?: string;
-  hasColumnOrder?: boolean;
+  columnNumber?: number;
   noSearch?: boolean;
   saveSearch?: boolean;
   notify?: (text: string, type: "error" | "success" | "warning") => void;
@@ -119,7 +119,6 @@ export interface BaseTableProps {
   actionButtons?: ReactNode;
   noPageSize?: boolean;
   rowClassName?: (row: any) => void;
-
 }
 
 export interface Selectable extends BaseTableProps {

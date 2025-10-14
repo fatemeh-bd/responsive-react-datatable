@@ -6,7 +6,7 @@ import axios from "axios";
 import { useState } from "react";
 const ExternalTable = () => {
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(8);
   const [search, setSearch] = useState("");
 
   const columns: ColumnType[] = [

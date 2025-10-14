@@ -43,7 +43,7 @@ const Table: React.FC<TableProps> = (props) => {
     pageQueryName = "page",
     pageSize = defaultSize,
     mode,
-    hasColumnOrder,
+    columnNumber,
     noSearch,
     notify,
     onPageChange,
@@ -205,7 +205,7 @@ const Table: React.FC<TableProps> = (props) => {
   }, [dynamicPageSize, isMobile, autoEnabled, isManualPageSize]);
   const [order, setOrder] = useState<any>([
     {
-      column: hasColumnOrder ? 8 : 0,
+      column: columnNumber || 0,
       dir: mode === "internal" ? props?.internalApiConfig?.sortType : "desc",
       name:
         mode === "internal" ? props?.internalApiConfig?.defaultSortBy : "id",
@@ -601,6 +601,7 @@ const Table: React.FC<TableProps> = (props) => {
                 ? height
                 : `calc(${tableHeightPageSize * (rowHeight || 51.15)}px)`
             }
+            isSelectable={isSelectable}
             columns={columnsWithRow}
             isLoading={isLoading || tableLoading}
             rows={

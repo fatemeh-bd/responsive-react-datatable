@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaNpm } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 
 // Placeholder components for steps (replace with your actual components)
@@ -94,6 +95,17 @@ const WelcomePage = () => {
     return (
       <div className="w-full min-h-[90vh] flex flex-col items-center justify-center p-2">
         {/* Heading */}
+        <a
+          href="https://www.npmjs.com/package/responsive-react-datatable"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 hover:text-gray-300"
+        >
+          <FaNpm className="text-6xl text-orange-300" />
+          <span className="text-2xl text-orange-300">
+            responsive-react-datatable
+          </span>
+        </a>
         <h1
           className="text-3xl md:text-4xl font-extrabold mb-6 text-[#d24670] flex items-center text-center gap-2"
           role="heading"
