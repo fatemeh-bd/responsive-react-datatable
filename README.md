@@ -162,7 +162,7 @@ const staticRows = [{ id: 1, name: "max", age: 30 }];
 | lang               | `'en' \| 'fa'`                                | 'en'    | Language                                                              |
 | noSearch           | boolean                                       | false   | don't show search box                                                 |
 | saveSearch         | boolean                                       | false   | save search value in sessionStorage                                   |
-| columnNumber     | number                                       | false   | Enable column reordering ( column: columnNumber )            |
+| columnNumber     | number                                       | 0   | Enable column reordering ( column: columnNumber )            |
 | notify             | (text:string,type:"warning" \| "error")=>void | —       | return error message after calling api in "internal" mode             |
 | isLoading          | boolean                                       | false   | Loading state                                                         |
 | autoPageSizeConfig | AutoPageSizeConfig                            | Default | Auto page size settings (Show number of rows relative to page height) |
