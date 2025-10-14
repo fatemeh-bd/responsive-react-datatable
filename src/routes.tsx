@@ -36,14 +36,12 @@ export const routes = [
     element: <ExamplePage />,
     children: [
       {
-        name: "Basic",
-        path: "/example/basic",
+        name: "Static",
+        path: "/example/static",
         element: (
           <TabPage
-            headerImports={`import Table, {
-    type ColumnType,
-    rowRenderer,
-  } from 'responsive-react-datatable';`}
+            headerImports={`import Table, {type ColumnType, rowRenderer, } from 'responsive-react-datatable';
+import mock from "../../components/table/mockData.json";`}
             view={<BasicTable />}
             code={BasicTableCode}
           />
@@ -71,12 +69,11 @@ import { useState } from "react";`}
           <TabPage
             headerImports={`import Table , { type ColumnType , rowRenderer} from 'responsive-react-datatable';`}
             view={
-            <>
-            <InternalNotes/>
-            <InternalTable />
-            </>
+              <>
+                <InternalNotes />
+                <InternalTable />
+              </>
             }
-            
             code={InternalTableCode}
           />
         ),
@@ -86,11 +83,7 @@ import { useState } from "react";`}
         path: "/example/staticAutoPageSize",
         element: (
           <TabPage
-            headerImports={`import Table, {
-    type ColumnType,
-    rowRenderer,
-    ActionDropDown
-  } from 'responsive-react-datatable';`}
+            headerImports={`import Table, {type ColumnType, rowRenderer, ActionDropDown} from 'responsive-react-datatable';`}
             view={<StaticAutoPageSizeTable />}
             code={StaticAutoPageSizeTableCode}
           />

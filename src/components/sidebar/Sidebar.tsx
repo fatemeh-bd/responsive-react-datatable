@@ -26,7 +26,7 @@ const Sidebar: React.FC = () => {
           )}
         </button>
       </div>
-      <div className="lg:w-[300px] max-w-[300px] fixed z-[999] md:relative">
+      <div className="lg:w-[300px] max-w-[300px] fixed z-[999] md:relative max-md:top-[4rem]">
         {/* Mobile Header */}
 
         {/* Sidebar */}
@@ -35,10 +35,10 @@ const Sidebar: React.FC = () => {
             isOpen ? "translate-x-0" : "translate-x-[-100%] md:translate-x-0"
           }`}
         >
-          <div className="sticky top-16">
-            <div className="hidden md:flex flex-col items-center mx-auto gap-2 my-8">
-              <img src="logo.svg" alt="logo" height={50} width={50} />
-              <h2 className="font-semibold text-white text-2xl">React Table</h2>
+          <div className="sticky top-1">
+            <div className="hidden md:flex flex-col items-center mx-auto gap-2 my-2">
+              <img src="logo.svg" alt="logo" height={40} width={40} />
+              <h2 className="font-semibold text-white text-xl">React Table</h2>
             </div>
             <nav className="flex flex-col">
               {routes.map((item, index) => (
