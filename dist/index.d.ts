@@ -82,7 +82,7 @@ interface BaseTableProps {
     onSearch?: (value: string) => void;
     onPageSizeChange?: (order: number) => void;
     height?: string;
-    hasColumnOrder?: boolean;
+    columnNumber?: number;
     noSearch?: boolean;
     saveSearch?: boolean;
     notify?: (text: string, type: "error" | "success" | "warning") => void;

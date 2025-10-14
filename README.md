@@ -11,7 +11,6 @@
 
 ![Responsive React DataTable Demo](/table.gif)
 
-
 ---
 
 ## 🚀 Features of Responsive React DataTable
@@ -144,7 +143,7 @@ const staticRows = [{ id: 1, name: "max", age: 30 }];
 ## ⚙️ Props Reference
 
 | Prop               | Type                                          | Default | Description                                                           |
-| ------------------ | --------------------------------------------- | ------- | --------------------------------------------------------------------- |
+| ------------------ | --------------------------------------------- | ------- | --------------------------------------------------------------------- | --- | --- |
 | columns            | ColumnType[]                                  | []      | Column definitions                                                    |
 | mode               | `'internal' \| 'external' \| 'static'`        | -       | Table mode                                                            |
 | internalApiConfig  | object                                        | —       | Internal API config                                                   |
@@ -162,7 +161,7 @@ const staticRows = [{ id: 1, name: "max", age: 30 }];
 | lang               | `'en' \| 'fa'`                                | 'en'    | Language                                                              |
 | noSearch           | boolean                                       | false   | don't show search box                                                 |
 | saveSearch         | boolean                                       | false   | save search value in sessionStorage                                   |
-| hasColumnOrder     | boolean                                       | false   | Enable column reordering ( column: hasColumnOrder ? 8 : 0)            |
+| columnNumber       | boolean                                       | false   | Enable column reordering ( column: columnNumber                       |     | 0)  |
 | notify             | (text:string,type:"warning" \| "error")=>void | —       | return error message after calling api in "internal" mode             |
 | isLoading          | boolean                                       | false   | Loading state                                                         |
 | autoPageSizeConfig | AutoPageSizeConfig                            | Default | Auto page size settings (Show number of rows relative to page height) |
