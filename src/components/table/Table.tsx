@@ -221,8 +221,24 @@ const Table: React.FC<TableProps> = (props) => {
 
   const handleOrderChange = useCallback(
     (newOrder: OrderType) => {
-      setOrder(newOrder ? [newOrder] : []);
-      onSortChange?.(newOrder);
+      setOrder(
+        newOrder
+          ? [
+              {
+                ...newOrder,
+                column: isSelectable ? newOrder?.column - 1 : newOrder?.column,
+              },
+            ]
+          : []
+      );
+      onSortChange?.(
+        newOrder
+          ? {
+              ...newOrder,
+              column: isSelectable ? newOrder?.column - 1 : newOrder?.column,
+            }
+          : null
+      );
     },
     [mode, onSortChange]
   );
@@ -601,7 +617,6 @@ const Table: React.FC<TableProps> = (props) => {
                 ? height
                 : `calc(${tableHeightPageSize * (rowHeight || 51.15)}px)`
             }
-            isSelectable={isSelectable}
             columns={columnsWithRow}
             isLoading={isLoading || tableLoading}
             rows={
