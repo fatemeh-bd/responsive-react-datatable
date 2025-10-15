@@ -15,6 +15,9 @@ import ExternalTableCode from "./pages/examplePage/ExternalTable?raw";
 import InternalTable from "./pages/examplePage/InternalTable";
 import InternalTableCode from "./pages/examplePage/InternalTable?raw";
 import InternalNotes from "./pages/examplePage/InternalNotes";
+import FiltersTable from "./pages/examplePage/FiltersTable";
+import FiltersTableCode from "./pages/examplePage/FiltersTable?raw";
+import FiltersTableNotes from "./pages/examplePage/FiltersTableNotes";
 
 export const routes = [
   {
@@ -86,6 +89,26 @@ import { useState } from "react";`}
             headerImports={`import Table, {type ColumnType, rowRenderer, ActionDropDown} from 'responsive-react-datatable';`}
             view={<StaticAutoPageSizeTable />}
             code={StaticAutoPageSizeTableCode}
+          />
+        ),
+      },
+      {
+        name: "Table With Filters",
+        path: "/example/filters",
+        element: (
+          <TabPage
+            headerImports={`import Table , { type ColumnType , rowRenderer} from 'responsive-react-datatable';
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useState } from "react";
+import { ChevronDown } from "../../components/table/icons";`}
+            view={
+              <>
+                <FiltersTableNotes />
+                <FiltersTable />
+              </>
+            }
+            code={FiltersTableCode}
           />
         ),
       },
