@@ -59,7 +59,7 @@ const Sidebar: React.FC = () => {
                   </NavLink>
 
                   {item.children && (
-                    <ul className="flex flex-col ml-8 list-disc mt-4">
+                    <ul className="flex flex-col ml-8 md:list-disc mt-1">
                       {item.children.map((child, cIndex) => (
                         <li key={cIndex}>
                           <NavLink
