@@ -512,7 +512,7 @@ const InternalTable = () => {\r
 };\r
 \r
 export default InternalTable;\r
-`,hQ=()=>R.jsxs("div",{className:"bg-blue-400/20 p-4 mb-6 space-y-2",children:[R.jsx("h3",{className:"text-lg font-semibold text-blue-400",children:"Example Table with Mock API"}),R.jsxs("p",{children:["This example demonstrates how to use the table in ",R.jsx("strong",{children:"internal mode"})," with a mock API response."]}),R.jsxs("p",{children:["The data is fetched from a local JSON file (",R.jsx("code",{children:"mockData.json"}),") for demonstration purposes."]}),R.jsxs("p",{children:["Features like ",R.jsx("strong",{children:"sorting"}),", ",R.jsx("strong",{children:"searching"}),", and ",R.jsx("strong",{children:"pagination"})," are ",R.jsx("em",{children:"not functional"})," in this example, because there is ",R.jsx("span",{className:"underline underline-offset-4",children:"no real API."})]}),R.jsx("p",{children:"The table only displays the data and logs the response to the console."}),R.jsxs("p",{className:"text-yellow-300",children:["When connected to a ",R.jsx("strong",{children:"real API"}),", the table will automatically handle:"]}),R.jsxs("ul",{className:"list-disc list-inside ml-4 space-y-1",children:[R.jsx("li",{children:"Sorting"}),R.jsx("li",{children:"Searching"}),R.jsx("li",{children:"Pagination"}),R.jsx("li",{children:"Page Size"})]}),R.jsx("p",{children:"and send the necessary parameters to your API endpoint."})]}),Il=({label:e,options:t,value:n,onChange:r})=>R.jsxs("div",{className:"flex flex-col gap-1 w-full",children:[R.jsx("span",{className:"text-xs capitalize",children:e}),R.jsxs("div",{className:"relative",children:[R.jsxs("select",{style:{borderColor:"#364153",backgroundColor:"#000"},className:"page-size-select cursorPointer !px-3 appearance-none pr-6",value:n,onChange:a=>r?.(a.target.value),children:[R.jsx("option",{value:"",children:"All"}),t.map(a=>R.jsx("option",{className:"page-size-option",value:a,children:a},a))]}),R.jsx(Z0,{className:"absolute top-0 bottom-0 right-2 my-auto pointer-events-none"})]})]}),mQ=()=>{const[e,t]=$.useState(1),[n,r]=$.useState(6),[a,s]=$.useState(""),[l,u]=$.useState(""),[c,p]=$.useState(""),f=[{data:"images",dontShowTitleInMobile:!0,orderable:!1,title:"image",searchable:!1,width:70,render:aa(E=>R.jsx("img",{src:E[0],className:"md:size-12 size-32 mx-auto"}))},{data:"title",title:"title",width:150},{data:"price",title:"price",width:140},{data:"rating",title:"rating",width:80},{data:"category",title:"category",width:140},{data:null,title:"operation",width:140,render:aa((E,S)=>R.jsx("button",{className:"bg-[#d24670] rounded-2xl px-4 py-1",onClick:()=>alert(S?.title),children:"click me"}))}],{data:h,isFetching:g}=aE({queryKey:["get-sample-datas",e,n,a,l,c],queryFn:async()=>{let E="";l?E=`https://dummyjson.com/products/category/${l}?limit=${n}&skip=${(e-1)*n}`:E=`https://dummyjson.com/products/search?q=${a}&limit=${n}&skip=${(e-1)*n}`;const S=await ht.get(E);let v=S?.data?.products||[];return c&&(v=v.filter(w=>w.brand?.toLowerCase()===c.toLowerCase())),{...S.data,products:v}}});return R.jsx(Ii,{lang:"en",isLoading:g,mode:"external",externalRows:h?.products,totalItems:h?.total,columns:f,onPageChange:t,onPageSizeChange:r,onSearch:s,pageSize:6,height:"570px",tableName:"table1",colorTheme:{backgroundColor:"#000",borderColor:"#364153",cellTextColor:"#fff",headerTextColor:"#fff",headerBackgroundColor:"#364153",primaryColor:"#d24670"},filters:R.jsxs(R.Fragment,{children:[R.jsx(Il,{label:"category",options:["beauty","fragrances"],value:l,onChange:E=>{u(E),t(1)}}),R.jsx(Il,{label:"brand",options:["Essence","Calvin Klein","Glamour Beauty","Nail Couture","Velvet Touch","Chic Cosmetics"],value:c,onChange:E=>{p(E),t(1)}})]}),topFilter:R.jsxs(R.Fragment,{children:[R.jsx(Il,{label:"category",options:["beauty","fragrances"],value:l,onChange:E=>{u(E),t(1)}}),R.jsx(Il,{label:"brand",options:["Essence","Calvin Klein","Glamour Beauty","Nail Couture","Velvet Touch","Chic Cosmetics"],value:c,onChange:E=>{p(E),t(1)}})]}),actionButtons:R.jsxs("button",{className:"bg-blue-600 py-2 px-4 rounded-xl",children:["+ New Record"," "]}),notify:E=>alert(E)})},gQ=`import axios from "axios";\r
+`,hQ=()=>R.jsxs("div",{className:"bg-blue-400/20 p-4 mb-6 space-y-2",children:[R.jsx("h3",{className:"text-lg font-semibold text-blue-400",children:"Example Table with Mock API"}),R.jsxs("p",{children:["This example demonstrates how to use the table in ",R.jsx("strong",{children:"internal mode"})," with a mock API response."]}),R.jsxs("p",{children:["The data is fetched from a local JSON file (",R.jsx("code",{children:"mockData.json"}),") for demonstration purposes."]}),R.jsxs("p",{children:["Features like ",R.jsx("strong",{children:"sorting"}),", ",R.jsx("strong",{children:"searching"}),", and ",R.jsx("strong",{children:"pagination"})," are ",R.jsx("em",{children:"not functional"})," in this example, because there is ",R.jsx("span",{className:"underline underline-offset-4",children:"no real API."})]}),R.jsx("p",{children:"The table only displays the data and logs the response to the console."}),R.jsxs("p",{className:"text-yellow-300",children:["When connected to a ",R.jsx("strong",{children:"real API"}),", the table will automatically handle:"]}),R.jsxs("ul",{className:"list-disc list-inside ml-4 space-y-1",children:[R.jsx("li",{children:"Sorting"}),R.jsx("li",{children:"Searching"}),R.jsx("li",{children:"Pagination"}),R.jsx("li",{children:"Page Size"})]}),R.jsx("p",{children:"and send the necessary parameters to your API endpoint."})]}),mQ=()=>{const[e,t]=$.useState(1),[n,r]=$.useState(6),[a,s]=$.useState(""),[l,u]=$.useState(""),[c,p]=$.useState(""),f=[{data:"images",dontShowTitleInMobile:!0,orderable:!1,title:"image",searchable:!1,width:70,render:aa(E=>R.jsx("img",{src:E[0],className:"md:size-12 size-32 mx-auto"}))},{data:"title",title:"title",width:150},{data:"price",title:"price",width:140},{data:"rating",title:"rating",width:80},{data:"category",title:"category",width:140},{data:null,title:"operation",width:140,render:aa((E,S)=>R.jsx("button",{className:"bg-[#d24670] rounded-2xl px-4 py-1",onClick:()=>alert(S?.title),children:"click me"}))}],{data:h,isFetching:g}=aE({queryKey:["get-sample-datas",e,n,a,l,c],queryFn:async()=>{let E="";l?E=`https://dummyjson.com/products/category/${l}?limit=${n}&skip=${(e-1)*n}`:E=`https://dummyjson.com/products/search?q=${a}&limit=${n}&skip=${(e-1)*n}`;const S=await ht.get(E);let v=S?.data?.products||[];return c&&(v=v.filter(w=>w.brand?.toLowerCase()===c.toLowerCase())),{...S.data,products:v}}});return R.jsx(Ii,{lang:"en",isLoading:g,mode:"external",externalRows:h?.products,totalItems:h?.total,columns:f,onPageChange:t,onPageSizeChange:r,onSearch:s,pageSize:6,height:"570px",tableName:"table1",colorTheme:{backgroundColor:"#000",borderColor:"#364153",cellTextColor:"#fff",headerTextColor:"#fff",headerBackgroundColor:"#364153",primaryColor:"#d24670"},filters:R.jsxs(R.Fragment,{children:[R.jsx(Il,{label:"category",options:["beauty","fragrances"],value:l,onChange:E=>{u(E),t(1)}}),R.jsx(Il,{label:"brand",options:["Essence","Calvin Klein","Glamour Beauty","Nail Couture","Velvet Touch","Chic Cosmetics"],value:c,onChange:E=>{p(E),t(1)}})]}),topFilter:R.jsxs(R.Fragment,{children:[R.jsx(Il,{label:"category",options:["beauty","fragrances"],value:l,onChange:E=>{u(E),t(1)}}),R.jsx(Il,{label:"brand",options:["Essence","Calvin Klein","Glamour Beauty","Nail Couture","Velvet Touch","Chic Cosmetics"],value:c,onChange:E=>{p(E),t(1)}})]}),actionButtons:R.jsxs("button",{className:"bg-blue-600 py-2 px-4 rounded-xl",children:["+ New Record"," "]}),notify:E=>alert(E)})},Il=({label:e,options:t,value:n,onChange:r})=>R.jsxs("div",{className:"flex flex-col gap-1 w-full",children:[R.jsx("span",{className:"text-xs capitalize",children:e}),R.jsxs("div",{className:"relative",children:[R.jsxs("select",{style:{borderColor:"#364153",backgroundColor:"#000"},className:"page-size-select cursorPointer !px-3 appearance-none pr-6",value:n,onChange:a=>r?.(a.target.value),children:[R.jsx("option",{value:"",children:"All"}),t.map(a=>R.jsx("option",{className:"page-size-option",value:a,children:a},a))]}),R.jsx(Z0,{className:"absolute top-0 bottom-0 right-2 my-auto pointer-events-none"})]})]}),gQ=`import axios from "axios";\r
 import Table from "../../components/table/Table";\r
 import { useState } from "react";\r
 import { ColumnType } from "../../components/table/types";\r
@@ -527,38 +527,6 @@ interface SelectBoxProps {\r
   value?: string;\r
   onChange?: (value: string) => void;\r
 }\r
-\r
-const SelectBox: React.FC<SelectBoxProps> = ({\r
-  label,\r
-  options,\r
-  value,\r
-  onChange,\r
-}) => {\r
-  return (\r
-    <div className="flex flex-col gap-1 w-full">\r
-      <span className="text-xs capitalize">{label}</span>\r
-      <div className="relative">\r
-        <select\r
-          style={{\r
-            borderColor: "#364153",\r
-            backgroundColor: "#000",\r
-          }}\r
-          className="page-size-select cursorPointer !px-3 appearance-none pr-6"\r
-          value={value}\r
-          onChange={(e) => onChange?.(e.target.value)}\r
-        >\r
-          <option value="">All</option>\r
-          {options.map((opt) => (\r
-            <option key={opt} className="page-size-option" value={opt}>\r
-              {opt}\r
-            </option>\r
-          ))}\r
-        </select>\r
-        <ChevronDown className="absolute top-0 bottom-0 right-2 my-auto pointer-events-none" />\r
-      </div>\r
-    </div>\r
-  );\r
-};\r
 \r
 // 🔸 FiltersTable component\r
 const FiltersTable = () => {\r
@@ -732,6 +700,38 @@ const FiltersTable = () => {\r
 };\r
 \r
 export default FiltersTable;\r
+\r
+const SelectBox: React.FC<SelectBoxProps> = ({\r
+  label,\r
+  options,\r
+  value,\r
+  onChange,\r
+}) => {\r
+  return (\r
+    <div className="flex flex-col gap-1 w-full">\r
+      <span className="text-xs capitalize">{label}</span>\r
+      <div className="relative">\r
+        <select\r
+          style={{\r
+            borderColor: "#364153",\r
+            backgroundColor: "#000",\r
+          }}\r
+          className="page-size-select cursorPointer !px-3 appearance-none pr-6"\r
+          value={value}\r
+          onChange={(e) => onChange?.(e.target.value)}\r
+        >\r
+          <option value="">All</option>\r
+          {options.map((opt) => (\r
+            <option key={opt} className="page-size-option" value={opt}>\r
+              {opt}\r
+            </option>\r
+          ))}\r
+        </select>\r
+        <ChevronDown className="absolute top-0 bottom-0 right-2 my-auto pointer-events-none" />\r
+      </div>\r
+    </div>\r
+  );\r
+};\r
 `,bQ=()=>R.jsxs("div",{className:"bg-blue-400/20 p-4 mb-6 space-y-2 rounded-lg",children:[R.jsx("h3",{className:"text-lg font-semibold text-blue-400",children:"Using Filters in Table"}),R.jsxs("p",{children:["The"," ",R.jsx("code",{className:"text-green-400 font-bold text-lg mx-1",children:"filters"})," ","prop allows you to add custom filter elements next to the table’s"," ",R.jsx("strong",{children:"search box"}),", while the",R.jsx("code",{className:"text-fuchsia-400 font-bold text-lg mx-1",children:"topFilter"})," ","prop places them at the top of the table."]}),R.jsxs("p",{className:"text-yellow-300",children:["⚠️ Important: To ensure correct layout and responsiveness, filters must be passed as ",R.jsx("strong",{children:"ReactNodes"})," wrapped inside a"," ",R.jsx("code",{children:"<></>"})," fragment — not inside any parent element."]}),R.jsxs("p",{children:["The table automatically allocates ",R.jsx("strong",{children:"200px"})," width for each filter element, aligning them neatly next to the search box."]}),R.jsx("p",{children:"✅ Correct usage example:"}),R.jsx("pre",{className:"bg-black/40 p-3 rounded-md text-sm overflow-x-auto",children:`filters={
   <>
     <SelectBox label="category" options={categories} />
