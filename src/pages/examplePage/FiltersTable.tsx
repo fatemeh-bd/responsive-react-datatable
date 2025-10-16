@@ -14,38 +14,6 @@ interface SelectBoxProps {
   onChange?: (value: string) => void;
 }
 
-const SelectBox: React.FC<SelectBoxProps> = ({
-  label,
-  options,
-  value,
-  onChange,
-}) => {
-  return (
-    <div className="flex flex-col gap-1 w-full">
-      <span className="text-xs capitalize">{label}</span>
-      <div className="relative">
-        <select
-          style={{
-            borderColor: "#364153",
-            backgroundColor: "#000",
-          }}
-          className="page-size-select cursorPointer !px-3 appearance-none pr-6"
-          value={value}
-          onChange={(e) => onChange?.(e.target.value)}
-        >
-          <option value="">All</option>
-          {options.map((opt) => (
-            <option key={opt} className="page-size-option" value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-        <ChevronDown className="absolute top-0 bottom-0 right-2 my-auto pointer-events-none" />
-      </div>
-    </div>
-  );
-};
-
 // 🔸 FiltersTable component
 const FiltersTable = () => {
   const [page, setPage] = useState(1);
@@ -178,9 +146,75 @@ const FiltersTable = () => {
           />
         </>
       }
+      topFilter={
+        <>
+          <SelectBox
+            label="category"
+            options={["beauty", "fragrances"]}
+            value={selectedCategory}
+            onChange={(val) => {
+              setSelectedCategory(val);
+              setPage(1); // reset page on filter change
+            }}
+          />
+          <SelectBox
+            label="brand"
+            options={[
+              "Essence",
+              "Calvin Klein",
+              "Glamour Beauty",
+              "Nail Couture",
+              "Velvet Touch",
+              "Chic Cosmetics",
+            ]}
+            value={selectedBrand}
+            onChange={(val) => {
+              setSelectedBrand(val);
+              setPage(1);
+            }}
+          />
+        </>
+      }
+      actionButtons={
+        <button className="bg-blue-600 py-2 px-4 rounded-xl">
+          + New Record{" "}
+        </button>
+      }
       notify={(text) => alert(text)}
     />
   );
 };
 
 export default FiltersTable;
+
+const SelectBox: React.FC<SelectBoxProps> = ({
+  label,
+  options,
+  value,
+  onChange,
+}) => {
+  return (
+    <div className="flex flex-col gap-1 w-full">
+      <span className="text-xs capitalize">{label}</span>
+      <div className="relative">
+        <select
+          style={{
+            borderColor: "#364153",
+            backgroundColor: "#000",
+          }}
+          className="page-size-select cursorPointer !px-3 appearance-none pr-6"
+          value={value}
+          onChange={(e) => onChange?.(e.target.value)}
+        >
+          <option value="">All</option>
+          {options.map((opt) => (
+            <option key={opt} className="page-size-option" value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
+        <ChevronDown className="absolute top-0 bottom-0 right-2 my-auto pointer-events-none" />
+      </div>
+    </div>
+  );
+};

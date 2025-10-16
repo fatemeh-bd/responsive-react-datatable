@@ -14,3 +14,39 @@ body {
 .option-button {
   background-color: #364153 !important;
 }
+@media (min-width: 768px) {
+  .top-filter-container {
+    /* border: 1px solid #ed6bff; */
+    position: relative;
+  }
+  .top-filter-container::after {
+    content: "← top filters";
+    color: #ed6bff;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    right: auto;
+    left: 26.5rem;
+    align-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .filter-container-className {
+    /* border: 1px solid #05df72; */
+    position: relative;
+  }
+  .filter-container-className::after {
+    content: "← filters";
+    color: #05df72;
+    position: absolute;
+    font-size: 1.5rem;
+    font-weight: bold;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    right: -7rem;
+    align-content: center;
+  }
+}
