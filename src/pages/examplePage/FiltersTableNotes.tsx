@@ -6,8 +6,14 @@ const FiltersTableNotes = () => {
       </h3>
 
       <p>
-        The <code>filters</code> prop allows you to add custom filter elements
-        next to the table’s <strong>search box</strong>.
+        The{" "}
+        <code className="text-green-400 font-bold text-lg mx-1">filters</code>{" "}
+        prop allows you to add custom filter elements next to the table’s{" "}
+        <strong>search box</strong>, while the
+        <code className="text-fuchsia-400 font-bold text-lg mx-1">
+          topFilter
+        </code>{" "}
+        prop places them at the top of the table.
       </p>
 
       <p className="text-yellow-300">
@@ -28,12 +34,27 @@ const FiltersTableNotes = () => {
     <SelectBox label="category" options={categories} />
     <SelectBox label="brand" options={brands} />
   </>
-}`}
+}
+  
+topFilter={
+  <>
+    <SelectBox label="category" options={categories} />
+    <SelectBox label="brand" options={brands} />
+  </>
+      }
+`}
       </pre>
 
       <p>❌ Incorrect usage (will break layout):</p>
       <pre className="bg-black/40 p-3 rounded-md text-sm overflow-x-auto">
         {`filters={
+  <div>
+    <SelectBox label="category" options={categories} />
+    <SelectBox label="brand" options={brands} />
+  </div>
+}
+  
+topFilter={
   <div>
     <SelectBox label="category" options={categories} />
     <SelectBox label="brand" options={brands} />
