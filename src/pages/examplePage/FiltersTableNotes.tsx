@@ -34,12 +34,27 @@ const FiltersTableNotes = () => {
     <SelectBox label="category" options={categories} />
     <SelectBox label="brand" options={brands} />
   </>
-}`}
+}
+  
+topFilter={
+  <>
+    <SelectBox label="category" options={categories} />
+    <SelectBox label="brand" options={brands} />
+  </>
+      }
+`}
       </pre>
 
       <p>❌ Incorrect usage (will break layout):</p>
       <pre className="bg-black/40 p-3 rounded-md text-sm overflow-x-auto">
         {`filters={
+  <div>
+    <SelectBox label="category" options={categories} />
+    <SelectBox label="brand" options={brands} />
+  </div>
+}
+  
+topFilter={
   <div>
     <SelectBox label="category" options={categories} />
     <SelectBox label="brand" options={brands} />

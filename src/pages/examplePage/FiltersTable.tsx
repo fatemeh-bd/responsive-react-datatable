@@ -175,11 +175,6 @@ const FiltersTable = () => {
           />
         </>
       }
-      actionButtons={
-        <button className="bg-blue-600 py-2 px-4 rounded-xl">
-          + New Record{" "}
-        </button>
-      }
       notify={(text) => alert(text)}
     />
   );

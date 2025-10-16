@@ -20,7 +20,7 @@ body {
     position: relative;
   }
   .top-filter-container::after {
-    content: "← top filters";
+    content: "← topFilter";
     color: #ed6bff;
     position: absolute;
     top: 0;
