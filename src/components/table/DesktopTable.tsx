@@ -1,8 +1,175 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { ColorTheme, ColumnType, OrderType, TextsConfig } from "./types";
 import { ArrowDownIcon, ArrowUpIcon } from "./icons";
 import Checkbox from "./tools/checkbox/CheckBox";
 import Skeleton from "./tools/Skeleton";
+
+const TableHeader = memo(
+  ({
+    columns,
+    theme,
+    rowHeight,
+    order,
+    onSort,
+    isAllSelected,
+    onAllSelect,
+  }: {
+    columns: ColumnType[];
+    theme: ColorTheme;
+    rowHeight?: string;
+    order: OrderType;
+    onSort: (colIndex: number, column: ColumnType) => void;
+    isAllSelected: boolean;
+    onAllSelect?: (checked?: boolean) => void;
+  }) => {
+    return (
+      <thead
+        className="desktop-table-head"
+        style={{ backgroundColor: theme.headerBackgroundColor }}
+      >
+        <tr
+          className="desktop-table-header-row"
+          style={{
+            height: rowHeight,
+          }}
+        >
+          {columns.map((column, colIndex) => (
+            <th
+              key={column?.data || colIndex}
+              className={`desktop-table-header-cell ${
+                column?.orderable
+                  ? "desktop-table-header-cell--sortable cursorPointer"
+                  : ""
+              }`}
+              style={{
+                width: column?.width,
+                color: theme.headerTextColor,
+                borderBottom: `1px solid ${theme.borderColor}`,
+              }}
+              onClick={() => column?.orderable && onSort(colIndex, column)}
+            >
+              {column?.data === "selectableTable" && (
+                <Checkbox
+                  className="desktop-table-select-all-checkbox"
+                  primaryColor={theme.primaryColor}
+                  onChange={(value) => onAllSelect?.(value?.target.checked)}
+                  checked={isAllSelected}
+                />
+              )}
+              {column?.data !== "selectableTable" && (
+                <div
+                  className="desktop-table-header-content"
+                  title={column?.width ? column?.title : ""}
+                >
+                  {column?.orderable && (
+                    <span className="desktop-table-sort-icons">
+                      <ArrowUpIcon
+                        style={{
+                          color:
+                            order?.dir === "asc" && order?.column === colIndex
+                              ? theme?.headerTextColor
+                              : "",
+                        }}
+                        className={`desktop-table-sort-icon desktop-table-sort-icon--asc ${
+                          order?.column === colIndex && order?.dir === "asc"
+                            ? "opacityFull"
+                            : "opacityHalf"
+                        }`}
+                      />
+                      <ArrowDownIcon
+                        style={{
+                          color:
+                            order?.dir === "desc" && order?.column === colIndex
+                              ? theme?.headerTextColor
+                              : "",
+                        }}
+                        className={`desktop-table-sort-icon desktop-table-sort-icon--desc ${
+                          order?.column === colIndex && order?.dir === "desc"
+                            ? "opacityFull"
+                            : "opacityHalf"
+                        }`}
+                      />
+                    </span>
+                  )}
+                  <span className="desktop-table-header-title">
+                    {column?.title}
+                  </span>
+                </div>
+              )}
+            </th>
+          ))}
+        </tr>
+      </thead>
+    );
+  },
+);
+
+TableHeader.displayName = "TableHeader";
+
+const TableRow = memo(
+  ({
+    row,
+    columns,
+    theme,
+    rowHeight,
+    rowClassName,
+  }: {
+    row: Record<string, any>;
+    columns: ColumnType[];
+    theme: ColorTheme;
+    rowHeight?: string;
+    rowClassName?: (row: any) => string;
+  }) => {
+    return (
+      <tr
+        className={`desktop-table-data-row ${rowClassName?.(row) || ""}`}
+        style={{
+          borderBottom: `1px solid ${theme.borderColor}`,
+          backgroundColor: theme.backgroundColor,
+          height: rowHeight,
+        }}
+      >
+        {columns.map((column, colIndex) => {
+          const cellKey = column.data;
+          const content = useMemo(
+            () =>
+              column?.render
+                ? column.render(
+                    cellKey ? row[cellKey] : undefined,
+                    row,
+                    colIndex,
+                  )
+                : cellKey
+                  ? row[cellKey]
+                  : null,
+            [column, row, cellKey, colIndex],
+          );
+          return (
+            <td
+              key={colIndex}
+              className="desktop-table-data-cell"
+              style={{
+                width: column?.width,
+                color: theme.cellTextColor,
+              }}
+            >
+              <div
+                title={cellKey ? row[cellKey]?.toString() : undefined}
+                className={`desktop-table-cell-content ${
+                  cellKey === null ? "isContent" : "noContent"
+                }`}
+              >
+                {content}
+              </div>
+            </td>
+          );
+        })}
+      </tr>
+    );
+  },
+);
+
+TableRow.displayName = "TableRow";
 
 const DesktopTable = ({
   columns,
@@ -29,45 +196,45 @@ const DesktopTable = ({
   onOrderChange?: (order: OrderType) => void;
   rowHeight?: string;
   isAllSelected?: boolean;
-  rowClassName?: (row: any) => void;
+  rowClassName?: (row: any) => string;
 }) => {
   const [order, setOrder] = useState<OrderType>(null);
   const [allSelected, setAllSelected] = useState(isAllSelected);
   const headerContainerRef = useRef<HTMLDivElement>(null);
   const bodyContainerRef = useRef<HTMLDivElement>(null);
-  const handleSort = (colIndex: number, column: ColumnType) => {
-    if (!column.orderable || !column.data) return;
 
-    setOrder((prev) => {
-      let newOrder: OrderType;
-      if (!prev || prev.column !== colIndex) {
-        newOrder = { column: colIndex, dir: "desc", name: column.data! };
-      } else if (prev.dir === "desc") {
-        newOrder = { column: colIndex, dir: "asc", name: column.data! };
-      } else {
-        newOrder = null;
-      }
-      onOrderChange?.(newOrder);
-      return newOrder;
-    });
-  };
+  const handleSort = useCallback(
+    (colIndex: number, column: ColumnType) => {
+      if (!column.orderable || !column.data) return;
+      setOrder((prev) => {
+        let newOrder: OrderType;
+        if (!prev || prev.column !== colIndex) {
+          newOrder = { column: colIndex, dir: "desc", name: column.data! };
+        } else if (prev.dir === "desc") {
+          newOrder = { column: colIndex, dir: "asc", name: column.data! };
+        } else {
+          newOrder = null;
+        }
+        onOrderChange?.(newOrder);
+        return newOrder;
+      });
+    },
+    [onOrderChange],
+  );
+
   useEffect(() => {
-    if (isAllSelected) {
-      setAllSelected(true);
-    }
+    setAllSelected(isAllSelected);
   }, [isAllSelected]);
+
   useEffect(() => {
     const bodyContainer = bodyContainerRef.current;
     const headerContainer = headerContainerRef.current;
-
     if (!bodyContainer || !headerContainer) return;
 
     const handleScroll = () => {
       headerContainer.scrollLeft = bodyContainer.scrollLeft;
     };
-
     bodyContainer.addEventListener("scroll", handleScroll);
-
     return () => {
       bodyContainer.removeEventListener("scroll", handleScroll);
     };
@@ -79,100 +246,24 @@ const DesktopTable = ({
       style={{ border: `1px solid ${theme.borderColor}` }}
     >
       <div className="desktop-table-inner">
-        {/* Header table (fixed) */}
         <div
           ref={headerContainerRef}
           className="desktop-table-header-container scrollbar-hide"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           <table className="desktop-table">
-            <thead
-              className="desktop-table-head"
-              style={{ backgroundColor: theme.headerBackgroundColor }}
-            >
-              <tr
-                className="desktop-table-header-row"
-                style={{
-                  height: rowHeight,
-                }}
-              >
-                {columns.map((column, colIndex) => (
-                  <th
-                    key={column?.data || colIndex}
-                    className={`desktop-table-header-cell ${
-                      column?.orderable
-                        ? "desktop-table-header-cell--sortable cursorPointer"
-                        : ""
-                    }`}
-                    style={{
-                      width: column?.width,
-                      color: theme.headerTextColor,
-                      borderBottom: `1px solid ${theme.borderColor}`,
-                    }}
-                    onClick={() =>
-                      column?.orderable && handleSort(colIndex, column)
-                    }
-                  >
-                    {column?.data === "selectableTable" && rows?.length ? (
-                      <Checkbox
-                        className="desktop-table-select-all-checkbox"
-                        primaryColor={theme.primaryColor}
-                        onChange={(value) => {
-                          setAllSelected(value?.target.checked);
-                          onAllSelect?.(value?.target.checked);
-                        }}
-                        checked={allSelected}
-                      />
-                    ) : (
-                      <div
-                        className="desktop-table-header-content"
-                        title={column?.width ? column?.title : ""}
-                      >
-                        {column?.orderable && (
-                          <span className="desktop-table-sort-icons">
-                            <ArrowUpIcon
-                              style={{
-                                color:
-                                  order?.dir === "asc"
-                                    ? theme?.headerTextColor
-                                    : "",
-                              }}
-                              className={`desktop-table-sort-icon desktop-table-sort-icon--asc ${
-                                order?.column === colIndex &&
-                                order?.dir === "asc"
-                                  ? "opacityFull"
-                                  : "opacityHalf"
-                              }`}
-                            />
-                            <ArrowDownIcon
-                              style={{
-                                color:
-                                  order?.dir === "desc"
-                                    ? theme?.headerTextColor
-                                    : "",
-                              }}
-                              className={`desktop-table-sort-icon desktop-table-sort-icon--desc ${
-                                order?.column === colIndex &&
-                                order?.dir === "desc"
-                                  ? "opacityFull"
-                                  : "opacityHalf"
-                              }`}
-                            />
-                          </span>
-                        )}
-                        <span className="desktop-table-header-title">
-                          {column?.title}
-                        </span>
-                      </div>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            </thead>
+            <TableHeader
+              columns={columns}
+              theme={theme}
+              rowHeight={rowHeight}
+              order={order}
+              onSort={handleSort}
+              isAllSelected={allSelected}
+              onAllSelect={onAllSelect}
+            />
           </table>
         </div>
 
-        {/* Scrollable body */}
         <div
           ref={bodyContainerRef}
           className="desktop-table-body-container"
@@ -195,52 +286,14 @@ const DesktopTable = ({
                 ))
               ) : rows?.length > 0 ? (
                 rows.map((row, rowIndex) => (
-                  <tr
-                    key={rowIndex}
-                    className={`desktop-table-data-row ${
-                      rowClassName?.(row) || ""
-                    }`}
-                    style={{
-                      borderBottom: `1px solid ${theme.borderColor}`,
-                      backgroundColor: theme.backgroundColor,
-                      height: rowHeight,
-                    }}
-                  >
-                    {columns.map((column, colIndex) => {
-                      const cellKey = column.data;
-                      const content = column?.render
-                        ? column?.render(
-                            cellKey ? row[cellKey] : undefined,
-                            row,
-                            rowIndex
-                          )
-                        : cellKey
-                        ? row[cellKey]
-                        : null;
-
-                      return (
-                        <td
-                          key={colIndex}
-                          className="desktop-table-data-cell"
-                          style={{
-                            width: column?.width,
-                            color: theme.cellTextColor,
-                          }}
-                        >
-                          <div
-                            title={
-                              cellKey ? row[cellKey]?.toString() : undefined
-                            }
-                            className={`desktop-table-cell-content ${
-                              cellKey === null ? "isContent" : "noContent"
-                            }`}
-                          >
-                            {content}
-                          </div>
-                        </td>
-                      );
-                    })}
-                  </tr>
+                  <TableRow
+                    key={row.id || rowIndex}
+                    row={row}
+                    columns={columns}
+                    theme={theme}
+                    rowHeight={rowHeight}
+                    rowClassName={rowClassName}
+                  />
                 ))
               ) : (
                 <tr className="desktop-table-empty-row">
