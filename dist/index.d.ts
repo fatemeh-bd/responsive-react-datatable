@@ -24,6 +24,8 @@ interface ColumnType {
     searchable?: boolean;
     dontShowTitleInMobile?: boolean;
     dontShowDataInMobile?: boolean;
+    isHiddenTitle?: boolean;
+    isHiddenData?: boolean;
 }
 interface TextsConfig {
     row?: string;

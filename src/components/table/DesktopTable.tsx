@@ -96,77 +96,79 @@ const DesktopTable = ({
                   height: rowHeight,
                 }}
               >
-                {columns.map((column, colIndex) => (
-                  <th
-                    key={column?.data || colIndex}
-                    className={`desktop-table-header-cell ${
-                      column?.orderable
-                        ? "desktop-table-header-cell--sortable cursorPointer"
-                        : ""
-                    }`}
-                    style={{
-                      width: column?.width,
-                      color: theme.headerTextColor,
-                      borderBottom: `1px solid ${theme.borderColor}`,
-                    }}
-                    onClick={() =>
-                      column?.orderable && handleSort(colIndex, column)
-                    }
-                  >
-                    {column?.data === "selectableTable" && rows?.length ? (
-                      <Checkbox
-                        className="desktop-table-select-all-checkbox"
-                        primaryColor={theme.primaryColor}
-                        onChange={(value) => {
-                          setAllSelected(value?.target.checked);
-                          onAllSelect?.(value?.target.checked);
-                        }}
-                        checked={allSelected}
-                      />
-                    ) : (
-                      <div
-                        className="desktop-table-header-content"
-                        title={column?.width ? column?.title : ""}
-                      >
-                        {column?.orderable && (
-                          <span className="desktop-table-sort-icons">
-                            <ArrowUpIcon
-                              style={{
-                                color:
+                {columns.map((column, colIndex) =>
+                  column?.isHiddenTitle ? null : (
+                    <th
+                      key={column?.data || colIndex}
+                      className={`desktop-table-header-cell ${
+                        column?.orderable
+                          ? "desktop-table-header-cell--sortable cursorPointer"
+                          : ""
+                      }`}
+                      style={{
+                        width: column?.width,
+                        color: theme.headerTextColor,
+                        borderBottom: `1px solid ${theme.borderColor}`,
+                      }}
+                      onClick={() =>
+                        column?.orderable && handleSort(colIndex, column)
+                      }
+                    >
+                      {column?.data === "selectableTable" && rows?.length ? (
+                        <Checkbox
+                          className="desktop-table-select-all-checkbox"
+                          primaryColor={theme.primaryColor}
+                          onChange={(value) => {
+                            setAllSelected(value?.target.checked);
+                            onAllSelect?.(value?.target.checked);
+                          }}
+                          checked={allSelected}
+                        />
+                      ) : (
+                        <div
+                          className="desktop-table-header-content"
+                          title={column?.width ? column?.title : ""}
+                        >
+                          {column?.orderable && (
+                            <span className="desktop-table-sort-icons">
+                              <ArrowUpIcon
+                                style={{
+                                  color:
+                                    order?.dir === "asc"
+                                      ? theme?.headerTextColor
+                                      : "",
+                                }}
+                                className={`desktop-table-sort-icon desktop-table-sort-icon--asc ${
+                                  order?.column === colIndex &&
                                   order?.dir === "asc"
-                                    ? theme?.headerTextColor
-                                    : "",
-                              }}
-                              className={`desktop-table-sort-icon desktop-table-sort-icon--asc ${
-                                order?.column === colIndex &&
-                                order?.dir === "asc"
-                                  ? "opacityFull"
-                                  : "opacityHalf"
-                              }`}
-                            />
-                            <ArrowDownIcon
-                              style={{
-                                color:
+                                    ? "opacityFull"
+                                    : "opacityHalf"
+                                }`}
+                              />
+                              <ArrowDownIcon
+                                style={{
+                                  color:
+                                    order?.dir === "desc"
+                                      ? theme?.headerTextColor
+                                      : "",
+                                }}
+                                className={`desktop-table-sort-icon desktop-table-sort-icon--desc ${
+                                  order?.column === colIndex &&
                                   order?.dir === "desc"
-                                    ? theme?.headerTextColor
-                                    : "",
-                              }}
-                              className={`desktop-table-sort-icon desktop-table-sort-icon--desc ${
-                                order?.column === colIndex &&
-                                order?.dir === "desc"
-                                  ? "opacityFull"
-                                  : "opacityHalf"
-                              }`}
-                            />
+                                    ? "opacityFull"
+                                    : "opacityHalf"
+                                }`}
+                              />
+                            </span>
+                          )}
+                          <span className="desktop-table-header-title">
+                            {column?.title}
                           </span>
-                        )}
-                        <span className="desktop-table-header-title">
-                          {column?.title}
-                        </span>
-                      </div>
-                    )}
-                  </th>
-                ))}
+                        </div>
+                      )}
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
           </table>
@@ -218,7 +220,7 @@ const DesktopTable = ({
                         ? row[cellKey]
                         : null;
 
-                      return (
+                      return column?.isHiddenData ? null : (
                         <td
                           key={colIndex}
                           className="desktop-table-data-cell"

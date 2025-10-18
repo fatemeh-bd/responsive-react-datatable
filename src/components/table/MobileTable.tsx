@@ -39,11 +39,12 @@ const MobileTable = ({
           ? row[cellKey]
           : null;
 
-        return column?.dontShowDataInMobile ? null : (
+        return column?.dontShowDataInMobile || column?.isHiddenData ? null : (
           <div key={colIndex} className="mobile-table-card-row">
             {column?.title === "عملیات" ||
             column?.data === null ||
-            column?.dontShowTitleInMobile ? null : (
+            column?.dontShowTitleInMobile ||
+            column?.isHiddenTitle ? null : (
               <span
                 style={{ color: theme?.headerTextColor }}
                 className="mobile-table-card-label"
