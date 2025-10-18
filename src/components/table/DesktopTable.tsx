@@ -113,12 +113,14 @@ const TableRow = memo(
     theme,
     rowHeight,
     rowClassName,
+    rowIndex,
   }: {
     row: Record<string, any>;
     columns: ColumnType[];
     theme: ColorTheme;
     rowHeight?: string;
     rowClassName?: (row: any) => string;
+    rowIndex?: number;
   }) => {
     return (
       <tr
@@ -137,12 +139,12 @@ const TableRow = memo(
                 ? column.render(
                     cellKey ? row[cellKey] : undefined,
                     row,
-                    colIndex,
+                    rowIndex,
                   )
                 : cellKey
                   ? row[cellKey]
                   : null,
-            [column, row, cellKey, colIndex],
+            [column, row, cellKey, rowIndex],
           );
           return (
             <td
@@ -293,6 +295,7 @@ const DesktopTable = ({
                     theme={theme}
                     rowHeight={rowHeight}
                     rowClassName={rowClassName}
+                    rowIndex={rowIndex}
                   />
                 ))
               ) : (
