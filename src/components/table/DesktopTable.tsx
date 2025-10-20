@@ -119,7 +119,7 @@ const TableRow = memo(
     columns: ColumnType[];
     theme: ColorTheme;
     rowHeight?: string;
-    rowClassName?: (row: any) => string;
+    rowClassName?: (row: any) => void;
     rowIndex?: number;
   }) => {
     return (
@@ -198,7 +198,7 @@ const DesktopTable = ({
   onOrderChange?: (order: OrderType) => void;
   rowHeight?: string;
   isAllSelected?: boolean;
-  rowClassName?: (row: any) => string;
+  rowClassName?: (row: any) => void;
 }) => {
   const [order, setOrder] = useState<OrderType>(null);
   const [allSelected, setAllSelected] = useState(isAllSelected);

@@ -609,7 +609,7 @@ const Table: React.FC<TableProps> = (props) => {
       ) : (
         <>
           <DesktopTable
-            // rowClassName={rowClassName}
+            rowClassName={rowClassName}
             rowHeight={`${rowHeight}px` || "51.15px"}
             pageSize={dynamicPageSize}
             maxHeight={
