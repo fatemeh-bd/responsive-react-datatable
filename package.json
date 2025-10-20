@@ -15,7 +15,6 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "dependencies": {
-    "/<": "^5.61.3",
     "axios": ">=0.22.0 <2",
     "ogl": "^1.0.11",
     "react-icons": "^5.5.0",
