@@ -51,6 +51,7 @@ export const defaultAutoConfig: AutoPageSizeConfig = {
     // "#paging",
     // "#topFilter",
   ],
+  // @ts-ignore
   optionalSelectorsForExtraBuffer: ["#topFilter"],
   rowHeight: 51.15,
   baseBufferRows: 2,
