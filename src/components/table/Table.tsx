@@ -407,6 +407,11 @@ const Table: React.FC<TableProps> = (props) => {
     )
       ? props?.internalApiConfig?.customBody.filter((item) => !item.noRefresh)
       : [];
+    useEffect(() => {
+      updateParams(pageQueryName, "1");
+      setCurrentPage(1);
+    }, [JSON.stringify(refreshableCustomBody)]);
+
     useQuery({
       enabled: Boolean(dynamicPageSize && mode === "internal"),
       queryKey: [

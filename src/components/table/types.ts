@@ -41,8 +41,6 @@ export interface ColumnType {
   searchable?: boolean;
   dontShowTitleInMobile?: boolean;
   dontShowDataInMobile?: boolean;
-  isHiddenTitle?: boolean;
-  isHiddenData?: boolean;
 }
 export interface TextsConfig {
   row?: string;
