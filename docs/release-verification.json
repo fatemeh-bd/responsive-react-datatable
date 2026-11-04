@@ -1,6 +1,6 @@
 {
   "artifact": "responsive-react-datatable-3.0.0.tgz",
-  "sha512": "sha512-gorBwDYRlKkmW+UH8ojgO6EER6LbIPzsDOIVxM3+WwgOARZNP4KNiZ+y8ka8PlgaR/uSMedbQ6+Nozi+vHF5TA==",
+  "sha512": "sha512-CuotVMyZwsagB49C3LuVqotRuOU6kXPA8hztaHcwwdJjZrwZu0WMyGnLXCrsvJm5vg+2D5x6/fgJ/eINSac61A==",
   "results": [
     {
       "name": "react18-min",
@@ -53,5 +53,13 @@
       "hydration": "desktop + mobile passed",
       "css": "passed"
     }
-  ]
+  ],
+  "postMergeVerification": {
+    "tests": "21 passed",
+    "typecheck": "passed",
+    "libraryBuild": "passed",
+    "packageSurfaceAndNodeSSR": "passed",
+    "javascriptCssAndDeclarations": "match tested tarball after CRLF/LF normalization",
+    "sourceMapDifference": "source-content line endings only"
+  }
 }
