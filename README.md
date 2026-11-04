@@ -1,5 +1,11 @@
 # 📊 Responsive React DataTable
 
+> **Maintainers and coding agents:** start with [AGENTS.md](AGENTS.md) and the
+> [maintainer quick start](docs/MAINTAINER-README.md). The
+> [2026-11-04 compatibility audit](docs/COMPATIBILITY-AUDIT.md) records current
+> release blockers; compatibility fixes and the proposed support matrix are
+> tracked in the [stabilization plan](docs/RELEASE-PLAN.md).
+
 [![npm](https://img.shields.io/npm/dt/responsive-react-datatable)](https://www.npmjs.com/package/responsive-react-datatable)
 [![npm version](https://img.shields.io/npm/v/responsive-react-datatable)](https://www.npmjs.com/package/responsive-react-datatable)
 ![license](https://img.shields.io/npm/l/responsive-react-datatable)
