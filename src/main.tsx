@@ -40,18 +40,10 @@ root.render(
               >
                 Fatemeh baridaryan
               </a>{" "}
-              &{" "}
-              <a
-                target="_blank"
-                href="https://zephinax.com"
-                className="underline cursor-pointer"
-              >
-                Zephinax
-              </a>
             </h2>
           </div>
         </div>
       </HashRouter>
     </QueryClientProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

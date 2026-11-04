@@ -13,17 +13,6 @@ export default function SidebarFooter() {
         <FaGithub className="text-xl" />
         <span className="text-sm">@fatemeh-bd</span>
       </a>
-
-      {/* GitHub - Zephinax */}
-      <a
-        href="https://github.com/Zephinax"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center text-gray-500 gap-2 hover:text-gray-300"
-      >
-        <FaGithub className="text-xl" />
-        <span className="text-sm">@Zephinax</span>
-      </a>
     </div>
   );
 }

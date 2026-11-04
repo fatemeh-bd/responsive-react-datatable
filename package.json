@@ -61,13 +61,6 @@
     "url": "https://github.com/fatemeh-bd/responsive-react-datatable/issues",
     "email": "baridaryan@gmail.com"
   },
-  "contributors": [
-    {
-      "name": "Zephinax",
-      "email": "zephinax@gmail.com",
-      "url": "https://github.com/Zephinax"
-    }
-  ],
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=6.0.0"
