@@ -1,0 +1,57 @@
+{
+  "artifact": "responsive-react-datatable-3.0.0.tgz",
+  "sha512": "sha512-gorBwDYRlKkmW+UH8ojgO6EER6LbIPzsDOIVxM3+WwgOARZNP4KNiZ+y8ka8PlgaR/uSMedbQ6+Nozi+vHF5TA==",
+  "results": [
+    {
+      "name": "react18-min",
+      "react": "18.0.0",
+      "tests": "passed",
+      "types": "bundler + NodeNext passed"
+    },
+    {
+      "name": "react18",
+      "react": "18.3.1",
+      "tests": "passed",
+      "types": "bundler + NodeNext passed"
+    },
+    {
+      "name": "react19-min",
+      "react": "19.0.0",
+      "tests": "passed",
+      "types": "bundler + NodeNext passed"
+    },
+    {
+      "name": "react19",
+      "react": "19.3.1",
+      "tests": "passed",
+      "types": "bundler + NodeNext passed"
+    },
+    {
+      "name": "next15-pages",
+      "react": "18.3.1",
+      "next": "15.5.29",
+      "build": "passed",
+      "ssr": "passed",
+      "hydration": "desktop + mobile passed",
+      "css": "passed"
+    },
+    {
+      "name": "next15-app",
+      "react": "19.3.1",
+      "next": "15.5.29",
+      "build": "passed",
+      "ssr": "passed",
+      "hydration": "desktop + mobile passed",
+      "css": "passed"
+    },
+    {
+      "name": "next16-app",
+      "react": "19.3.1",
+      "next": "16.4.5",
+      "build": "passed",
+      "ssr": "passed",
+      "hydration": "desktop + mobile passed",
+      "css": "passed"
+    }
+  ]
+}

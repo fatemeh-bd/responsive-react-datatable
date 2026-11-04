@@ -1,730 +1,240 @@
+"use client";
 import "./tableStyle.css";
-
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  ColorTheme,
-  ColumnType,
-  ExternalTableProps,
-  InternalTableProps,
-  OrderType,
-  Selectable,
-  StaticModeProps,
-  TableProps,
-} from "./types";
-import { useIsMobile } from "./hooks/useIsMobile";
-import MobileTable from "./MobileTable";
-import DesktopTable from "./DesktopTable";
-import { rowRenderer } from "./helper";
-import Pagination from "./tools/Pagination";
-import { useQueryParams } from "./hooks/useQueryParams";
-import { SelectableCheckbox } from "./tools/SelectableCheckbox";
-import { useQuery } from "@tanstack/react-query";
-import { FilterIcon, TrashIcon } from "./icons";
+import React, { useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from "react";
+import { QueryClient, QueryClientContext, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import type { ColumnType, InternalModeProps, OrderType, Selectable, TableProps } from "./types";
+import { useIsMobile } from "./hooks/useIsMobile";
+import { useQueryParams } from "./hooks/useQueryParams";
+import { defaultAutoConfig, defaultColorTheme, defaultSize, defaultTexts } from "./tableConfigs";
+import { localRows, positiveInteger, requestConfig } from "./data";
+import DesktopTable from "./DesktopTable";
+import MobileTable from "./MobileTable";
+import Pagination from "./tools/Pagination";
 import PageSizeSelect from "./tools/PageSizeSelect";
-import Modal from "./tools/Modal";
-import {
-  defaultAutoConfig,
-  defaultColorTheme,
-  defaultSize,
-  defaultTexts,
-} from "./tableConfigs";
 import SearchBox from "./tools/SearchBox";
+import Modal from "./tools/Modal";
+import { SelectableCheckbox } from "./tools/SelectableCheckbox";
+import { FilterIcon, TrashIcon } from "./icons";
 
-const Table: React.FC<TableProps> = (props) => {
-  // props
-  const {
-    startMobileSize,
-    columns = [],
-    isSelectable,
-    colorTheme,
-    textsConfig,
-    lang = "en",
-    pageQueryName = "page",
-    pageSize = defaultSize,
-    mode,
-    columnNumber,
-    noSearch,
-    notify,
-    onPageChange,
-    onSortChange,
-    onSearch,
-    isLoading,
-    autoPageSizeConfig: customAutoPageSizeConfig,
-    height,
-    onPageSizeChange,
-    listMode,
-    tableName,
-    filters,
-    topFilter,
-    topFilterContainerClassName,
-    filterContainerClassName,
-    removeFilterKey,
-    actionButtons,
-    noPageSize,
-    rowClassName,
-  } = props;
-  const selectableProps = isSelectable ? (props as Selectable) : undefined;
-  const theme: ColorTheme = useMemo(
-    () => ({
-      ...defaultColorTheme,
-      ...colorTheme,
-    }),
-    [colorTheme]
-  );
-
-  const mergedTexts = useMemo(
-    () => ({ ...defaultTexts[lang], ...textsConfig }),
-    [lang, textsConfig]
-  );
-  const dir = lang === "fa" ? "rtl" : "ltr";
-
-  // const autoConfig = {
-  //   ...defaultAutoConfig,
-  //   ...customAutoPageSizeConfig,
-  //   subtractSelectors: [
-  //     "#table-header-actions",
-  //     // "#paging",
-  //     "#topFilter",
-  //     ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
-  //   ],
-  //   optionalSelectorsForExtraBuffer: [
-  //     "#paging",
-  //     ...((customAutoPageSizeConfig?.optionalSelectorsForExtraBuffer as string[]) ||
-  //       []),
-  //   ],
-  // };
-
-  // const {
-  //   enabled: autoEnabled,
-  //   containerSelector,
-  //   subtractSelectors,
-  //   optionalSelectorsForExtraBuffer,
-  //   rowHeight,
-  //   baseBufferRows,
-  //   extraBufferRows,
-  // } = autoConfig;
-
-  // hooks
-  const isMobile = useIsMobile(startMobileSize);
-  const { updateParams, getParams } = useQueryParams();
-  // states
-  const [tableLoading, setTableLoading] = useState(false);
-  const pageSizeInitial = Number(getParams("pageSize")) || pageSize;
+// Keep credentials out of query keys/devtools. Identity is private to its client.
+const credentialScopes = new WeakMap<QueryClient, Map<string, number>>();
+function credentialScope(client: QueryClient, headers: unknown) {
+  let scopes = credentialScopes.get(client);
+  if (!scopes) { scopes = new Map(); credentialScopes.set(client, scopes); }
+  const key = JSON.stringify(headers || {});
+  if (!scopes.has(key)) scopes.set(key, scopes.size + 1);
+  return scopes.get(key);
+}
+const emptyRows: any[] = [];
+function Table(props: TableProps) {
+  const { columns, mode, lang = "en", pageQueryName = "page", pageSizeQueryName = "pageSize",
+    pageSize = defaultSize, tableName, isSelectable, noSearch, filters, topFilter,
+    onPageChange, onPageSizeChange, onSearch, onSortChange } = props;
+  const instanceId = useId();
+  const root = useRef<HTMLDivElement>(null);
+  const header = useRef<HTMLDivElement>(null);
+  const footer = useRef<HTMLDivElement>(null);
+  const top = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile(props.startMobileSize);
+  const { getParams, setParams } = useQueryParams();
+  const [ready, setReady] = useState(false);
+  useEffect(() => { setReady(true); }, []);
   const [openFilter, setOpenFilter] = useState(false);
-  const [currentPage, setCurrentPage] = useState(
-    () => Number(getParams(pageQueryName)) || 1
-  );
-  const [searchText, setSearchText] = useState("");
-  const [tableRows, setTableRows] = useState<any[]>(
-    mode === "static" ? (props as StaticModeProps).staticRows || [] : []
-  );
-  const [filteredRows, setFilteredRows] = useState<any[]>(tableRows);
-  const [totalItems, setTotalItems] = useState<number>(
-    mode === "static" ? (props as StaticModeProps).totalItems || 0 : 0
-  );
-  // const [dynamicPageSize, setDynamicPageSize] = useState(pageSizeInitial);
-  // const [tableHeightPageSize, setTableHeightPageSize] = useState(
-  //   isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSize
-  // );
-  // const autoConfig = { ...defaultAutoConfig, ...customAutoPageSizeConfig };
-  const autoConfig = {
-    ...defaultAutoConfig,
-    ...customAutoPageSizeConfig,
-    subtractSelectors: [
-      "#table-header-actions",
-      "#topFilter",
-      "#paging",
-      ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
-    ],
-    optionalSelectorsForExtraBuffer: [
-      "#topFilter",
-      // "#paging",
-      ...((customAutoPageSizeConfig?.subtractSelectors as string[]) || []),
-    ],
-    extraBufferRows: 1,
-  };
-  const {
-    enabled: autoEnabled,
-    containerSelector,
-    subtractSelectors,
-    optionalSelectorsForExtraBuffer,
-    rowHeight,
-    baseBufferRows,
-    extraBufferRows,
-  } = autoConfig;
-  const [dynamicPageSize, setDynamicPageSize] = useState(
-    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSizeInitial
-  );
-  const [tableHeightPageSize, setTableHeightPageSize] = useState(
-    isMobile ? pageSizeInitial : autoEnabled ? 0 : pageSizeInitial
-  );
-
-  const [isManualPageSize, setIsManualPageSize] = useState(false);
+  const [search, setSearch] = useState("");
+  const searchValue = useRef("");
+  const searchCallback = useRef(onSearch);
+  useEffect(() => { searchCallback.current = onSearch; }, [onSearch]);
+  const searchKey = props.saveSearch && tableName ? `search_${tableName}` : null;
+  useEffect(() => {
+    let saved = "";
+    try { if (searchKey) saved = JSON.parse(sessionStorage.getItem(searchKey) || "null")?.value || ""; } catch { /* storage is optional */ }
+    const restored = typeof saved === "string" ? saved : "";
+    setSearch(restored);
+    if (restored !== searchValue.current) searchCallback.current?.(restored);
+    searchValue.current = restored;
+  }, [searchKey]);
+  const config = mode === "internal" ? props.internalApiConfig : undefined;
+  const defaultOrder: OrderType = config?.defaultSortBy ? {
+    column: props.columnNumber ?? 0, dir: config.sortType ?? "desc", name: config.defaultSortBy,
+  } : null;
+  const [order, setOrder] = useState<OrderType>(defaultOrder);
+  useEffect(() => {
+    setOrder(config?.defaultSortBy ? { column: props.columnNumber ?? 0, dir: config.sortType ?? "desc", name: config.defaultSortBy } : null);
+  }, [mode, config?.defaultSortBy, config?.sortType, props.columnNumber]);
+  const theme = useMemo(() => ({ ...defaultColorTheme, ...props.colorTheme }), [props.colorTheme]);
+  const texts = useMemo(() => ({ ...defaultTexts[lang], ...props.textsConfig }), [lang, props.textsConfig]);
+  const dir = lang === "fa" ? "rtl" : "ltr";
+  const [autoSize, setAutoSize] = useState<number | null>(null);
+  const auto = useMemo(() => ({ ...defaultAutoConfig, ...props.autoPageSizeConfig }), [props.autoPageSizeConfig]);
+  const preferredSize = positiveInteger(pageSize, defaultSize);
+  const size = positiveInteger(getParams(pageSizeQueryName), auto.enabled && !isMobile ? autoSize ?? preferredSize : preferredSize);
+  const requestedPage = positiveInteger(getParams(pageQueryName), 1);
 
   useEffect(() => {
-    if (!isMobile && autoEnabled && !isManualPageSize) {
-      const calcSize = () => {
-        let sumSubtract = 0;
-        for (const sel of subtractSelectors || []) {
-          const el = document.querySelector(sel);
-          if (el) sumSubtract += Number(el.clientHeight || 0);
-        }
-        const containerEl = document.querySelector(containerSelector || "");
-        const availableHeight = (containerEl?.clientHeight || 0) - sumSubtract;
-        const rows = Math.floor(availableHeight / (rowHeight || 51.15));
-        let buffer = baseBufferRows || 2;
-
-        const hasOptional = (optionalSelectorsForExtraBuffer || []).some(
-          (sel) => {
-            const el = document.querySelector(sel);
-            return !!el && el.clientHeight > 0;
-          }
-        );
-        if (hasOptional) buffer += extraBufferRows || 1;
-
-        const newSize = rows - buffer;
-        console.log("Auto Page Size calculated:", newSize);
-        if (newSize > 0 && newSize !== dynamicPageSize) {
-          setTableHeightPageSize(newSize);
-          setDynamicPageSize(Number(getParams("pageSize")) || newSize);
-        }
-      };
-
-      // محاسبه اولیه
-      calcSize();
-
-      const containerEl = document.querySelector(containerSelector || "");
-      if (containerEl) {
-        const resizeObserver = new ResizeObserver(calcSize);
-        resizeObserver.observe(containerEl);
-
-        return () => resizeObserver.disconnect();
-      }
-    }
-  }, [dynamicPageSize, isMobile, autoEnabled, isManualPageSize]);
-  const [order, setOrder] = useState<any>([
-    {
-      column: columnNumber || 0,
-      dir: mode === "internal" ? props?.internalApiConfig?.sortType : "desc",
-      name:
-        mode === "internal" ? props?.internalApiConfig?.defaultSortBy : "id",
-    },
-  ]);
-
-  // functions
-  const onChangePage = (page: number) => {
-    updateParams(pageQueryName, page.toString());
-    setCurrentPage(page);
-    onPageChange?.(page);
-  };
-
-  const handleOrderChange = useCallback(
-    (newOrder: OrderType) => {
-      setOrder(
-        newOrder
-          ? [
-              {
-                ...newOrder,
-                column: isSelectable ? newOrder?.column - 1 : newOrder?.column,
-              },
-            ]
-          : []
-      );
-      onSortChange?.(
-        newOrder
-          ? {
-              ...newOrder,
-              column: isSelectable ? newOrder?.column - 1 : newOrder?.column,
-            }
-          : null
-      );
-    },
-    [mode, onSortChange]
-  );
-
-  const paginatedRows = useMemo(() => {
-    const size = dynamicPageSize;
-    const start = (currentPage - 1) * size;
-    const end = start + size;
-    return filteredRows.slice(start, end);
-  }, [filteredRows, currentPage, pageSizeInitial, dynamicPageSize]);
-
-  const columnsWithRow: ColumnType[] = useMemo(() => {
-    const selectableColumn: ColumnType[] = isSelectable
-      ? [
-          {
-            data: "selectableTable",
-            title: "",
-            render: rowRenderer((_cell, _row) =>
-              selectableProps ? (
-                <SelectableCheckbox
-                  row={_row}
-                  selectableProps={selectableProps}
-                  theme={theme}
-                />
-              ) : null
-            ),
-            orderable: false,
-            width: 50,
-            searchable: false,
-          },
-        ]
-      : [];
-
-    return [
-      ...selectableColumn,
-      {
-        data: "id",
-        title: mergedTexts.row || "",
-        render: rowRenderer(
-          (_cell, _row, index?: number) =>
-            (Number(currentPage) - 1) * dynamicPageSize + (index! + 1)
-        ),
-        orderable: true,
-        width: 70,
-        searchable: false,
-      },
-      ...columns,
-    ];
-  }, [
-    columns,
-    isSelectable,
-    selectableProps,
-    theme,
-    mergedTexts.row,
-    currentPage,
-  ]);
-
-  // useEffects
-
-  useEffect(() => {
-    if (mode === "static") {
-      const rows = (props as StaticModeProps).staticRows || [];
-      setTableRows(rows);
-      setFilteredRows(rows);
-      setTotalItems((props as StaticModeProps).totalItems || rows.length);
-    }
-  }, [
-    (props as StaticModeProps).staticRows,
-    (props as StaticModeProps).totalItems,
-  ]);
-
-  useEffect(() => {
-    const handler = () => {
-      setCurrentPage(Number(getParams(pageQueryName)) || 1);
+    if (!auto.enabled || isMobile) return;
+    const query = (selector?: string) => {
+      try { return selector ? document.querySelector<HTMLElement>(selector) : null; } catch { return null; }
     };
-    window.addEventListener("popstate", handler);
-    return () => window.removeEventListener("popstate", handler);
-  }, [getParams, pageQueryName]);
-
-  useEffect(() => {
-    if (mode === "static") {
-      setTableRows((props as StaticModeProps).staticRows || []);
-      setTotalItems((props as StaticModeProps).totalItems || 0);
-    }
-  }, [
-    (props as StaticModeProps).staticRows,
-    (props as StaticModeProps).totalItems,
-  ]);
-
-  // useLayoutEffect(() => {
-  //   if (!isMobile && autoEnabled) {
-  //     const calcSize = () => {
-  //       let sumSubtract = 0;
-  //       for (const sel of subtractSelectors || []) {
-  //         sumSubtract += Number(document.querySelector(sel)?.clientHeight || 0);
-  //       }
-  //       const availableHeight =
-  //         Number(
-  //           document.querySelector(containerSelector || "")?.clientHeight || 0
-  //         ) - sumSubtract;
-
-  //       const rows = Math.floor(availableHeight / (rowHeight || 51.15));
-  //       let buffer = baseBufferRows || 2;
-  //       const hasOptional = (optionalSelectorsForExtraBuffer || []).some(
-  //         (sel) => Number(document.querySelector(sel)?.clientHeight || 0) > 0
-  //       );
-  //       if (hasOptional) buffer += extraBufferRows || 1;
-
-  //       const newSize = rows - buffer;
-  //       if (newSize > 0) {
-  //         setTableHeightPageSize(newSize);
-  //         // if (!dynamicPageSize) {
-  //         //   setDynamicPageSize(Number(getParams("pageSize")) || newSize);
-  //         // }
-  //       }
-  //     };
-
-  //     calcSize();
-  //     const observer = new MutationObserver(calcSize);
-  //     observer.observe(document.body, { childList: true, subtree: true });
-  //     return () => observer.disconnect();
-  //   }
-  // }, [isMobile, autoEnabled]);
-
-  useEffect(() => {
-    if (mode === "static" && order?.length > 0) {
-      const { name, dir } = order[0];
-
-      if (!name) return;
-
-      const sorted = [...(props as StaticModeProps).staticRows].sort((a, b) => {
-        const aValue = a[name];
-        const bValue = b[name];
-
-        if (aValue === null || aValue === undefined) return 1;
-        if (bValue === null || bValue === undefined) return -1;
-
-        if (typeof aValue === "number" && typeof bValue === "number") {
-          return dir === "asc" ? aValue - bValue : bValue - aValue;
-        }
-
-        return dir === "asc"
-          ? String(aValue).localeCompare(String(bValue))
-          : String(bValue).localeCompare(String(aValue));
+    const container = query(auto.containerSelector) || root.current?.parentElement;
+    const calculate = () => {
+      if (!container || container.clientHeight <= 0) return;
+      const internal = [header.current, footer.current, top.current];
+      const additional = (auto.subtractSelectors || []).map(selector => {
+        // Historical IDs are now local to each table, not global duplicate IDs.
+        if (selector === "#table-header-actions") return header.current;
+        if (selector === "#topFilter") return top.current;
+        if (selector === "#paging") return footer.current;
+        return query(selector);
       });
+      const elements = new Set([...internal, ...additional]);
+      const subtract = Array.from(elements).reduce((sum, el) => sum + (el?.clientHeight || 0), 0);
+      const optional = (auto.optionalSelectorsForExtraBuffer || []).some(selector => {
+        const el = selector === "#topFilter" ? top.current : selector === "#paging" ? footer.current : query(selector);
+        return !!el && el.clientHeight > 0;
+      });
+      const rowHeight = Number.isFinite(auto.rowHeight) && auto.rowHeight! > 0 ? auto.rowHeight! : 51.15;
+      const buffer = Math.max(0, auto.baseBufferRows ?? 2) + (optional ? Math.max(0, auto.extraBufferRows ?? 1) : 0);
+      setAutoSize(Math.max(1, Math.floor((container.clientHeight - subtract) / rowHeight) - buffer));
+    };
+    calculate();
+    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(calculate);
+    if (container) observer?.observe(container);
+    [header.current, footer.current, top.current].forEach(el => { if (el) observer?.observe(el); });
+    window.addEventListener("resize", calculate);
+    return () => { observer?.disconnect(); window.removeEventListener("resize", calculate); };
+  }, [auto, isMobile]);
 
-      setTableRows(sorted);
-    }
-  }, [order, mode, props]);
-  // ✅ mode === "external"
+  const staticRows = mode === "static" ? props.staticRows || emptyRows : emptyRows;
+  const processed = useMemo(() => localRows(staticRows, columns, search, order), [staticRows, columns, search, order]);
+  const preliminaryTotal = mode === "static" ? processed.length : mode === "external" ? Math.max(0, props.totalItems || 0) : 0;
+  const preliminaryPage = mode === "static" ? Math.min(requestedPage, Math.max(1, Math.ceil(preliminaryTotal / size))) : requestedPage;
+  const requestColumns = useMemo(() => [{ data: "id", title: texts.row || "", searchable: false, orderable: true }, ...columns]
+    .filter(col => col.data !== null).map(col => ({ data: col.data, name: col.data, searchable: !!col.searchable,
+      orderable: !!col.orderable, search: { value: "", regex: false, fixed: [] } })), [columns, texts.row]);
+  const refreshBody = JSON.stringify((config?.customBody || []).filter(item => !item.noRefresh));
+  const previousBody = useRef<string | null>(null);
+  const previousMode = useRef(mode);
+  const bodyChanged = mode === "internal" && previousMode.current === mode && previousBody.current !== null && previousBody.current !== refreshBody;
   useEffect(() => {
-    if (mode === "external") {
-      setTableRows((props as ExternalTableProps).externalRows || []);
-      setTotalItems((props as ExternalTableProps).totalItems || 0);
-    }
-  }, [
-    mode,
-    (props as ExternalTableProps).externalRows,
-    (props as ExternalTableProps).totalItems,
-  ]);
-
-  // internal api call
-  if (mode === "internal") {
-    const refreshableCustomBody = Array.isArray(
-      props?.internalApiConfig?.customBody
-    )
-      ? props?.internalApiConfig?.customBody.filter((item) => !item.noRefresh)
-      : [];
-    useEffect(() => {
-      updateParams(pageQueryName, "1");
-      setCurrentPage(1);
-    }, [JSON.stringify(refreshableCustomBody)]);
-
-    useQuery({
-      enabled: Boolean(dynamicPageSize && mode === "internal"),
-      queryKey: [
-        tableName,
-        currentPage,
-        searchText,
-        order,
-        refreshableCustomBody,
-        dynamicPageSize,
-      ],
-      refetchOnWindowFocus: false,
-      refetchIntervalInBackground: false,
-      queryFn: async () => {
-        try {
-          setTableLoading(true);
-          const payloadCustomBody = props?.internalApiConfig?.customBody || [];
-
-          const makeCurrentCols = columnsWithRow
-            ?.filter((i) => i.data !== null && i.data !== "selectableTable")
-            ?.map((item) => ({
-              data: item?.data,
-              name: item?.data,
-              searchable: item?.searchable,
-              orderable: item?.orderable,
-              search: { value: "", regex: false, fixed: [] },
-            }));
-          let payload: Record<string, any> = {
-            draw: currentPage,
-            columns: makeCurrentCols,
-            order: order || [],
-            start: (currentPage - 1) * dynamicPageSize,
-            length: dynamicPageSize,
-            search: { value: searchText || "", regex: false, fixed: [] },
-          };
-
-          payloadCustomBody.forEach((item) => {
-            const { noRefresh, isFilter, ...rest } = item;
-            Object.assign(payload, rest);
-          });
-
-          const endpoint = props?.internalApiConfig?.endpoint || "";
-          const response = await axios({
-            method: props?.internalApiConfig?.method || "POST",
-            url: props?.internalApiConfig?.baseUrl + endpoint || "" + endpoint,
-            data: props?.internalApiConfig?.payload || payload || null,
-            headers: props?.internalApiConfig?.headers,
-          });
-
-          props?.internalApiConfig?.onFetch?.(response?.data);
-          setTableRows(response?.data?.data);
-          setTotalItems(response?.data?.recordsFiltered);
-          setTableLoading(false);
-          if (openFilter) {
-            setOpenFilter(false);
-          }
-          if (response?.data?.data === null) {
-            notify?.(response?.data?.message || "null data", "warning");
-            console.log(response?.data?.message || "null data", "warning");
-          }
-          return response?.data;
-        } catch (error: any) {
-          notify?.(error?.message, "error");
-          console.log(error?.message, "error");
-          setTableLoading(false);
-        }
-      },
-    });
-  }
-  const internalConfig = (props as InternalTableProps).internalApiConfig;
-
-  const activeFilterCount = Array.isArray(internalConfig?.customBody)
-    ? internalConfig?.customBody?.reduce((count, item) => {
-        if (!item.isFilter) return count;
-        const { noRefresh, isFilter, ...rest } = item;
-        const hasValue = Object.values(rest).some(
-          (val) => val !== null && val !== undefined && val !== ""
-        );
-        return hasValue ? count + 1 : count;
-      }, 0)
-    : 0;
-
-  return (
-    <div className="table-container" dir={dir}>
-      {!isMobile && topFilter && (
-        <div
-          className={`top-filter-container ${topFilterContainerClassName}`}
-          id="topFilter"
-        >
-          {topFilter}
-        </div>
-      )}
-
-      <div id="table-header-actions" className={`table-header-actions`}>
-        <div className="search-container-table">
-          {!noSearch && (
-            <SearchBox
-              {...props}
-              onSearch={(value) => {
-                onSearch?.(value);
-                setSearchText(value);
-              }}
-              onStaticNoSearch={() => {
-                setFilteredRows(tableRows);
-                setTotalItems(tableRows.length);
-              }}
-              onStaticSearching={(searched: any) => {
-                setFilteredRows(searched);
-                setTotalItems(searched.length);
-              }}
-              tableRows={tableRows}
-              currentPage={currentPage}
-              dir={dir}
-              mergedTexts={mergedTexts}
-              theme={theme}
-            />
-          )}
-          {!isMobile && filters && (
-            <div
-              className={`${filterContainerClassName} filter-container-className`}
-            >
-              {filters}
-            </div>
-          )}
-        </div>
-        {isMobile && (filters || topFilter) && (
-          <button
-            onClick={() => setOpenFilter(true)}
-            style={{
-              minHeight: 43,
-              background: "#427bd225",
-              color: "#427bd2",
-            }}
-            className="mobile-filter-button"
-          >
-            {activeFilterCount > 0 && (
-              <span
-                style={{
-                  right: "-10px",
-                }}
-                className="mobile-filter-badge"
-              >
-                {activeFilterCount}
-              </span>
-            )}
-            {mergedTexts?.filterText}
-            <FilterIcon />
-          </button>
-        )}
-
-        {(actionButtons || !isMobile) && (
-          <div className="actionButtons">
-            {actionButtons && actionButtons}
-            {!isMobile && !noPageSize && (
-              <PageSizeSelect
-                pageQueryName={pageQueryName}
-                textsConfig={mergedTexts}
-                theme={theme}
-                initialPageSize={tableHeightPageSize}
-                pageSize={pageSizeInitial}
-                onPageSizeChange={(newSize) => {
-                  setDynamicPageSize(newSize);
-                  setIsManualPageSize(true); // ← تغییر دستی کاربر
-                  setCurrentPage(1);
-                  onPageSizeChange?.(newSize);
-                }}
-              />
-            )}
-            {/* {!isMobile && (
-              <PageSizeSelect
-                pageQueryName={pageQueryName}
-                textsConfig={mergedTexts}
-                theme={theme}
-                // initialPageSize={tableHeightPageSize}
-                pageSize={pageSizeInitial}
-                onPageSizeChange={(newSize) => {
-                  // setDynamicPageSize(newSize);
-                  setCurrentPage(1);
-                  onPageSizeChange?.(newSize);
-                }}
-              />
-            )} */}
-          </div>
-        )}
+    if (bodyChanged) setParams({ [pageQueryName]: "1" });
+    previousMode.current = mode;
+    previousBody.current = mode === "internal" ? refreshBody : null;
+  }, [mode, refreshBody, bodyChanged, setParams, pageQueryName]);
+  const pageForRequest = bodyChanged ? 1 : preliminaryPage;
+  const sharedClient = useContext(QueryClientContext);
+  const [privateClient] = useState(() => new QueryClient({ defaultOptions: { queries: { retry: false } } }));
+  const client = sharedClient || privateClient;
+  const callbacks = useRef({ config, notify: props.notify });
+  useEffect(() => { callbacks.current = { config, notify: props.notify }; });
+  const query = useQuery({
+    enabled: ready && mode === "internal" && !!config,
+    queryKey: ["responsive-react-datatable", tableName || instanceId, config?.baseUrl, config?.endpoint,
+      config?.method || "POST", config?.payload, requestColumns, credentialScope(client, config?.headers),
+      pageForRequest, size, search, order, refreshBody],
+    refetchOnWindowFocus: false,
+    throwOnError: false,
+    queryFn: async ({ signal }) => {
+      const current = config as InternalModeProps["internalApiConfig"];
+      const payload: Record<string, any> = { draw: pageForRequest, columns: requestColumns, order: order ? [order] : [],
+        start: (pageForRequest - 1) * size, length: size, search: { value: search, regex: false, fixed: [] } };
+      for (const { noRefresh: _noRefresh, isFilter: _isFilter, ...rest } of current.customBody || []) Object.assign(payload, rest);
+      const response = await axios({ ...requestConfig(current, payload), signal });
+      if (!response.data || typeof response.data !== "object") throw new Error("Invalid table response: expected an object");
+      if (response.data.data != null && !Array.isArray(response.data.data)) throw new Error("Invalid table response: data must be an array");
+      return response.data;
+    },
+  }, client);
+  const lastSuccess = useRef<unknown>(null);
+  useEffect(() => {
+    if (mode !== "internal" || !query.data || query.data === lastSuccess.current) return;
+    lastSuccess.current = query.data;
+    callbacks.current.config?.onFetch?.(query.data);
+    if (query.data.data === null) callbacks.current.notify?.(query.data.message || "null data", "warning");
+    setOpenFilter(false);
+  }, [mode, query.data]);
+  useEffect(() => {
+    if (mode === "internal" && query.error) callbacks.current.notify?.(query.error.message, "error");
+  }, [mode, query.error]);
+  const total = mode === "internal" ? Math.max(0, Number(query.data?.recordsFiltered) || 0) : preliminaryTotal;
+  const page = total > 0 || mode === "static" ? Math.min(requestedPage, Math.max(1, Math.ceil(total / size))) : requestedPage;
+  const previousPage = useRef(1);
+  const pageCallback = useRef(onPageChange);
+  useEffect(() => { pageCallback.current = onPageChange; }, [onPageChange]);
+  useEffect(() => {
+    if (previousPage.current !== page) { previousPage.current = page; pageCallback.current?.(page); }
+    if (page !== requestedPage) setParams({ [pageQueryName]: String(page) });
+  }, [page, requestedPage, pageQueryName, setParams]);
+  const changePage = useCallback((next: number) => setParams({ [pageQueryName]: String(positiveInteger(next, 1)) }), [pageQueryName, setParams]);
+  const changeSearch = (next: string) => {
+    searchValue.current = next;
+    setSearch(next); changePage(1); onSearch?.(next);
+    try { if (searchKey) sessionStorage.setItem(searchKey, JSON.stringify({ value: next })); } catch { /* optional */ }
+  };
+  const changeSize = (next: number) => {
+    setParams({ [pageSizeQueryName]: String(positiveInteger(next, preferredSize)), [pageQueryName]: "1" });
+    onPageSizeChange?.(positiveInteger(next, preferredSize));
+  };
+  const changeOrder = (next: OrderType) => {
+    const index = next ? requestColumns.findIndex(col => col.data === next.name) : -1;
+    const mapped = next ? { ...next, column: index } : null;
+    setOrder(mapped); changePage(1); onSortChange?.(mapped);
+  };
+  const rows = mode === "static" ? processed.slice((page - 1) * size, page * size) :
+    mode === "external" ? props.externalRows || emptyRows : query.data?.data || emptyRows;
+  const selectable = isSelectable ? props as Selectable : undefined;
+  const selectedKey = selectable?.selectedKey || "id";
+  // Static: all filtered rows; server modes: loaded page. Preserve other pages' IDs.
+  const selectableRows = mode === "static" ? processed : rows;
+  const selectableIds: Array<string | number> = Array.from(new Set(selectableRows.map((row: any) => row[selectedKey])
+    .filter((id: unknown) => typeof id === "string" || typeof id === "number"))) as Array<string | number>;
+  const selectedIds = selectable?.selectedIds || [];
+  const allSelected = selectableIds.length > 0 && selectableIds.every(id => selectedIds.includes(id));
+  const someSelected = selectableIds.some(id => selectedIds.includes(id));
+  const selectAll = () => selectable?.onSelectChange?.(allSelected ? selectedIds.filter(id => !selectableIds.includes(id)) : Array.from(new Set([...selectedIds, ...selectableIds])));
+  const displayColumns: ColumnType[] = [
+    ...(selectable ? [{ data: "selectableTable", title: "", width: 50, orderable: false, searchable: false,
+      render: (_cell: unknown, row?: any) => <SelectableCheckbox row={row} selectableProps={selectable} theme={theme} /> }] : []),
+    { data: "id", title: texts.row || "", render: (_cell, _row, index = 0) => (page - 1) * size + index + 1,
+      orderable: true, width: 70, searchable: false }, ...columns,
+  ];
+  const loading = props.isLoading || (mode === "internal" && (!ready || query.isFetching || bodyChanged));
+  const activeFilterCount = (config?.customBody || []).filter(item => item.isFilter && Object.entries(item)
+    .some(([key, value]) => key !== "isFilter" && key !== "noRefresh" && value != null && value !== "")).length;
+  const pageSelect = <PageSizeSelect pageSize={size} initialPageSize={autoSize ?? preferredSize} theme={theme} textsConfig={texts} onPageSizeChange={changeSize} />;
+  return <div ref={root} className="rrdt table-container" dir={dir} aria-busy={!!loading}>
+    {!isMobile && topFilter && <div ref={top} className={`top-filter-container ${props.topFilterContainerClassName || ""}`}>{topFilter}</div>}
+    <div ref={header} className="table-header-actions">
+      <div className="search-container-table">
+        {!noSearch && <SearchBox value={search} onSearch={changeSearch} theme={theme} mergedTexts={texts} dir={dir} />}
+        {!isMobile && filters && <div className={`${props.filterContainerClassName || ""} filter-container-className`}>{filters}</div>}
       </div>
-      {isMobile ? (
-        <MobileTable
-          columns={columnsWithRow}
-          isLoading={isLoading || tableLoading}
-          rows={
-            mode === "internal"
-              ? tableRows
-              : mode === "external"
-              ? tableRows
-              : paginatedRows
-          }
-          theme={theme}
-          textsConfig={mergedTexts}
-          listMode={listMode}
-        />
-      ) : (
-        <>
-          <DesktopTable
-            rowClassName={rowClassName}
-            rowHeight={`${rowHeight}px` || "51.15px"}
-            pageSize={dynamicPageSize}
-            maxHeight={
-              height
-                ? height
-                : `calc(${tableHeightPageSize * (rowHeight || 51.15)}px)`
-            }
-            columns={columnsWithRow}
-            isLoading={isLoading || tableLoading}
-            rows={
-              mode === "internal"
-                ? tableRows
-                : mode === "external"
-                ? tableRows
-                : paginatedRows
-            }
-            // pageSize={pageSizeInitial}
-            theme={theme}
-            textsConfig={mergedTexts}
-            onOrderChange={handleOrderChange}
-            isAllSelected={
-              selectableProps?.isSelectable &&
-              selectableProps?.selectedIds?.length > 0 &&
-              selectableProps?.selectedIds?.length === totalItems
-            }
-            onAllSelect={() => {
-              if (!selectableProps?.onSelectChange) return;
-
-              const allIds =
-                tableRows?.map(
-                  (i) => i[selectableProps?.selectedKey as keyof typeof i]
-                ) || [];
-              const isAllSelected =
-                selectableProps.selectedIds?.length === allIds.length;
-
-              selectableProps.onSelectChange(isAllSelected ? [] : allIds);
-            }}
-          />
-        </>
-      )}
-      <div className="table-footer">
-        {totalItems ? (
-          <Pagination
-            dir={dir}
-            startMobileSize={startMobileSize}
-            totalItems={totalItems}
-            queryName={pageQueryName}
-            pageSize={dynamicPageSize}
-            theme={theme}
-            textsConfig={mergedTexts}
-            currentPage={currentPage}
-            onChangePage={onChangePage}
-          />
-        ) : null}
-        {isMobile && !noPageSize && (
-          <PageSizeSelect
-            pageQueryName={pageQueryName}
-            textsConfig={mergedTexts}
-            theme={theme}
-            initialPageSize={tableHeightPageSize}
-            pageSize={pageSizeInitial}
-            onPageSizeChange={(newSize) => {
-              setDynamicPageSize(newSize);
-              setIsManualPageSize(true); // ← تغییر دستی کاربر
-              setCurrentPage(1);
-              onPageSizeChange?.(newSize);
-            }}
-          />
-        )}
-      </div>
-      <Modal
-        size="lg"
-        title={mergedTexts?.filterText}
-        isOpen={openFilter}
-        onClose={() => setOpenFilter(false)}
-        className="filter-modal"
-        theme={theme}
-      >
-        <div className="filter-modal-content space-items">
-          {filters}
-          {topFilter}
-        </div>
-        <div className="filter-modal-actions">
-          <button
-            onClick={() => setOpenFilter(false)}
-            style={{ borderColor: theme?.primaryColor }}
-            className="filter-modal-close-button"
-          >
-            {mergedTexts?.close}
-          </button>
-          <button
-            onClick={() => {
-              window.history.replaceState({}, "", window.location.pathname);
-              if (removeFilterKey) {
-                sessionStorage.removeItem(removeFilterKey);
-              }
-              if (tableName) {
-                sessionStorage.removeItem(`search_${tableName}`);
-              }
-              location.reload();
-            }}
-            className="filter-modal-clear-button"
-          >
-            {mergedTexts?.removeFilterText}
-            <TrashIcon />
-          </button>
-        </div>
-      </Modal>
+      {isMobile && (filters || topFilter) && <button type="button" onClick={() => setOpenFilter(true)} style={{ minHeight: 43, background: "#427bd225", color: "#427bd2" }} className="mobile-filter-button">
+        {activeFilterCount > 0 && <span className="mobile-filter-badge">{activeFilterCount}</span>}{texts.filterText}<FilterIcon />
+      </button>}
+      <div className="actionButtons">{props.actionButtons}{!isMobile && !props.noPageSize && pageSelect}</div>
     </div>
-  );
-};
-
+    {isMobile ? <MobileTable columns={displayColumns} rows={rows} isLoading={!!loading} theme={theme} textsConfig={texts} listMode={props.listMode} rowKey={props.rowKey || selectedKey} /> :
+      <DesktopTable columns={displayColumns} rows={rows} isLoading={!!loading} theme={theme} textsConfig={texts}
+        pageSize={size} maxHeight={props.height || `${(size + 1) * (auto.rowHeight || 51.15)}px`} rowHeight={`${auto.rowHeight || 51.15}px`}
+        rowClassName={props.rowClassName} rowKey={props.rowKey || selectedKey} order={order}
+        onOrderChange={changeOrder} isAllSelected={allSelected} isIndeterminate={someSelected && !allSelected} onAllSelect={selectAll} />}
+    <div ref={footer} className="table-footer">
+      {total > 0 && <Pagination dir={dir} startMobileSize={props.startMobileSize} totalItems={total} pageSize={size}
+        queryName={pageQueryName} theme={theme} textsConfig={texts} currentPage={page} onChangePage={changePage} />}
+      {isMobile && !props.noPageSize && pageSelect}
+    </div>
+    <Modal size="lg" title={texts.filterText} isOpen={openFilter} onClose={() => setOpenFilter(false)} className="filter-modal" theme={theme}>
+      <div className="filter-modal-content space-items">{filters}{topFilter}</div>
+      <div className="filter-modal-actions">
+        <button type="button" onClick={() => setOpenFilter(false)} className="filter-modal-close-button">{texts.close}</button>
+        <button type="button" className="filter-modal-clear-button" onClick={() => {
+          changeSearch("");
+          try { if (props.removeFilterKey) sessionStorage.removeItem(props.removeFilterKey); if (searchKey) sessionStorage.removeItem(searchKey); } catch { /* optional */ }
+          props.onClearFilters?.(); setOpenFilter(false);
+        }}>{texts.removeFilterText}<TrashIcon /></button>
+      </div>
+    </Modal>
+  </div>;
+}
 export default React.memo(Table);

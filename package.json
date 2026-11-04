@@ -1,7 +1,7 @@
 {
   "name": "responsive-react-datatable",
-  "version": "0.0.6",
-  "description": "A responsive React DataTable component for displaying and managing tabular data. Easily handle sorting, filtering, pagination, and dynamic columns, with support for selectable rows and inline editing. Perfect for building interactive, data-driven interfaces that look great on any screen size.",
+  "version": "3.0.0",
+  "description": "Responsive React data table with static and server data, search, sorting, pagination, selection and Persian/RTL support.",
   "author": {
     "name": "fatemeh daryan",
     "email": "baridaryan@gmail.com",
@@ -12,25 +12,13 @@
     "url": "https://github.com/fatemeh-bd/responsive-react-datatable/",
     "directory": "/"
   },
-  "main": "dist/index.js",
+  "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "dependencies": {
-    "@tanstack/react-query": "^5.90.5",
-    "axios": ">=0.22.0 <2",
-    "ogl": "^1.0.11",
-    "react-icons": "^5.5.0",
-    "react-markdown": "^10.1.0",
-    "react-router-dom": "^7.9.3",
-    "react-syntax-highlighter": "^15.6.6",
-    "rehype-raw": "^7.0.0",
-    "remark-gfm": "^4.0.1",
-    "swiper": "^11.2.10"
+    "axios": "^1.21.0",
+    "swiper": "^12.2.0"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^26.0.1",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@tailwindcss/postcss": "^4.1.13",
     "@types/react": "^18.2.7",
@@ -44,30 +32,47 @@
     "react-dom": "18.2.0",
     "rollup": "^4.18.1",
     "rollup-plugin-dts": "^6.1.1",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.2",
     "tailwindcss": "^4.1.12",
     "tslib": "^2.6.3",
     "typescript": "^5.5.3",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "ogl": "^1.0.11",
+    "react-icons": "^5.5.0",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.18.0",
+    "react-syntax-highlighter": "^16.1.2",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1",
+    "@tanstack/react-query": "^5.90.5",
+    "vitest": "^5.1.0",
+    "jsdom": "^26.1.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@playwright/test": "^1.56.0",
+    "esbuild": "^0.25.0"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs"
-    }
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
   },
   "bugs": {
     "url": "https://github.com/fatemeh-bd/responsive-react-datatable/issues",
     "email": "baridaryan@gmail.com"
   },
   "engines": {
-    "node": ">=14.0.0",
-    "npm": ">=6.0.0"
+    "node": ">=20.19.0",
+    "npm": ">=10.0.0"
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "funding": {
     "type": "individual",
@@ -76,23 +81,15 @@
   "homepage": "https://fatemeh-bd.github.io/responsive-react-datatable",
   "keywords": [
     "react",
-    "react-component",
-    "image-upload",
-    "profile-picture",
-    "avatar",
-    "file-upload",
-    "image-cropper",
-    "ui-component",
-    "typescript",
-    "picture-selector",
-    "image-picker",
-    "upload-progress",
-    "react-hooks",
-    "responsive-design",
-    "customizable",
-    "drag-drop",
-    "image-editor",
-    "react-library"
+    "table",
+    "datatable",
+    "responsive",
+    "pagination",
+    "sorting",
+    "filtering",
+    "rtl",
+    "nextjs",
+    "typescript"
   ],
   "license": "MIT",
   "publishConfig": {
@@ -100,14 +97,28 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "rollup": "rollup -c --bundleConfigAsCjs",
     "dev": "vite",
-    "build": "vite build",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
-    "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node scripts/clean-dist.cjs && npm run typecheck && rollup -c rollup.config.mjs",
+    "build:demo": "vite build",
+    "rollup": "npm run build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:package": "node scripts/check-package.mjs",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run test && npm run build && npm run test:package",
+    "predeploy": "npm run build:demo",
+    "deploy": "gh-pages -d demo-dist",
+    "test:release": "node scripts/verify-release.mjs"
   },
-  "sideEffects": false,
-  "types": "dist/index.d.ts"
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "types": "dist/index.d.ts",
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "@tanstack/react-query": "^5.90.5"
+  },
+  "type": "module"
 }

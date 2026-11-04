@@ -1,1 +1,8 @@
 node_modules/
+dist/
+demo-dist/
+.release-tests/
+test-results/
+playwright-report/
+*.tgz
+.npm-cache/

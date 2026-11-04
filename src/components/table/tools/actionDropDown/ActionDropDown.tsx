@@ -22,7 +22,7 @@ export function ActionDropDown({
         button={renderButton}
         className="DropDownMenu"
         children={
-          <ul className="dropdown-list">
+          <ul role="menu" className="dropdown-list">
             {options?.map(
               (option, index) =>
                 !option.hidden && (
@@ -33,10 +33,10 @@ export function ActionDropDown({
                         ? "dropdown-item--last"
                         : ""
                     }`}
-                    onClick={option?.onClick}
+                    role="none"
                   >
                     {option?.href ? (
-                      <a href={option?.href} className="dropdown-link">
+                      <a role="menuitem" onClick={option.onClick} href={option.href} className="dropdown-link">
                         <>
                           {option.Icon && (
                             <option.Icon className="dropdown-icon" />
@@ -45,12 +45,12 @@ export function ActionDropDown({
                         </>
                       </a>
                     ) : (
-                      <>
+                      <button type="button" role="menuitem" onClick={option.onClick} className="dropdown-link">
                         {option.Icon && (
                           <option.Icon className="dropdown-icon" />
                         )}
                         {option.label}
-                      </>
+                      </button>
                     )}
                   </li>
                 )
@@ -65,6 +65,8 @@ export function ActionDropDown({
 const actionButton = () => {
   return (
     <button
+      type="button"
+      aria-label="Actions"
       style={{
         backgroundColor: "#fefefe",
       }}
@@ -78,6 +80,8 @@ const actionButton = () => {
 const managementButton = (text: string) => {
   return (
     <button
+      type="button"
+      aria-label="Actions"
       style={{
         backgroundColor: "#fefefe",
       }}

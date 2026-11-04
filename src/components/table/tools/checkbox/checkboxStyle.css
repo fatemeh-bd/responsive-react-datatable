@@ -67,6 +67,18 @@
   transform: translate(-50%, -50%) rotate(45deg) scale(1);
   opacity: 1;
 }
+.checkbox .checkbox-input:focus-visible ~ .checkbox-control {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+.checkbox .checkbox-input:indeterminate ~ .checkbox-control::after {
+  width: 10px;
+  height: 2px;
+  border: 0;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
 
 .checkbox .checkbox-label {
   font-size: 1rem;

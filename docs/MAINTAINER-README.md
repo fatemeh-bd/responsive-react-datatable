@@ -1,87 +1,64 @@
 # Maintainer quick start
 
-Last audited: 2026-11-04. This is the short context entrypoint for humans and AI.
+Release preparation: 3.0.0, 2026-11-04. This is the short entrypoint for future
+work; the earlier audit remains a historical snapshot.
 
-## Current state
+## Implementation
 
-| Area | main | dev / working tree at audit |
-| --- | --- | --- |
-| Commit | `1a6f205` | `7a71022` |
-| Manifest version | `2.1.8` | `0.0.6` |
-| Table implementation | Identical to dev | Identical to main |
-| Build | Rollup library; isolated rebuild passed with warnings | Vite demo; library config missing |
-| Public JS exports | default, Table, rowRenderer, ActionDropDown | default only |
-| React peer dependencies | >=16.8 (inaccurate) | missing |
-| SSR | fails on window | fails on window |
-| Runtime dependency audit | 4 affected package nodes | 10 affected package nodes |
+The library and demo share one repository. Rollup builds `dist/index.mjs`,
+`dist/index.d.ts`, source map and scoped `dist/styles.css`. Vite builds the demo
+into `demo-dist/`. Never publish the demo directory as the npm library.
 
-Remote commit IDs were checked with `git ls-remote`; they matched both local
-branches. No branch switch, dependency update, publish, push, or runtime fix was
-performed. Do not read `dist` or the entire git history to rediscover this context.
+Public exports: default and named Table, rowRenderer, ActionDropDown and public
+prop/configuration types. React/React DOM 18/19 and TanStack Query v5 are peers;
+Axios and Swiper are runtime dependencies. Demo packages are dev dependencies.
+The npm lockfile is authoritative. The package is ESM (`type: module`), including
+its .d.ts interpretation under NodeNext. Use `.cjs` for CommonJS tooling configs.
 
-Read [the audit](COMPATIBILITY-AUDIT.md) for findings and
-[the release plan](RELEASE-PLAN.md) for the next implementation steps.
+Modes: static derives filter -> sort -> slice; external takes host-owned data and
+callbacks; internal uses a host QueryClient or a private fallback, cancellation,
+request-specific keys, safe credential scopes and query-derived result state.
+GET uses params; POST uses data. Saved search is guarded and restored after mount.
 
-## Architecture and behavior
+URL state is shared through useSyncExternalStore and a reversible History API
+subscription, preserving hash/history state/unrelated query values. Set distinct
+pageQueryName and pageSizeQueryName for independent tables. Select-all includes
+filtered static rows or the loaded server page, preserving off-scope selections.
+Use rowKey/selectedKey for stable identity; numeric zero is valid.
 
-The npm entrypoint is `src/index.ts`. It should expose Table as both the default
-and a named export, the existing helper/dropdown, and documented types.
-`Table.tsx` renders desktop tables or mobile Swiper cards and owns pagination,
-sort/search state, selection wiring, automatic height calculation and filters.
+Overlays mount only in the browser. The desktop header/body use one semantic table.
+Dialog focus, Escape, menu keyboard controls and non-submitting buttons are tested.
+Automatic sizing uses local refs and positive fallbacks, never a zero page size.
 
-Modes:
-
-- `static`: receives all rows and performs local slicing/search/sort.
-- `external`: host fetches rows and listens to callbacks.
-- `internal`: table builds a DataTables-like payload and calls Axios via TanStack
-  Query. Today it requires the host's QueryClientProvider, which the root README
-  example omits. Query result data is currently ignored in favor of queryFn
-  state mutations. This is an important stabilization target.
-
-Shared state currently uses URL keys `page` (configurable) and `pageSize`
-(hardcoded), plus optional `sessionStorage` search state by `tableName`.
-Multiple instances do not have a shared URL subscription. Fixed DOM IDs also
-make automatic sizing unsafe across multiple tables.
-
-The demo uses React Router, Markdown, syntax highlighting, icons, OGL and
-Tailwind; these are not core library requirements. Demo examples import source
-files directly, so a working demo does not verify npm exports or package CSS.
-
-## Safe local checks
-
-Dependencies already existed during the audit; no install was performed.
+## Required checks
 
 ```powershell
-node node_modules/typescript/bin/tsc --noEmit --pretty false
-node scripts/audit-compatibility.cjs
-node node_modules/vite/bin/vite.js build --outDir .audit-demo-dist --emptyOutDir
-npm.cmd pack --dry-run --json --ignore-scripts
-npm.cmd audit --omit=dev --json --registry=https://registry.npmjs.org
+npm.cmd ci
+npm.cmd test
+npm.cmd run build
+npm.cmd run test:package
+npm.cmd run test:release
+npm.cmd run build:demo
+npm.cmd audit --omit=dev --registry=https://registry.npmjs.org/
 ```
 
-Use an unused temporary output path for the demo command; never point it at a
-directory with valuable files. Audit probes print observed errors and exit 0
-when the probe run itself completed. They are not passing regression tests.
-The probe strips CSS to isolate runtime failures, bundles Swiper from the
-installed tree, and tests React 18.2 only. It also imports main's committed bundle
-with the installed dependencies; it does not emulate main's historical install.
+See [release status](RELEASE-STATUS.md), `release-verification.json` for exact
+matrix results, and [publishing instructions](PUBLISHING.md). The release matrix
+uses temporary isolated consumers in `.release-tests/` and no public API services.
+Its requests are mocked; Next integration is exercised against local servers.
+Chromium must be installed, or set RELEASE_CHROME_PATH. On this Windows machine
+Chrome was already installed, avoiding a region-blocked Chromium download.
 
-On this environment, Node entrypoint resolution required sandbox escalation to
-read the parent workspace path. That is an environment limitation, not a library
-bug. Public npm advisory queries worked after explicitly using the npm registry;
-the configured mirror's audit endpoint failed. Do not change the user's registry
-settings to work around that.
+## Migration / limits
 
-## Confirmed support requirement (2026-11-04)
+Read CHANGELOG.md and the root README. React 16/17 are out of scope. Version 3
+requires a global styles.css import, preserves unsorted static input order, and
+uses onClearFilters rather than a full-page reload for host-owned filter reset.
+Mobile has no built-in sorting header. Server-side filtering/pagination requires
+an API implementing the documented response protocol. Stable row IDs are strongly
+recommended for stateful cells. Future React majors and other Next/browser pairs
+require testing before being advertised as supported.
 
-The user confirmed React 18 and above as the target, with matching React DOM
-versions. React 16/17 compatibility work is out of scope. Validate React 18 and
-19 first, including compatible Next.js Pages/App consumers, SSR and hydration.
-Future React majors need validation before being advertised as supported.
-This is the agreed target, not a claim that the current package already passes.
-Query v5 may remain; its cache, provider and request-state defects still need
-fixing. Do not remove it solely for legacy React support.
-
-Keep known-good exports and preserve behavior while building the release matrix.
-Do not increment from dev's 0.0.6 blindly: inspect the published npm version/tags
-first. The registry's published package itself was not downloaded in this audit.
+The original audit and old raw advisories are historical. The audit diagnostic
+script is not the current regression suite and imports historical main artifacts;
+use npm test/test:package/test:release for release decisions.

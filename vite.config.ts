@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [react()],
   base: "/responsive-react-datatable/",
   root: ".",
+  build: { outDir: "demo-dist" },
   server: {
     port: 5173,
   },

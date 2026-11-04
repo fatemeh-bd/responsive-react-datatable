@@ -1,5 +1,6 @@
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import { ColorTheme, ColumnType, TextsConfig } from "./types";
+import { rowIdentity } from "./data";
 import Skeleton from "./tools/Skeleton";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -30,20 +31,7 @@ const TableCard = memo(
       >
         {columns.map((column, colIndex) => {
           const cellKey = column.data;
-          // استفاده از useMemo برای بهینه‌سازی رندر محتوا
-          const content = useMemo(
-            () =>
-              column?.render
-                ? column.render(
-                    cellKey ? row[cellKey] : undefined,
-                    row,
-                    rowIndex,
-                  )
-                : cellKey
-                  ? row[cellKey]
-                  : null,
-            [column, row, cellKey, rowIndex],
-          );
+          const content = column.render ? column.render(cellKey ? row[cellKey] : undefined, row, rowIndex) : cellKey ? row[cellKey] : null;
 
           return column?.dontShowDataInMobile ? null : (
             <div key={colIndex} className="mobile-table-card-row">
@@ -85,6 +73,7 @@ const MobileTable = ({
   theme,
   textsConfig,
   listMode = false,
+  rowKey,
 }: {
   columns: ColumnType[];
   isLoading?: boolean;
@@ -92,6 +81,7 @@ const MobileTable = ({
   theme: ColorTheme;
   textsConfig: TextsConfig;
   listMode?: boolean;
+  rowKey?: string | ((row: any) => string | number);
 }) => {
   return (
     <div className="mobile-table-container">
@@ -127,7 +117,7 @@ const MobileTable = ({
           <div className="mobile-table-list-container">
             {rows.map((row, rowIndex) => (
               <TableCard
-                key={row.id || rowIndex} // ترجیحاً از row.id استفاده کنید
+                key={rowIdentity(row, rowIndex, rowKey)} // ترجیحاً از row.id استفاده کنید
                 row={row}
                 rowIndex={rowIndex}
                 columns={columns}
@@ -145,7 +135,8 @@ const MobileTable = ({
           >
             {rows.map((row, rowIndex) => (
               <SwiperSlide
-                key={row.id || rowIndex}
+                virtualIndex={rowIndex}
+                key={rowIdentity(row, rowIndex, rowKey)}
                 className="mobile-table-swiper-slide"
               >
                 <TableCard

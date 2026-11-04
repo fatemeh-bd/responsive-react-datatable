@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-04",
+  "registry": "https://registry.npmjs.org/",
+  "scope": "root package-lock.json, including development dependencies",
+  "vulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "dependencies": {
+    "prod": 29,
+    "dev": 448,
+    "optional": 108,
+    "peer": 16,
+    "peerOptional": 0,
+    "total": 476
+  }
+}

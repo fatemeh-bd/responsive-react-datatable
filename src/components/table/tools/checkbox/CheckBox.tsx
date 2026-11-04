@@ -1,8 +1,10 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import "./checkboxStyle.css";
 
 interface CheckboxProps {
   label?: string;
+  ariaLabel?: string;
+  indeterminate?: boolean;
   checked?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
@@ -17,6 +19,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
     {
       label,
+      ariaLabel,
+      indeterminate,
       checked,
       onChange,
       name,
@@ -27,7 +31,11 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       primaryColor,
     },
     ref
-  ) => (
+  ) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+    useImperativeHandle(ref, () => inputRef.current!);
+    useEffect(() => { if (inputRef.current) inputRef.current.indeterminate = !!indeterminate; }, [indeterminate]);
+    return (
     <label className={`${className} checkbox checkbox-container`}>
       <input
         className="checkbox-input"
@@ -35,7 +43,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         name={name}
         checked={checked}
         onChange={onChange}
-        ref={ref}
+        ref={inputRef}
+        aria-label={ariaLabel || label || "Select row"}
         value={value}
         disabled={disabled}
         defaultChecked={defaultChecked}
@@ -53,7 +62,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         <span className="checkbox-label checkbox-text-label">{label}</span>
       )}
     </label>
-  )
+  );
+  }
 );
 
 Checkbox.displayName = "Checkbox";

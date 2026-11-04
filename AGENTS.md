@@ -1,51 +1,65 @@
-# Working context for coding agents
+# Repository context for coding agents
 
-Read this file first, then `docs/MAINTAINER-README.md`. Read only the relevant
-finding IDs in `docs/COMPATIBILITY-AUDIT.md`; raw audit JSON is for investigation,
-not routine context loading.
+Read this file, then `docs/MAINTAINER-README.md`. Do not reload the entire history,
+generated bundles or raw advisory JSON for routine context.
 
-## Product and scope
+## Product and requirements
 
-- This repository contains the npm library `responsive-react-datatable` and its
-  Vite documentation/demo site. Keep their dependency graphs and builds separate.
-- The user requested an audit of `main` and `dev` before stabilization and new
-  features. The 2026-11-04 audit is complete; runtime fixes are NOT implemented.
-- Confirmed user requirement: minimum React/React DOM 18. React 16/17 support
-  is out of scope. Validate React 18 and 19, and test future majors before
-  claiming support. Next.js integration remains in scope.
-- Preserve the current `<Table />` API and the main branch's existing public
-  exports when stabilizing. Do not silently drop older consumers.
-- Do not claim compatibility with every React/Next.js version. State the tested
-  matrix and distinguish proposed support from verified support.
+- npm library: responsive-react-datatable. React/React DOM 18 and 19 are the
+  supported majors; 16/17 are explicitly out of scope. Validate future majors.
+- The user authorized stabilizing BOTH dev and main for a manual npm release.
+  Do not publish, push, or create a release tag without a separate instruction.
+- Release candidate 3.0.0 restores public exports and fixes shared table behavior.
+  Version 3 requires an explicit styles.css import and React >=18; see CHANGELOG.
+- Exact executed compatibility results live in docs/release-verification.json.
+  Do not claim untested browser/framework/version combinations are verified.
 
-## Repository map
+## Map
 
-- `src/index.ts`: library entry (currently regressed to default export only).
-- `src/components/table/`: entire shared library implementation and CSS.
-- `src/components/table/Table.tsx`: orchestration, modes, URL state, requests.
-- `DesktopTable.tsx`, `MobileTable.tsx`: renderers.
-- `types.ts`, `tableConfigs.tsx`, `helper.ts`: API types, defaults, helpers.
-- `hooks/`, `tools/`: URL/responsive hooks, search, paging, selection, overlays.
-- `src/main.tsx`, `App.tsx`, `routes.tsx`, `pages/`: demo, not library entrypoints.
-- `docs/COMPATIBILITY-AUDIT.md`: evidence, priorities, reproduction scenarios.
-- `docs/RELEASE-PLAN.md`: ordered stabilization work and release acceptance gates.
-- `scripts/audit-compatibility.cjs`: local diagnostic probes; not a test suite.
+- src/index.ts: public client entry and types. Preserve default/named Table,
+  rowRenderer, ActionDropDown and existing public prop/configuration types.
+- src/components/table/: shared library; Table.tsx orchestrates data/state;
+  data.ts contains pure validation/filter/sort/request helpers.
+- hooks/useQueryParams.tsx: useSyncExternalStore + reversible History API
+  subscription. Preserve router state, hash, unrelated params and other tables.
+- DesktopTable.tsx/MobileTable.tsx: desktop semantic table and mobile cards.
+- tools/: search, paging, selection, dialogs, dropdowns.
+- src/main.tsx, App.tsx, routes.tsx, pages/: demo only.
+- rollup.config.mjs: ESM + declarations + scoped extracted CSS. React, React DOM,
+  Query and other runtime packages are external; preserve the use client banner.
+- vite.config.ts: demo only. dist/ and demo-dist/ MUST remain separate.
+- tests/table.test.tsx: meaningful regressions. Fixture tests import the packed
+  public package; do not replace them with private-source-only checks.
+- scripts/verify-release.mjs: isolated tarball React/type/production Next/browser
+  matrix. Uses system Chrome on Windows or RELEASE_CHROME_PATH, otherwise Chromium.
 
-## Commands and constraints
+## Commands and verification
 
-- Windows PowerShell: use `npm.cmd`; `npm.ps1` may be blocked by execution policy.
-- Type check: `node node_modules/typescript/bin/tsc --noEmit --pretty false`.
-- Audit probes: `node scripts/audit-compatibility.cjs` (requires existing
-  React/React DOM and Vite's transitive esbuild; no new installs or requests).
-- `npm run build` currently builds the DEMO into tracked `dist`; do not use it
-  to validate/publish the library. Prefer a temporary `--outDir` for demo checks.
-- `npm run rollup` currently fails on dev: config is missing. `npm test` is a
-  placeholder that exits 1. Neither means stabilization has been tested.
-- Recheck git status before editing. At audit start the user had staged edits in
-  package.json, package-lock.json, src/main.tsx and SidebarFooter.tsx. Do not undo,
-  restage, or overwrite them. Do not switch branches over a dirty workspace.
-- Never hand-edit generated bundles. Test the packed library in consumers.
-- Keep hooks unconditional and out of loops; do not read browser globals during
-  SSR; keep server and initial client markup consistent.
-- Record fixes by finding ID and update verification evidence after meaningful
-  changes. Do not mark an open finding resolved based on source inspection alone.
+Use npm (package-lock.json is authoritative). On PowerShell use npm.cmd if npm.ps1
+is blocked. Use Node 20.19+ on Node 20, or Node 22.12+/a compatible newer line.
+
+- npm test: behavioral regressions, SSR/hydration, cache, cancellation, URL,
+  selection, filter clearing, keyboard controls.
+- npm run build: clean GENERATED dist, typecheck and library build.
+- npm run test:package: exports/types/CSS/Node SSR/pack-list checks.
+- npm run test:release: install tarball consumers; React 18/19, TypeScript
+  bundler/NodeNext and production Next Pages/App with desktop/mobile Chromium.
+- npm run build:demo: demo production build in demo-dist.
+- npm audit: root dependency security; fixture dependencies are separate.
+
+## Invariants
+
+Never put Hooks in loops/conditions. Never read window/document/storage while
+server-rendering. First client and server markup must match. Portal targets and
+persistence are browser-only. Query state is declarative, uses cancellation, and
+must not put credentials in cache keys. Static/external modes need no host provider.
+Do not break the existing internal request protocol or shared QueryClient support.
+
+Check git status before editing and preserve user changes/staging. The original
+attribution edits were committed by the user before stabilization began. Avoid
+switching branches over uncommitted work. Keep both branches' shared release
+implementation identical; branch updates must preserve existing history.
+
+The original COMPATIBILITY-AUDIT.md and audit-evidence/ are HISTORICAL baseline
+records, not a list of current failures. Use RELEASE-STATUS.md and the latest
+verification JSON for the outcome. Update evidence after material changes.

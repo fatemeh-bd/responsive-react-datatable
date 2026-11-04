@@ -13,15 +13,15 @@ export const SelectableCheckbox: React.FC<SelectableCheckboxProps> = ({
   selectableProps,
   theme,
 }) => {
-  const selectedKey = selectableProps.selectedKey;
+  const selectedKey = selectableProps.selectedKey || "id";
   const selectedIds = selectableProps.selectedIds || [];
   const id = row[selectedKey];
   const handleCheckboxChange = useCallback(
     (row: any) => {
       if (!selectableProps) return;
       const { selectedIds, selectedKey, onSelectChange } = selectableProps;
-      const id = row?.[selectedKey];
-      if (!id) return;
+      const id = row?.[selectedKey || "id"];
+      if (id === null || id === undefined) return;
 
       const newSelectedIds = selectedIds?.includes(id)
         ? selectedIds.filter((i) => i !== id)
@@ -33,6 +33,7 @@ export const SelectableCheckbox: React.FC<SelectableCheckboxProps> = ({
   );
   return (
     <Checkbox
+      ariaLabel={`Select row ${id}`}
       className="selectableCheckbox"
       primaryColor={theme.primaryColor}
       checked={selectedIds.includes(id)}

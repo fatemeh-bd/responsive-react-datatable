@@ -1,7 +1,7 @@
 # Stabilization plan before feature development
 
-Status: proposed implementation sequence from the 2026-11-04 audit. All items
-are open. Finding IDs refer to COMPATIBILITY-AUDIT.md. This is not a claim that
+Historical plan from the 2026-11-04 audit. Stabilization has now been implemented;
+consult RELEASE-STATUS.md and release-verification.json for current results. Finding IDs refer to COMPATIBILITY-AUDIT.md. This is not a claim that
 compatibility changes have already been implemented.
 
 Confirmed user scope: minimum React/React DOM 18. React 16/17 support is excluded.

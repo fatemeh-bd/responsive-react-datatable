@@ -1,7 +1,9 @@
 # Compatibility audit: main and dev
 
-Date: 2026-11-04. Status: diagnosis complete; findings below are OPEN.
-No functional fixes or dependency updates are included in this audit.
+Date: 2026-11-04. HISTORICAL BASELINE before stabilization.
+This document preserves original findings and reproduction evidence. For the
+current implementation and verification outcome, see [RELEASE-STATUS.md](RELEASE-STATUS.md)
+and `release-verification.json`; findings below describe the audited old versions.
 
 Scope update after audit (2026-11-04): the user confirmed React 18 and above.
 React 16/17 support is out of scope. Findings about the historical >=16.8 claim

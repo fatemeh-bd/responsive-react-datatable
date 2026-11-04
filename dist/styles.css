@@ -1,0 +1,1556 @@
+/* table css */
+:where(.rrdt) .table-container,
+:where(.rrdt).table-container,
+:where(.rrdt) .table-container *,
+:where(.rrdt).table-container *,
+:where(.rrdt) .table-container *::before,
+:where(.rrdt).table-container *::before,
+:where(.rrdt) .table-container *::after,
+:where(.rrdt).table-container *::after,
+:where(.rrdt) .dropdown-container,
+:where(.rrdt).dropdown-container,
+:where(.rrdt) .dropdown-container *,
+:where(.rrdt).dropdown-container *,
+:where(.rrdt) .dropdown-menu,
+:where(.rrdt).dropdown-menu,
+:where(.rrdt) .dropdown-menu *,
+:where(.rrdt).dropdown-menu *,
+:where(.rrdt) .modal-overlay,
+:where(.rrdt).modal-overlay,
+:where(.rrdt) .modal-overlay *,
+:where(.rrdt).modal-overlay * {
+    box-sizing: border-box;
+}
+:where(.rrdt) .table-container button,
+:where(.rrdt).table-container button,
+:where(.rrdt) .dropdown-container button,
+:where(.rrdt).dropdown-container button,
+:where(.rrdt) .dropdown-menu button,
+:where(.rrdt).dropdown-menu button,
+:where(.rrdt) .modal-overlay button,
+:where(.rrdt).modal-overlay button {
+    font: inherit;
+}
+:where(.rrdt) .desktop-table-header-content, :where(.rrdt).desktop-table-header-content {
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+:where(.rrdt) .top-filter-container, :where(.rrdt).top-filter-container {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+:where(.rrdt) .filter-container-className, :where(.rrdt).filter-container-className {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+:where(.rrdt) .mobile-filter-button, :where(.rrdt).mobile-filter-button {
+    position: relative;
+    margin-right: auto;
+    min-width: 70px;
+    font-size: 13px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    gap: 2px;
+    padding: 4px;
+}
+:where(.rrdt) .mobile-filter-badge, :where(.rrdt).mobile-filter-badge {
+    position: absolute;
+    top: 0;
+    background-color: white;
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    align-content: center;
+    border-radius: 9999px;
+    color: inherit;
+}
+:where(.rrdt) .actionButtons, :where(.rrdt).actionButtons {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+:where(.rrdt) .table-footer, :where(.rrdt).table-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: space-between;
+}
+:where(.rrdt) .space-items > * + *, :where(.rrdt).space-items > * + * {
+    margin-top: 0.5rem; /* 8px */
+}
+
+:where(.rrdt) .filter-modal-actions, :where(.rrdt).filter-modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2rem;
+}
+:where(.rrdt) .filter-modal-close-button, :where(.rrdt).filter-modal-close-button {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    border: 1px solid;
+}
+:where(.rrdt) .filter-modal-clear-button, :where(.rrdt).filter-modal-clear-button {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #fb2c48;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+}
+:where(.rrdt) .table-header-actions, :where(.rrdt).table-header-actions {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    gap: 0.75rem;
+    width: 100%;
+}
+:where(.rrdt) .search-container-table, :where(.rrdt).search-container-table {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap-reverse;
+    gap: 0.5rem;
+}
+/* mobile table */
+:where(.rrdt) .mobile-table-swiper-slide, :where(.rrdt).mobile-table-swiper-slide {
+    height: auto !important;
+}
+:where(.rrdt) .mobile-table-card, :where(.rrdt).mobile-table-card {
+    padding: 16px;
+    height: 100%;
+    margin-bottom: 0.75rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid;
+}
+:where(.rrdt) .shadowSmall, :where(.rrdt).shadowSmall {
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.1),
+        0 1px 2px rgba(0, 0, 0, 0.06);
+}
+:where(.rrdt) .mobile-table-card-row, :where(.rrdt).mobile-table-card-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    gap: 1rem;
+    width: 100%;
+    flex-wrap: wrap;
+}
+:where(.rrdt) .mobile-table-card-label, :where(.rrdt).mobile-table-card-label {
+    font-size: 12px;
+    min-width: 80px;
+}
+:where(.rrdt) .mobile-table-card-content, :where(.rrdt).mobile-table-card-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+    overflow: visible;
+    height: auto;
+    font-size: 12px;
+    display: flex;
+    text-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-left: 0;
+    margin-right: 0;
+    flex-wrap: wrap;
+}
+:where(.rrdt) .isOperation, :where(.rrdt).isOperation {
+    width: 100%;
+}
+:where(.rrdt) .isOperation button,
+:where(.rrdt).isOperation button,
+:where(.rrdt) .isOperation div,
+:where(.rrdt).isOperation div,
+:where(.rrdt) .isOperation a,
+:where(.rrdt).isOperation a {
+    flex: 1;
+}
+:where(.rrdt) .mobile-table-skeleton-container, :where(.rrdt).mobile-table-skeleton-container {
+    border: 1px solid rgb(151, 151, 151);
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+}
+:where(.rrdt) .mobile-table-skeleton-row, :where(.rrdt).mobile-table-skeleton-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+:where(.rrdt) .mobile-table-skeleton-action-row, :where(.rrdt).mobile-table-skeleton-action-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+:where(.rrdt) .mobile-table-list-container, :where(.rrdt).mobile-table-list-container {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+:where(.rrdt) .mobile-table-swiper, :where(.rrdt).mobile-table-swiper {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex-direction: column;
+}
+:where(.rrdt) .mobile-table-empty-message, :where(.rrdt).mobile-table-empty-message {
+    text-align: center;
+    padding: 1.5rem;
+    padding-bottom: 1.5rem;
+    color: rgb(51, 51, 51);
+}
+/* desktop table */
+:where(.rrdt) .desktop-table-container, :where(.rrdt).desktop-table-container {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 0.75rem;
+}
+:where(.rrdt) .desktop-table-inner, :where(.rrdt).desktop-table-inner {
+    position: relative;
+}
+:where(.rrdt) .desktop-table-header-container, :where(.rrdt).desktop-table-header-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+:where(.rrdt) .desktop-table, :where(.rrdt).desktop-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+:where(.rrdt) .desktop-table-header-cell, :where(.rrdt).desktop-table-header-cell {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    text-align: center;
+    font-size: 10.5pt;
+    min-width: max-content;
+}
+:where(.rrdt) .cursorPointer, :where(.rrdt).cursorPointer {
+    cursor: pointer;
+}
+:where(.rrdt) .desktop-table-select-all-checkbox, :where(.rrdt).desktop-table-select-all-checkbox {
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+}
+:where(.rrdt) .desktop-table-header-content, :where(.rrdt).desktop-table-header-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: auto;
+    text-align: center;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+:where(.rrdt) .desktop-table-sort-icons, :where(.rrdt).desktop-table-sort-icons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+:where(.rrdt) .desktop-table-sort-icon, :where(.rrdt).desktop-table-sort-icon {
+    height: 0.5rem;
+    transform: translateY(1px);
+}
+:where(.rrdt) .opacityFull, :where(.rrdt).opacityFull {
+    opacity: 100%;
+}
+:where(.rrdt) .opacityHalf, :where(.rrdt).opacityHalf {
+    opacity: 20%;
+}
+
+/* .desktop-table-sort-icon--desc {
+  rotate: 180deg;
+} */
+:where(.rrdt) .desktop-table-body-container, :where(.rrdt).desktop-table-body-container {
+    width: 100%;
+    overflow: auto;
+}
+:where(.rrdt) .desktop-table-body, :where(.rrdt).desktop-table-body {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+:where(.rrdt) .desktop-table-data-cell, :where(.rrdt).desktop-table-data-cell {
+    padding: 0.25rem;
+    text-align: center;
+}
+:where(.rrdt) .desktop-table-cell-content, :where(.rrdt).desktop-table-cell-content {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    height: auto;
+    font-size: 10.5pt;
+}
+:where(.rrdt) .isContent, :where(.rrdt).isContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+}
+:where(.rrdt) .noContent, :where(.rrdt).noContent {
+    margin-left: auto;
+    margin-right: auto;
+}
+:where(.rrdt) .desktop-table-empty-cell, :where(.rrdt).desktop-table-empty-cell {
+    padding: 1.5rem;
+    text-align: center;
+}
+/* skleton */
+:where(.rrdt) .skleton-class, :where(.rrdt).skleton-class {
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: #e5e7eb;
+    animation: rrdt-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes rrdt-pulse {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.05);
+    }
+}
+/* SelectableCheckbox */
+:where(.rrdt) .selectableCheckbox, :where(.rrdt).selectableCheckbox {
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+}
+/* search box */
+:where(.rrdt) .table-search-container, :where(.rrdt).table-search-container {
+    margin-top: auto;
+}
+:where(.rrdt) .table-search-wrapper, :where(.rrdt).table-search-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+:where(.rrdt) .table-search-wrapper > div, :where(.rrdt).table-search-wrapper > div {
+    flex-direction: row-reverse;
+    gap: 0.25rem;
+}
+:where(.rrdt) .table-search-input-container, :where(.rrdt).table-search-input-container {
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    text-align: start;
+    font-size: 16px;
+    border-radius: 0.5rem;
+    outline-style: none !important;
+    width: 100%;
+    padding: 0.625rem;
+    border: 1px solid;
+}
+:where(.rrdt) .table-search-input-container::placeholder, :where(.rrdt).table-search-input-container::placeholder {
+    font-size: 10.5pt;
+}
+:where(.rrdt) .table-search-input-container:disabled, :where(.rrdt).table-search-input-container:disabled {
+    opacity: 70%;
+}
+:where(.rrdt) .table-search-clear-icon, :where(.rrdt).table-search-clear-icon {
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+    transform: scale(1.5);
+}
+:where(.rrdt) .table-search-clear-button, :where(.rrdt).table-search-clear-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #fb2c36;
+}
+:where(.rrdt) .table-search-icon, :where(.rrdt).table-search-icon {
+    flex-shrink: 0;
+}
+:where(.rrdt) .borderRight, :where(.rrdt).borderRight {
+    border-right: 1px solid;
+}
+:where(.rrdt) .borderLeft, :where(.rrdt).borderLeft {
+    border-left: 1px solid;
+}
+:where(.rrdt) .table-search-icon, :where(.rrdt).table-search-icon {
+    width: 20px;
+    height: 20px;
+    transform: scale(1.5);
+    opacity: 60%;
+}
+:where(.rrdt) .table-search-input, :where(.rrdt).table-search-input {
+    width: 100%;
+    color: inherit;
+    border-style: none;
+    background-color: transparent;
+    outline-style: none !important;
+    font-size: 10.5pt;
+}
+:where(.rrdt) .table-search-input::placeholder, :where(.rrdt).table-search-input::placeholder {
+    font-size: 10.5pt;
+}
+/* pagination */
+:where(.rrdt) .pagination-mobile-container, :where(.rrdt).pagination-mobile-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap-reverse;
+}
+:where(.rrdt) .pagination-container, :where(.rrdt).pagination-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap-reverse;
+}
+
+:where(.rrdt) .pagination-info, :where(.rrdt).pagination-info {
+    color: inherit;
+}
+/* page size selector */
+:where(.rrdt) .page-size-select-container, :where(.rrdt).page-size-select-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+:where(.rrdt) .page-size-select-label, :where(.rrdt).page-size-select-label {
+    font-size: 10.5pt;
+    text-wrap: nowrap;
+    color: inherit;
+}
+:where(.rrdt) .pageSizeParent, :where(.rrdt).pageSizeParent {
+    position: relative;
+    width: max-content;
+}
+:where(.rrdt) .page-size-select, :where(.rrdt).page-size-select {
+    color: inherit;
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    text-align: start;
+    font-size: 16px;
+    border-radius: 0.5rem;
+    outline-style: none !important;
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid;
+    appearance: none !important;
+    padding-left: 1.5rem;
+}
+:where(.rrdt) .page-size-select:disabled, :where(.rrdt).page-size-select:disabled {
+    opacity: 70%;
+}
+:where(.rrdt) .page-size-select::placeholder, :where(.rrdt).page-size-select::placeholder {
+    font-size: 10.5pt;
+}
+:where(.rrdt) .page-size-select-icon, :where(.rrdt).page-size-select-icon {
+    pointer-events: none;
+    color: inherit;
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    position: absolute;
+    left: 0.25rem;
+    top: 0;
+    bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+/* modal */
+/* --- Overlay --- */
+:where(.rrdt) .modal-overlay, :where(.rrdt).modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition:
+        transform 0.5s ease,
+        opacity 0.3s ease;
+}
+
+:where(.rrdt) .modal-overlay.show, :where(.rrdt).modal-overlay.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+:where(.rrdt) .modal-overlay.hide, :where(.rrdt).modal-overlay.hide {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+/* --- Modal container --- */
+:where(.rrdt) .modal-container, :where(.rrdt).modal-container {
+    position: relative;
+    z-index: 1000;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: scale(0.95);
+    max-width: 90%;
+}
+
+:where(.rrdt) .modal-container.open, :where(.rrdt).modal-container.open {
+    opacity: 1;
+    transform: scale(1);
+}
+
+:where(.rrdt) .modal-container.sm, :where(.rrdt).modal-container.sm {
+    width: 370px;
+}
+
+:where(.rrdt) .modal-container.md, :where(.rrdt).modal-container.md {
+    width: 750px;
+}
+
+:where(.rrdt) .modal-container.lg, :where(.rrdt).modal-container.lg {
+    width: 1100px;
+}
+
+:where(.rrdt) .modal-container.xl, :where(.rrdt).modal-container.xl {
+    width: 80%;
+}
+
+:where(.rrdt) .modal-container.xxl,
+:where(.rrdt).modal-container.xxl,
+:where(.rrdt) .modal-container.full,
+:where(.rrdt).modal-container.full {
+    width: 90%;
+}
+
+:where(.rrdt) .modal-container.fit, :where(.rrdt).modal-container.fit {
+    width: auto;
+}
+
+/* --- Header --- */
+:where(.rrdt) .modal-header-wrapper, :where(.rrdt).modal-header-wrapper {
+    padding: 0 20px;
+}
+
+:where(.rrdt) .modal-header, :where(.rrdt).modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 8px;
+}
+
+:where(.rrdt) .modal-title, :where(.rrdt).modal-title {
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* --- Close button --- */
+:where(.rrdt) .modal-close-btn, :where(.rrdt).modal-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+:where(.rrdt) .icon-close, :where(.rrdt).icon-close {
+    width: 24px;
+    height: 24px;
+    color: #6b7280;
+}
+
+/* --- Body --- */
+:where(.rrdt) .modal-body, :where(.rrdt).modal-body {
+    padding: 20px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Overflow variants */
+:where(.rrdt) .overflow__auto, :where(.rrdt).overflow__auto {
+    overflow-y: auto;
+}
+
+:where(.rrdt) .overflow__hidden, :where(.rrdt).overflow__hidden {
+    overflow-y: hidden;
+}
+
+:where(.rrdt) .overflow__visible, :where(.rrdt).overflow__visible {
+    overflow-y: visible;
+}
+
+:where(.rrdt) .overflow__scroll, :where(.rrdt).overflow__scroll {
+    overflow-y: scroll;
+}
+
+:where(.rrdt) .overflow__clip, :where(.rrdt).overflow__clip {
+    overflow-y: clip;
+}
+
+/* drop down */
+:where(.rrdt) .dropdown-container, :where(.rrdt).dropdown-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+:where(.rrdt) .dropdown-trigger, :where(.rrdt).dropdown-trigger {
+    width: 100%;
+    cursor: pointer;
+}
+
+:where(.rrdt) .dropdown-menu, :where(.rrdt).dropdown-menu {
+    width: max-content;
+    background-color: inherit;
+    border-radius: 12px;
+    box-shadow:
+        0 10px 15px rgba(0, 0, 0, 0.1),
+        0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: all 0.2s ease-in-out;
+}
+:where(.rrdt) .dropdown-list, :where(.rrdt).dropdown-list {
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    min-width: 100px;
+    background-color: inherit;
+    padding: 4px;
+    margin: 0;
+    list-style: none;
+}
+:where(.rrdt) .dropdown-item, :where(.rrdt).dropdown-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 16px;
+    font-size: 10.5pt;
+    font-weight: 500;
+    color: inherit;
+    border-bottom: 1px solid var(--color-secondary-400, #cbd5e1);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+:where(.rrdt) .dropdown-item:hover, :where(.rrdt).dropdown-item:hover {
+    background-color: #e5e7eb;
+    border-radius: 6px;
+    border-color: transparent;
+}
+
+:where(.rrdt) .dropdown-item:last-child, :where(.rrdt).dropdown-item:last-child {
+    border-color: transparent;
+}
+
+:where(.rrdt) .dropdown-item--last, :where(.rrdt).dropdown-item--last {
+    color: var(--color-success, #16a34a);
+    font-weight: 500;
+}
+
+:where(.rrdt) .dropdown-link, :where(.rrdt).dropdown-link {
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+:where(.rrdt) .dropdown-icon, :where(.rrdt).dropdown-icon {
+    width: 14px;
+    height: 14px;
+}
+:where(.rrdt) .option-button, :where(.rrdt).option-button {
+    padding: 0.5rem;
+    font-size: 10.5pt;
+    border-radius: 12px;
+    width: 100%;
+    min-width: fit-content !important;
+}
+:where(.rrdt) .managementButton, :where(.rrdt).managementButton {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition-property: none !important;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    font-size: 10.5pt;
+    border-radius: 12px;
+    min-width: fit-content !important;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    width: 100%;
+}
+/*  */
+@media (min-width: 768px) {
+    :where(.rrdt) .page-size-select-label, :where(.rrdt).page-size-select-label {
+        font-size: 16px;
+    }
+    :where(.rrdt) .pagination-mobile-container, :where(.rrdt).pagination-mobile-container {
+        margin-top: 0.5rem;
+    }
+    :where(.rrdt) .mobile-table-container, :where(.rrdt).mobile-table-container {
+        display: none;
+    }
+    :where(.rrdt) .desktop-filter-container > div,
+    :where(.rrdt).desktop-filter-container > div,
+    :where(.rrdt) .top-filter-container > div,
+    :where(.rrdt).top-filter-container > div,
+    :where(.rrdt) .filter-container-className > div,
+    :where(.rrdt).filter-container-className > div {
+        width: 200px;
+    }
+    :where(.rrdt) .table-search-wrapper, :where(.rrdt).table-search-wrapper {
+        width: 320px;
+    }
+}
+
+@media (max-width: 768px) {
+    :where(.rrdt) .modal-container, :where(.rrdt).modal-container {
+        width: 100% !important;
+        border-radius: 16px 16px 0 0;
+        align-self: flex-end;
+    }
+    :where(.rrdt) .page-size-select, :where(.rrdt).page-size-select {
+        padding-left: 1rem;
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+        min-width: 3rem;
+        font-size: 13px;
+    }
+    :where(.rrdt) .pagination-mobile-container, :where(.rrdt).pagination-mobile-container {
+        justify-content: center;
+    }
+    :where(.rrdt) .table-search-input::placeholder, :where(.rrdt).table-search-input::placeholder {
+        font-size: 12px;
+    }
+    :where(.rrdt) .mobile-table-container, :where(.rrdt).mobile-table-container {
+        display: block;
+    }
+    :where(.rrdt) .actionButtons,
+    :where(.rrdt).actionButtons,
+    :where(.rrdt) .search-container-table,
+    :where(.rrdt).search-container-table,
+    :where(.rrdt) .table-search-container,
+    :where(.rrdt).table-search-container {
+        margin-top: auto;
+    }
+    :where(.rrdt) .table-search-input-container,
+    :where(.rrdt).table-search-input-container,
+    :where(.rrdt) .search-container-table,
+    :where(.rrdt).search-container-table,
+    :where(.rrdt) .table-search-container,
+    :where(.rrdt).table-search-container {
+        width: 100%;
+    }
+    :where(.rrdt) table button {
+        min-width: max-content;
+    }
+    /* .table-header-actions {
+    flex-direction: column-reverse;
+  } */
+    :where(.rrdt) .DropDownMenu, :where(.rrdt).DropDownMenu {
+        position: fixed !important;
+        inset: 0 !important;
+        margin: auto !important;
+        height: fit-content !important;
+        background-color: inherit;
+        display: block;
+        z-index: 99999999;
+    }
+    :where(.rrdt) .DropDownMenu ul, :where(.rrdt).DropDownMenu ul {
+        border-radius: 8px !important;
+        border: 1px solid #fafafa;
+    }
+    :where(.rrdt) .DropDownMenu::before, :where(.rrdt).DropDownMenu::before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.281);
+        z-index: -1;
+    }
+}
+
+/**
+ * Swiper 12.2.0
+ * Most modern mobile touch slider and framework with hardware accelerated transitions
+ * https://swiperjs.com
+ *
+ * Copyright 2014-2026 Vladimir Kharlampidi
+ *
+ * Released under the MIT License
+ *
+ * Released on: May 27, 2026
+ */
+
+:where(.rrdt) .rrdt, :where(.rrdt).rrdt {
+  --swiper-theme-color: #007aff;
+  /*
+  --swiper-preloader-color: var(--swiper-theme-color);
+  --swiper-wrapper-transition-timing-function: initial;
+  */
+}
+:where(.rrdt) :host {
+  position: relative;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 1;
+}
+:where(.rrdt) .swiper, :where(.rrdt).swiper {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  overflow: hidden;
+  list-style: none;
+  padding: 0;
+  /* Fix of Webkit flickering */
+  z-index: 1;
+  display: block;
+}
+:where(.rrdt) .swiper-vertical > .swiper-wrapper, :where(.rrdt).swiper-vertical > .swiper-wrapper {
+  flex-direction: column;
+}
+:where(.rrdt) .swiper-wrapper, :where(.rrdt).swiper-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  transition-property: transform;
+  transition-timing-function: var(--swiper-wrapper-transition-timing-function, initial);
+  box-sizing: content-box;
+}
+:where(.rrdt) .swiper-android .swiper-slide,
+:where(.rrdt).swiper-android .swiper-slide,
+:where(.rrdt) .swiper-ios .swiper-slide,
+:where(.rrdt).swiper-ios .swiper-slide,
+:where(.rrdt) .swiper-wrapper,
+:where(.rrdt).swiper-wrapper {
+  transform: translate3d(0px, 0, 0);
+}
+:where(.rrdt) .swiper-horizontal, :where(.rrdt).swiper-horizontal {
+  touch-action: pan-y;
+}
+:where(.rrdt) .swiper-vertical, :where(.rrdt).swiper-vertical {
+  touch-action: pan-x;
+}
+:where(.rrdt) .swiper-slide, :where(.rrdt).swiper-slide {
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition-property: transform;
+  display: block;
+}
+:where(.rrdt) .swiper-slide-invisible-blank, :where(.rrdt).swiper-slide-invisible-blank {
+  visibility: hidden;
+}
+/* Auto Height */
+:where(.rrdt) .swiper-autoheight,
+:where(.rrdt).swiper-autoheight,
+:where(.rrdt) .swiper-autoheight .swiper-slide,
+:where(.rrdt).swiper-autoheight .swiper-slide {
+  height: auto;
+}
+:where(.rrdt) .swiper-autoheight .swiper-wrapper, :where(.rrdt).swiper-autoheight .swiper-wrapper {
+  align-items: flex-start;
+  transition-property: transform, height;
+}
+:where(.rrdt) .swiper-backface-hidden .swiper-slide, :where(.rrdt).swiper-backface-hidden .swiper-slide {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+/* 3D Effects */
+:where(.rrdt) .swiper-3d.swiper-css-mode .swiper-wrapper, :where(.rrdt).swiper-3d.swiper-css-mode .swiper-wrapper {
+  perspective: 1200px;
+}
+:where(.rrdt) .swiper-3d .swiper-wrapper, :where(.rrdt).swiper-3d .swiper-wrapper {
+  transform-style: preserve-3d;
+}
+:where(.rrdt) .swiper-3d, :where(.rrdt).swiper-3d {
+  perspective: 1200px;
+  :where(.rrdt) .swiper-slide,
+  :where(.rrdt).swiper-slide,
+  :where(.rrdt) .swiper-cube-shadow,
+  :where(.rrdt).swiper-cube-shadow {
+    transform-style: preserve-3d;
+  }
+}
+
+/* CSS Mode */
+:where(.rrdt) .swiper-css-mode, :where(.rrdt).swiper-css-mode {
+  :where(.rrdt) > .swiper-wrapper {
+    overflow: auto;
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+    :where(.rrdt) &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  :where(.rrdt) > .swiper-wrapper > .swiper-slide {
+    scroll-snap-align: start start;
+  }
+  :where(.rrdt) &.swiper-horizontal {
+    :where(.rrdt) > .swiper-wrapper {
+      scroll-snap-type: x mandatory;
+    }
+    :where(.rrdt) > .swiper-wrapper > .swiper-slide:first-child {
+      margin-inline-start: var(--swiper-slides-offset-before);
+      scroll-margin-inline-start: var(--swiper-slides-offset-before);
+    }
+    :where(.rrdt) > .swiper-wrapper > .swiper-slide:last-child {
+      margin-inline-end: var(--swiper-slides-offset-after);
+    }
+  }
+  :where(.rrdt) &.swiper-vertical {
+    :where(.rrdt) > .swiper-wrapper {
+      scroll-snap-type: y mandatory;
+    }
+    :where(.rrdt) > .swiper-wrapper > .swiper-slide:first-child {
+      margin-block-start: var(--swiper-slides-offset-before);
+      scroll-margin-block-start: var(--swiper-slides-offset-before);
+    }
+    :where(.rrdt) > .swiper-wrapper > .swiper-slide:last-child {
+      margin-block-end: var(--swiper-slides-offset-after);
+    }
+  }
+  :where(.rrdt) &.swiper-free-mode {
+    :where(.rrdt) > .swiper-wrapper {
+      scroll-snap-type: none;
+    }
+    :where(.rrdt) > .swiper-wrapper > .swiper-slide {
+      scroll-snap-align: none;
+    }
+  }
+  :where(.rrdt) &.swiper-centered {
+    :where(.rrdt) > .swiper-wrapper::before {
+      content: '';
+      flex-shrink: 0;
+      order: 9999;
+    }
+    :where(.rrdt) > .swiper-wrapper > .swiper-slide {
+      scroll-snap-align: center center;
+      scroll-snap-stop: always;
+    }
+  }
+  :where(.rrdt) &.swiper-centered.swiper-horizontal {
+    :where(.rrdt) > .swiper-wrapper > .swiper-slide:first-child {
+      margin-inline-start: var(--swiper-centered-offset-before);
+    }
+    :where(.rrdt) > .swiper-wrapper::before {
+      height: 100%;
+      min-height: 1px;
+      width: var(--swiper-centered-offset-after);
+    }
+  }
+  :where(.rrdt) &.swiper-centered.swiper-vertical {
+    :where(.rrdt) > .swiper-wrapper > .swiper-slide:first-child {
+      margin-block-start: var(--swiper-centered-offset-before);
+    }
+    :where(.rrdt) > .swiper-wrapper::before {
+      width: 100%;
+      min-width: 1px;
+      height: var(--swiper-centered-offset-after);
+    }
+  }
+}
+
+/* Slide styles start */
+/* 3D Shadows */
+:where(.rrdt) .swiper-3d, :where(.rrdt).swiper-3d {
+  :where(.rrdt) .swiper-slide-shadow,
+  :where(.rrdt).swiper-slide-shadow,
+  :where(.rrdt) .swiper-slide-shadow-left,
+  :where(.rrdt).swiper-slide-shadow-left,
+  :where(.rrdt) .swiper-slide-shadow-right,
+  :where(.rrdt).swiper-slide-shadow-right,
+  :where(.rrdt) .swiper-slide-shadow-top,
+  :where(.rrdt).swiper-slide-shadow-top,
+  :where(.rrdt) .swiper-slide-shadow-bottom,
+  :where(.rrdt).swiper-slide-shadow-bottom,
+  :where(.rrdt) .swiper-slide-shadow,
+  :where(.rrdt).swiper-slide-shadow,
+  :where(.rrdt) .swiper-slide-shadow-left,
+  :where(.rrdt).swiper-slide-shadow-left,
+  :where(.rrdt) .swiper-slide-shadow-right,
+  :where(.rrdt).swiper-slide-shadow-right,
+  :where(.rrdt) .swiper-slide-shadow-top,
+  :where(.rrdt).swiper-slide-shadow-top,
+  :where(.rrdt) .swiper-slide-shadow-bottom,
+  :where(.rrdt).swiper-slide-shadow-bottom {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+  }
+  :where(.rrdt) .swiper-slide-shadow, :where(.rrdt).swiper-slide-shadow {
+    background: rgba(0, 0, 0, 0.15);
+  }
+  :where(.rrdt) .swiper-slide-shadow-left, :where(.rrdt).swiper-slide-shadow-left {
+    background-image: linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+  }
+  :where(.rrdt) .swiper-slide-shadow-right, :where(.rrdt).swiper-slide-shadow-right {
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+  }
+  :where(.rrdt) .swiper-slide-shadow-top, :where(.rrdt).swiper-slide-shadow-top {
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+  }
+  :where(.rrdt) .swiper-slide-shadow-bottom, :where(.rrdt).swiper-slide-shadow-bottom {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+  }
+}
+:where(.rrdt) .swiper-lazy-preloader, :where(.rrdt).swiper-lazy-preloader {
+  width: 42px;
+  height: 42px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -21px;
+  margin-top: -21px;
+  z-index: 10;
+  transform-origin: 50%;
+  box-sizing: border-box;
+  border: 4px solid var(--swiper-preloader-color, var(--swiper-theme-color));
+  border-radius: 50%;
+  border-top-color: transparent;
+}
+:where(.rrdt) .swiper:not(.swiper-watch-progress),
+:where(.rrdt).swiper:not(.swiper-watch-progress),
+:where(.rrdt) .swiper-watch-progress .swiper-slide-visible,
+:where(.rrdt).swiper-watch-progress .swiper-slide-visible {
+  :where(.rrdt) .swiper-lazy-preloader, :where(.rrdt).swiper-lazy-preloader {
+    animation: rrdt-swiper-preloader-spin 1s infinite linear;
+  }
+}
+:where(.rrdt) .swiper-lazy-preloader-white, :where(.rrdt).swiper-lazy-preloader-white {
+  --swiper-preloader-color: #fff;
+}
+:where(.rrdt) .swiper-lazy-preloader-black, :where(.rrdt).swiper-lazy-preloader-black {
+  --swiper-preloader-color: #000;
+}
+@keyframes rrdt-swiper-preloader-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/* Slide styles end */
+
+:where(.rrdt) .rrdt, :where(.rrdt).rrdt {
+  --swiper-navigation-size: 44px;
+  /*
+  --swiper-navigation-top-offset: 50%;
+  --swiper-navigation-sides-offset: 4px;
+  --swiper-navigation-color: var(--swiper-theme-color);
+  */
+}
+:where(.rrdt) .swiper-button-prev,
+:where(.rrdt).swiper-button-prev,
+:where(.rrdt) .swiper-button-next,
+:where(.rrdt).swiper-button-next {
+  position: absolute;
+
+  width: var(--swiper-navigation-size);
+  height: var(--swiper-navigation-size);
+
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--swiper-navigation-color, var(--swiper-theme-color));
+  :where(.rrdt) &.swiper-button-disabled {
+    opacity: 0.35;
+    cursor: auto;
+    pointer-events: none;
+  }
+  :where(.rrdt) &.swiper-button-hidden {
+    opacity: 0;
+    cursor: auto;
+    pointer-events: none;
+  }
+  :where(.rrdt) .swiper-navigation-disabled &, :where(.rrdt).swiper-navigation-disabled & {
+    display: none !important;
+  }
+
+  :where(.rrdt) ::slotted(svg),
+  :where(.rrdt) svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform-origin: center;
+    fill: currentColor;
+    pointer-events: none;
+  }
+}
+
+:where(.rrdt) .swiper-button-lock, :where(.rrdt).swiper-button-lock {
+  display: none;
+}
+
+:where(.rrdt) .swiper-button-prev,
+:where(.rrdt).swiper-button-prev,
+:where(.rrdt) .swiper-button-next,
+:where(.rrdt).swiper-button-next {
+  top: var(--swiper-navigation-top-offset, 50%);
+  margin-top: calc(0px - (var(--swiper-navigation-size) / 2));
+}
+:where(.rrdt) .swiper-button-prev, :where(.rrdt).swiper-button-prev {
+  left: var(--swiper-navigation-sides-offset, 4px);
+  right: auto;
+  :where(.rrdt) ::slotted(.swiper-navigation-icon),
+  :where(.rrdt) .swiper-navigation-icon,
+  :where(.rrdt).swiper-navigation-icon {
+    transform: rotate(180deg);
+  }
+}
+:where(.rrdt) .swiper-button-next, :where(.rrdt).swiper-button-next {
+  right: var(--swiper-navigation-sides-offset, 4px);
+  left: auto;
+}
+:where(.rrdt) .swiper-horizontal, :where(.rrdt).swiper-horizontal {
+  :where(.rrdt) .swiper-button-prev,
+  :where(.rrdt).swiper-button-prev,
+  :where(.rrdt) .swiper-button-next,
+  :where(.rrdt).swiper-button-next,
+  :where(.rrdt) ~ .swiper-button-prev,
+  :where(.rrdt) ~ .swiper-button-next {
+    top: var(--swiper-navigation-top-offset, 50%);
+    margin-top: calc(0px - (var(--swiper-navigation-size) / 2));
+    margin-left: 0;
+  }
+  :where(.rrdt) .swiper-button-prev,
+  :where(.rrdt).swiper-button-prev,
+  :where(.rrdt) & ~ .swiper-button-prev,
+  :where(.rrdt) &.swiper-rtl .swiper-button-next,
+  :where(.rrdt) &.swiper-rtl ~ .swiper-button-next {
+    left: var(--swiper-navigation-sides-offset, 4px);
+    right: auto;
+  }
+  :where(.rrdt) .swiper-button-next,
+  :where(.rrdt).swiper-button-next,
+  :where(.rrdt) & ~ .swiper-button-next,
+  :where(.rrdt) &.swiper-rtl .swiper-button-prev,
+  :where(.rrdt) &.swiper-rtl ~ .swiper-button-prev {
+    right: var(--swiper-navigation-sides-offset, 4px);
+    left: auto;
+  }
+  :where(.rrdt) .swiper-button-prev,
+  :where(.rrdt).swiper-button-prev,
+  :where(.rrdt) & ~ .swiper-button-prev,
+  :where(.rrdt) &.swiper-rtl .swiper-button-next,
+  :where(.rrdt) &.swiper-rtl ~ .swiper-button-next {
+    :where(.rrdt) ::slotted(.swiper-navigation-icon),
+    :where(.rrdt) .swiper-navigation-icon,
+    :where(.rrdt).swiper-navigation-icon {
+      transform: rotate(180deg);
+    }
+  }
+  :where(.rrdt) &.swiper-rtl .swiper-button-prev,
+  :where(.rrdt) &.swiper-rtl ~ .swiper-button-prev {
+    :where(.rrdt) ::slotted(.swiper-navigation-icon),
+    :where(.rrdt) .swiper-navigation-icon,
+    :where(.rrdt).swiper-navigation-icon {
+      transform: rotate(0deg);
+    }
+  }
+}
+:where(.rrdt) .swiper-vertical, :where(.rrdt).swiper-vertical {
+  :where(.rrdt) .swiper-button-prev,
+  :where(.rrdt).swiper-button-prev,
+  :where(.rrdt) .swiper-button-next,
+  :where(.rrdt).swiper-button-next,
+  :where(.rrdt) ~ .swiper-button-prev,
+  :where(.rrdt) ~ .swiper-button-next {
+    left: var(--swiper-navigation-top-offset, 50%);
+    right: auto;
+    margin-left: calc(0px - (var(--swiper-navigation-size) / 2));
+    margin-top: 0;
+  }
+  :where(.rrdt) .swiper-button-prev,
+  :where(.rrdt).swiper-button-prev,
+  :where(.rrdt) ~ .swiper-button-prev {
+    top: var(--swiper-navigation-sides-offset, 4px);
+    bottom: auto;
+    :where(.rrdt) ::slotted(.swiper-navigation-icon),
+    :where(.rrdt) .swiper-navigation-icon,
+    :where(.rrdt).swiper-navigation-icon {
+      transform: rotate(-90deg);
+    }
+  }
+  :where(.rrdt) .swiper-button-next,
+  :where(.rrdt).swiper-button-next,
+  :where(.rrdt) ~ .swiper-button-next {
+    bottom: var(--swiper-navigation-sides-offset, 4px);
+    top: auto;
+    :where(.rrdt) ::slotted(.swiper-navigation-icon),
+    :where(.rrdt) .swiper-navigation-icon,
+    :where(.rrdt).swiper-navigation-icon {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+:where(.rrdt) .rrdt, :where(.rrdt).rrdt {
+  /*
+  --swiper-pagination-color: var(--swiper-theme-color);
+  --swiper-pagination-left: auto;
+  --swiper-pagination-right: 8px;
+  --swiper-pagination-bottom: 8px;
+  --swiper-pagination-top: auto;
+  --swiper-pagination-fraction-color: inherit;
+  --swiper-pagination-progressbar-bg-color: rgba(0,0,0,0.25);
+  --swiper-pagination-progressbar-size: 4px;
+  --swiper-pagination-bullet-size: 8px;
+  --swiper-pagination-bullet-width: 8px;
+  --swiper-pagination-bullet-height: 8px;
+  --swiper-pagination-bullet-border-radius: 50%;
+  --swiper-pagination-bullet-inactive-color: #000;
+  --swiper-pagination-bullet-inactive-opacity: 0.2;
+  --swiper-pagination-bullet-opacity: 1;
+  --swiper-pagination-bullet-horizontal-gap: 4px;
+  --swiper-pagination-bullet-vertical-gap: 6px;
+  */
+}
+:where(.rrdt) .swiper-pagination, :where(.rrdt).swiper-pagination {
+  position: absolute;
+  text-align: center;
+  transition: 300ms opacity;
+  transform: translate3d(0, 0, 0);
+  z-index: 10;
+  :where(.rrdt) &.swiper-pagination-hidden {
+    opacity: 0;
+  }
+  :where(.rrdt) .swiper-pagination-disabled > &,
+  :where(.rrdt).swiper-pagination-disabled > &,
+  :where(.rrdt) &.swiper-pagination-disabled {
+    display: none !important;
+  }
+}
+/* Common Styles */
+:where(.rrdt) .swiper-pagination-fraction,
+:where(.rrdt).swiper-pagination-fraction,
+:where(.rrdt) .swiper-pagination-custom,
+:where(.rrdt).swiper-pagination-custom,
+:where(.rrdt) .swiper-horizontal > .swiper-pagination-bullets,
+:where(.rrdt).swiper-horizontal > .swiper-pagination-bullets,
+:where(.rrdt) .swiper-pagination-bullets.swiper-pagination-horizontal,
+:where(.rrdt).swiper-pagination-bullets.swiper-pagination-horizontal {
+  bottom: var(--swiper-pagination-bottom, 8px);
+  top: var(--swiper-pagination-top, auto);
+  left: 0;
+  width: 100%;
+}
+/* Bullets */
+:where(.rrdt) .swiper-pagination-bullets-dynamic, :where(.rrdt).swiper-pagination-bullets-dynamic {
+  overflow: hidden;
+  font-size: 0;
+  :where(.rrdt) .swiper-pagination-bullet, :where(.rrdt).swiper-pagination-bullet {
+    transform: scale(0.33);
+    position: relative;
+  }
+  :where(.rrdt) .swiper-pagination-bullet-active, :where(.rrdt).swiper-pagination-bullet-active {
+    transform: scale(1);
+  }
+  :where(.rrdt) .swiper-pagination-bullet-active-main, :where(.rrdt).swiper-pagination-bullet-active-main {
+    transform: scale(1);
+  }
+  :where(.rrdt) .swiper-pagination-bullet-active-prev, :where(.rrdt).swiper-pagination-bullet-active-prev {
+    transform: scale(0.66);
+  }
+  :where(.rrdt) .swiper-pagination-bullet-active-prev-prev, :where(.rrdt).swiper-pagination-bullet-active-prev-prev {
+    transform: scale(0.33);
+  }
+  :where(.rrdt) .swiper-pagination-bullet-active-next, :where(.rrdt).swiper-pagination-bullet-active-next {
+    transform: scale(0.66);
+  }
+  :where(.rrdt) .swiper-pagination-bullet-active-next-next, :where(.rrdt).swiper-pagination-bullet-active-next-next {
+    transform: scale(0.33);
+  }
+}
+:where(.rrdt) .swiper-pagination-bullet, :where(.rrdt).swiper-pagination-bullet {
+  width: var(--swiper-pagination-bullet-width, var(--swiper-pagination-bullet-size, 8px));
+  height: var(--swiper-pagination-bullet-height, var(--swiper-pagination-bullet-size, 8px));
+  display: inline-block;
+  border-radius: var(--swiper-pagination-bullet-border-radius, 50%);
+  background: var(--swiper-pagination-bullet-inactive-color, #000);
+  opacity: var(--swiper-pagination-bullet-inactive-opacity, 0.2);
+  :where(.rrdt) button& {
+    border: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    appearance: none;
+  }
+  :where(.rrdt) .swiper-pagination-clickable &, :where(.rrdt).swiper-pagination-clickable & {
+    cursor: pointer;
+  }
+
+  :where(.rrdt) &:only-child {
+    display: none !important;
+  }
+}
+:where(.rrdt) .swiper-pagination-bullet-active, :where(.rrdt).swiper-pagination-bullet-active {
+  opacity: var(--swiper-pagination-bullet-opacity, 1);
+  background: var(--swiper-pagination-color, var(--swiper-theme-color));
+}
+
+:where(.rrdt) .swiper-vertical > .swiper-pagination-bullets,
+:where(.rrdt).swiper-vertical > .swiper-pagination-bullets,
+:where(.rrdt) .swiper-pagination-vertical.swiper-pagination-bullets,
+:where(.rrdt).swiper-pagination-vertical.swiper-pagination-bullets {
+  right: var(--swiper-pagination-right, 8px);
+  left: var(--swiper-pagination-left, auto);
+  top: 50%;
+  transform: translate3d(0px, -50%, 0);
+  :where(.rrdt) .swiper-pagination-bullet, :where(.rrdt).swiper-pagination-bullet {
+    margin: var(--swiper-pagination-bullet-vertical-gap, 6px) 0;
+    display: block;
+  }
+  :where(.rrdt) &.swiper-pagination-bullets-dynamic {
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    :where(.rrdt) .swiper-pagination-bullet, :where(.rrdt).swiper-pagination-bullet {
+      display: inline-block;
+      transition:
+        200ms transform,
+        200ms top;
+    }
+  }
+}
+:where(.rrdt) .swiper-horizontal > .swiper-pagination-bullets,
+:where(.rrdt).swiper-horizontal > .swiper-pagination-bullets,
+:where(.rrdt) .swiper-pagination-horizontal.swiper-pagination-bullets,
+:where(.rrdt).swiper-pagination-horizontal.swiper-pagination-bullets {
+  :where(.rrdt) .swiper-pagination-bullet, :where(.rrdt).swiper-pagination-bullet {
+    margin: 0 var(--swiper-pagination-bullet-horizontal-gap, 4px);
+  }
+  :where(.rrdt) &.swiper-pagination-bullets-dynamic {
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    :where(.rrdt) .swiper-pagination-bullet, :where(.rrdt).swiper-pagination-bullet {
+      transition:
+        200ms transform,
+        200ms left;
+    }
+  }
+}
+:where(.rrdt) .swiper-horizontal.swiper-rtl > .swiper-pagination-bullets-dynamic .swiper-pagination-bullet, :where(.rrdt).swiper-horizontal.swiper-rtl > .swiper-pagination-bullets-dynamic .swiper-pagination-bullet {
+  transition:
+    200ms transform,
+    200ms right;
+}
+/* Fraction */
+:where(.rrdt) .swiper-pagination-fraction, :where(.rrdt).swiper-pagination-fraction {
+  color: var(--swiper-pagination-fraction-color, inherit);
+}
+/* Progress */
+:where(.rrdt) .swiper-pagination-progressbar, :where(.rrdt).swiper-pagination-progressbar {
+  background: var(--swiper-pagination-progressbar-bg-color, rgba(0, 0, 0, 0.25));
+  position: absolute;
+  :where(.rrdt) .swiper-pagination-progressbar-fill, :where(.rrdt).swiper-pagination-progressbar-fill {
+    background: var(--swiper-pagination-color, var(--swiper-theme-color));
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    transform: scale(0);
+    transform-origin: left top;
+  }
+  :where(.rrdt) .swiper-rtl & .swiper-pagination-progressbar-fill, :where(.rrdt).swiper-rtl & .swiper-pagination-progressbar-fill {
+    transform-origin: right top;
+  }
+  :where(.rrdt) .swiper-horizontal > &,
+  :where(.rrdt).swiper-horizontal > &,
+  :where(.rrdt) &.swiper-pagination-horizontal,
+  :where(.rrdt) .swiper-vertical > &.swiper-pagination-progressbar-opposite,
+  :where(.rrdt).swiper-vertical > &.swiper-pagination-progressbar-opposite,
+  :where(.rrdt) &.swiper-pagination-vertical.swiper-pagination-progressbar-opposite {
+    width: 100%;
+    height: var(--swiper-pagination-progressbar-size, 4px);
+    left: 0;
+    top: 0;
+  }
+  :where(.rrdt) .swiper-vertical > &,
+  :where(.rrdt).swiper-vertical > &,
+  :where(.rrdt) &.swiper-pagination-vertical,
+  :where(.rrdt) .swiper-horizontal > &.swiper-pagination-progressbar-opposite,
+  :where(.rrdt).swiper-horizontal > &.swiper-pagination-progressbar-opposite,
+  :where(.rrdt) &.swiper-pagination-horizontal.swiper-pagination-progressbar-opposite {
+    width: var(--swiper-pagination-progressbar-size, 4px);
+    height: 100%;
+    left: 0;
+    top: 0;
+  }
+}
+:where(.rrdt) .swiper-pagination-lock, :where(.rrdt).swiper-pagination-lock {
+  display: none;
+}
+
+:where(.rrdt) .checkbox, :where(.rrdt).checkbox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+:where(.rrdt) .checkbox .checkbox-input, :where(.rrdt).checkbox .checkbox-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+:where(.rrdt) .checkbox .checkbox-control, :where(.rrdt).checkbox .checkbox-control {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:where(.rrdt) .checkbox .checkbox-control::before,
+:where(.rrdt).checkbox .checkbox-control::before,
+:where(.rrdt) .checkbox .checkbox-control::after,
+:where(.rrdt).checkbox .checkbox-control::after {
+  content: "";
+  position: absolute;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s;
+  will-change: transform, opacity;
+}
+
+:where(.rrdt) .checkbox .checkbox-control::before, :where(.rrdt).checkbox .checkbox-control::before {
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  background-color: rgba(70, 70, 70, 0.3);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+}
+
+:where(.rrdt) .checkbox .checkbox-control::after, :where(.rrdt).checkbox .checkbox-control::after {
+  left: 50%;
+  top: 45%;
+  width: 6px;
+  height: 12px;
+  border: solid black;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -50%) rotate(45deg) scale(0);
+  opacity: 0;
+}
+
+/* .checkbox .checkbox-input:checked ~ .checkbox-control {
+  background-color: var(--primary);
+  border-color: var(--primary);
+} */
+
+/* .checkbox .checkbox-input:checked ~ .checkbox-control::before {
+  animation: ripple 240ms linear;
+} */
+
+:where(.rrdt) .checkbox .checkbox-input:checked ~ .checkbox-control::after, :where(.rrdt).checkbox .checkbox-input:checked ~ .checkbox-control::after {
+  transform: translate(-50%, -50%) rotate(45deg) scale(1);
+  opacity: 1;
+}
+:where(.rrdt) .checkbox .checkbox-input:focus-visible ~ .checkbox-control, :where(.rrdt).checkbox .checkbox-input:focus-visible ~ .checkbox-control {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+:where(.rrdt) .checkbox .checkbox-input:indeterminate ~ .checkbox-control::after, :where(.rrdt).checkbox .checkbox-input:indeterminate ~ .checkbox-control::after {
+  width: 10px;
+  height: 2px;
+  border: 0;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+
+:where(.rrdt) .checkbox .checkbox-label, :where(.rrdt).checkbox .checkbox-label {
+  font-size: 1rem;
+  user-select: none;
+  transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+:where(.rrdt) .checkbox-control, :where(.rrdt).checkbox-control {
+  border-radius: 6px;
+  border: 1px solid;
+  transition-property: all;
+}
+@keyframes rrdt-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.35);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0;
+  }
+}

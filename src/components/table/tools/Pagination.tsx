@@ -2,7 +2,7 @@ import { useMemo, useCallback, useState, useEffect } from "react";
 
 import { useIsMobile } from "../hooks/useIsMobile";
 import { numberWithCommas } from "../helper";
-import { useQueryParams } from "../hooks/useQueryParams";
+
 import { ColorTheme, TextsConfig } from "../types";
 import { MdOutlineArrowBackIos, MdOutlineArrowForwardIos } from "../icons";
 
@@ -29,7 +29,7 @@ const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   onChangePage,
 }) => {
-  const { updateParams } = useQueryParams();
+
   const totalPages = Math.ceil(totalItems / pageSize);
   const isMobile = useIsMobile(startMobileSize);
   const [pageInput, setPageInput] = useState(currentPage.toString());
@@ -93,10 +93,9 @@ const Pagination: React.FC<PaginationProps> = ({
 
   const updatePage = useCallback(
     (page: number) => {
-      updateParams(queryName, page.toString());
       onChangePage?.(page);
     },
-    [updateParams, queryName]
+    [onChangePage]
   );
 
   const goToFirstPage = () => updatePage(1);
@@ -154,13 +153,14 @@ const Pagination: React.FC<PaginationProps> = ({
   return isMobile ? (
     <div className="pagination-mobile-container">
       <button
+        type="button"
         style={{
           ...baseStyle,
           ...(currentPage === 1 ? disabledStyle : {}),
         }}
         disabled={currentPage === 1}
         onClick={goToPrevPage}
-        className="pagination-mobile-nav pagination-mobile-prev"
+        aria-label="Previous page" className="pagination-mobile-nav pagination-mobile-prev"
       >
         {dir === "rtl" ? (
           <MdOutlineArrowForwardIos style={{ fontSize: "16px" }} />
@@ -175,6 +175,7 @@ const Pagination: React.FC<PaginationProps> = ({
           border: `1px solid ${theme.borderColor}`,
           borderRadius: "6px",
         }}
+        aria-label="Page number"
         type="number"
         inputMode="numeric"
         value={pageInput}
@@ -191,13 +192,14 @@ const Pagination: React.FC<PaginationProps> = ({
       </span>
       <span className="pagination-mobile-total">{totalPages}</span>
       <button
+        type="button"
         style={{
           ...baseStyle,
           ...(currentPage === totalPages ? disabledStyle : {}),
         }}
         disabled={currentPage === totalPages}
         onClick={goToNextPage}
-        className="pagination-mobile-nav pagination-mobile-next"
+        aria-label="Next page" className="pagination-mobile-nav pagination-mobile-next"
       >
         {dir === "rtl" ? (
           <MdOutlineArrowBackIos style={{ fontSize: "16px" }} />
@@ -214,6 +216,7 @@ const Pagination: React.FC<PaginationProps> = ({
           className="pagination-buttons-container"
         >
           <button
+        type="button"
             style={{
               ...baseStyle,
               ...(currentPage === 1 ? disabledStyle : {}),
@@ -226,13 +229,14 @@ const Pagination: React.FC<PaginationProps> = ({
           </button>
 
           <button
+        type="button"
             style={{
               ...baseStyle,
               ...(currentPage === 1 ? disabledStyle : {}),
             }}
             disabled={currentPage === 1}
             onClick={goToPrevPage}
-            className="pagination-button pagination-prev"
+            aria-label="Previous page" className="pagination-button pagination-prev"
           >
             {dir === "rtl" ? (
               <MdOutlineArrowForwardIos style={{ fontSize: "16px" }} />
@@ -242,6 +246,7 @@ const Pagination: React.FC<PaginationProps> = ({
           </button>
 
           <button
+        type="button"
             style={{
               ...baseStyle,
               ...(1 === currentPage ? activeStyle : {}),
@@ -260,6 +265,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
           {middlePages.map((pageNum) => (
             <button
+        type="button"
               key={pageNum}
               style={{
                 ...baseStyle,
@@ -279,6 +285,7 @@ const Pagination: React.FC<PaginationProps> = ({
           )}
 
           <button
+        type="button"
             style={{
               ...baseStyle,
               ...(totalPages === currentPage ? activeStyle : {}),
@@ -290,13 +297,14 @@ const Pagination: React.FC<PaginationProps> = ({
           </button>
 
           <button
+        type="button"
             style={{
               ...baseStyle,
               ...(currentPage === totalPages ? disabledStyle : {}),
             }}
             disabled={currentPage === totalPages}
             onClick={goToNextPage}
-            className="pagination-button pagination-next"
+            aria-label="Next page" className="pagination-button pagination-next"
           >
             {dir === "rtl" ? (
               <MdOutlineArrowBackIos style={{ fontSize: "16px" }} />
@@ -306,6 +314,7 @@ const Pagination: React.FC<PaginationProps> = ({
           </button>
 
           <button
+        type="button"
             style={{
               ...baseStyle,
               ...(currentPage === totalPages ? disabledStyle : {}),

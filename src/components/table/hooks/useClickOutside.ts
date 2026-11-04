@@ -17,9 +17,7 @@ export const useClickOutside = <T extends HTMLElement>(
 
     // Clean up with a check to avoid null error
     return () => {
-      if (ref.current) {
-        document.removeEventListener("mousedown", handleClickOutside);
-      }
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, deps);
 

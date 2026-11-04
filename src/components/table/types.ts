@@ -78,16 +78,16 @@ export interface InternalModeProps {
 
 export interface StaticModeProps {
   staticRows: any[];
-  totalItems: number;
+  totalItems?: number;
 }
 export interface AutoPageSizeConfig {
   enabled?: boolean;
   containerSelector?: string;
   subtractSelectors?: string[];
-  // optionalSelectorsForExtraBuffer?: string[];
+  optionalSelectorsForExtraBuffer?: string[];
   rowHeight?: number;
   baseBufferRows?: number;
-  // extraBufferRows?: number;
+  extraBufferRows?: number;
 }
 export interface BaseTableProps {
   mode: TableMode;
@@ -97,6 +97,7 @@ export interface BaseTableProps {
   textsConfig?: TextsConfig;
   lang?: "en" | "fa";
   pageQueryName?: string;
+  pageSizeQueryName?: string;
   pageSize?: number;
   onPageChange?: (page: number) => void;
   onSortChange?: (order: OrderType) => void;
@@ -110,21 +111,23 @@ export interface BaseTableProps {
   isLoading?: boolean;
   autoPageSizeConfig?: AutoPageSizeConfig;
   listMode?: boolean;
-  tableName: string;
+  tableName?: string;
   filters?: ReactNode;
   topFilter?: ReactNode;
   filterContainerClassName?: string;
   topFilterContainerClassName?: string;
   removeFilterKey?: string;
+  onClearFilters?: () => void;
   actionButtons?: ReactNode;
   noPageSize?: boolean;
-  rowClassName?: (row: any) => void;
+  rowClassName?: (row: any) => string | undefined | void;
+  rowKey?: string | ((row: any) => string | number);
 }
 
 export interface Selectable extends BaseTableProps {
   isSelectable: boolean;
   selectedIds: Array<string | number>;
-  selectedKey: string;
+  selectedKey?: string;
   onSelectChange?: (value: any) => void;
 }
 
