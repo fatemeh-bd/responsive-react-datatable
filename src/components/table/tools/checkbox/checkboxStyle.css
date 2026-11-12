@@ -48,7 +48,7 @@
   top: 45%;
   width: 6px;
   height: 12px;
-  border: solid black;
+  border: solid currentColor;
   border-width: 0 2px 2px 0;
   transform: translate(-50%, -50%) rotate(45deg) scale(0);
   opacity: 0;

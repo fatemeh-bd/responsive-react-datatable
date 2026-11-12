@@ -6,6 +6,7 @@ import { dirname, join, resolve } from "node:path";
 import assert from "node:assert/strict";
 import { createServer } from "node:net";
 import { chromium } from "@playwright/test";
+import { unzipSync, strFromU8 } from "fflate";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const output = join(root, ".release-tests"); mkdirSync(output, { recursive: true });
 const npmCli = process.env.npm_execpath;
@@ -32,7 +33,7 @@ function consumer(name, react, next) {
   writeFileSync(join(cwd, "package.json"), JSON.stringify({ name: `release-${name}`, private: true, type: "module",
     dependencies: { "react-responsive-datatable-kit": tarball, react, "react-dom": react, ...(next ? { next } : {}) },
     devDependencies: { typescript: "^5.9.3", "@types/react": react.startsWith("18") ? "^18" : "^19", "@types/react-dom": react.startsWith("18") ? "^18" : "^19", "@types/node": "^22",
-      ...(!next ? { vitest: "^5.1.0", jsdom: "^26.1.0", "@testing-library/react": "^16.3.0", axios: "^1.21.0" } : {}) } }, null, 2));
+      ...(!next ? { vitest: "^5.1.0", jsdom: "^26.1.0", "@testing-library/react": "^16.3.0", axios: "^1.21.0", fflate: "^0.8.2", jspdf: "^4.2.1", "jspdf-autotable": "^5.0.9" } : {}) } }, null, 2));
   cpSync(join(root, "tests/fixtures/consumer.tsx"), join(cwd, "consumer.tsx"));
   writeFileSync(join(cwd, "tsconfig.json"), JSON.stringify(tsconfig));
   return cwd;
@@ -58,6 +59,7 @@ try {
     await npm(["install"], cwd);
     const pageSource = readFileSync(join(root, "tests/fixtures/next/app/page.tsx"), "utf8");
     cpSync(join(root, "tests/fixtures/next/Interactive.tsx"), join(cwd, "Interactive.tsx"));
+    cpSync(join(root, "tests/fixtures/next/Features.tsx"), join(cwd, "Features.tsx"));
     mkdirSync(join(cwd, router), { recursive: true });
     writeFileSync(join(cwd, router, router === "app" ? "page.tsx" : "index.tsx"), pageSource);
     cpSync(join(root, `tests/fixtures/next/${router}/${router === "app" ? "layout.tsx" : "_app.tsx"}`), join(cwd, router, router === "app" ? "layout.tsx" : "_app.tsx"));
@@ -101,8 +103,32 @@ try {
         assert.equal(requestAttempts, 2, "A failed request can be retried without notify or a host provider");
         assert(await page.locator(".interactive-person-row").count() > 0, "Custom row classes must survive responsive rendering");
         if (!mobile) {
+          const stability = page.getByRole("region", { name: "Loading layout stability" });
+          const beforeLoading = await stability.evaluate(async region => {
+            const scroller = region.querySelector(".desktop-table-body-container");
+            const widths = () => Array.from(region.querySelectorAll("th")).map(cell => cell.getBoundingClientRect().width);
+            const initial = widths(); let overflow = 0; let scaled = false;
+            const start = performance.now();
+            while (performance.now() - start < 2200) {
+              overflow = Math.max(overflow, scroller.scrollWidth - scroller.clientWidth);
+              scaled ||= Array.from(region.querySelectorAll(".skleton-class")).some(el => getComputedStyle(el).transform !== "none");
+              await new Promise(resolve => setTimeout(resolve, 40));
+            }
+            return { widths: initial, overflow, scaled, rowHeight: region.querySelector(".desktop-table-skeleton-row").getBoundingClientRect().height };
+          });
+          assert(beforeLoading.overflow <= 1 && !beforeLoading.scaled, "Skeleton animation must not cause horizontal overflow");
+          await stability.getByRole("button", { name: "Toggle table loading" }).click();
+          await stability.getByText("Roya", { exact: true }).waitFor();
+          const afterLoading = await stability.evaluate(region => ({
+            widths: Array.from(region.querySelectorAll("th")).map(cell => cell.getBoundingClientRect().width),
+            rowHeight: region.querySelector(".desktop-table-data-row").getBoundingClientRect().height,
+          }));
+          assert(beforeLoading.widths.every((width, index) => Math.abs(width - afterLoading.widths[index]) <= 1), "Column widths must survive the loading transition");
+          assert(Math.abs(beforeLoading.rowHeight - afterLoading.rowHeight) <= 1, "Loading and data row heights must match");
+          const sortIcon = await page.locator(".desktop-table-sort-icons svg").first().boundingBox();
+          assert(sortIcon && sortIcon.width <= 10 && sortIcon.height <= 7, "Sort indicators must stay compact");
           assert.equal(await page.locator(".desktop-table-container").first().evaluate(el => getComputedStyle(el).borderRadius), "12px");
-          await page.getByRole("button", { name: "Next page", exact: true }).click();
+          await page.locator(".table-container").first().getByRole("button", { name: "Next page", exact: true }).click();
           await page.getByText("Next consumer", { exact: true }).waitFor();
           assert(await page.getByText("Next consumer", { exact: true }).evaluate(el => {
             const cell = el.getBoundingClientRect(), scroller = el.closest(".desktop-table-body-container").getBoundingClientRect();
@@ -119,13 +145,40 @@ try {
         assert.equal(await checkMark.evaluate(el => getComputedStyle(el, "::after").content), '""');
         await page.waitForFunction(() => getComputedStyle(document.querySelector(".selectableCheckbox .checkbox-control"), "::after").opacity === "1");
         assert.equal(await page.locator('section[aria-label="Interactive client wrapper"] [dir="rtl"]').count(), 1);
+        const features = page.getByRole("region", { name: "New table features", exact: true });
+        await features.getByRole("button", { name: "Expand row", exact: true }).click();
+        await features.getByRole("region", { name: "Row details", exact: true }).getByText("جزئیات ردیف اول").waitFor();
+        await features.getByRole("button", { name: "Export", exact: true }).click();
+        const exportDialog = page.getByRole("dialog", { name: "Export", exact: true });
+        for (const format of ["csv", "xlsx", "pdf"]) {
+          const downloadPromise = page.waitForEvent("download");
+          await exportDialog.getByRole("button", { name: format === "xlsx" ? "Excel (.xlsx)" : format.toUpperCase(), exact: true }).click();
+          const download = await downloadPromise;
+          const path = join(cwd, `exports-${mobile ? "mobile" : "desktop"}.${format}`);
+          await download.saveAs(path);
+          const bytes = readFileSync(path);
+          if (format === "csv") { assert(bytes.toString("utf8").includes("Roya")); assert(!bytes.toString("utf8").includes("@example.com")); }
+          if (format === "xlsx") {
+            const sheet = strFromU8(unzipSync(bytes)["xl/worksheets/sheet1.xml"]);
+            assert(sheet.includes("Roya") && sheet.includes("سمیرا") && sheet.includes("<v>12.5</v>"));
+          }
+          if (format === "pdf") assert(bytes.toString("latin1").startsWith("%PDF-") && bytes.includes(Buffer.from("/FontFile2")));
+        }
+        await page.keyboard.press("Escape");
+        await features.getByRole("button", { name: "Columns", exact: true }).click();
+        await page.getByRole("dialog", { name: "Columns", exact: true }).getByRole("checkbox", { name: "Email", exact: true }).check();
+        await page.keyboard.press("Escape");
+        await features.getByText("samira@example.com", { exact: true }).waitFor();
+        await features.getByRole("button", { name: "Toggle table theme" }).click();
+        assert.equal(await features.locator(".fixture-features").getAttribute("data-theme"), "dark");
         await page.screenshot({ path: join(cwd, mobile ? "mobile.png" : "desktop.png"), fullPage: true });
         assert.deepEqual(errors, [], `${name} ${mobile ? "mobile" : "desktop"} browser errors`);
         await page.close();
       }
       results.push({ name, react: JSON.parse(readFileSync(join(cwd, "node_modules/react/package.json"))).version,
         next: JSON.parse(readFileSync(join(cwd, "node_modules/next/package.json"))).version, build: "passed", ssr: "passed", hydration: "desktop + mobile passed", css: "passed",
-        requestRecovery: "desktop + mobile passed", rowClasses: "desktop + mobile passed" });
+        requestRecovery: "desktop + mobile passed", rowClasses: "desktop + mobile passed",
+        columnVisibility: "desktop + mobile passed", rowDetails: "desktop + mobile passed", themes: "desktop + mobile passed", exports: "CSV + XLSX + PDF downloads passed", skeletonLayout: "2.2s animation + loading transition passed" });
     } finally { child.kill(); }
   }
 } finally { await browser?.close(); }

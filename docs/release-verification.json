@@ -1,6 +1,6 @@
 {
   "artifact": "react-responsive-datatable-kit-3.0.0.tgz",
-  "sha512": "sha512-btRqu7XQxL8s/GlYDff14z2DMYe0IGcY4oztqTbHf0IFhKYxNdjxFQua9YANB9bbSBEPufQrcizvjx+7h+XrfA==",
+  "sha512": "sha512-gcSqUXrjG/rtu7RUS2FnE8okhsapABbO5zPnS6geM0nEMs9FvuK4N943DLXGiNx9s3Tj0WmWYY2JHODtnFnPUQ==",
   "results": [
     {
       "name": "react18-min",
@@ -35,7 +35,12 @@
       "hydration": "desktop + mobile passed",
       "css": "passed",
       "requestRecovery": "desktop + mobile passed",
-      "rowClasses": "desktop + mobile passed"
+      "rowClasses": "desktop + mobile passed",
+      "columnVisibility": "desktop + mobile passed",
+      "rowDetails": "desktop + mobile passed",
+      "themes": "desktop + mobile passed",
+      "exports": "CSV + XLSX + PDF downloads passed",
+      "skeletonLayout": "2.2s animation + loading transition passed"
     },
     {
       "name": "next15-app",
@@ -46,7 +51,12 @@
       "hydration": "desktop + mobile passed",
       "css": "passed",
       "requestRecovery": "desktop + mobile passed",
-      "rowClasses": "desktop + mobile passed"
+      "rowClasses": "desktop + mobile passed",
+      "columnVisibility": "desktop + mobile passed",
+      "rowDetails": "desktop + mobile passed",
+      "themes": "desktop + mobile passed",
+      "exports": "CSV + XLSX + PDF downloads passed",
+      "skeletonLayout": "2.2s animation + loading transition passed"
     },
     {
       "name": "next16-app",
@@ -57,7 +67,12 @@
       "hydration": "desktop + mobile passed",
       "css": "passed",
       "requestRecovery": "desktop + mobile passed",
-      "rowClasses": "desktop + mobile passed"
+      "rowClasses": "desktop + mobile passed",
+      "columnVisibility": "desktop + mobile passed",
+      "rowDetails": "desktop + mobile passed",
+      "themes": "desktop + mobile passed",
+      "exports": "CSV + XLSX + PDF downloads passed",
+      "skeletonLayout": "2.2s animation + loading transition passed"
     }
   ]
 }

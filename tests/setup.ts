@@ -1,6 +1,7 @@
 import { afterEach } from "vitest";
 import { cleanup } from "@testing-library/react";
 afterEach(() => {
+  if (typeof window === "undefined") return;
   cleanup();
   window.history.replaceState(null, "", "/");
   sessionStorage.clear();

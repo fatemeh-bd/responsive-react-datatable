@@ -1,0 +1,77 @@
+.app-main:has(.docs-page) { max-width:1600px; width:100%; padding-inline:30px; }
+.docs-page { font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif; color:#262626; font-size:17px; line-height:1.65; min-width:0; padding-block:4px; }
+.docs-page * { box-sizing:border-box; }
+.docs-intro { display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1fr); align-items:center; gap:34px; margin-bottom:34px; padding:26px; background:#fff; border:1px solid #e5e5e5; border-radius:18px; }
+.docs-eyebrow { color:#737373; font-size:12px; font-weight:650; letter-spacing:.1em; }
+.docs-heading h1 { font-size:clamp(30px,3.5vw,44px); line-height:1.15; letter-spacing:-.035em; color:#121212; font-weight:750; margin:12px 0; }
+.docs-heading p { font-size:18px; color:#626262; margin:0 0 22px; max-width:430px; }
+.docs-version-control { display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:15px; }
+.docs-version-control select { padding:8px 12px; border:1px solid #d4d4d4; border-radius:7px; background:#fafafa; color:#262626; font:inherit; min-width:150px; }
+.docs-version-control button { color:#262626; background:transparent; border:0; font:inherit; cursor:pointer; padding:8px 0; }
+.docs-version-help { display:block; color:#737373; font-size:13px; margin-top:14px; overflow-wrap:anywhere; }
+.docs-version-help code { color:#525252; }
+.docs-gif { margin:0; min-width:0; }
+.docs-gif img { width:100%; height:auto; display:block; border-radius:10px; border:1px solid #e5e5e5; }
+.docs-gif figcaption { color:#737373; font-size:12px; text-align:center; padding-top:7px; }
+.docs-layout { display:grid; grid-template-columns:230px minmax(0,1fr); align-items:start; gap:26px; }
+.docs-navigation { position:sticky; top:20px; min-width:0; background:#fafafa; border:1px solid #e5e5e5; border-radius:12px; padding:14px; }
+.docs-search input { width:100%; font:inherit; font-size:15px; color:#262626; background:#fff; border:1px solid #d4d4d4; border-radius:7px; padding:10px 11px; }
+.docs-navigation nav { display:grid; gap:5px; margin-top:15px; }
+.docs-navigation nav button { width:100%; text-align:left; padding:10px 12px; border:1px solid transparent; background:#f5f5f5; color:#525252; border-radius:7px; font:inherit; font-size:15px; line-height:1.4; cursor:pointer; }
+.docs-navigation nav button:hover { color:#121212; background:#ededed; }
+.docs-navigation nav button[aria-current=page] { border-color:#121212; background:#121212; color:#fff; }
+.docs-navigation>p { border-top:1px solid #e5e5e5; padding-top:13px; margin:15px 0 0; font-size:13px; color:#737373; }
+.docs-recipe { min-width:0; border:1px solid #dedede; border-radius:14px; background:#fff; color:#404040; overflow:hidden; }
+.docs-recipe-heading { padding:28px 30px 18px; }
+.docs-kicker { display:block; color:#737373; letter-spacing:.1em; font-weight:700; font-size:11px; }
+.docs-recipe h2 { margin:6px 0 10px; font-size:30px; line-height:1.3; letter-spacing:-.025em; font-weight:700; color:#171717; }
+.docs-recipe-heading>p { margin:0; font-size:17px; line-height:1.7; color:#525252; }
+.docs-install { padding:0 30px; }
+.docs-example-toolbar { border-top:1px solid #e5e5e5; border-bottom:1px solid #e5e5e5; background:#fafafa; padding:12px 24px; display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; }
+.docs-view-tabs { display:flex; gap:6px; }
+.docs-view-tabs button { font:inherit; font-weight:600; font-size:15px; padding:7px 20px; background:transparent; color:#525252; border:1px solid transparent; border-radius:7px; cursor:pointer; }
+.docs-view-tabs button[aria-pressed=true] { background:#171717; color:#fff; border-color:#171717; }
+.docs-theme-picker { display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:14px; }
+.docs-theme-picker label { display:flex; align-items:center; gap:8px; }
+.docs-theme-picker input { width:30px; height:30px; border:1px solid #a3a3a3; background:#fff; padding:2px; border-radius:6px; cursor:pointer; }
+.docs-theme-picker button { font:inherit; color:#404040; padding:4px 8px; border:1px solid #d4d4d4; border-radius:5px; background:#fff; cursor:pointer; }
+.docs-theme-picker code { font-size:13px; }
+.docs-table-stage { padding:10px; background:#f5f5f5; }
+.docs-status { display:inline-block; font-size:13px; padding:2px 8px; border:1px solid #8295ac66; border-radius:99px; }
+.docs-table-stage .page-size-select { background:transparent; color:inherit; }
+.docs-table-stage .table-container { font-size:15px; }
+.docs-table-stage .desktop-table-data-cell,.docs-table-stage .desktop-table-header-content { font-size:15px; }
+.docs-table-stage input[aria-label="Filter by name"] { color:inherit; background:transparent; border:1px solid #a3a3a3; padding:8px 10px; border-radius:7px; font:inherit; }
+.docs-example-code { padding:0 24px; }
+.docs-code { margin:18px 0; border:1px solid #dedede; border-radius:9px; overflow:hidden; min-width:0; text-align:left; direction:ltr; }
+.docs-code-bar { display:flex; align-items:center; justify-content:space-between; padding:9px 14px; background:#ededed; color:#626262; font-size:12px; line-height:1.4; }
+.docs-code-bar button { border:0; background:transparent; color:#262626; padding:3px 5px; font:inherit; font-size:13px; cursor:pointer; }
+.docs-code pre { overflow-x:auto!important; max-width:100%; line-height:1.7!important; }
+.docs-code pre,.docs-code pre code { font-size:15px!important; }
+.docs-code code { background:transparent!important; }
+.docs-tip { margin:20px 28px!important; padding:14px 16px; border-left:3px solid #a3a3a3; background:#f7f7f7; color:#525252; font-size:15px; line-height:1.7; border-radius:0 7px 7px 0; }
+.docs-shared-setup { font-size:13px; color:#737373; padding:0 30px; margin:0 0 22px; }
+.docs-shared-setup button { color:#262626; text-decoration:underline; cursor:pointer; background:transparent; border:0; font:inherit; }
+.docs-reference { margin:22px 28px; border:1px solid #d4d4d4; border-radius:8px; color:#404040; }
+.docs-reference>summary { padding:12px 16px; cursor:pointer; font-size:15px; font-weight:600; background:#fafafa; border-radius:8px; }
+.docs-reference-content { padding:8px 20px 20px; min-width:0; overflow-wrap:anywhere; }
+.docs-reference-content h2 { font-size:23px; margin-top:24px; padding-top:18px; border-top:1px solid #e5e5e5; }
+.docs-reference-content h3 { font-size:19px; color:#171717; font-weight:600; margin:22px 0 8px; }
+.docs-reference-content p { margin:12px 0; font-size:16px; line-height:1.8; }
+.docs-reference-content :not(pre)>code,.docs-shared-setup code { background:#f3f3f3; color:#404040; padding:2px 4px; border-radius:4px; font-size:.88em; }
+.docs-reference-content a { color:#264faf; text-decoration:underline; }
+.docs-reference-content ul,.docs-reference-content ol,.docs-highlights { padding-left:22px; list-style:disc; }
+.docs-reference-content li { padding:4px 0; font-size:16px; }
+.docs-table-scroll { overflow:auto; max-width:100%; border:1px solid #d4d4d4; border-radius:8px; margin:18px 0; }
+.docs-table-scroll table { border-collapse:collapse; width:100%; font-size:15px; line-height:1.6; }
+.docs-table-scroll th,.docs-table-scroll td { text-align:left; vertical-align:top; border-bottom:1px solid #e5e5e5; padding:12px; min-width:135px; }
+.docs-table-scroll th { background:#f3f3f3; color:#171717; font-weight:650; }
+.docs-highlights { margin:0 32px 24px; font-size:17px; line-height:2; }
+.docs-empty { padding:28px; border:1px solid #d4d4d4; border-radius:10px; margin-block:20px; }
+.docs-empty button { margin-top:12px; color:#262626; text-decoration:underline; cursor:pointer; }
+.docs-page-footer { margin-top:28px; padding:18px 0; border-top:1px solid #e5e5e5; color:#737373; font-size:13px; }
+.docs-visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+.docs-page button:focus-visible,.docs-page input:focus-visible,.docs-page select:focus-visible { outline:3px solid #525252; outline-offset:3px; }
+@media(min-width:1700px) { .docs-page { font-size:18px; color:#262626; }.docs-layout { grid-template-columns:250px minmax(0,1fr); gap:30px; }.docs-navigation nav button { font-size:16px; background:#f5f5f5; color:#525252; }.docs-recipe-heading>p { font-size:18px; } }
+@media(max-width:1100px) { .docs-intro { grid-template-columns:1fr; gap:24px; background:#fff; border:1px solid #e5e5e5; }.docs-gif { max-width:750px; width:100%; }.docs-layout { grid-template-columns:190px minmax(0,1fr); gap:16px; }.docs-recipe-heading { padding:24px; } }
+@media(max-width:767px) { .app-main:has(.docs-page) { padding-inline:14px; }.docs-intro { padding:20px; margin-bottom:20px; background:#fff; border:1px solid #e5e5e5; }.docs-heading h1 { font-size:32px; color:#121212; }.docs-heading p { font-size:16px; color:#626262; }.docs-layout { grid-template-columns:minmax(0,1fr); }.docs-navigation { position:static; background:#fafafa; border:1px solid #e5e5e5; }.docs-navigation nav { display:flex; flex-wrap:wrap; gap:7px; }.docs-navigation nav button { width:auto; padding:8px 10px; font-size:14px; background:#f5f5f5; color:#525252; }.docs-navigation>p { display:none; color:#737373; border-top:1px solid #e5e5e5; }.docs-recipe h2 { font-size:26px; }.docs-recipe-heading { padding:20px; }.docs-recipe-heading>p { font-size:16px; }.docs-install,.docs-example-code { padding-inline:14px; }.docs-tip { margin:16px!important; background:#f7f7f7; color:#525252; border-left:3px solid #a3a3a3; }.docs-reference { margin:18px 14px; }.docs-shared-setup { padding-inline:18px; }.docs-reference-content { padding-inline:12px; }.docs-code pre,.docs-code pre code { font-size:14px!important; }.docs-table-stage { padding:0; }.docs-example-toolbar { padding:12px 14px; } }

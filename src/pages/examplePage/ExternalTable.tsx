@@ -57,7 +57,7 @@ const ExternalTable = () => {
       width: 140,
       render: rowRenderer((_cell, _row) => (
         <button
-          className="bg-[#d24670] rounded-2xl px-4 py-1"
+          className="bg-[#333333] text-white rounded-2xl px-4 py-1"
           onClick={() => alert(_row?.title)}
         >
           click me
@@ -91,14 +91,6 @@ const ExternalTable = () => {
       pageSize={8}
       height="570px"
       tableName="table1"
-      colorTheme={{
-        backgroundColor: "#000",
-        borderColor: "#364153",
-        cellTextColor: "#fff",
-        headerTextColor: "#fff",
-        headerBackgroundColor: "#364153",
-        primaryColor: "#d24670",
-      }}
       notify={(text) => alert(text)}
     />
   );

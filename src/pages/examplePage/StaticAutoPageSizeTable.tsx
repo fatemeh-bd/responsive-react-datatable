@@ -64,14 +64,6 @@ const StaticAutoPageSizeTable = () => {
         rowHeight: 51.15,
         baseBufferRows: 3,
       }}
-      colorTheme={{
-        backgroundColor: "#000",
-        borderColor: "#364153",
-        cellTextColor: "#fff",
-        headerTextColor: "#fff",
-        headerBackgroundColor: "#364153",
-        primaryColor: "#d24670",
-      }}
       notify={(text) => alert(text)}
     />
   );

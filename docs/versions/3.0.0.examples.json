@@ -1,0 +1,154 @@
+{
+  "highlights": [
+    "Show or hide columns",
+    "Download CSV, Excel or PDF",
+    "Expand details with a chevron",
+    "Light table by default; configurable theme and classes",
+    "Light monochrome site with version-specific examples"
+  ],
+  "recipes": [
+    {
+      "id": "start",
+      "title": "Quick start",
+      "summary": "Install, import the stylesheet, and pass your rows. No provider or Tailwind setup needed.",
+      "preview": "basic",
+      "sections": [
+        "Install",
+        "Quick start: static rows"
+      ],
+      "code": "import Table, { type ColumnType } from 'react-responsive-datatable-kit';\nimport 'react-responsive-datatable-kit/styles.css';\n\nconst columns: ColumnType[] = [\n  { data: 'name', title: 'Name', orderable: true },\n  { data: 'email', title: 'Email' },\n];\nconst rows = [\n  { id: 0, name: 'Mina', email: 'mina@example.com', notes: 'Designer' },\n  { id: 1, name: 'Arman', email: 'arman@example.com', notes: 'Developer' },\n];\n\nexport default function People() {\n  return <Table mode=\"static\" columns={columns} staticRows={rows} />;\n}"
+    },
+    {
+      "id": "playground",
+      "title": "All features",
+      "summary": "Try column visibility, file downloads and row details together.",
+      "preview": "all",
+      "sections": [
+        "Public API"
+      ],
+      "code": "<Table mode=\"static\" columns={columns} staticRows={rows}\n  columnVisibility exportConfig={{ fileName: \"people\" }}\n  expandableRows={{ render: row => <p>{row.notes}</p> }}\n  theme=\"#fff\" />"
+    },
+    {
+      "id": "modes",
+      "title": "Choose a data mode",
+      "summary": "Static: local rows. Internal: the table fetches. External: your app fetches.",
+      "sections": [
+        "Choose a data mode",
+        "Internal API mode",
+        "External API mode"
+      ],
+      "code": "// All rows are already in memory\n<Table mode=\"static\" columns={columns} staticRows={rows} />\n\n// The table manages requests\n<Table mode=\"internal\" columns={columns}\n  internalApiConfig={{ endpoint: '/api/people', method: 'GET' }} />\n\n// Your app manages requests and state\n<Table mode=\"external\" columns={columns}\n  externalRows={rows} totalItems={total} isLoading={loading}\n  onPageChange={setPage} onPageSizeChange={setPageSize}\n  onSearch={setSearch} onSortChange={setOrder} />",
+      "note": "Internal mode expects { data: [...], recordsFiltered: total }. External callbacks and loading state belong to your app."
+    },
+    {
+      "id": "columns",
+      "title": "Show / hide columns",
+      "summary": "Add a Columns button. Start fields hidden or keep important columns locked.",
+      "preview": "columns",
+      "sections": [
+        "Show and hide columns",
+        "Column reference"
+      ],
+      "code": "const columns: ColumnType[] = [\n  { data: 'name', title: 'Name', hideable: false },\n  { data: 'email', title: 'Email', hidden: true },\n];\n\n<Table mode=\"static\" columns={columns} staticRows={rows}\n  columnVisibility />",
+      "note": "Use hiddenColumnIds + onHiddenColumnsChange for controlled visibility. A column's ID defaults to its data field."
+    },
+    {
+      "id": "exports",
+      "title": "CSV / Excel / PDF",
+      "summary": "Choose the format, row scope and columns. Download a real file in one click.",
+      "preview": "exports",
+      "sections": [
+        "Export CSV, Excel or PDF"
+      ],
+      "code": "<Table mode=\"static\" columns={columns} staticRows={rows}\n  exportConfig={{\n    fileName: 'people',\n    formats: ['csv', 'xlsx', 'pdf'],\n  }}\n/>",
+      "note": "Static exports include all filtered rows by default. Server mode exports loaded rows; add getRows for all matches. Action controls are excluded."
+    },
+    {
+      "id": "details",
+      "title": "Expandable details",
+      "summary": "Keep the table compact. Open extra content below a row or inside its mobile card.",
+      "preview": "details",
+      "sections": [
+        "Expand row details"
+      ],
+      "code": "<Table mode=\"static\" columns={columns} staticRows={rows}\n  rowKey=\"id\"\n  expandableRows={{\n    render: row => <div>\n      <strong>{row.name}</strong>\n      <p>{row.email}</p>\n      <p>{row.notes}</p>\n    </div>,\n    defaultExpandedRowIds: [0],\n  }}\n/>",
+      "note": "Use the downward chevron to open details; it points upward while open. Rows need stable IDs. Controlled state uses expandedRowIds + onExpandedChange."
+    },
+    {
+      "id": "theme",
+      "title": "Theme & className",
+      "summary": "A white table with soft-black text and controls. Choose another base color when you need it.",
+      "preview": "theme",
+      "sections": [
+        "Themes and custom styles"
+      ],
+      "code": "<Table mode=\"static\" columns={columns} staticRows={rows}\n  theme=\"#121212\"\n  className=\"people-table\"\n  style={{ padding: 16, borderRadius: 12 }}\n  rowClassName={row => row.id === 0 ? 'featured-person' : undefined}\n/>",
+      "extraCode": ".people-table { margin-block: 24px; }\n.people-table .featured-person { font-weight: 600; }",
+      "note": "The default is light. A hex theme such as #121212 changes the table palette; className and style customize its root."
+    },
+    {
+      "id": "selection",
+      "title": "Select rows",
+      "summary": "Keep selected IDs in your state. Select one row or all filtered local rows.",
+      "preview": "selection",
+      "sections": [
+        "Public API"
+      ],
+      "code": "const [selectedIds, setSelectedIds] = useState<Array<string | number>>([]);\n\n<Table mode=\"static\" columns={columns} staticRows={rows}\n  isSelectable selectedIds={selectedIds}\n  onSelectChange={setSelectedIds}\n  selectedKey=\"id\" />",
+      "note": "Import useState from React. Server select-all covers the loaded page and preserves IDs selected on other pages."
+    },
+    {
+      "id": "filters",
+      "title": "Custom filters",
+      "summary": "Put your controls beside search. You own their state and filtering logic.",
+      "preview": "filters",
+      "sections": [
+        "Public API"
+      ],
+      "code": "const [name, setName] = useState('');\n\n<Table mode=\"static\" columns={columns}\n  staticRows={rows.filter(row => row.name.includes(name))}\n  filters={<>\n    <input aria-label=\"Filter by name\" value={name}\n      onChange={event => setName(event.target.value)} />\n  </>}\n  onClearFilters={() => setName('')} />",
+      "note": "Your custom filters own their state and styles. Use onClearFilters to reset them. Mobile opens them in a dialog."
+    },
+    {
+      "id": "renderers",
+      "title": "Custom cells",
+      "summary": "Use a renderer for buttons, badges or links. Keep exported values separate.",
+      "sections": [
+        "Column reference",
+        "Export CSV, Excel or PDF"
+      ],
+      "code": "const columns: ColumnType[] = [\n  { data: 'name', title: 'Name',\n    render: cell => <strong>{String(cell)}</strong> },\n  { id: 'actions', data: null, title: 'Actions', exportable: false,\n    render: rowRenderer((_cell, row) =>\n      <button type=\"button\" onClick={() => alert(row.name)}>View</button>) },\n];",
+      "note": "Import rowRenderer from the package. Use exportValue: row => ... to format a plain export value without exporting the UI."
+    },
+    {
+      "id": "next",
+      "title": "Next.js",
+      "summary": "Import CSS globally. Put render functions and callbacks in a Client Component.",
+      "sections": [
+        "Next.js"
+      ],
+      "code": "'use client';\nimport Table from 'react-responsive-datatable-kit';\n\nexport default function People() {\n  return <Table mode=\"static\"\n    columns={[{ data: 'name', title: 'Name' }]}\n    staticRows={[{ id: 0, name: 'Mina' }]} />;\n}",
+      "note": "Import 'react-responsive-datatable-kit/styles.css' in app/layout.tsx or pages/_app.tsx. SSR stays enabled."
+    },
+    {
+      "id": "reference",
+      "title": "Props & troubleshooting",
+      "summary": "Look up a prop, its default or a setup issue when you need it.",
+      "sections": [
+        "Public API",
+        "Column reference",
+        "Common setup issues"
+      ]
+    },
+    {
+      "id": "loading",
+      "title": "Loading & skeletons",
+      "summary": "Show loading without changing column widths or creating a flashing horizontal scrollbar.",
+      "preview": "loading",
+      "sections": [
+        "Loading states"
+      ],
+      "code": "<Table mode=\"external\" columns={columns} externalRows={rows}\n  totalItems={total} isLoading={loading} />",
+      "note": "Pass your request loading state. Skeletons only fade; they do not scale. Reduced-motion preferences are respected."
+    }
+  ]
+}

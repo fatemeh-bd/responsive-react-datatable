@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useId } from "react";
 import { ColorTheme, ColumnType, TextsConfig } from "./types";
 import { rowIdentity } from "./data";
 import Skeleton from "./tools/Skeleton";
@@ -7,6 +7,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Virtual } from "swiper/modules";
+import { RowDetailsButton, type RowExpansion } from "./RowDetails";
 
 // کامپوننت کارت جداگانه با memo
 const TableCard = memo(
@@ -16,13 +17,18 @@ const TableCard = memo(
     columns,
     theme,
     rowClassName,
+    expansion,
   }: {
     row: Record<string, any>;
     rowIndex: number;
     columns: ColumnType[];
     theme: ColorTheme;
     rowClassName?: (row: any) => string | undefined | void;
+    expansion?: RowExpansion;
   }) => {
+    const panelId = useId();
+    const expandable = !!expansion?.canExpand(row);
+    const expanded = expandable && !!expansion?.isExpanded(row);
     return (
       <div
         style={{
@@ -61,6 +67,12 @@ const TableCard = memo(
             </div>
           );
         })}
+        {expandable && expansion && <div className="table-card-details">
+          <RowDetailsButton panelId={panelId} expanded={expanded} label={expanded ? expansion.collapseText : expansion.expandText}
+            onToggle={() => expansion.toggle(row)} />
+          <span>{expansion.detailsText}</span>
+          {expanded && <div id={panelId} role="region" aria-label={expansion.detailsText} className="table-row-details">{expansion.render(row, rowIndex)}</div>}
+        </div>}
       </div>
     );
   },
@@ -77,6 +89,7 @@ const MobileTable = ({
   listMode = false,
   rowKey,
   rowClassName,
+  expansion,
 }: {
   columns: ColumnType[];
   isLoading?: boolean;
@@ -86,6 +99,7 @@ const MobileTable = ({
   listMode?: boolean;
   rowKey?: string | ((row: any) => string | number);
   rowClassName?: (row: any) => string | undefined | void;
+  expansion?: RowExpansion;
 }) => {
   return (
     <div className="mobile-table-container">
@@ -127,6 +141,7 @@ const MobileTable = ({
                 columns={columns}
                 theme={theme}
                 rowClassName={rowClassName}
+                expansion={expansion}
               />
             ))}
           </div>
@@ -150,6 +165,7 @@ const MobileTable = ({
                   columns={columns}
                   theme={theme}
                   rowClassName={rowClassName}
+                  expansion={expansion}
                 />
               </SwiperSlide>
             ))}

@@ -39,7 +39,7 @@ const BasicTable = () => {
       searchable: false,
       width: 140,
       render: rowRenderer((_cell, _row) => (
-        <button className="bg-rose-200 rounded-2xl py-1.5 font-bold text-sm px-4 text-black">
+        <button className="bg-neutral-200 rounded-2xl py-1.5 font-bold text-sm px-4 text-black">
           Detail of
           <span className="ml-1">{_row?.contractName?.slice(0, 5)}</span>
         </button>
@@ -56,14 +56,6 @@ const BasicTable = () => {
       pageSize={12}
       height="615px"
       tableName="table1"
-      colorTheme={{
-        backgroundColor: "#000",
-        borderColor: "#364153",
-        cellTextColor: "#fff",
-        headerTextColor: "#fff",
-        headerBackgroundColor: "#364153",
-        primaryColor: "#d24670",
-      }}
       notify={(text) => alert(text)}
     />
   );

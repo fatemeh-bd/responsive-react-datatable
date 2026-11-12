@@ -1,27 +1,13 @@
 import React from "react";
-import Particles from "./components/particles/Particles";
 import { Route, Routes } from "react-router-dom";
 import { routes } from "./routes";
+import DocumentPage from "./pages/documentPage/HomePage";
 
 const App: React.FC = () => {
   return (
     <div className="min-h-[95svh] relative" id="content-wrapper">
-      <div
-        style={{ width: "100%", height: "100svh", position: "absolute" }}
-        className="top-0 -z-40 pointer-events-none"
-      >
-        <Particles
-          particleColors={["#fafafa", "#fafafa"]}
-          particleCount={200}
-          particleSpread={10}
-          speed={0.1}
-          particleBaseSize={100}
-          moveParticlesOnHover={false}
-          alphaParticles={false}
-          disableRotation={false}
-        />
-      </div>
       <Routes>
+        <Route path="/document/:version" element={<DocumentPage />} />
         {routes.map((route,index) => (
           <React.Fragment key={route.path||index}>
             <Route  path={route.path} element={route.element} />

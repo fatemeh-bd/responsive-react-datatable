@@ -5,6 +5,50 @@ Consult release-verification.json for the tested artifact integrity and exact
 React/Next versions; release-security.json records the root dependency audit.
 No npm publication, git push or release tag is performed by this preparation.
 
+## Latest feature candidate verification: 2026-11-12
+
+The package remains `react-responsive-datatable-kit@3.0.0`. New opt-in APIs add
+column visibility, CSV/XLSX/PDF export scopes and formatters, async server export
+rows and expandable details. Public exports and the internal request protocol
+remain intact. The default table is light; explicit hex themes such as #121212
+and root className/style overrides are supported.
+
+The demo is a monochrome light site with the user-supplied logo and favicon.
+English documentation is organized by short examples with View/Code tabs,
+copyable snippets, the original GIF, searchable topics and collapsible reference.
+Version 3.0.0 has its own guide, examples and change notes. Snapshot creation
+refuses overwrite; the package check rejects missing or mismatched release docs.
+No future version or translated documentation is presented as available.
+
+Validation completed:
+
+- All 42 root tests pass, including export contents, visibility, controlled row
+  details, theme/class overrides, hydration and immediate search clearing.
+- All 42 tests pass against the actual tarball with React 18.0.0, 18.3.1, 19.0.0
+  and 19.3.1. TypeScript bundler and NodeNext fixtures pass.
+- Production Next 15.5.29 Pages/App and Next 16.4.6 App pass SSR and desktop/mobile
+  Chrome checks, including real CSV/XLSX/PDF downloads and the new controls.
+- Desktop skeleton geometry is sampled across 2.2 seconds of animation and after
+  data replacement. There is no extra horizontal overflow, scaling or change to
+  header widths and row height in these fixtures. Animation changes opacity only;
+  loading/data share colgroup widths and desktop reserves a scrollbar gutter.
+- Library build/typecheck, package surface and Node SSR checks pass. The complete
+  dist includes lazy export/font chunks and the bundled font's license.
+- Demo build and desktop/mobile documentation checks pass: real logo/favicon,
+  GIF, version routing, clipboard, search, light auto-size example, light Category/
+  Brand controls and mobile filter reset. See documentation-verification.json.
+- Independent openpyxl parsing verified the XLSX sample's text and numeric cells;
+  rendered PDF samples were visually checked, including Persian text direction.
+- A full root dependency audit reports zero vulnerabilities. Next fixture
+  advisories are separate and are not dependencies shipped with the library.
+- npm ci succeeds from the authoritative lockfile in an isolated workspace copy.
+  Root reinstall initially encountered Windows dev-server native-file locks;
+  npm install restored the root install without stopping the user's server.
+
+Exact artifact integrity and combinations are in release-verification.json.
+Screenshots and sample downloads are retained in ignored .release-tests folders.
+This run does not verify Firefox, WebKit, React 16/17 or CommonJS consumers.
+Publication, git push and release tags remain separate manual actions.
 ## Package rename verification: 2026-11-12
 
 The npm package is now named `react-responsive-datatable-kit`, retaining version
@@ -70,7 +114,7 @@ This work remains local; no publication, push or release tag was performed.
 
 ## Release checks
 
-- Root React 18.2: 25 behavioral regressions pass.
+- Root React 18.2: 42 regression/file tests pass.
 - Clean npm ci from package-lock.json succeeds; tests, library build, Node SSR/
   package-surface checks and demo production build pass in an isolated copy.
 - The tarball matrix runs the same regressions with React 18.0, 18.3, 19.0 and

@@ -34,7 +34,7 @@ export default function Modal({ title, isOpen, onClose, children, className = ""
   if (!mounted || !isOpen) return null;
   return createPortal(<div className="rrdt modal-overlay show" onClick={() => onClose()}>
     <div ref={panel} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1}
-      onClick={event => event.stopPropagation()} style={{ backgroundColor: theme.backgroundColor }}
+      onClick={event => event.stopPropagation()} style={{ backgroundColor: theme.backgroundColor, color: theme.cellTextColor }}
       className={`modal-container ${size === "2xl" ? "xxl" : size} open ${className}`}>
       <div className="modal-header-wrapper"><div className="modal-header" style={{ backgroundColor: theme.backgroundColor }}>
         <div id={titleId} className="modal-title">{title}</div>

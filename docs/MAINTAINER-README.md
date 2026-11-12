@@ -12,6 +12,9 @@ into `demo-dist/`. Never publish the demo directory as the npm library.
 Public exports: default and named Table, rowRenderer, ActionDropDown and public
 prop/configuration types. React/React DOM 18/19 and TanStack Query v5 are peers;
 Axios and Swiper are runtime dependencies. Demo packages are dev dependencies.
+File exports load fflate and jsPDF/AutoTable on demand. Rollup emits export/font
+chunks under `dist/chunks/`; publish the entire dist directory, including the
+Vazirmatn font license. The default table entry remains server-safe.
 The npm lockfile is authoritative. The package is ESM (`type: module`), including
 its .d.ts interpretation under NodeNext. Use `.cjs` for CommonJS tooling configs.
 
@@ -48,6 +51,17 @@ uses temporary isolated consumers in `.release-tests/` and no public API service
 Its requests are mocked; Next integration is exercised against local servers.
 Chromium must be installed, or set RELEASE_CHROME_PATH. On this Windows machine
 Chrome was already installed, avoiding a region-blocked Chromium download.
+
+## Documentation versions
+
+Every public API or behavior change must update the README, examples and the
+guide for the release being prepared. Before a new release, set the package
+version, add its CHANGELOG section and run `npm run docs:snapshot`. This writes
+`docs/versions/{version}.md`, matching change notes, example recipes and the version index. The
+command refuses to overwrite an existing snapshot. Keep published snapshots
+unchanged; a new release gets a new document. The website routes are
+`#/document/{version}`. Its live playground is shown only for the running package
+version; archived guides never silently run a newer implementation.
 
 ## Migration / limits
 

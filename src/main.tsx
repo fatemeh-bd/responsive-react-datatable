@@ -15,15 +15,15 @@ root.render(
       <HashRouter>
         <div className="flex">
           <Sidebar />
-          <div className="flex-1 px-4 pt-18 md:pt-12 z-[99] pb-12 max-w-7xl overflow-x-auto mx-auto">
+          <div className="app-main flex-1 px-4 pt-18 md:pt-12 z-[99] pb-12 max-w-7xl overflow-x-auto mx-auto">
             <App />
-            <h2 className="text-lg text-[#d24670] font-bold text-center mt-8">
+            <footer className="site-footer">
               Design with{" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="w-6 h-6 inline text-[#d24670]"
+                className="site-footer-heart"
               >
                 <path
                   d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
@@ -40,7 +40,7 @@ root.render(
               >
                 Fatemeh baridaryan
               </a>{" "}
-            </h2>
+            </footer>
           </div>
         </div>
       </HashRouter>

@@ -68,7 +68,7 @@ const actionButton = () => {
       type="button"
       aria-label="Actions"
       style={{
-        backgroundColor: "#fefefe",
+        backgroundColor: "#f5f5f5", color: "inherit",
       }}
       className="cursor-pointer option-button"
     >
@@ -83,7 +83,7 @@ const managementButton = (text: string) => {
       type="button"
       aria-label="Actions"
       style={{
-        backgroundColor: "#fefefe",
+        backgroundColor: "transparent", color: "inherit",
       }}
       className="cursorPointer option-button managementButton"
     >

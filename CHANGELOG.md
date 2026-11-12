@@ -2,6 +2,20 @@
 
 ## 3.0.0
 
+### New capabilities
+
+- Optional column chooser, initial hidden columns and controlled visibility.
+- CSV, real Excel (.xlsx) and PDF exports with row scopes, hidden-column control,
+  custom export values and async server export data. Export code is loaded on demand.
+- Expandable row details on desktop and mobile, with controlled or default ID state.
+- Hex base-color themes (for example theme="#000"), light/dark presets, partial
+  color overrides and root className/style support. Text and active-control
+  contrast adapt to the supplied hex color.
+- Versioned documentation with per-release guides, change notes, live examples,
+  copyable snippets, theme preview and the original animated table preview.
+- Monochrome light demo site with the supplied logo/favicon. Tables default to
+  white rows and soft-black controls; theme="#121212" opts into a dark palette.
+
 ### Migration
 
 - Minimum React/React DOM is now 18; React 18 and 19 are the supported majors.
@@ -24,6 +38,10 @@
 - Derive the initial API sort index from its field unless explicitly overridden.
 - Apply custom row classes to mobile cards as well as desktop rows.
 - Show an accessible API error state with a retry button without requiring notify.
+- Keep only one search-clear control and clear immediately; use a rotating
+  chevron for expanded-row details on desktop and mobile.
+- Prevent skeleton animation from growing horizontally; preserve column/row
+  geometry and a stable scrollbar gutter when loading changes.
 - Restore named exports and public types; separate demo and library builds.
 - Preserve Next client boundary; guard server render, storage and portals.
 - Correct Hook ordering for dynamic columns and mode changes.

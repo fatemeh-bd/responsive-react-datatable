@@ -3,8 +3,26 @@
 A responsive data table for React 18 and 19, with desktop tables, mobile cards,
 static or server data, search, sorting, pagination, selection and Persian/RTL.
 
-[Live demo](https://fatemeh-bd.github.io/responsive-react-datatable/) ?
+[Live demo](https://fatemeh-bd.github.io/responsive-react-datatable/) ·
 [Migration notes](https://github.com/fatemeh-bd/responsive-react-datatable/blob/main/CHANGELOG.md)
+
+![Responsive table interaction preview](https://raw.githubusercontent.com/fatemeh-bd/responsive-react-datatable/refs/heads/main/table.gif)
+
+Recorded interaction preview. The live examples in the documentation demonstrate
+the current release, including column visibility, file exports and row details.
+
+## Choose your documentation version
+
+Open the [versioned documentation](https://fatemeh-bd.github.io/responsive-react-datatable/#/document)
+and select the version installed in your project. Check it with:
+
+```sh
+npm ls react-responsive-datatable-kit
+```
+
+Each version has its own guide, examples and change notes. Archived documentation
+does not change when a new major version is released. Live playgrounds are shown
+only when they match the version running in the documentation site.
 
 ## Install
 
@@ -50,7 +68,19 @@ export default function People() {
 Static mode derives the count from the supplied rows. Input order is preserved
 until sorted; the third sort click restores input order. Local search respects
 `searchable: false`. Searching resets the page. Sorting works with `noSearch`.
+Search has one clear button, which resets immediately. Sort indicators are compact.
 The table prepends a row-number column, as in previous releases.
+
+## Choose a data mode
+
+| Mode | Give the table | What the table manages | Best fit |
+| --- | --- | --- | --- |
+| `static` | The complete `staticRows` array | Local search, sorting, count and pagination | Small/medium in-memory datasets |
+| `internal` | `internalApiConfig` and the documented API response | Requests, cancellation, cache, loading and interaction state | A compatible paginated endpoint |
+| `external` | The loaded `externalRows`, `totalItems`, loading and callbacks | Rendering and interaction callbacks | Your own fetching layer or custom API protocol |
+
+All three modes support column visibility, row details and file exports. In server
+modes, the table only has the loaded page unless you supply `exportConfig.getRows`.
 
 ## Next.js
 
@@ -164,6 +194,8 @@ Default export and named `Table` refer to the same component. Also exported:
 | `saveSearch` | false; optional sessionStorage persistence, requires `tableName` |
 | `lang` | `en`; `fa` enables Persian labels and RTL |
 | `textsConfig`, `colorTheme` | Override texts/colors; see exported types |
+| `theme` | `light` by default; white rows with soft-black text/controls. Also accepts `dark` or a hex color |
+| `className`, `style` | Additional root class and inline styles; built-in classes are preserved |
 | `height` | Desktop maximum scroll height, e.g. `70vh` |
 | `startMobileSize` | 768; mobile cards below this width |
 | `listMode` | false; use a mobile list instead of swipe cards |
@@ -175,10 +207,201 @@ Default export and named `Table` refer to the same component. Also exported:
 | `removeFilterKey` | Optional sessionStorage key removed when clearing filters |
 | `notify`, `isLoading` | Request notifications / host loading state |
 | `onPageChange`, `onPageSizeChange`, `onSearch`, `onSortChange` | Interaction callbacks |
+| `columnVisibility` | false; show the column chooser |
+| `hiddenColumnIds`, `onHiddenColumnsChange` | Optional controlled column visibility |
+| `defaultHiddenColumnIds` | Initial hidden column IDs for uncontrolled visibility |
+| `exportConfig` | false; `true` enables CSV, Excel and PDF, or pass an `ExportConfig` |
+| `expandableRows` | Optional renderer and expanded-row state; see the example below |
 
 Select-all includes all filtered static rows, or the loaded server page. It keeps
 selected IDs outside that scope. Mobile sorting has no built-in header control;
 server-side sorting can be provided by host-owned controls.
+
+## Show and hide columns
+
+```tsx
+const columns: ColumnType[] = [
+  { data: "name", title: "Name", hideable: false },
+  { data: "email", title: "Email", hidden: true },
+  { id: "actions", data: null, title: "Actions", exportable: false,
+    render: rowRenderer((_cell, row) => <button type="button">View {row.name}</button>) },
+];
+
+<Table mode="static" columns={columns} staticRows={rows} columnVisibility />;
+```
+
+The **Columns** button opens an accessible chooser on desktop and mobile.
+`hidden: true` sets the initial visibility; `hideable: false` locks its checkbox.
+IDs default to the `data` field, or `column-{index}` for `data: null`. Give action
+columns a stable `id`, and use unique IDs when fields repeat.
+
+For controlled visibility, supply `hiddenColumnIds` and update it in
+`onHiddenColumnsChange`. The default props are read at mount. Hiding a column
+changes presentation, not the request schema or search pipeline; use
+`searchable: false` if that field should not be searched.
+
+## Export CSV, Excel or PDF
+
+```tsx
+<Table mode="static" columns={columns} staticRows={rows} columnVisibility
+  exportConfig={{ fileName: "people", formats: ["csv", "xlsx", "pdf"] }} />;
+```
+
+Choose **Export**, a row scope, whether to include hidden columns, and the file
+format. Excel produces a real `.xlsx` workbook with numeric/boolean cells and a
+frozen header. CSV uses UTF-8 with a BOM, quotes cells and neutralizes formula-like
+text. PDF uses a bundled, freely licensed font for Latin and Persian/Arabic text;
+wide tables can continue across pages. Export code is loaded when requested.
+
+| Option | Default / meaning |
+| --- | --- |
+| `formats` | `["csv", "xlsx", "pdf"]`; restrict the available buttons |
+| `fileName` | `table-export`; extension is added automatically |
+| `scope` | `filtered` in static mode; `page` in server modes without `getRows` |
+| `includeHiddenColumns` | false; users can change this in the export dialog |
+| `getRows(context)` | Optional async data source for the chosen export scope |
+| `onError(error)` | Optional additional error handling; the dialog also shows a retryable error |
+
+Only your data columns are exported; built-in selection, numbering and detail
+controls are excluded. Action columns (`data: null`) are excluded unless they
+provide `exportValue`. Set `exportable: false` to exclude a field in every format.
+React renderers are not used for export. Use `exportValue` for formatted data:
+
+```tsx
+{ data: "status", title: "Status",
+  render: rowRenderer(cell => <strong>{String(cell)}</strong>),
+  exportValue: row => row.status === "active" ? "Active" : "Inactive" }
+```
+
+Return a string, number, boolean, Date, null or undefined. Dates export as ISO text.
+The bundled PDF font covers Latin and Persian/Arabic, not every Unicode script.
+
+### Row scopes and server exports
+
+- **All filtered rows:** the filtered, sorted static dataset, across all pages.
+- **Current page:** the currently loaded/displayed rows.
+- **Selected rows:** selected rows that are available in the dataset being exported.
+
+Server mode does not silently fetch every page. Its dialog explains the loaded-row
+limit. To export all matches or selected IDs from other pages, provide `getRows`:
+
+```tsx
+exportConfig={{
+  fileName: "people",
+  scope: "filtered",
+  getRows: async ({ scope, search, order, page, pageSize, selectedIds }) => {
+    const response = await fetch("/api/people/export", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ scope, search, order, page, pageSize, selectedIds }),
+    });
+    if (!response.ok) throw new Error("Export request failed");
+    const body = await response.json();
+    return body.data; // array of rows, not a file or a DataTables envelope
+  },
+}}
+```
+
+This export endpoint is implemented by your application. It should honor the
+requested scope. `selected` exports are also filtered against `selectedIds` using
+`selectedKey`; IDs must use matching string/number types. Export is generated in
+the browser, so use an application-owned export flow for datasets too large to
+load into memory.
+
+## Expand row details
+
+```tsx
+<Table mode="static" columns={columns} staticRows={rows} rowKey="id"
+  expandableRows={{
+    render: row => <section>
+      <h3>{row.name}</h3>
+      <p>{row.email}</p>
+      <p>{row.notes}</p>
+    </section>,
+    canExpand: row => Boolean(row.notes),
+    defaultExpandedRowIds: [0],
+  }} />;
+```
+
+Desktop shows a full-width detail row below its parent. Mobile shows the same
+content inside the card. Details are rendered only when expanded. The toggle
+uses a small downward chevron, rotating upward while open. It
+supports keyboard activation and exposes `aria-expanded` / `aria-controls`.
+
+Stable string/number IDs are required. Use `rowKey` when your data has no `id`;
+rows without a valid ID have no expansion toggle. ID `0` is supported. Expanded
+state follows the ID when sorting or changing pages, and is shared between desktop
+and mobile. Controlled state uses `expandedRowIds` and `onExpandedChange` inside
+`expandableRows`; otherwise use `defaultExpandedRowIds`.
+
+## Loading states
+
+```tsx
+<Table mode="external" columns={columns} externalRows={rows} totalItems={total}
+  isLoading={loading} />
+```
+
+Loading placeholders use the same column widths and row height as the data.
+The animation changes opacity only, so it does not expand into the horizontal
+scroll area. Desktop reserves a stable scrollbar gutter. Reduced-motion settings
+disable the animation.
+
+## Column reference
+
+| Property | Type / default | Purpose |
+| --- | --- | --- |
+| `data` | `string` or `null`, required | Row field, or a custom action cell |
+| `title` | `string`, required | Header and mobile label |
+| `id` | `string`, derived by default | Stable visibility ID |
+| `render` | `(cell, row, index) => ReactNode` | Custom presentation; `rowRenderer` helps with existing callback types |
+| `width` | `number`, optional | Desktop column width in pixels |
+| `orderable` | `boolean`, false | Enable the desktop sorting control |
+| `searchable` | `boolean` | Local search includes fields unless false; API requests send the explicit flag |
+| `hidden` | `boolean`, false | Initial hidden state |
+| `hideable` | `boolean`, true | Whether the chooser can toggle the column |
+| `exportable` | `boolean`, true for data fields | Include the column in file exports |
+| `exportValue` | `(row) => ExportCellValue` | Export a plain value independently of `render` |
+| `dontShowTitleInMobile` | `boolean`, false | Hide the mobile field label |
+| `dontShowDataInMobile` | `boolean`, false | Hide this field in cards; desktop visibility is unchanged |
+
+## Themes and custom styles
+
+```tsx
+<Table mode="static" columns={columns} staticRows={rows}
+  theme="#000"
+  className="people-table"
+  style={{ padding: 16, borderRadius: 16 }}
+  rowClassName={row => row.status === "inactive" ? "muted-person" : undefined}
+/>
+```
+
+The table defaults to light mode: white rows, a pale-gray header, and soft-black
+text and controls. For another palette, pass a hex color such as `theme="#121212"`.
+It sets the table's base surface and derives readable text, header, borders and
+controls automatically; it is not just an accent color. Use `theme="light"` for
+a white table. `dark` is also accepted. `colorTheme` optionally overrides individual colors.
+The root exposes the supplied value in `data-theme` for your CSS.
+
+| `colorTheme` key | Controls |
+| --- | --- |
+| `primaryColor` | Selected checkboxes and active pagination |
+| `primaryTextColor` | Text/checkmarks on the primary color; contrast is derived when omitted |
+| `borderColor` | Table and control borders |
+| `backgroundColor` | Row, card and dialog surfaces |
+| `headerBackgroundColor` | Desktop header background |
+| `headerTextColor` | Header and mobile label text |
+| `cellTextColor` | Data and control text |
+
+Use `className` and `style` for the root layout and your own CSS selectors. Use
+`rowClassName` for desktop rows and mobile cards. Built-in colors are inline, so
+prefer `colorTheme` for color changes. Dialogs are portalled to `document.body`;
+they receive theme colors, but are not descendants of your custom root class.
+
+```css
+.people-table { margin-block: 24px; }
+.people-table .desktop-table-data-cell { padding-block: 14px; }
+.people-table .muted-person { opacity: 0.65; }
+```
 
 ## Common setup issues
 

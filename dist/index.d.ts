@@ -1,6 +1,6 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as React$1 from 'react';
-import React__default, { ReactNode } from 'react';
+import React__default, { CSSProperties, ReactNode } from 'react';
 
 interface PaginationProps {
     totalItems: number;
@@ -19,7 +19,9 @@ interface ColorTheme {
     headerTextColor?: string;
     cellTextColor?: string;
     primaryColor?: string;
+    primaryTextColor?: string;
 }
+type TableTheme = "light" | "dark" | `#${string}`;
 interface DesktopTableProps {
     columns: ColumnType[];
     rows: Record<string, any>[];
@@ -29,6 +31,12 @@ interface DesktopTableProps {
     colorTheme?: ColorTheme;
 }
 interface ColumnType {
+    /** Stable ID for visibility controls; defaults to data or column-{index}. */
+    id?: string;
+    hidden?: boolean;
+    hideable?: boolean;
+    exportable?: boolean;
+    exportValue?: (row: any) => ExportCellValue;
     data: string | null;
     title: string;
     render?: (cell?: unknown, row?: Record<string, any>, index?: number) => React.ReactNode;
@@ -43,6 +51,19 @@ interface TextsConfig {
     noDataText?: string;
     errorText?: string;
     retryText?: string;
+    columnsText?: string;
+    exportText?: string;
+    exportScopeText?: string;
+    exportFilteredText?: string;
+    exportPageText?: string;
+    exportSelectedText?: string;
+    exportVisibleText?: string;
+    exportingText?: string;
+    exportErrorText?: string;
+    exportLoadedText?: string;
+    expandRowText?: string;
+    collapseRowText?: string;
+    rowDetailsText?: string;
     searchPlaceholder?: string;
     firstPaging?: string;
     lastPaging?: string;
@@ -53,6 +74,34 @@ interface TextsConfig {
     close?: string;
 }
 type TableMode = "static" | "external" | "internal";
+type RowId = string | number;
+type ExportFormat = "csv" | "xlsx" | "pdf";
+type ExportScope = "filtered" | "page" | "selected";
+type ExportCellValue = string | number | boolean | Date | null | undefined;
+interface ExportContext {
+    scope: ExportScope;
+    search: string;
+    order: OrderType;
+    page: number;
+    pageSize: number;
+    selectedIds: RowId[];
+}
+interface ExportConfig {
+    formats?: ExportFormat[];
+    fileName?: string;
+    scope?: ExportScope;
+    includeHiddenColumns?: boolean;
+    /** Fetch all required rows in server modes; called only when exporting. */
+    getRows?: (context: ExportContext) => any[] | Promise<any[]>;
+    onError?: (error: Error) => void;
+}
+interface ExpandableRowsConfig {
+    render: (row: any, index: number) => ReactNode;
+    canExpand?: (row: any) => boolean;
+    expandedRowIds?: RowId[];
+    defaultExpandedRowIds?: RowId[];
+    onExpandedChange?: (ids: RowId[]) => void;
+}
 interface CustomBody {
     noRefresh?: boolean;
     isFilter?: boolean;
@@ -90,6 +139,9 @@ interface BaseTableProps {
     startMobileSize?: number;
     columns: ColumnType[];
     colorTheme?: ColorTheme;
+    theme?: TableTheme;
+    className?: string;
+    style?: CSSProperties;
     textsConfig?: TextsConfig;
     lang?: "en" | "fa";
     pageQueryName?: string;
@@ -118,6 +170,12 @@ interface BaseTableProps {
     noPageSize?: boolean;
     rowClassName?: (row: any) => string | undefined | void;
     rowKey?: string | ((row: any) => string | number);
+    columnVisibility?: boolean;
+    hiddenColumnIds?: string[];
+    defaultHiddenColumnIds?: string[];
+    onHiddenColumnsChange?: (ids: string[]) => void;
+    exportConfig?: boolean | ExportConfig;
+    expandableRows?: ExpandableRowsConfig;
 }
 interface Selectable extends BaseTableProps {
     isSelectable: boolean;
@@ -169,4 +227,4 @@ interface ActionDropDownProps {
 declare function ActionDropDown({ options, button, lastItem, text, }: ActionDropDownProps): react_jsx_runtime.JSX.Element;
 
 export { ActionDropDown, _default as Table, _default as default, rowRenderer };
-export type { ActionDropDownProps, AutoPageSizeConfig, BaseTableProps, ColorTheme, ColumnType, CustomBody, DesktopTableProps, ExternalTableProps, InternalModeProps, InternalTableProps, OrderType, PaginationProps, Selectable, StaticModeProps, StaticTableProps, SvgType, TableMode, TableProps, TextsConfig };
+export type { ActionDropDownProps, AutoPageSizeConfig, BaseTableProps, ColorTheme, ColumnType, CustomBody, DesktopTableProps, ExpandableRowsConfig, ExportCellValue, ExportConfig, ExportContext, ExportFormat, ExportScope, ExternalTableProps, InternalModeProps, InternalTableProps, OrderType, PaginationProps, RowId, Selectable, StaticModeProps, StaticTableProps, SvgType, TableMode, TableProps, TableTheme, TextsConfig };

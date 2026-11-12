@@ -37,7 +37,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
   // === Styles
   const baseStyle: React.CSSProperties = {
-    color: "inherit",
+    color: theme.cellTextColor,
     border: `1px solid ${theme.borderColor}`,
     backgroundColor: theme.backgroundColor || "transparent",
     padding: isMobile ? "0 4px" : "0 8px",
@@ -55,7 +55,7 @@ const Pagination: React.FC<PaginationProps> = ({
   const activeStyle: React.CSSProperties = {
     backgroundColor: theme.primaryColor,
     border: `1px solid ${theme.primaryColor}`,
-    color: "inherit",
+    color: theme.primaryTextColor,
   };
 
   const disabledStyle: React.CSSProperties = {

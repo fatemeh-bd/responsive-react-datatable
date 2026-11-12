@@ -1,0 +1,24 @@
+{
+  "version": "3.0.0",
+  "language": "en",
+  "browser": "Chrome",
+  "layouts": [
+    "desktop 1440",
+    "mobile 390"
+  ],
+  "examples": "passed",
+  "siteTheme": "light monochrome",
+  "logoAndFavicon": "passed",
+  "lightTableDefault": "passed",
+  "autoSizeExample": "passed",
+  "filterControls": "desktop + mobile passed",
+  "versionRouting": "passed",
+  "snapshotProtection": "passed",
+  "search": "passed",
+  "originalGif": "passed",
+  "hexTheme": "passed",
+  "singleClearButton": "passed",
+  "rowChevron": "passed",
+  "clipboard": "passed",
+  "overflow": "passed"
+}

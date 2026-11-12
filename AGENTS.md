@@ -13,6 +13,9 @@ generated bundles or raw advisory JSON for routine context.
   Version 3 requires an explicit styles.css import and React >=18; see CHANGELOG.
 - Exact executed compatibility results live in docs/release-verification.json.
   Do not claim untested browser/framework/version combinations are verified.
+- Every public behavior/API change must update its README and versioned guide,
+  change notes and runnable examples. Keep published docs/versions snapshots
+  intact; add a new snapshot for a new release. Never invent a future release.
 
 ## Map
 

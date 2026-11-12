@@ -36,6 +36,7 @@ export const SelectableCheckbox: React.FC<SelectableCheckboxProps> = ({
       ariaLabel={`Select row ${id}`}
       className="selectableCheckbox"
       primaryColor={theme.primaryColor}
+      primaryTextColor={theme.primaryTextColor}
       checked={selectedIds.includes(id)}
       value={id}
       onChange={() => handleCheckboxChange(row)}

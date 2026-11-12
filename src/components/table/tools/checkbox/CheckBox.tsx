@@ -13,6 +13,7 @@ interface CheckboxProps {
   disabled?: boolean;
   defaultChecked?: boolean;
   primaryColor?: string;
+  primaryTextColor?: string;
 }
 
 const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
@@ -29,6 +30,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       disabled = false,
       defaultChecked,
       primaryColor,
+      primaryTextColor,
     },
     ref
   ) => {
@@ -53,6 +55,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         style={{
           backgroundColor: checked ? primaryColor : "transparent",
           borderColor: checked ? primaryColor : "#b8b8b8",
+          color: primaryTextColor || "#111827",
           width: 22,
           height: 22,
         }}

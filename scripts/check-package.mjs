@@ -4,6 +4,11 @@ import assert from "node:assert/strict";
 import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+const docs = JSON.parse(readFileSync(new URL("../docs/versions/index.json", import.meta.url), "utf8"));
+assert.equal(docs.current, pkg.version, "Create versioned documentation before publishing this version");
+for (const suffix of [".md", ".changes.md", ".examples.json"]) {
+  assert(existsSync(`docs/versions/${pkg.version}${suffix}`), `Missing release documentation: ${pkg.version}${suffix}`);
+}
 for (const file of [pkg.main, pkg.module, pkg.types, pkg.exports["./styles.css"]]) {
   assert(existsSync(file), `Missing package target: ${file}`);
 }
@@ -19,4 +24,6 @@ assert(renderToString(createElement(exports.ActionDropDown, { options: [] })).in
 const files = JSON.parse(execFileSync(process.execPath, [process.env.npm_execpath, "pack", "--dry-run", "--ignore-scripts", "--json"], { encoding: "utf8" }))[0].files.map(file => file.path);
 for (const file of files) assert(!/^dist\/(?:assets\/|index\.html|.*\.(?:gif|png))/.test(file), `Demo leaked into package: ${file}`);
 assert(files.includes("LICENSE"));
+assert(files.includes("dist/Vazirmatn-OFL.txt"), "PDF font license must ship with the package");
+assert(files.some(file => /^dist\/chunks\/pdfFont-.*\.mjs$/.test(file)), "Lazy PDF font chunk must ship");
 console.log(`Package surface and Node SSR verified (${files.length} packed files).`);

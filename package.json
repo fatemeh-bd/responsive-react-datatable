@@ -16,40 +16,43 @@
   "module": "dist/index.mjs",
   "dependencies": {
     "axios": "^1.21.0",
+    "fflate": "^0.8.3",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.9",
     "swiper": "^12.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.0",
     "@rollup/plugin-typescript": "^11.1.6",
     "@tailwindcss/postcss": "^4.1.13",
+    "@tanstack/react-query": "^5.90.5",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^18.2.7",
     "@types/react-dom": "^18.2.7",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@vitejs/plugin-react": "^5.0.2",
     "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.0",
     "gh-pages": "^6.3.0",
+    "jsdom": "^26.1.0",
+    "ogl": "^1.0.11",
     "postcss": "^8.5.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "rollup": "^4.18.1",
-    "rollup-plugin-dts": "^6.1.1",
-    "tailwindcss": "^4.1.12",
-    "tslib": "^2.6.3",
-    "typescript": "^5.5.3",
-    "vite": "^7.1.7",
-    "ogl": "^1.0.11",
     "react-icons": "^5.5.0",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.18.0",
     "react-syntax-highlighter": "^16.1.2",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
-    "@tanstack/react-query": "^5.90.5",
-    "vitest": "^5.1.0",
-    "jsdom": "^26.1.0",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.6.1",
-    "@playwright/test": "^1.56.0",
-    "esbuild": "^0.25.0"
+    "rollup": "^4.18.1",
+    "rollup-plugin-dts": "^6.1.1",
+    "tailwindcss": "^4.1.12",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.3",
+    "vite": "^7.1.7",
+    "vitest": "^5.1.0"
   },
   "exports": {
     ".": {
@@ -109,16 +112,18 @@
     "prepublishOnly": "npm run test && npm run build && npm run test:package",
     "predeploy": "npm run build:demo",
     "deploy": "gh-pages -d demo-dist",
-    "test:release": "node scripts/verify-release.mjs"
+    "test:release": "node scripts/verify-release.mjs",
+    "docs:snapshot": "node scripts/snapshot-docs.mjs",
+    "test:docs": "node scripts/verify-docs.mjs"
   },
   "sideEffects": [
     "**/*.css"
   ],
   "types": "dist/index.d.ts",
   "peerDependencies": {
+    "@tanstack/react-query": "^5.90.5",
     "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0",
-    "@tanstack/react-query": "^5.90.5"
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "type": "module"
 }

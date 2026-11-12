@@ -17,6 +17,7 @@ npm.cmd run build
 npm.cmd run test:package
 npm.cmd run test:release
 npm.cmd run build:demo
+npm.cmd run test:docs
 npm.cmd audit --omit=dev --registry=https://registry.npmjs.org/
 ```
 

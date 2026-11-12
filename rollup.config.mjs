@@ -38,13 +38,14 @@ function styles() {
         });
       });
       this.emitFile({ type: "asset", fileName: "styles.css", source: css.toString() });
+      this.emitFile({ type: "asset", fileName: "Vazirmatn-OFL.txt", source: readFileSync("src/components/table/export/Vazirmatn-OFL.txt", "utf8") });
     },
   };
 }
 export default [
   {
     input: "src/index.ts",
-    output: { file: "dist/index.mjs", format: "esm", sourcemap: true, banner: '\"use client\";' },
+    output: { dir: "dist", entryFileNames: "index.mjs", chunkFileNames: "chunks/[name]-[hash].mjs", format: "esm", sourcemap: true, banner: '\"use client\";' },
     external: id => external(id) && !cssImport(id),
     plugins: [styles(), typescript({ tsconfig: "tsconfig.lib.json" })],
     onwarn(warning, warn) {

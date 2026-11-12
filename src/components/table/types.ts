@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, type CSSProperties } from "react";
 
 export interface PaginationProps {
   totalItems: number;
@@ -17,7 +17,9 @@ export interface ColorTheme {
   headerTextColor?: string;
   cellTextColor?: string;
   primaryColor?: string;
+  primaryTextColor?: string;
 }
+export type TableTheme = "light" | "dark" | `#${string}`;
 
 export interface DesktopTableProps {
   columns: ColumnType[];
@@ -29,6 +31,12 @@ export interface DesktopTableProps {
 }
 
 export interface ColumnType {
+  /** Stable ID for visibility controls; defaults to data or column-{index}. */
+  id?: string;
+  hidden?: boolean;
+  hideable?: boolean;
+  exportable?: boolean;
+  exportValue?: (row: any) => ExportCellValue;
   data: string | null;
   title: string;
   render?: (
@@ -47,6 +55,19 @@ export interface TextsConfig {
   noDataText?: string;
   errorText?: string;
   retryText?: string;
+  columnsText?: string;
+  exportText?: string;
+  exportScopeText?: string;
+  exportFilteredText?: string;
+  exportPageText?: string;
+  exportSelectedText?: string;
+  exportVisibleText?: string;
+  exportingText?: string;
+  exportErrorText?: string;
+  exportLoadedText?: string;
+  expandRowText?: string;
+  collapseRowText?: string;
+  rowDetailsText?: string;
   searchPlaceholder?: string;
   firstPaging?: string;
   lastPaging?: string;
@@ -57,6 +78,34 @@ export interface TextsConfig {
   close?: string;
 }
 export type TableMode = "static" | "external" | "internal";
+export type RowId = string | number;
+export type ExportFormat = "csv" | "xlsx" | "pdf";
+export type ExportScope = "filtered" | "page" | "selected";
+export type ExportCellValue = string | number | boolean | Date | null | undefined;
+export interface ExportContext {
+  scope: ExportScope;
+  search: string;
+  order: OrderType;
+  page: number;
+  pageSize: number;
+  selectedIds: RowId[];
+}
+export interface ExportConfig {
+  formats?: ExportFormat[];
+  fileName?: string;
+  scope?: ExportScope;
+  includeHiddenColumns?: boolean;
+  /** Fetch all required rows in server modes; called only when exporting. */
+  getRows?: (context: ExportContext) => any[] | Promise<any[]>;
+  onError?: (error: Error) => void;
+}
+export interface ExpandableRowsConfig {
+  render: (row: any, index: number) => ReactNode;
+  canExpand?: (row: any) => boolean;
+  expandedRowIds?: RowId[];
+  defaultExpandedRowIds?: RowId[];
+  onExpandedChange?: (ids: RowId[]) => void;
+}
 
 export interface CustomBody {
   noRefresh?: boolean;
@@ -96,6 +145,9 @@ export interface BaseTableProps {
   startMobileSize?: number;
   columns: ColumnType[];
   colorTheme?: ColorTheme;
+  theme?: TableTheme;
+  className?: string;
+  style?: CSSProperties;
   textsConfig?: TextsConfig;
   lang?: "en" | "fa";
   pageQueryName?: string;
@@ -124,6 +176,12 @@ export interface BaseTableProps {
   noPageSize?: boolean;
   rowClassName?: (row: any) => string | undefined | void;
   rowKey?: string | ((row: any) => string | number);
+  columnVisibility?: boolean;
+  hiddenColumnIds?: string[];
+  defaultHiddenColumnIds?: string[];
+  onHiddenColumnsChange?: (ids: string[]) => void;
+  exportConfig?: boolean | ExportConfig;
+  expandableRows?: ExpandableRowsConfig;
 }
 
 export interface Selectable extends BaseTableProps {

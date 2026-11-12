@@ -3,10 +3,11 @@ import "./tableStyle.css";
 import React, { useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from "react";
 import { QueryClient, QueryClientContext, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { ColumnType, InternalModeProps, OrderType, Selectable, TableProps } from "./types";
+import type { ColumnType, InternalModeProps, OrderType, RowId, Selectable, TableProps } from "./types";
 import { useIsMobile } from "./hooks/useIsMobile";
 import { useQueryParams } from "./hooks/useQueryParams";
-import { defaultAutoConfig, defaultColorTheme, defaultSize, defaultTexts } from "./tableConfigs";
+import { defaultAutoConfig, defaultSize, defaultTexts } from "./tableConfigs";
+import { resolveTheme } from "./theme";
 import { localRows, positiveInteger, requestConfig } from "./data";
 import DesktopTable from "./DesktopTable";
 import MobileTable from "./MobileTable";
@@ -16,6 +17,9 @@ import SearchBox from "./tools/SearchBox";
 import Modal from "./tools/Modal";
 import { SelectableCheckbox } from "./tools/SelectableCheckbox";
 import { FilterIcon, TrashIcon } from "./icons";
+import { columnId } from "./export/data";
+import type { RowExpansion } from "./RowDetails";
+import TableTools from "./tools/TableTools";
 
 // Keep credentials out of query keys/devtools. Identity is private to its client.
 const credentialScopes = new WeakMap<QueryClient, Map<string, number>>();
@@ -32,6 +36,16 @@ function Table(props: TableProps) {
     pageSize = defaultSize, tableName, isSelectable, noSearch, filters, topFilter,
     onPageChange, onPageSizeChange, onSearch, onSortChange } = props;
   const instanceId = useId();
+  const [internalHiddenIds, setInternalHiddenIds] = useState<string[]>(() => Array.from(new Set([
+    ...(props.defaultHiddenColumnIds || []), ...columns.flatMap((column, index) => column.hidden ? [columnId(column, index)] : []),
+  ])));
+  const hiddenIds = props.hiddenColumnIds ?? internalHiddenIds;
+  const visibleColumns = columns.filter((column, index) => !hiddenIds.includes(columnId(column, index)));
+  const changeHidden = (ids: string[]) => {
+    if (props.hiddenColumnIds === undefined) setInternalHiddenIds(ids);
+    props.onHiddenColumnsChange?.(ids);
+  };
+  const [internalExpandedIds, setInternalExpandedIds] = useState<RowId[]>(() => props.expandableRows?.defaultExpandedRowIds || []);
   const root = useRef<HTMLDivElement>(null);
   const header = useRef<HTMLDivElement>(null);
   const footer = useRef<HTMLDivElement>(null);
@@ -55,7 +69,7 @@ function Table(props: TableProps) {
     searchValue.current = restored;
   }, [searchKey]);
   const config = mode === "internal" ? props.internalApiConfig : undefined;
-  const theme = useMemo(() => ({ ...defaultColorTheme, ...props.colorTheme }), [props.colorTheme]);
+  const theme = useMemo(() => resolveTheme(props.theme, props.colorTheme), [props.theme, props.colorTheme]);
   const texts = useMemo(() => ({ ...defaultTexts[lang], ...props.textsConfig }), [lang, props.textsConfig]);
   const requestColumns = useMemo(() => [{ data: "id", title: texts.row || "", searchable: false, orderable: true }, ...columns]
     .filter(col => col.data !== null).map(col => ({ data: col.data, name: col.data, searchable: !!col.searchable,
@@ -198,6 +212,26 @@ function Table(props: TableProps) {
   const selectableIds: Array<string | number> = Array.from(new Set(selectableRows.map((row: any) => row[selectedKey])
     .filter((id: unknown) => typeof id === "string" || typeof id === "number"))) as Array<string | number>;
   const selectedIds = selectable?.selectedIds || [];
+  const expandedIds = props.expandableRows?.expandedRowIds ?? internalExpandedIds;
+  const expansionId = (row: any): RowId | undefined => {
+    const key = props.rowKey || selectedKey;
+    const id = typeof key === "function" ? key(row) : row[key];
+    return typeof id === "string" || (typeof id === "number" && Number.isFinite(id)) ? id : undefined;
+  };
+  const expansion: RowExpansion | undefined = props.expandableRows ? {
+    canExpand: row => expansionId(row) !== undefined && (props.expandableRows?.canExpand?.(row) ?? true),
+    isExpanded: row => expandedIds.includes(expansionId(row)!),
+    toggle: row => {
+      const id = expansionId(row);
+      if (id === undefined) return;
+      const next = expandedIds.includes(id) ? expandedIds.filter(value => value !== id) : [...expandedIds, id];
+      if (props.expandableRows?.expandedRowIds === undefined) setInternalExpandedIds(next);
+      props.expandableRows?.onExpandedChange?.(next);
+    },
+    render: props.expandableRows.render,
+    expandText: texts.expandRowText || "Expand row", collapseText: texts.collapseRowText || "Collapse row",
+    detailsText: texts.rowDetailsText || "Row details",
+  } : undefined;
   const allSelected = selectableIds.length > 0 && selectableIds.every(id => selectedIds.includes(id));
   const someSelected = selectableIds.some(id => selectedIds.includes(id));
   const selectAll = () => selectable?.onSelectChange?.(allSelected ? selectedIds.filter(id => !selectableIds.includes(id)) : Array.from(new Set([...selectedIds, ...selectableIds])));
@@ -205,33 +239,39 @@ function Table(props: TableProps) {
     ...(selectable ? [{ data: "selectableTable", title: "", width: 50, orderable: false, searchable: false,
       render: (_cell: unknown, row?: any) => <SelectableCheckbox row={row} selectableProps={selectable} theme={theme} /> }] : []),
     { data: "id", title: texts.row || "", render: (_cell, _row, index = 0) => (page - 1) * size + index + 1,
-      orderable: true, width: 70, searchable: false }, ...columns,
+      orderable: true, width: 70, searchable: false }, ...visibleColumns,
   ];
   const loading = props.isLoading || (mode === "internal" && (!ready || query.isFetching || bodyChanged));
   const requestFailed = mode === "internal" && query.isError;
   const activeFilterCount = (config?.customBody || []).filter(item => item.isFilter && Object.entries(item)
     .some(([key, value]) => key !== "isFilter" && key !== "noRefresh" && value != null && value !== "")).length;
   const pageSelect = <PageSizeSelect pageSize={size} initialPageSize={autoSize ?? preferredSize} theme={theme} textsConfig={texts} onPageSizeChange={changeSize} />;
-  return <div ref={root} className="rrdt table-container" dir={dir} aria-busy={!!loading}>
+  return <div ref={root} className={`rrdt table-container ${props.className || ""}`} style={{ color: theme.cellTextColor, backgroundColor: theme.backgroundColor, ...props.style }}
+    data-theme={props.theme || "light"} dir={dir} aria-busy={!!loading}>
     {!isMobile && topFilter && <div ref={top} className={`top-filter-container ${props.topFilterContainerClassName || ""}`}>{topFilter}</div>}
     <div ref={header} className="table-header-actions">
       <div className="search-container-table">
         {!noSearch && <SearchBox value={search} onSearch={changeSearch} theme={theme} mergedTexts={texts} dir={dir} />}
         {!isMobile && filters && <div className={`${props.filterContainerClassName || ""} filter-container-className`}>{filters}</div>}
       </div>
-      {isMobile && (filters || topFilter) && <button type="button" onClick={() => setOpenFilter(true)} style={{ minHeight: 43, background: "#427bd225", color: "#427bd2" }} className="mobile-filter-button">
+      {isMobile && (filters || topFilter) && <button type="button" onClick={() => setOpenFilter(true)} style={{ minHeight: 43, background: theme.headerBackgroundColor, color: theme.headerTextColor }} className="mobile-filter-button">
         {activeFilterCount > 0 && <span className="mobile-filter-badge">{activeFilterCount}</span>}{texts.filterText}<FilterIcon />
       </button>}
-      <div className="actionButtons">{props.actionButtons}{!isMobile && !props.noPageSize && pageSelect}</div>
+      <div className="actionButtons">{props.actionButtons}
+        {(props.columnVisibility || props.exportConfig) && <TableTools columns={columns} hiddenIds={hiddenIds} onHiddenChange={changeHidden}
+          columnVisibility={props.columnVisibility} config={props.exportConfig} context={{ scope: "page", page, pageSize: size, search, order, selectedIds }}
+          pageRows={rows} filteredRows={processed} staticMode={mode === "static"} selectedKey={selectedKey}
+          theme={theme} texts={texts} rtl={dir === "rtl"} disabled={!!loading} />}
+        {!isMobile && !props.noPageSize && pageSelect}</div>
     </div>
     {requestFailed && <div role="alert" className="table-request-error" style={{ borderColor: theme.borderColor, color: theme.cellTextColor }}>
       <span>{texts.errorText}</span>
       <button type="button" disabled={!!loading} onClick={() => { void query.refetch(); }}>{texts.retryText}</button>
     </div>}
-    {(!requestFailed || rows.length > 0) && (isMobile ? <MobileTable columns={displayColumns} rows={rows} isLoading={!!loading} theme={theme} textsConfig={texts} listMode={props.listMode} rowKey={props.rowKey || selectedKey} rowClassName={props.rowClassName} /> :
+    {(!requestFailed || rows.length > 0) && (isMobile ? <MobileTable columns={displayColumns} rows={rows} isLoading={!!loading} theme={theme} textsConfig={texts} listMode={props.listMode} rowKey={props.rowKey || selectedKey} rowClassName={props.rowClassName} expansion={expansion} /> :
       <DesktopTable columns={displayColumns} rows={rows} isLoading={!!loading} theme={theme} textsConfig={texts}
         pageSize={size} maxHeight={props.height || `${(size + 1) * (auto.rowHeight || 51.15)}px`} rowHeight={`${auto.rowHeight || 51.15}px`}
-        rowClassName={props.rowClassName} rowKey={props.rowKey || selectedKey} order={order}
+        rowClassName={props.rowClassName} rowKey={props.rowKey || selectedKey} order={order} expansion={expansion}
         onOrderChange={changeOrder} isAllSelected={allSelected} isIndeterminate={someSelected && !allSelected} onAllSelect={selectAll} />)}
     <div ref={footer} className="table-footer">
       {total > 0 && <Pagination dir={dir} startMobileSize={props.startMobileSize} totalItems={total} pageSize={size}

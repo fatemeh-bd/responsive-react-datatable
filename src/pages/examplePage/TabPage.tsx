@@ -1,7 +1,7 @@
 import { useState, useMemo, ReactNode } from "react";
 import { FaCode, FaRegEye, FaRegCopy } from "react-icons/fa";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { monochromeCodeTheme } from "../../components/codeTheme";
 
 interface TabPageProps {
   view: ReactNode;
@@ -67,7 +67,7 @@ const TabPage = ({ view, code, headerImports }: TabPageProps) => {
               paddingTop: "2.5rem",
             }}
             language="tsx"
-            style={oneDark}
+            style={monochromeCodeTheme}
           >
             {finalCode}
           </SyntaxHighlighter>

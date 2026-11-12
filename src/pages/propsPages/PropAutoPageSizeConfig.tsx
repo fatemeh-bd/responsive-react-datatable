@@ -1,7 +1,7 @@
 import Table from "../../components/table/Table";
 import { ColumnType } from "../../components/table/types";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { monochromeCodeTheme } from "../../components/codeTheme";
 import mock from "../../components/table/mockData.json";
 
 const PropAutoPageSizeConfig = () => {
@@ -59,7 +59,7 @@ const PropAutoPageSizeConfig = () => {
       <h2 className="text-2xl font-semibold">Example Usage</h2>
       <SyntaxHighlighter
         language="tsx"
-        style={oneDark}
+        style={monochromeCodeTheme}
         customStyle={{
           fontSize: "0.85rem",
           borderRadius: "0.5rem",
@@ -128,7 +128,7 @@ const PropAutoPageSizeConfig = () => {
 
       {/* How it Works */}
       <h2 className="text-2xl font-semibold">How It Works</h2>
-      <ol className="list-decimal list-inside space-y-2 text-pink-100">
+      <ol className="list-decimal list-inside space-y-2 text-black sm:text-lg">
         <li>
           <strong className="!text-pink-400">Parent Container:</strong> Measures
           the height of <code>#content-wrapper</code> or your specified
@@ -151,7 +151,7 @@ const PropAutoPageSizeConfig = () => {
 
       {/* Dynamic Example */}
       <h2 className="text-2xl font-semibold">Example with Dynamic Page Size</h2>
-      <div className="border border-gray-800 p-4 rounded bg-gray-900">
+      <div className="border border-gray-800 p-4 rounded">
         <div id="wrapper" className="min-h-[400px]">
           <Table
             tableName="table3"
@@ -166,20 +166,12 @@ const PropAutoPageSizeConfig = () => {
               rowHeight: 51.15,
               baseBufferRows: 2,
             }}
-            colorTheme={{
-              backgroundColor: "#000",
-              borderColor: "#364153",
-              cellTextColor: "#fff",
-              headerTextColor: "#fff",
-              headerBackgroundColor: "#364153",
-              primaryColor: "#d24670",
-            }}
           />
         </div>
       </div>
 
       {/* Tips */}
-      <h2 className="text-2xl flex items-center gap-2 font-bold text-yellow-400">
+      <h2 className="text-2xl flex items-center gap-2 font-bold !text-pink-500">
         <svg
           stroke="currentColor"
           fill="currentColor"
@@ -194,7 +186,7 @@ const PropAutoPageSizeConfig = () => {
         </svg>
         Tips
       </h2>
-      <ul className="list-disc list-inside space-y-1 text-gray-200">
+      <ul className="list-disc list-inside space-y-1 !text-pink-500 sm:text-lg">
         <li>
           Always point <code>containerSelector</code> to the main wrapper of
           your table.

@@ -16,7 +16,8 @@ export default function SearchBox({ value, onSearch, theme, mergedTexts, dir }: 
   }, [input, value]);
   return <div className="table-search-container"><div className="table-search-wrapper">
     <div className="table-search-input-container" style={{ borderColor: theme.borderColor, backgroundColor: theme.backgroundColor }}>
-      {input ? <button type="button" className="table-search-clear-button" aria-label={dir === "rtl" ? "پاک کردن جستجو" : "Clear search"} onClick={() => setInput("")}><CloseIcon className="table-search-clear-icon" /></button> : <SearchIcon className="table-search-icon" />}
+      {input ? <button type="button" className="table-search-clear-button" aria-label={dir === "rtl" ? "پاک کردن جستجو" : "Clear search"}
+        onClick={() => { setInput(""); callback.current(""); }}><CloseIcon className="table-search-clear-icon" /></button> : <SearchIcon className="table-search-icon" />}
       <input type="search" aria-label={mergedTexts.searchPlaceholder || "Search"} value={input}
         placeholder={mergedTexts.searchPlaceholder} className="table-search-input" onChange={event => setInput(event.target.value)} />
     </div></div></div>;

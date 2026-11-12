@@ -1,6 +1,6 @@
 import axios from "axios";
 import Table from "../../components/table/Table";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { ColumnType } from "../../components/table/types";
 import { useQuery } from "@tanstack/react-query";
 import { rowRenderer } from "../../components/table/helper";
@@ -45,7 +45,7 @@ const FiltersTable = () => {
       width: 140,
       render: rowRenderer((_cell, _row) => (
         <button
-          className="bg-[#d24670] rounded-2xl px-4 py-1"
+          className="bg-[#333333] text-white rounded-2xl px-4 py-1"
           onClick={() => alert(_row?.title)}
         >
           click me
@@ -108,15 +108,7 @@ const FiltersTable = () => {
       pageSize={6}
       height="570px"
       tableName="table1"
-      colorTheme={{
-        backgroundColor: "#000",
-        borderColor: "#364153",
-        cellTextColor: "#fff",
-        headerTextColor: "#fff",
-        headerBackgroundColor: "#364153",
-        primaryColor: "#d24670",
-      }}
-      // ✅ filters must be wrapped in Fragment (<> </>)
+      onClearFilters={() => { setSelectedCategory(""); setSelectedBrand(""); setPage(1); }}
       filters={
         <>
           <SelectBox
@@ -188,16 +180,14 @@ const SelectBox: React.FC<SelectBoxProps> = ({
   value,
   onChange,
 }) => {
+  const id = useId();
   return (
-    <div className="flex flex-col gap-1 w-full">
-      <span className="text-xs capitalize">{label}</span>
+    <div className="demo-filter-field">
+      <label className="demo-filter-label" htmlFor={id}>{label}</label>
       <div className="relative">
         <select
-          style={{
-            borderColor: "#364153",
-            backgroundColor: "#000",
-          }}
-          className="page-size-select cursorPointer !px-3 appearance-none pr-6"
+          id={id}
+          className="demo-filter-select"
           value={value}
           onChange={(e) => onChange?.(e.target.value)}
         >
