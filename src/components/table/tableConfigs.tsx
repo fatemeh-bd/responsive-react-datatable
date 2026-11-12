@@ -9,6 +9,8 @@ export const defaultTexts: {
   en: {
     row: "Row",
     noDataText: "No data available",
+    errorText: "Unable to load data",
+    retryText: "Try again",
     firstPaging: "First",
     lastPaging: "Last",
     showing: (from: number, to: number, total: string) =>
@@ -22,6 +24,8 @@ export const defaultTexts: {
   fa: {
     row: "ردیف",
     noDataText: "اطلاعاتی برای نمایش وجود ندارد",
+    errorText: "دریافت اطلاعات ناموفق بود",
+    retryText: "تلاش دوباره",
     firstPaging: "اولین",
     lastPaging: "آخرین",
     showing: (from: number, to: number, total: string) =>

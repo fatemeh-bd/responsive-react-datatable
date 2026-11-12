@@ -5,7 +5,7 @@ generated bundles or raw advisory JSON for routine context.
 
 ## Product and requirements
 
-- npm library: responsive-react-datatable. React/React DOM 18 and 19 are the
+- npm library: react-responsive-datatable-kit. React/React DOM 18 and 19 are the
   supported majors; 16/17 are explicitly out of scope. Validate future majors.
 - The user authorized stabilizing BOTH dev and main for a manual npm release.
   Do not publish, push, or create a release tag without a separate instruction.

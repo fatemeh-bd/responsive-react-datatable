@@ -1,3 +1,3 @@
-import "responsive-react-datatable/styles.css";
+import "react-responsive-datatable-kit/styles.css";
 import type { AppProps } from "next/app";
 export default function App({ Component, pageProps }: AppProps) { return <Component {...pageProps} />; }

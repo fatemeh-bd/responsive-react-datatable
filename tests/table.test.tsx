@@ -5,7 +5,7 @@ import { hydrateRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
-import Table, { ActionDropDown, type ColumnType } from "responsive-react-datatable";
+import Table, { ActionDropDown, type ColumnType } from "react-responsive-datatable-kit";
 import { localRows, positiveInteger, requestConfig } from "../src/components/table/data";
 vi.mock("axios", () => ({ default: vi.fn() }));
 beforeEach(() => { vi.mocked(axios).mockReset(); });
@@ -78,6 +78,28 @@ describe("existing table interactions", () => {
     expect(tables[0].textContent).toContain("Bob");
     expect(tables[1].querySelector("tbody")?.textContent).toContain("Zoe");
   });
+  it("notifies the host once when URL page size changes, including a restored deep link", async () => {
+    window.history.replaceState({ host: true }, "", "/?pageSize=20&host=yes#details");
+    const onPageSizeChange = vi.fn();
+    render(<StrictMode><Table mode="external" columns={columns} externalRows={rows} totalItems={100}
+      onPageSizeChange={onPageSizeChange} /></StrictMode>);
+    await waitFor(() => expect(onPageSizeChange).toHaveBeenCalledExactlyOnceWith(20));
+    act(() => window.history.pushState({ host: true }, "", "/?pageSize=50&host=yes#details"));
+    expect(onPageSizeChange).toHaveBeenLastCalledWith(50);
+    fireEvent.change(screen.getByRole("combobox"), { target: { value: "100" } });
+    expect(onPageSizeChange.mock.calls.map(([size]) => size)).toEqual([20, 50, 100]);
+    expect(window.history.state).toEqual({ host: true });
+    expect(window.location.hash).toBe("#details");
+    expect(window.location.search).toContain("host=yes");
+  });
+  it("applies custom row classes in mobile lists and swipe cards", () => {
+    Object.defineProperty(window, "innerWidth", { value: 375, writable: true });
+    const rowClassName = (row: any) => row.id === 0 ? "highlight-person" : undefined;
+    const view = render(<Table {...props} listMode rowClassName={rowClassName} />);
+    expect(document.querySelector(".mobile-table-card.highlight-person")?.textContent).toContain("Zoe");
+    view.rerender(<Table {...props} rowClassName={rowClassName} />);
+    expect(document.querySelector(".mobile-table-card.highlight-person")?.textContent).toContain("Zoe");
+  });
   it("observes host history changes and browser back/forward events", async () => {
     render(<Table {...props} />);
     act(() => window.history.pushState({ host: true }, "", "/?page=2#host"));
@@ -104,6 +126,29 @@ describe("requests and SSR", () => {
     await screen.findByText("Zoe");
     expect(axios).toHaveBeenCalledWith(expect.objectContaining({ url: "/api", params: expect.objectContaining({ start: 4, length: 2 }), signal: expect.any(AbortSignal) }));
     expect(window.location.search).toContain("page=3");
+  });
+  it("maps the initial sort field to its request column unless an explicit index is supplied", async () => {
+    vi.mocked(axios).mockResolvedValue({ data: { data: rows, recordsFiltered: 3 } });
+    const config = { endpoint: "/sorted", defaultSortBy: "name", sortType: "asc" as const };
+    const view = render(<Table mode="internal" columns={[{ data: null, title: "Actions" }, ...columns]} internalApiConfig={config} />);
+    await screen.findByText("Zoe");
+    expect(axios).toHaveBeenLastCalledWith(expect.objectContaining({ data: expect.objectContaining({
+      order: [{ column: 1, name: "name", dir: "asc" }],
+    }) }));
+    view.rerender(<Table mode="internal" columns={columns} internalApiConfig={config} columnNumber={0} />);
+    await waitFor(() => expect(axios).toHaveBeenLastCalledWith(expect.objectContaining({ data: expect.objectContaining({
+      order: [{ column: 0, name: "name", dir: "asc" }],
+    }) })));
+  });
+  it("shows a request error without notify and lets the user retry", async () => {
+    vi.mocked(axios).mockRejectedValueOnce(new Error("Offline")).mockResolvedValueOnce({ data: { data: rows, recordsFiltered: 3 } });
+    render(<Table mode="internal" columns={columns} internalApiConfig={{ endpoint: "/retry" }} />);
+    expect((await screen.findByRole("alert")).textContent).toContain("Unable to load data");
+    expect(screen.queryByText("No data available")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
+    await screen.findByText("Zoe");
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(axios).toHaveBeenCalledTimes(2);
   });
   it("renders fresh cache on remount without invoking queryFn", async () => {
     vi.mocked(axios).mockClear().mockResolvedValue({ data: { data: rows, recordsFiltered: 3 } });

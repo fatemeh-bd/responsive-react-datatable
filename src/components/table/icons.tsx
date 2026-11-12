@@ -89,7 +89,7 @@ export const SearchIcon = ({
       strokeWidth="0"
       viewBox="0 0 24 24"
       className={className}
-      xmlns="http://www.w3.org/200it style0/svg"
+      xmlns="http://www.w3.org/2000/svg"
     >
       <path
         fillRule="evenodd"

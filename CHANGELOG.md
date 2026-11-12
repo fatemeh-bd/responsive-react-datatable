@@ -5,7 +5,7 @@
 ### Migration
 
 - Minimum React/React DOM is now 18; React 18 and 19 are the supported majors.
-- Import `responsive-react-datatable/styles.css` once in the application's global
+- Import `react-responsive-datatable-kit/styles.css` once in the application's global
   entry or Next root layout. Styles are scoped and extracted instead of injected.
 - Internal mode works with the host's TanStack Query v5 provider, or a private
   client when no provider is present. Query v5 is an explicit peer dependency.
@@ -20,6 +20,10 @@
 
 ### Fixes
 
+- Synchronize page-size callbacks with deep links, host navigation and automatic sizing.
+- Derive the initial API sort index from its field unless explicitly overridden.
+- Apply custom row classes to mobile cards as well as desktop rows.
+- Show an accessible API error state with a retry button without requiring notify.
 - Restore named exports and public types; separate demo and library builds.
 - Preserve Next client boundary; guard server render, storage and portals.
 - Correct Hook ordering for dynamic columns and mode changes.

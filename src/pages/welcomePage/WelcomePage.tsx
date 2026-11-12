@@ -8,7 +8,7 @@ const Step1 = () => (
     <h2 className="text-2xl font-bold mb-4">Step 1: Installation</h2>
     <p>Install the package using npm or yarn.</p>
     <pre className="mt-4 md:p-4 p-3 text-wrap rounded bg-[#364153]">
-      npm install responsive-react-datatable
+      npm install react-responsive-datatable-kit @tanstack/react-query
     </pre>
   </div>
 );
@@ -19,7 +19,8 @@ const Step2 = () => (
     <p>Import and configure the datatable in your component.</p>
 
     <pre className="mt-4 p-4 text-wrap rounded bg-[#364153] text-white">
-      {`import { DataTable } from 'responsive-react-datatable'`}
+      {`import Table from 'react-responsive-datatable-kit';
+import 'react-responsive-datatable-kit/styles.css';`}
     </pre>
     <p className="mt-4">
       This is the <strong>minimal setup</strong> with the fewest props. For more
@@ -96,22 +97,22 @@ const WelcomePage = () => {
       <div className="w-full min-h-[90vh] flex flex-col items-center justify-center p-2">
         {/* Heading */}
         <a
-          href="https://www.npmjs.com/package/responsive-react-datatable"
+          href="https://www.npmjs.com/package/react-responsive-datatable-kit"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 hover:text-gray-300"
         >
           <FaNpm className="text-6xl text-orange-300" />
           <span className="text-2xl text-orange-300">
-            responsive-react-datatable
+            react-responsive-datatable-kit
           </span>
         </a>
         <h1
           className="text-3xl md:text-4xl font-extrabold mb-6 text-[#d24670] flex items-center text-center gap-2"
           role="heading"
-          aria-label="Welcome to Responsive React Datatable"
+          aria-label="Welcome to React Responsive DataTable Kit"
         >
-          Welcome to Responsive React Datatable
+          Welcome to React Responsive DataTable Kit
         </h1>
 
         {/* Description */}

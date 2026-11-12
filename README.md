@@ -1,4 +1,4 @@
-# Responsive React DataTable
+# React Responsive DataTable Kit
 
 A responsive data table for React 18 and 19, with desktop tables, mobile cards,
 static or server data, search, sorting, pagination, selection and Persian/RTL.
@@ -9,7 +9,7 @@ static or server data, search, sorting, pagination, selection and Persian/RTL.
 ## Install
 
 ```sh
-npm install responsive-react-datatable @tanstack/react-query
+npm install react-responsive-datatable-kit @tanstack/react-query
 ```
 
 React and React DOM must use matching supported versions (`^18.0.0 || ^19.0.0`).
@@ -20,16 +20,21 @@ This package is ESM. Future React major versions require separate verification.
 Import the stylesheet once in your application entry:
 
 ```tsx
-import "responsive-react-datatable/styles.css";
+import "react-responsive-datatable-kit/styles.css";
 ```
 
 Version 3 extracts and scopes CSS instead of injecting it into the document.
 No Tailwind installation is required.
 
-## Static rows
+## Quick start: static rows
+
+This example works in a React/Vite application without a QueryClientProvider or
+Tailwind. Supply the complete rows array; filtering, sorting and pagination run
+locally.
 
 ```tsx
-import Table, { type ColumnType } from "responsive-react-datatable";
+import Table, { type ColumnType } from "react-responsive-datatable-kit";
+import "react-responsive-datatable-kit/styles.css";
 
 const columns: ColumnType[] = [
   { data: "name", title: "Name", searchable: true, orderable: true },
@@ -59,7 +64,7 @@ Client Component:
 
 ```tsx
 "use client";
-import Table, { rowRenderer, type ColumnType } from "responsive-react-datatable";
+import Table, { rowRenderer, type ColumnType } from "react-responsive-datatable-kit";
 const columns: ColumnType[] = [
   { data: "name", title: "Name" },
   { data: null, title: "Action", render: rowRenderer((_cell, row) =>
@@ -77,7 +82,7 @@ of compatibility with every historical or future Next release.
 ## Internal API mode
 
 ```tsx
-import Table from "responsive-react-datatable";
+import Table from "react-responsive-datatable-kit";
 
 <Table mode="internal" tableName="people" columns={columns}
   internalApiConfig={{
@@ -94,6 +99,9 @@ import Table from "responsive-react-datatable";
 The table uses a surrounding QueryClientProvider when present, otherwise a
 private client. Requests are cancelled when obsolete. Query data/loading/errors
 are derived from the active request, including fresh cached results.
+Failed requests display an accessible error message and a **Try again** button,
+even without `notify`. Customize these with `textsConfig.errorText` and
+`textsConfig.retryText`; `notify` remains available for your own notifications.
 GET sends query parameters; POST sends JSON data. `baseUrl` is optional, and
 absolute endpoints are supported. Never pass private server credentials through
 client props.
@@ -129,7 +137,9 @@ The host owns fetching and passes the loaded page, total count and loading flag:
 ```
 
 Callbacks also notify the host when search/sizing resets the page or a deep-linked
-page is restored. Pass stable row IDs with `rowKey` when data does not use `id`.
+page or page size is restored. `onPageSizeChange` also runs when the effective
+size changes through browser navigation or automatic sizing; it fires once per
+size change. Pass stable row IDs with `rowKey` when data does not use `id`.
 
 ## Public API
 
@@ -158,8 +168,8 @@ Default export and named `Table` refer to the same component. Also exported:
 | `startMobileSize` | 768; mobile cards below this width |
 | `listMode` | false; use a mobile list instead of swipe cards |
 | `autoPageSizeConfig` | Disabled by default; containerSelector, rowHeight, subtractSelectors and row buffers |
-| `columnNumber` | Initial request sort column index, when defaultSortBy is configured |
-| `rowClassName` | `(row) => string`; optional row styling |
+| `columnNumber` | Optional override for the initial request sort index; otherwise derived from `defaultSortBy` |
+| `rowClassName` | `(row) => string`; applied to desktop rows and mobile cards |
 | `filters`, `topFilter`, `actionButtons` | Host-owned content slots |
 | `onClearFilters` | Reset host-owned filters; clearing no longer reloads the app |
 | `removeFilterKey` | Optional sessionStorage key removed when clearing filters |
@@ -169,6 +179,16 @@ Default export and named `Table` refer to the same component. Also exported:
 Select-all includes all filtered static rows, or the loaded server page. It keeps
 selected IDs outside that scope. Mobile sorting has no built-in header control;
 server-side sorting can be provided by host-owned controls.
+
+## Common setup issues
+
+| Symptom | What to check |
+| --- | --- |
+| Table is unstyled | Import `react-responsive-datatable-kit/styles.css` once; in Next, use the root layout or `_app.tsx` |
+| Next rejects function props | Put render functions and callbacks inside a component marked `"use client"` |
+| Two tables change pages together | Give each table distinct `pageQueryName` and `pageSizeQueryName` values |
+| Selection or state follows the wrong row | Use stable, unique IDs; configure `rowKey` and `selectedKey` for your data |
+| API mode cannot show results | Return `{ data: [...], recordsFiltered: total }`; external mode expects the loaded page and the filtered total separately |
 
 ## Development and release
 

@@ -78,6 +78,8 @@ const defaultTexts = {
     en: {
         row: "Row",
         noDataText: "No data available",
+        errorText: "Unable to load data",
+        retryText: "Try again",
         firstPaging: "First",
         lastPaging: "Last",
         showing: (from, to, total) => `Showing ${from} to ${to} of ${total} records`,
@@ -90,6 +92,8 @@ const defaultTexts = {
     fa: {
         row: "ردیف",
         noDataText: "اطلاعاتی برای نمایش وجود ندارد",
+        errorText: "دریافت اطلاعات ناموفق بود",
+        retryText: "تلاش دوباره",
         firstPaging: "اولین",
         lastPaging: "آخرین",
         showing: (from, to, total) => `نمایش ${from} تا ${to} از ${total} رکورد`,
@@ -165,7 +169,7 @@ const CloseIcon = ({ onClick, className, style = {}, }) => {
     return (jsx("svg", { style: style, onClick: onClick, className: className, stroke: "currentColor", fill: "none", strokeWidth: "0", viewBox: "0 0 24 24", height: "1rem", width: "1rem", xmlns: "http://www.w3.org/2000/svg", children: jsx("path", { d: "M6.2253 4.81108C5.83477 4.42056 5.20161 4.42056 4.81108 4.81108C4.42056 5.20161 4.42056 5.83477 4.81108 6.2253L10.5858 12L4.81114 17.7747C4.42062 18.1652 4.42062 18.7984 4.81114 19.1889C5.20167 19.5794 5.83483 19.5794 6.22535 19.1889L12 13.4142L17.7747 19.1889C18.1652 19.5794 18.7984 19.5794 19.1889 19.1889C19.5794 18.7984 19.5794 18.1652 19.1889 17.7747L13.4142 12L19.189 6.2253C19.5795 5.83477 19.5795 5.20161 19.189 4.81108C18.7985 4.42056 18.1653 4.42056 17.7748 4.81108L12 10.5858L6.2253 4.81108Z", fill: "currentColor" }) }));
 };
 const SearchIcon = ({ className, style = {}, }) => {
-    return (jsx("svg", { style: style, stroke: "currentColor", fill: "none", strokeWidth: "0", viewBox: "0 0 24 24", className: className, xmlns: "http://www.w3.org/200it style0/svg", children: jsx("path", { fillRule: "evenodd", clipRule: "evenodd", d: "M18.319 14.4326C20.7628 11.2941 20.542 6.75347 17.6569 3.86829C14.5327 0.744098 9.46734 0.744098 6.34315 3.86829C3.21895 6.99249 3.21895 12.0578 6.34315 15.182C9.22833 18.0672 13.769 18.2879 16.9075 15.8442C16.921 15.8595 16.9351 15.8745 16.9497 15.8891L21.1924 20.1317C21.5829 20.5223 22.2161 20.5223 22.6066 20.1317C22.9971 19.7412 22.9971 19.1081 22.6066 18.7175L18.364 14.4749C18.3493 14.4603 18.3343 14.4462 18.319 14.4326ZM16.2426 5.28251C18.5858 7.62565 18.5858 11.4246 16.2426 13.7678C13.8995 16.1109 10.1005 16.1109 7.75736 13.7678C5.41421 11.4246 5.41421 7.62565 7.75736 5.28251C10.1005 2.93936 13.8995 2.93936 16.2426 5.28251Z", fill: "currentColor" }) }));
+    return (jsx("svg", { style: style, stroke: "currentColor", fill: "none", strokeWidth: "0", viewBox: "0 0 24 24", className: className, xmlns: "http://www.w3.org/2000/svg", children: jsx("path", { fillRule: "evenodd", clipRule: "evenodd", d: "M18.319 14.4326C20.7628 11.2941 20.542 6.75347 17.6569 3.86829C14.5327 0.744098 9.46734 0.744098 6.34315 3.86829C3.21895 6.99249 3.21895 12.0578 6.34315 15.182C9.22833 18.0672 13.769 18.2879 16.9075 15.8442C16.921 15.8595 16.9351 15.8745 16.9497 15.8891L21.1924 20.1317C21.5829 20.5223 22.2161 20.5223 22.6066 20.1317C22.9971 19.7412 22.9971 19.1081 22.6066 18.7175L18.364 14.4749C18.3493 14.4603 18.3343 14.4462 18.319 14.4326ZM16.2426 5.28251C18.5858 7.62565 18.5858 11.4246 16.2426 13.7678C13.8995 16.1109 10.1005 16.1109 7.75736 13.7678C5.41421 11.4246 5.41421 7.62565 7.75736 5.28251C10.1005 2.93936 13.8995 2.93936 16.2426 5.28251Z", fill: "currentColor" }) }));
 };
 const TrashIcon = () => {
     return (jsxs("svg", { stroke: "currentColor", fill: "currentColor", strokeWidth: "0", viewBox: "0 0 24 24", height: "20px", width: "20px", xmlns: "http://www.w3.org/2000/svg", children: [jsx("path", { d: "M16 1.75V3h5.25a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1 0-1.5H8V1.75C8 .784 8.784 0 9.75 0h4.5C15.216 0 16 .784 16 1.75Zm-6.5 0V3h5V1.75a.25.25 0 0 0-.25-.25h-4.5a.25.25 0 0 0-.25.25ZM4.997 6.178a.75.75 0 1 0-1.493.144L4.916 20.92a1.75 1.75 0 0 0 1.742 1.58h10.684a1.75 1.75 0 0 0 1.742-1.581l1.413-14.597a.75.75 0 0 0-1.494-.144l-1.412 14.596a.25.25 0 0 1-.249.226H6.658a.25.25 0 0 1-.249-.226L4.997 6.178Z" }), jsx("path", { d: "M9.206 7.501a.75.75 0 0 1 .793.705l.5 8.5A.75.75 0 1 1 9 16.794l-.5-8.5a.75.75 0 0 1 .705-.793Zm6.293.793A.75.75 0 1 0 14 8.206l-.5 8.5a.75.75 0 0 0 1.498.088l.5-8.5Z" })] }));
@@ -222,11 +226,11 @@ function DesktopTable({ columns, rows, pageSize, theme, textsConfig, isLoading, 
 var DesktopTable$1 = memo(DesktopTable);
 
 // کامپوننت کارت جداگانه با memo
-const TableCard = memo(({ row, rowIndex, columns, theme, }) => {
+const TableCard = memo(({ row, rowIndex, columns, theme, rowClassName, }) => {
     return (jsx("div", { style: {
             background: theme?.backgroundColor,
             borderColor: theme?.borderColor,
-        }, className: "mobile-table-card shadowSmall", children: columns.map((column, colIndex) => {
+        }, className: `mobile-table-card shadowSmall ${rowClassName?.(row) || ""}`, children: columns.map((column, colIndex) => {
             const cellKey = column.data;
             const content = column.render ? column.render(cellKey ? row[cellKey] : undefined, row, rowIndex) : cellKey ? row[cellKey] : null;
             return column?.dontShowDataInMobile ? null : (jsxs("div", { className: "mobile-table-card-row", children: [column?.title === "عملیات" ||
@@ -237,10 +241,10 @@ const TableCard = memo(({ row, rowIndex, columns, theme, }) => {
         }) }));
 });
 TableCard.displayName = "TableCard";
-const MobileTable = ({ columns, isLoading, rows, theme, textsConfig, listMode = false, rowKey, }) => {
+const MobileTable = ({ columns, isLoading, rows, theme, textsConfig, listMode = false, rowKey, rowClassName, }) => {
     return (jsx("div", { className: "mobile-table-container", children: isLoading ? (jsx("div", { className: "mobile-table-skeleton-container space-items", children: Array.from({ length: 3 }).map((_, index) => (jsx("div", { className: "mobile-table-skeleton-card shadowSmall", children: columns.map((column, colIndex) => column?.dontShowDataInMobile ? null : (jsxs("div", { className: "mobile-table-skeleton-row", children: [column?.title === "عملیات" ||
                             column?.data === null ||
-                            column?.dontShowTitleInMobile ? null : (jsx(Skeleton, { className: "mobile-table-skeleton-item", style: { width: "40%", margin: 0 }, height: "20px" })), jsx(Skeleton, { className: "mobile-table-skeleton-item", style: { width: "60%", margin: 0 }, height: "20px" })] }, colIndex))) }, index))) })) : rows?.length > 0 ? (listMode ? (jsx("div", { className: "mobile-table-list-container", children: rows.map((row, rowIndex) => (jsx(TableCard, { row: row, rowIndex: rowIndex, columns: columns, theme: theme }, rowIdentity(row, rowIndex, rowKey)))) })) : (jsx(Swiper, { className: "mobile-table-swiper", slidesPerView: rows?.length === 1 ? 1 : 1.1, spaceBetween: 10, modules: [Virtual], virtual: true, children: rows.map((row, rowIndex) => (jsx(SwiperSlide, { virtualIndex: rowIndex, className: "mobile-table-swiper-slide", children: jsx(TableCard, { row: row, rowIndex: rowIndex, columns: columns, theme: theme }) }, rowIdentity(row, rowIndex, rowKey)))) }))) : (jsx("p", { className: "mobile-table-empty-message", children: textsConfig?.noDataText })) }));
+                            column?.dontShowTitleInMobile ? null : (jsx(Skeleton, { className: "mobile-table-skeleton-item", style: { width: "40%", margin: 0 }, height: "20px" })), jsx(Skeleton, { className: "mobile-table-skeleton-item", style: { width: "60%", margin: 0 }, height: "20px" })] }, colIndex))) }, index))) })) : rows?.length > 0 ? (listMode ? (jsx("div", { className: "mobile-table-list-container", children: rows.map((row, rowIndex) => (jsx(TableCard, { row: row, rowIndex: rowIndex, columns: columns, theme: theme, rowClassName: rowClassName }, rowIdentity(row, rowIndex, rowKey)))) })) : (jsx(Swiper, { className: "mobile-table-swiper", slidesPerView: rows?.length === 1 ? 1 : 1.1, spaceBetween: 10, modules: [Virtual], virtual: true, children: rows.map((row, rowIndex) => (jsx(SwiperSlide, { virtualIndex: rowIndex, className: "mobile-table-swiper-slide", children: jsx(TableCard, { row: row, rowIndex: rowIndex, columns: columns, theme: theme, rowClassName: rowClassName }) }, rowIdentity(row, rowIndex, rowKey)))) }))) : (jsx("p", { className: "mobile-table-empty-message", children: textsConfig?.noDataText })) }));
 };
 
 const rowRenderer = (fn) => {
@@ -527,21 +531,34 @@ function Table(props) {
         searchValue.current = restored;
     }, [searchKey]);
     const config = mode === "internal" ? props.internalApiConfig : undefined;
+    const theme = useMemo(() => ({ ...defaultColorTheme, ...props.colorTheme }), [props.colorTheme]);
+    const texts = useMemo(() => ({ ...defaultTexts[lang], ...props.textsConfig }), [lang, props.textsConfig]);
+    const requestColumns = useMemo(() => [{ data: "id", title: texts.row || "", searchable: false, orderable: true }, ...columns]
+        .filter(col => col.data !== null).map(col => ({ data: col.data, name: col.data, searchable: !!col.searchable,
+        orderable: !!col.orderable, search: { value: "", regex: false, fixed: [] } })), [columns, texts.row]);
+    const initialSortColumn = props.columnNumber ?? Math.max(0, requestColumns.findIndex(col => col.data === config?.defaultSortBy));
     const defaultOrder = config?.defaultSortBy ? {
-        column: props.columnNumber ?? 0, dir: config.sortType ?? "desc", name: config.defaultSortBy,
+        column: initialSortColumn, dir: config.sortType ?? "desc", name: config.defaultSortBy,
     } : null;
     const [order, setOrder] = useState(defaultOrder);
     useEffect(() => {
-        setOrder(config?.defaultSortBy ? { column: props.columnNumber ?? 0, dir: config.sortType ?? "desc", name: config.defaultSortBy } : null);
-    }, [mode, config?.defaultSortBy, config?.sortType, props.columnNumber]);
-    const theme = useMemo(() => ({ ...defaultColorTheme, ...props.colorTheme }), [props.colorTheme]);
-    const texts = useMemo(() => ({ ...defaultTexts[lang], ...props.textsConfig }), [lang, props.textsConfig]);
+        setOrder(config?.defaultSortBy ? { column: initialSortColumn, dir: config.sortType ?? "desc", name: config.defaultSortBy } : null);
+    }, [mode, config?.defaultSortBy, config?.sortType, initialSortColumn]);
     const dir = lang === "fa" ? "rtl" : "ltr";
     const [autoSize, setAutoSize] = useState(null);
     const auto = useMemo(() => ({ ...defaultAutoConfig, ...props.autoPageSizeConfig }), [props.autoPageSizeConfig]);
     const preferredSize = positiveInteger(pageSize, defaultSize);
     const size = positiveInteger(getParams(pageSizeQueryName), auto.enabled && !isMobile ? autoSize ?? preferredSize : preferredSize);
     const requestedPage = positiveInteger(getParams(pageQueryName), 1);
+    const previousSize = useRef(preferredSize);
+    const sizeCallback = useRef(onPageSizeChange);
+    useEffect(() => { sizeCallback.current = onPageSizeChange; }, [onPageSizeChange]);
+    useEffect(() => {
+        if (previousSize.current !== size) {
+            previousSize.current = size;
+            sizeCallback.current?.(size);
+        }
+    }, [size]);
     useEffect(() => {
         if (!auto.enabled || isMobile)
             return;
@@ -591,9 +608,6 @@ function Table(props) {
     const processed = useMemo(() => localRows(staticRows, columns, search, order), [staticRows, columns, search, order]);
     const preliminaryTotal = mode === "static" ? processed.length : mode === "external" ? Math.max(0, props.totalItems || 0) : 0;
     const preliminaryPage = mode === "static" ? Math.min(requestedPage, Math.max(1, Math.ceil(preliminaryTotal / size))) : requestedPage;
-    const requestColumns = useMemo(() => [{ data: "id", title: texts.row || "", searchable: false, orderable: true }, ...columns]
-        .filter(col => col.data !== null).map(col => ({ data: col.data, name: col.data, searchable: !!col.searchable,
-        orderable: !!col.orderable, search: { value: "", regex: false, fixed: [] } })), [columns, texts.row]);
     const refreshBody = JSON.stringify((config?.customBody || []).filter(item => !item.noRefresh));
     const previousBody = useRef(null);
     const previousMode = useRef(mode);
@@ -672,7 +686,6 @@ function Table(props) {
     };
     const changeSize = (next) => {
         setParams({ [pageSizeQueryName]: String(positiveInteger(next, preferredSize)), [pageQueryName]: "1" });
-        onPageSizeChange?.(positiveInteger(next, preferredSize));
     };
     const changeOrder = (next) => {
         const index = next ? requestColumns.findIndex(col => col.data === next.name) : -1;
@@ -700,11 +713,12 @@ function Table(props) {
             orderable: true, width: 70, searchable: false }, ...columns,
     ];
     const loading = props.isLoading || (mode === "internal" && (!ready || query.isFetching || bodyChanged));
+    const requestFailed = mode === "internal" && query.isError;
     const activeFilterCount = (config?.customBody || []).filter(item => item.isFilter && Object.entries(item)
         .some(([key, value]) => key !== "isFilter" && key !== "noRefresh" && value != null && value !== "")).length;
     const pageSelect = jsx(PageSizeSelect, { pageSize: size, initialPageSize: autoSize ?? preferredSize, theme: theme, textsConfig: texts, onPageSizeChange: changeSize });
-    return jsxs("div", { ref: root, className: "rrdt table-container", dir: dir, "aria-busy": !!loading, children: [!isMobile && topFilter && jsx("div", { ref: top, className: `top-filter-container ${props.topFilterContainerClassName || ""}`, children: topFilter }), jsxs("div", { ref: header, className: "table-header-actions", children: [jsxs("div", { className: "search-container-table", children: [!noSearch && jsx(SearchBox, { value: search, onSearch: changeSearch, theme: theme, mergedTexts: texts, dir: dir }), !isMobile && filters && jsx("div", { className: `${props.filterContainerClassName || ""} filter-container-className`, children: filters })] }), isMobile && (filters || topFilter) && jsxs("button", { type: "button", onClick: () => setOpenFilter(true), style: { minHeight: 43, background: "#427bd225", color: "#427bd2" }, className: "mobile-filter-button", children: [activeFilterCount > 0 && jsx("span", { className: "mobile-filter-badge", children: activeFilterCount }), texts.filterText, jsx(FilterIcon, {})] }), jsxs("div", { className: "actionButtons", children: [props.actionButtons, !isMobile && !props.noPageSize && pageSelect] })] }), isMobile ? jsx(MobileTable, { columns: displayColumns, rows: rows, isLoading: !!loading, theme: theme, textsConfig: texts, listMode: props.listMode, rowKey: props.rowKey || selectedKey }) :
-                jsx(DesktopTable$1, { columns: displayColumns, rows: rows, isLoading: !!loading, theme: theme, textsConfig: texts, pageSize: size, maxHeight: props.height || `${(size + 1) * (auto.rowHeight || 51.15)}px`, rowHeight: `${auto.rowHeight || 51.15}px`, rowClassName: props.rowClassName, rowKey: props.rowKey || selectedKey, order: order, onOrderChange: changeOrder, isAllSelected: allSelected, isIndeterminate: someSelected && !allSelected, onAllSelect: selectAll }), jsxs("div", { ref: footer, className: "table-footer", children: [total > 0 && jsx(Pagination, { dir: dir, startMobileSize: props.startMobileSize, totalItems: total, pageSize: size, queryName: pageQueryName, theme: theme, textsConfig: texts, currentPage: page, onChangePage: changePage }), isMobile && !props.noPageSize && pageSelect] }), jsxs(Modal, { size: "lg", title: texts.filterText, isOpen: openFilter, onClose: () => setOpenFilter(false), className: "filter-modal", theme: theme, children: [jsxs("div", { className: "filter-modal-content space-items", children: [filters, topFilter] }), jsxs("div", { className: "filter-modal-actions", children: [jsx("button", { type: "button", onClick: () => setOpenFilter(false), className: "filter-modal-close-button", children: texts.close }), jsxs("button", { type: "button", className: "filter-modal-clear-button", onClick: () => {
+    return jsxs("div", { ref: root, className: "rrdt table-container", dir: dir, "aria-busy": !!loading, children: [!isMobile && topFilter && jsx("div", { ref: top, className: `top-filter-container ${props.topFilterContainerClassName || ""}`, children: topFilter }), jsxs("div", { ref: header, className: "table-header-actions", children: [jsxs("div", { className: "search-container-table", children: [!noSearch && jsx(SearchBox, { value: search, onSearch: changeSearch, theme: theme, mergedTexts: texts, dir: dir }), !isMobile && filters && jsx("div", { className: `${props.filterContainerClassName || ""} filter-container-className`, children: filters })] }), isMobile && (filters || topFilter) && jsxs("button", { type: "button", onClick: () => setOpenFilter(true), style: { minHeight: 43, background: "#427bd225", color: "#427bd2" }, className: "mobile-filter-button", children: [activeFilterCount > 0 && jsx("span", { className: "mobile-filter-badge", children: activeFilterCount }), texts.filterText, jsx(FilterIcon, {})] }), jsxs("div", { className: "actionButtons", children: [props.actionButtons, !isMobile && !props.noPageSize && pageSelect] })] }), requestFailed && jsxs("div", { role: "alert", className: "table-request-error", style: { borderColor: theme.borderColor, color: theme.cellTextColor }, children: [jsx("span", { children: texts.errorText }), jsx("button", { type: "button", disabled: !!loading, onClick: () => { void query.refetch(); }, children: texts.retryText })] }), (!requestFailed || rows.length > 0) && (isMobile ? jsx(MobileTable, { columns: displayColumns, rows: rows, isLoading: !!loading, theme: theme, textsConfig: texts, listMode: props.listMode, rowKey: props.rowKey || selectedKey, rowClassName: props.rowClassName }) :
+                jsx(DesktopTable$1, { columns: displayColumns, rows: rows, isLoading: !!loading, theme: theme, textsConfig: texts, pageSize: size, maxHeight: props.height || `${(size + 1) * (auto.rowHeight || 51.15)}px`, rowHeight: `${auto.rowHeight || 51.15}px`, rowClassName: props.rowClassName, rowKey: props.rowKey || selectedKey, order: order, onOrderChange: changeOrder, isAllSelected: allSelected, isIndeterminate: someSelected && !allSelected, onAllSelect: selectAll })), jsxs("div", { ref: footer, className: "table-footer", children: [total > 0 && jsx(Pagination, { dir: dir, startMobileSize: props.startMobileSize, totalItems: total, pageSize: size, queryName: pageQueryName, theme: theme, textsConfig: texts, currentPage: page, onChangePage: changePage }), isMobile && !props.noPageSize && pageSelect] }), jsxs(Modal, { size: "lg", title: texts.filterText, isOpen: openFilter, onClose: () => setOpenFilter(false), className: "filter-modal", theme: theme, children: [jsxs("div", { className: "filter-modal-content space-items", children: [filters, topFilter] }), jsxs("div", { className: "filter-modal-actions", children: [jsx("button", { type: "button", onClick: () => setOpenFilter(false), className: "filter-modal-close-button", children: texts.close }), jsxs("button", { type: "button", className: "filter-modal-clear-button", onClick: () => {
                                     changeSearch("");
                                     try {
                                         if (props.removeFilterKey)

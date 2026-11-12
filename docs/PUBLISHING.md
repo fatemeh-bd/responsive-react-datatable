@@ -33,8 +33,8 @@ version; if necessary, choose an appropriate new version and repeat verification
 
 ```powershell
 git switch main
-npm.cmd view responsive-react-datatable dist-tags --json --registry=https://registry.npmjs.org/
-npm.cmd view responsive-react-datatable@3.0.0 version --registry=https://registry.npmjs.org/
+npm.cmd view react-responsive-datatable-kit dist-tags --json --registry=https://registry.npmjs.org/
+npm.cmd view react-responsive-datatable-kit@3.0.0 version --registry=https://registry.npmjs.org/
 npm.cmd login --registry=https://registry.npmjs.org/
 npm.cmd publish --dry-run
 ```

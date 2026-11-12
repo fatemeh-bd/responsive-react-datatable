@@ -1,4 +1,4 @@
-import "responsive-react-datatable/styles.css";
+import "react-responsive-datatable-kit/styles.css";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return <html lang="en"><body>{children}</body></html>;
 }

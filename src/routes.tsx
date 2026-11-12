@@ -43,7 +43,8 @@ export const routes = [
         path: "/example/static",
         element: (
           <TabPage
-            headerImports={`import Table, {type ColumnType, rowRenderer, } from 'responsive-react-datatable';
+            headerImports={`import "react-responsive-datatable-kit/styles.css";
+import Table, {type ColumnType, rowRenderer, } from 'react-responsive-datatable-kit';
 import mock from "../../components/table/mockData.json";`}
             view={<BasicTable />}
             code={BasicTableCode}
@@ -56,7 +57,8 @@ import mock from "../../components/table/mockData.json";`}
         path: "/example/external",
         element: (
           <TabPage
-            headerImports={`import Table , { type ColumnType , rowRenderer} from 'responsive-react-datatable';
+            headerImports={`import "react-responsive-datatable-kit/styles.css";
+import Table , { type ColumnType , rowRenderer} from 'react-responsive-datatable-kit';
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";`}
@@ -70,7 +72,8 @@ import { useState } from "react";`}
         path: "/example/internal",
         element: (
           <TabPage
-            headerImports={`import Table , { type ColumnType , rowRenderer} from 'responsive-react-datatable';`}
+            headerImports={`import "react-responsive-datatable-kit/styles.css";
+import Table , { type ColumnType , rowRenderer} from 'react-responsive-datatable-kit';`}
             view={
               <>
                 <InternalNotes />
@@ -86,7 +89,8 @@ import { useState } from "react";`}
         path: "/example/staticAutoPageSize",
         element: (
           <TabPage
-            headerImports={`import Table, {type ColumnType, rowRenderer, ActionDropDown} from 'responsive-react-datatable';`}
+            headerImports={`import "react-responsive-datatable-kit/styles.css";
+import Table, {type ColumnType, rowRenderer, ActionDropDown} from 'react-responsive-datatable-kit';`}
             view={<StaticAutoPageSizeTable />}
             code={StaticAutoPageSizeTableCode}
           />
@@ -97,7 +101,8 @@ import { useState } from "react";`}
         path: "/example/filters",
         element: (
           <TabPage
-            headerImports={`import Table , { type ColumnType , rowRenderer} from 'responsive-react-datatable';
+            headerImports={`import "react-responsive-datatable-kit/styles.css";
+import Table , { type ColumnType , rowRenderer} from 'react-responsive-datatable-kit';
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";

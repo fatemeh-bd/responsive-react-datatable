@@ -796,3 +796,26 @@
         z-index: -1;
     }
 }
+.table-request-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 24px;
+  border: 1px solid;
+  border-radius: 12px;
+}
+.table-request-error button {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.table-request-error button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}

@@ -15,11 +15,13 @@ const TableCard = memo(
     rowIndex,
     columns,
     theme,
+    rowClassName,
   }: {
     row: Record<string, any>;
     rowIndex: number;
     columns: ColumnType[];
     theme: ColorTheme;
+    rowClassName?: (row: any) => string | undefined | void;
   }) => {
     return (
       <div
@@ -27,7 +29,7 @@ const TableCard = memo(
           background: theme?.backgroundColor,
           borderColor: theme?.borderColor,
         }}
-        className="mobile-table-card shadowSmall"
+        className={`mobile-table-card shadowSmall ${rowClassName?.(row) || ""}`}
       >
         {columns.map((column, colIndex) => {
           const cellKey = column.data;
@@ -74,6 +76,7 @@ const MobileTable = ({
   textsConfig,
   listMode = false,
   rowKey,
+  rowClassName,
 }: {
   columns: ColumnType[];
   isLoading?: boolean;
@@ -82,6 +85,7 @@ const MobileTable = ({
   textsConfig: TextsConfig;
   listMode?: boolean;
   rowKey?: string | ((row: any) => string | number);
+  rowClassName?: (row: any) => string | undefined | void;
 }) => {
   return (
     <div className="mobile-table-container">
@@ -122,6 +126,7 @@ const MobileTable = ({
                 rowIndex={rowIndex}
                 columns={columns}
                 theme={theme}
+                rowClassName={rowClassName}
               />
             ))}
           </div>
@@ -144,6 +149,7 @@ const MobileTable = ({
                   rowIndex={rowIndex}
                   columns={columns}
                   theme={theme}
+                  rowClassName={rowClassName}
                 />
               </SwiperSlide>
             ))}

@@ -1,6 +1,6 @@
 {
-  "artifact": "responsive-react-datatable-3.0.0.tgz",
-  "sha512": "sha512-CuotVMyZwsagB49C3LuVqotRuOU6kXPA8hztaHcwwdJjZrwZu0WMyGnLXCrsvJm5vg+2D5x6/fgJ/eINSac61A==",
+  "artifact": "react-responsive-datatable-kit-3.0.0.tgz",
+  "sha512": "sha512-btRqu7XQxL8s/GlYDff14z2DMYe0IGcY4oztqTbHf0IFhKYxNdjxFQua9YANB9bbSBEPufQrcizvjx+7h+XrfA==",
   "results": [
     {
       "name": "react18-min",
@@ -33,7 +33,9 @@
       "build": "passed",
       "ssr": "passed",
       "hydration": "desktop + mobile passed",
-      "css": "passed"
+      "css": "passed",
+      "requestRecovery": "desktop + mobile passed",
+      "rowClasses": "desktop + mobile passed"
     },
     {
       "name": "next15-app",
@@ -42,24 +44,20 @@
       "build": "passed",
       "ssr": "passed",
       "hydration": "desktop + mobile passed",
-      "css": "passed"
+      "css": "passed",
+      "requestRecovery": "desktop + mobile passed",
+      "rowClasses": "desktop + mobile passed"
     },
     {
       "name": "next16-app",
       "react": "19.3.1",
-      "next": "16.4.5",
+      "next": "16.4.6",
       "build": "passed",
       "ssr": "passed",
       "hydration": "desktop + mobile passed",
-      "css": "passed"
+      "css": "passed",
+      "requestRecovery": "desktop + mobile passed",
+      "rowClasses": "desktop + mobile passed"
     }
-  ],
-  "postMergeVerification": {
-    "tests": "21 passed",
-    "typecheck": "passed",
-    "libraryBuild": "passed",
-    "packageSurfaceAndNodeSSR": "passed",
-    "javascriptCssAndDeclarations": "match tested tarball after CRLF/LF normalization",
-    "sourceMapDifference": "source-content line endings only"
-  }
+  ]
 }

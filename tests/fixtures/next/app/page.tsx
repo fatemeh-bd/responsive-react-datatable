@@ -1,4 +1,4 @@
-import Table, { ActionDropDown } from "responsive-react-datatable";
+import Table, { ActionDropDown } from "react-responsive-datatable-kit";
 import Interactive from "../Interactive";
 export default function Page() {
   return <main><h1>Release consumer</h1><Table mode="static"

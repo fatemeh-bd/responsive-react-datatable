@@ -45,6 +45,8 @@ export interface ColumnType {
 export interface TextsConfig {
   row?: string;
   noDataText?: string;
+  errorText?: string;
+  retryText?: string;
   searchPlaceholder?: string;
   firstPaging?: string;
   lastPaging?: string;

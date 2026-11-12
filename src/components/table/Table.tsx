@@ -55,21 +55,34 @@ function Table(props: TableProps) {
     searchValue.current = restored;
   }, [searchKey]);
   const config = mode === "internal" ? props.internalApiConfig : undefined;
+  const theme = useMemo(() => ({ ...defaultColorTheme, ...props.colorTheme }), [props.colorTheme]);
+  const texts = useMemo(() => ({ ...defaultTexts[lang], ...props.textsConfig }), [lang, props.textsConfig]);
+  const requestColumns = useMemo(() => [{ data: "id", title: texts.row || "", searchable: false, orderable: true }, ...columns]
+    .filter(col => col.data !== null).map(col => ({ data: col.data, name: col.data, searchable: !!col.searchable,
+      orderable: !!col.orderable, search: { value: "", regex: false, fixed: [] } })), [columns, texts.row]);
+  const initialSortColumn = props.columnNumber ?? Math.max(0, requestColumns.findIndex(col => col.data === config?.defaultSortBy));
   const defaultOrder: OrderType = config?.defaultSortBy ? {
-    column: props.columnNumber ?? 0, dir: config.sortType ?? "desc", name: config.defaultSortBy,
+    column: initialSortColumn, dir: config.sortType ?? "desc", name: config.defaultSortBy,
   } : null;
   const [order, setOrder] = useState<OrderType>(defaultOrder);
   useEffect(() => {
-    setOrder(config?.defaultSortBy ? { column: props.columnNumber ?? 0, dir: config.sortType ?? "desc", name: config.defaultSortBy } : null);
-  }, [mode, config?.defaultSortBy, config?.sortType, props.columnNumber]);
-  const theme = useMemo(() => ({ ...defaultColorTheme, ...props.colorTheme }), [props.colorTheme]);
-  const texts = useMemo(() => ({ ...defaultTexts[lang], ...props.textsConfig }), [lang, props.textsConfig]);
+    setOrder(config?.defaultSortBy ? { column: initialSortColumn, dir: config.sortType ?? "desc", name: config.defaultSortBy } : null);
+  }, [mode, config?.defaultSortBy, config?.sortType, initialSortColumn]);
   const dir = lang === "fa" ? "rtl" : "ltr";
   const [autoSize, setAutoSize] = useState<number | null>(null);
   const auto = useMemo(() => ({ ...defaultAutoConfig, ...props.autoPageSizeConfig }), [props.autoPageSizeConfig]);
   const preferredSize = positiveInteger(pageSize, defaultSize);
   const size = positiveInteger(getParams(pageSizeQueryName), auto.enabled && !isMobile ? autoSize ?? preferredSize : preferredSize);
   const requestedPage = positiveInteger(getParams(pageQueryName), 1);
+  const previousSize = useRef(preferredSize);
+  const sizeCallback = useRef(onPageSizeChange);
+  useEffect(() => { sizeCallback.current = onPageSizeChange; }, [onPageSizeChange]);
+  useEffect(() => {
+    if (previousSize.current !== size) {
+      previousSize.current = size;
+      sizeCallback.current?.(size);
+    }
+  }, [size]);
 
   useEffect(() => {
     if (!auto.enabled || isMobile) return;
@@ -109,9 +122,6 @@ function Table(props: TableProps) {
   const processed = useMemo(() => localRows(staticRows, columns, search, order), [staticRows, columns, search, order]);
   const preliminaryTotal = mode === "static" ? processed.length : mode === "external" ? Math.max(0, props.totalItems || 0) : 0;
   const preliminaryPage = mode === "static" ? Math.min(requestedPage, Math.max(1, Math.ceil(preliminaryTotal / size))) : requestedPage;
-  const requestColumns = useMemo(() => [{ data: "id", title: texts.row || "", searchable: false, orderable: true }, ...columns]
-    .filter(col => col.data !== null).map(col => ({ data: col.data, name: col.data, searchable: !!col.searchable,
-      orderable: !!col.orderable, search: { value: "", regex: false, fixed: [] } })), [columns, texts.row]);
   const refreshBody = JSON.stringify((config?.customBody || []).filter(item => !item.noRefresh));
   const previousBody = useRef<string | null>(null);
   const previousMode = useRef(mode);
@@ -173,7 +183,6 @@ function Table(props: TableProps) {
   };
   const changeSize = (next: number) => {
     setParams({ [pageSizeQueryName]: String(positiveInteger(next, preferredSize)), [pageQueryName]: "1" });
-    onPageSizeChange?.(positiveInteger(next, preferredSize));
   };
   const changeOrder = (next: OrderType) => {
     const index = next ? requestColumns.findIndex(col => col.data === next.name) : -1;
@@ -199,6 +208,7 @@ function Table(props: TableProps) {
       orderable: true, width: 70, searchable: false }, ...columns,
   ];
   const loading = props.isLoading || (mode === "internal" && (!ready || query.isFetching || bodyChanged));
+  const requestFailed = mode === "internal" && query.isError;
   const activeFilterCount = (config?.customBody || []).filter(item => item.isFilter && Object.entries(item)
     .some(([key, value]) => key !== "isFilter" && key !== "noRefresh" && value != null && value !== "")).length;
   const pageSelect = <PageSizeSelect pageSize={size} initialPageSize={autoSize ?? preferredSize} theme={theme} textsConfig={texts} onPageSizeChange={changeSize} />;
@@ -214,11 +224,15 @@ function Table(props: TableProps) {
       </button>}
       <div className="actionButtons">{props.actionButtons}{!isMobile && !props.noPageSize && pageSelect}</div>
     </div>
-    {isMobile ? <MobileTable columns={displayColumns} rows={rows} isLoading={!!loading} theme={theme} textsConfig={texts} listMode={props.listMode} rowKey={props.rowKey || selectedKey} /> :
+    {requestFailed && <div role="alert" className="table-request-error" style={{ borderColor: theme.borderColor, color: theme.cellTextColor }}>
+      <span>{texts.errorText}</span>
+      <button type="button" disabled={!!loading} onClick={() => { void query.refetch(); }}>{texts.retryText}</button>
+    </div>}
+    {(!requestFailed || rows.length > 0) && (isMobile ? <MobileTable columns={displayColumns} rows={rows} isLoading={!!loading} theme={theme} textsConfig={texts} listMode={props.listMode} rowKey={props.rowKey || selectedKey} rowClassName={props.rowClassName} /> :
       <DesktopTable columns={displayColumns} rows={rows} isLoading={!!loading} theme={theme} textsConfig={texts}
         pageSize={size} maxHeight={props.height || `${(size + 1) * (auto.rowHeight || 51.15)}px`} rowHeight={`${auto.rowHeight || 51.15}px`}
         rowClassName={props.rowClassName} rowKey={props.rowKey || selectedKey} order={order}
-        onOrderChange={changeOrder} isAllSelected={allSelected} isIndeterminate={someSelected && !allSelected} onAllSelect={selectAll} />}
+        onOrderChange={changeOrder} isAllSelected={allSelected} isIndeterminate={someSelected && !allSelected} onAllSelect={selectAll} />)}
     <div ref={footer} className="table-footer">
       {total > 0 && <Pagination dir={dir} startMobileSize={props.startMobileSize} totalItems={total} pageSize={size}
         queryName={pageQueryName} theme={theme} textsConfig={texts} currentPage={page} onChangePage={changePage} />}

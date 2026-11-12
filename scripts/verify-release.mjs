@@ -30,7 +30,7 @@ const tsconfig = { compilerOptions: { target: "ES2020", lib: ["dom", "esnext"], 
 function consumer(name, react, next) {
   const cwd = join(runRoot, name); mkdirSync(cwd, { recursive: true });
   writeFileSync(join(cwd, "package.json"), JSON.stringify({ name: `release-${name}`, private: true, type: "module",
-    dependencies: { "responsive-react-datatable": tarball, react, "react-dom": react, ...(next ? { next } : {}) },
+    dependencies: { "react-responsive-datatable-kit": tarball, react, "react-dom": react, ...(next ? { next } : {}) },
     devDependencies: { typescript: "^5.9.3", "@types/react": react.startsWith("18") ? "^18" : "^19", "@types/react-dom": react.startsWith("18") ? "^18" : "^19", "@types/node": "^22",
       ...(!next ? { vitest: "^5.1.0", jsdom: "^26.1.0", "@testing-library/react": "^16.3.0", axios: "^1.21.0" } : {}) } }, null, 2));
   cpSync(join(root, "tests/fixtures/consumer.tsx"), join(cwd, "consumer.tsx"));
@@ -41,7 +41,7 @@ for (const [name, react] of [["react18-min", "18.0.0"], ["react18", "18.3.1"], [
   const cwd = consumer(name, react);
   cpSync(join(root, "tests"), join(cwd, "tests"), { recursive: true });
   cpSync(join(root, "src"), join(cwd, "src"), { recursive: true });
-  writeFileSync(join(cwd, "vitest.config.mjs"), 'import {defineConfig} from "vitest/config"; export default defineConfig({test:{server:{deps:{inline:["responsive-react-datatable"]}},environment:"jsdom",include:["tests/**/*.test.{ts,tsx}"],setupFiles:["./tests/setup.ts"],restoreMocks:true}});');
+  writeFileSync(join(cwd, "vitest.config.mjs"), 'import {defineConfig} from "vitest/config"; export default defineConfig({test:{server:{deps:{inline:["react-responsive-datatable-kit"]}},environment:"jsdom",include:["tests/**/*.test.{ts,tsx}"],setupFiles:["./tests/setup.ts"],restoreMocks:true}});');
   await npm(["install"], cwd);
   await run([join(cwd, "node_modules/typescript/bin/tsc"), "--noEmit"], cwd);
   await run([join(cwd, "node_modules/typescript/bin/tsc"), "--noEmit", "--module", "NodeNext", "--moduleResolution", "NodeNext"], cwd);
@@ -86,9 +86,20 @@ try {
         const page = await browser.newPage({ viewport: { width: mobile ? 375 : 1280, height: 800 } });
         // The fixture has no favicon; its absence is unrelated to package assets.
         await page.route("**/favicon.ico", route => route.fulfill({ status: 204, body: "" }));
+        let requestAttempts = 0;
+        await page.route("**/api/retry-fixture*", route => route.fulfill({ status: 200, contentType: "application/json",
+          body: JSON.stringify(++requestAttempts === 1 ? { data: "invalid" } :
+            { data: [{ id: 7, name: "Recovered person" }], recordsFiltered: 1 }) }));
         const errors = []; page.on("pageerror", error => errors.push(error.message));
         page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
         await page.goto(url); await page.getByText("Packed React", { exact: true }).waitFor();
+        const recovery = page.getByRole("region", { name: "Request recovery" });
+        await recovery.getByRole("alert").waitFor();
+        assert.equal(await recovery.getByRole("alert").evaluate(el => getComputedStyle(el).borderRadius), "12px");
+        await recovery.getByRole("button", { name: "Try again" }).click();
+        await recovery.getByText("Recovered person", { exact: true }).waitFor();
+        assert.equal(requestAttempts, 2, "A failed request can be retried without notify or a host provider");
+        assert(await page.locator(".interactive-person-row").count() > 0, "Custom row classes must survive responsive rendering");
         if (!mobile) {
           assert.equal(await page.locator(".desktop-table-container").first().evaluate(el => getComputedStyle(el).borderRadius), "12px");
           await page.getByRole("button", { name: "Next page", exact: true }).click();
@@ -113,7 +124,8 @@ try {
         await page.close();
       }
       results.push({ name, react: JSON.parse(readFileSync(join(cwd, "node_modules/react/package.json"))).version,
-        next: JSON.parse(readFileSync(join(cwd, "node_modules/next/package.json"))).version, build: "passed", ssr: "passed", hydration: "desktop + mobile passed", css: "passed" });
+        next: JSON.parse(readFileSync(join(cwd, "node_modules/next/package.json"))).version, build: "passed", ssr: "passed", hydration: "desktop + mobile passed", css: "passed",
+        requestRecovery: "desktop + mobile passed", rowClasses: "desktop + mobile passed" });
     } finally { child.kill(); }
   }
 } finally { await browser?.close(); }

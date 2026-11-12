@@ -5,6 +5,47 @@ Consult release-verification.json for the tested artifact integrity and exact
 React/Next versions; release-security.json records the root dependency audit.
 No npm publication, git push or release tag is performed by this preparation.
 
+## Package rename verification: 2026-11-12
+
+The npm package is now named `react-responsive-datatable-kit`, retaining version
+3.0.0. Installation/import examples, demo npm links, the lockfile, test aliases
+and packed consumer fixtures use the new name. GitHub repository and demo hosting
+URLs retain their existing paths. The internal query cache namespace is unchanged.
+
+The root 21-test suite, library build/typecheck, package surface/Node SSR check,
+demo build and complete packed consumer matrix passed after the rename. Exact
+React/Next versions and the new tarball integrity are in
+`release-verification.json`. This run did not repeat the root security audit;
+the security results below belong to the earlier preparation. Existing generated
+dist changes were backed up in `.release-tests/pre-rename-dist/dist` before build.
+No npm publish, git push or release tag was performed.
+
+## Usability verification: 2026-11-12
+
+- Page-size callbacks now follow restored URL values, host navigation and auto
+  sizing without duplicate notifications. The original history state, hash and
+  unrelated query parameters remain intact.
+- Initial API sorting derives its request column from the configured field;
+  explicit `columnNumber` overrides remain supported.
+- `rowClassName` applies to desktop rows, mobile lists and swipe cards.
+- Internal request failures show an accessible error message and retry action,
+  including when no `notify` callback or host QueryClientProvider is supplied.
+  `textsConfig.errorText` and `retryText` customize the labels.
+- Quick-start and demo snippets include the required stylesheet import. The
+  README explains common setup problems and the supported integration paths.
+
+All 25 root regressions pass. The same 25 tests pass against the packed package
+with React 18.0.0, 18.3.1, 19.0.0 and 19.3.1; TypeScript bundler and NodeNext
+fixtures pass. Production Next 15.5.29 Pages/App and Next 16.4.6 App fixtures pass
+SSR, desktop/mobile Chrome hydration, styles, retry recovery and row-class checks.
+Library build, package surface/Node SSR and demo build pass. Full root and
+production-only dependency audits report zero vulnerabilities; the refreshed root
+summary is in `release-security.json`. Next fixture advisories are separate from
+the root audit and are not dependencies shipped with the library.
+
+The tarball integrity and exact combinations are in `release-verification.json`.
+Firefox, WebKit, React 16/17 and CommonJS consumers are not verified by this run.
+This work remains local; no publication, push or release tag was performed.
 ## Changes against the audit
 
 | Findings | Implementation and verification |
@@ -29,7 +70,7 @@ No npm publication, git push or release tag is performed by this preparation.
 
 ## Release checks
 
-- Root React 18.2: 21 behavioral regressions pass.
+- Root React 18.2: 25 behavioral regressions pass.
 - Clean npm ci from package-lock.json succeeds; tests, library build, Node SSR/
   package-surface checks and demo production build pass in an isolated copy.
 - The tarball matrix runs the same regressions with React 18.0, 18.3, 19.0 and

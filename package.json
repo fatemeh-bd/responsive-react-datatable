@@ -1,5 +1,5 @@
 {
-  "name": "responsive-react-datatable",
+  "name": "react-responsive-datatable-kit",
   "version": "3.0.0",
   "description": "Responsive React data table with static and server data, search, sorting, pagination, selection and Persian/RTL support.",
   "author": {
