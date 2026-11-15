@@ -32,7 +32,7 @@ function consumer(name, react, next) {
   const cwd = join(runRoot, name); mkdirSync(cwd, { recursive: true });
   writeFileSync(join(cwd, "package.json"), JSON.stringify({ name: `release-${name}`, private: true, type: "module",
     dependencies: { "react-responsive-datatable-kit": tarball, react, "react-dom": react, ...(next ? { next } : {}) },
-    devDependencies: { typescript: "^5.9.3", "@types/react": react.startsWith("18") ? "^18" : "^19", "@types/react-dom": react.startsWith("18") ? "^18" : "^19", "@types/node": "^22",
+    devDependencies: { typescript: "^5.9.3", "@tanstack/react-query": "^5.90.5", "@types/react": react.startsWith("18") ? "^18" : "^19", "@types/react-dom": react.startsWith("18") ? "^18" : "^19", "@types/node": "^22",
       ...(!next ? { vitest: "^5.1.0", jsdom: "^26.1.0", "@testing-library/react": "^16.3.0", axios: "^1.21.0", fflate: "^0.8.2", jspdf: "^4.2.1", "jspdf-autotable": "^5.0.9" } : {}) } }, null, 2));
   cpSync(join(root, "tests/fixtures/consumer.tsx"), join(cwd, "consumer.tsx"));
   writeFileSync(join(cwd, "tsconfig.json"), JSON.stringify(tsconfig));
