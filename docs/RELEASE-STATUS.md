@@ -1,5 +1,16 @@
 # Release preparation status: 3.0.0
 
+## Publication preflight: 2026-11-15
+
+On the local main branch, all 42 root tests, library build/typecheck, package
+surface/Node SSR checks, demo build and desktop/mobile documentation checks pass.
+An isolated npm ci from the authoritative lockfile succeeds. The runtime audit
+reports zero vulnerabilities. The full packed React/TypeScript/Next/browser
+matrix passes; refreshed artifact integrity is in release-verification.json.
+The npm publish dry run succeeds with 17 files. npm reports the package/version
+as unavailable (404), but authentication returns 401. Publication is pending
+maintainer login; no package publication, git push or release tag was performed.
+
 Prepared on 2026-11-04. The original compatibility audit is a historical baseline.
 Consult release-verification.json for the tested artifact integrity and exact
 React/Next versions; release-security.json records the root dependency audit.
