@@ -157,3 +157,9 @@ the npm package. No exploitability assessment of consumers' applications is made
 A passing matrix reduces regression risk; it is not a proof that software has no
 bugs. Changes after verification require rerunning the relevant release checks.
 See PUBLISHING.md for the manual publication commands.
+
+## Default surface correction: 2026-11-16
+
+Default surfaces are transparent; explicit themes retain their palettes. See
+versions/3.0.0.styling.md. Earlier packed matrix evidence predates this correction
+and must be rerun before publishing this artifact.

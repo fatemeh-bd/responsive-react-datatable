@@ -247,7 +247,7 @@ function Table(props: TableProps) {
     .some(([key, value]) => key !== "isFilter" && key !== "noRefresh" && value != null && value !== "")).length;
   const pageSelect = <PageSizeSelect pageSize={size} initialPageSize={autoSize ?? preferredSize} theme={theme} textsConfig={texts} onPageSizeChange={changeSize} />;
   return <div ref={root} className={`rrdt table-container ${props.className || ""}`} style={{ color: theme.cellTextColor, backgroundColor: theme.backgroundColor, ...props.style }}
-    data-theme={props.theme || "light"} dir={dir} aria-busy={!!loading}>
+    data-theme={props.theme || "transparent"} dir={dir} aria-busy={!!loading}>
     {!isMobile && topFilter && <div ref={top} className={`top-filter-container ${props.topFilterContainerClassName || ""}`}>{topFilter}</div>}
     <div ref={header} className="table-header-actions">
       <div className="search-container-table">

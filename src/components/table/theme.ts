@@ -15,9 +15,9 @@ export function contrastColor(color?: string) {
   const luminance = linear[0] * .2126 + linear[1] * .7152 + linear[2] * .0722;
   return luminance > .179 ? "#171717" : "#ffffff";
 }
-export function resolveTheme(theme: TableTheme = "light", overrides?: ColorTheme): ColorTheme {
-  let colors = theme === "dark" ? darkColorTheme : lightColorTheme;
-  const base = theme.startsWith("#") ? rgb(theme) : null;
+export function resolveTheme(theme?: TableTheme, overrides?: ColorTheme): ColorTheme {
+  let colors = theme === undefined ? { ...lightColorTheme, backgroundColor: "transparent", headerBackgroundColor: "transparent", cellTextColor: "inherit", headerTextColor: "inherit" } : theme === "dark" ? darkColorTheme : lightColorTheme;
+  const base = theme?.startsWith("#") ? rgb(theme) : null;
   if (base) {
     const dark = contrastColor(theme) === "#ffffff";
     colors = {

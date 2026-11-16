@@ -23,8 +23,11 @@ function downloads() {
 }
 
 describe("column visibility and themes", () => {
-  it("defaults to a light table and lets the host choose a dark base color", () => {
+  it("defaults to transparent surfaces and preserves explicit light and dark themes", () => {
     const view = render(<Table {...props} />);
+    expect((document.querySelector(".table-container") as HTMLElement).style.backgroundColor).toBe("transparent");
+    expect((document.querySelector("tbody tr") as HTMLElement).style.backgroundColor).toBe("transparent");
+    view.rerender(<Table {...props} theme="light" />);
     expect((document.querySelector(".table-container") as HTMLElement).style.backgroundColor).toBe("rgb(255, 255, 255)");
     view.rerender(<Table {...props} theme="#121212" />);
     expect((document.querySelector(".table-container") as HTMLElement).style.backgroundColor).toBe("rgb(18, 18, 18)");

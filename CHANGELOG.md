@@ -2,6 +2,9 @@
 
 ## 3.0.0
 
+- Default table surfaces are transparent and text inherits from the host. Explicit
+  light/dark/hex themes and colorTheme overrides remain available.
+
 ### New capabilities
 
 - Optional column chooser, initial hidden columns and controlled visibility.

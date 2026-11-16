@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-16",
+  "checks": {
+    "build": "passed",
+    "behaviorTests": "42 passed",
+    "packageSurfaceAndNodeSSR": "passed"
+  },
+  "limitations": [
+    "Full packed release matrix not rerun after surface correction",
+    "Legacy branches received source corrections; builds not rerun"
+  ],
+  "branches": [
+    "main",
+    "dev",
+    "debug",
+    "debug-table",
+    "page-size"
+  ]
+}

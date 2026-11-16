@@ -3,7 +3,7 @@
     "Show or hide columns",
     "Download CSV, Excel or PDF",
     "Expand details with a chevron",
-    "Light table by default; configurable theme and classes",
+    "Transparent table by default; configurable theme and classes",
     "Light monochrome site with version-specific examples"
   ],
   "recipes": [
@@ -84,7 +84,7 @@
       ],
       "code": "<Table mode=\"static\" columns={columns} staticRows={rows}\n  theme=\"#121212\"\n  className=\"people-table\"\n  style={{ padding: 16, borderRadius: 12 }}\n  rowClassName={row => row.id === 0 ? 'featured-person' : undefined}\n/>",
       "extraCode": ".people-table { margin-block: 24px; }\n.people-table .featured-person { font-weight: 600; }",
-      "note": "The default is light. A hex theme such as #121212 changes the table palette; className and style customize its root."
+      "note": "The default is transparent and inherits host text color. A hex theme such as #121212 changes the table palette; className and style customize its root."
     },
     {
       "id": "selection",

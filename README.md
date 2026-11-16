@@ -194,7 +194,7 @@ Default export and named `Table` refer to the same component. Also exported:
 | `saveSearch` | false; optional sessionStorage persistence, requires `tableName` |
 | `lang` | `en`; `fa` enables Persian labels and RTL |
 | `textsConfig`, `colorTheme` | Override texts/colors; see exported types |
-| `theme` | `light` by default; white rows with soft-black text/controls. Also accepts `dark` or a hex color |
+| `theme` | Transparent by default; inherits host text color. Explicit `light`, `dark` or hex themes set a surface |
 | `className`, `style` | Additional root class and inline styles; built-in classes are preserved |
 | `height` | Desktop maximum scroll height, e.g. `70vh` |
 | `startMobileSize` | 768; mobile cards below this width |
@@ -375,8 +375,7 @@ disable the animation.
 />
 ```
 
-The table defaults to light mode: white rows, a pale-gray header, and soft-black
-text and controls. For another palette, pass a hex color such as `theme="#121212"`.
+The table defaults to transparent rows and header, inheriting the host text color. For another palette, pass a hex color such as `theme="#121212"`.
 It sets the table's base surface and derives readable text, header, borders and
 controls automatically; it is not just an accent color. Use `theme="light"` for
 a white table. `dark` is also accepted. `colorTheme` optionally overrides individual colors.
@@ -436,3 +435,5 @@ and `docs/MAINTAINER-README.md`. The original audit is historical; consult the
 release verification and changelog for the stabilized version.
 
 MIT License.
+
+See the [3.0.0 styling correction](docs/versions/3.0.0.styling.md) for the updated default.
