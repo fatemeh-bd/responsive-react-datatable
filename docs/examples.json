@@ -29,6 +29,16 @@
       "code": "<Table mode=\"static\" columns={columns} staticRows={rows}\n  columnVisibility exportConfig={{ fileName: \"people\" }}\n  expandableRows={{ render: row => <p>{row.notes}</p> }}\n  theme=\"#fff\" />"
     },
     {
+      "id": "auto-page-size",
+      "title": "Auto page size: enable / disable",
+      "summary": "Set autoPageSizeConfig.enabled to true to fit desktop rows to the viewport, or false for ordinary pagination.",
+      "sections": [
+        "Automatic page size"
+      ],
+      "code": "// Enable: fit rows to the available desktop viewport.\n<Table mode=\"static\" columns={columns} staticRows={rows}\n  autoPageSizeConfig={{ enabled: true }} />\n\n// Disable: use ordinary pagination with 10 rows per page.\n<Table mode=\"static\" columns={columns} staticRows={rows}\n  pageSize={10} autoPageSizeConfig={{ enabled: false }} />",
+      "note": "Disabled by default. Set enabled: true to activate, enabled: false to deactivate, or omit autoPageSizeConfig to keep it off. Filters and pagination are measured automatically. Explicit URL page size takes precedence; mobile uses ordinary pagination."
+    },
+    {
       "id": "modes",
       "title": "Choose a data mode",
       "summary": "Static: local rows. Internal: the table fetches. External: your app fetches.",
@@ -149,16 +159,6 @@
       ],
       "code": "<Table mode=\"external\" columns={columns} externalRows={rows}\n  totalItems={total} isLoading={loading} />",
       "note": "Pass your request loading state. Skeletons only fade; they do not scale. Reduced-motion preferences are respected."
-    },
-    {
-      "id": "auto-page-size",
-      "title": "Automatic page size",
-      "summary": "Fit desktop rows to the available viewport.",
-      "sections": [
-        "Automatic page size"
-      ],
-      "code": "<Table mode=\"static\" columns={columns} staticRows={rows}\n  autoPageSizeConfig={{ enabled: true }} />",
-      "note": "Filters and pagination are measured automatically. Explicit URL page size takes precedence; mobile uses ordinary pagination."
     }
   ]
 }

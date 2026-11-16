@@ -9,6 +9,7 @@ import css from "react-syntax-highlighter/dist/esm/languages/prism/css";
 import { monochromeCodeTheme } from "../../components/codeTheme";
 import manifest from "../../../docs/versions/index.json";
 import pkg from "../../../package.json";
+import currentExamples from "../../../docs/examples.json";
 import previewGif from "../../../table.gif";
 import FeatureTable from "../examplePage/FeatureTable";
 import type { TableTheme } from "../../components/table/types";
@@ -56,13 +57,14 @@ export default function DocumentPage() {
   const [view, setView] = useState<"preview" | "code">("code");
   const [changes, setChanges] = useState(false);
   const [theme, setTheme] = useState<TableTheme>("#ffffff");
-  const data = examples[`../../../docs/versions/${version}.examples.json`];
+  const data = version === pkg.version ? currentExamples : examples[`../../../docs/versions/${version}.examples.json`];
   const recipes = data?.recipes || [];
   const matching = recipes.filter(recipe => `${recipe.title} ${recipe.summary} ${recipe.code || ""}`.toLowerCase().includes(query.toLowerCase()));
   const selected = matching.find(recipe => recipe.id === selectedId) || matching[0];
   const canPreview = known && version === pkg.version && !!selected?.preview;
   const preview = view === "preview" && canPreview;
-  const guide = guides[`../../../docs/versions/${version}.md`] || "";
+  const guide = (guides[`../../../docs/versions/${version}.md`] || "") + (version === pkg.version
+    ? "\n" + (guides[`../../../docs/versions/${version}.auto-page-size.md`] || "") : "");
   const guideSections = guide.split(/(?=^## )/m).filter(section => section.startsWith("## "));
   const reference = guideSections.filter(section => selected?.sections.includes(section.split(/\r?\n/)[0].slice(3)));
   const selectRecipe = (recipe: Recipe) => { setSelectedId(recipe.id); setChanges(false); setView(recipe.preview && version === pkg.version ? "preview" : "code"); };

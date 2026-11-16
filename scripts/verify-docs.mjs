@@ -41,6 +41,10 @@ try {
     assert(await gif.evaluate(image => image.complete && image.naturalWidth > 0), "Original GIF must load locally");
     assert.equal(await page.getByLabel("Version", { exact: true }).inputValue(), manifest.current);
     const navigation = page.getByRole("navigation", { name: "Documentation examples" });
+    await navigation.getByRole("button", { name: "Auto page size: enable / disable", exact: true }).click();
+    const autoCode = await page.locator(".docs-example-code").innerText();
+    assert(autoCode.includes("enabled: true") && autoCode.includes("enabled: false"), "Auto sizing must document both on and off");
+    assert((await page.locator(".docs-tip").innerText()).includes("Disabled by default"));
     await navigation.getByRole("button", { name: "All features", exact: true }).click();
     const stage = page.getByRole("region", { name: "Live table example" });
     assert.equal(await page.locator(".people-table").evaluate(el => getComputedStyle(el).backgroundColor), "rgb(255, 255, 255)");
@@ -87,7 +91,7 @@ try {
     await page.locator(".docs-intro").screenshot({ path: join(output, mobile ? "mobile-hero.png" : "desktop-hero.png") });
     await page.goto(`${base}#/example/staticAutoPageSize`);
     await page.getByRole("button", { name: "Actions", exact: true }).first().waitFor();
-    assert.equal(await page.locator(".table-container").evaluate(el => getComputedStyle(el).backgroundColor), "rgb(255, 255, 255)");
+    assert.equal(await page.locator(".table-container").evaluate(el => getComputedStyle(el).backgroundColor), "rgba(0, 0, 0, 0)");
     assert.notEqual(await page.getByRole("button", { name: "Actions", exact: true }).first().evaluate(el => getComputedStyle(el).color), "rgb(255, 255, 255)");
     await page.screenshot({ path: join(output, mobile ? "mobile-auto-table.png" : "desktop-auto-table.png"), fullPage: false });
     await page.route("https://dummyjson.com/**", route => route.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({
