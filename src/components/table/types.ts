@@ -107,24 +107,56 @@ export interface ExpandableRowsConfig {
   onExpandedChange?: (ids: RowId[]) => void;
 }
 
+/** Extra request fields. Metadata keys are stripped before sending. */
 export interface CustomBody {
+  /** Changes to this item alone do not trigger a request. */
   noRefresh?: boolean;
+  /** Count this item as an active filter when it has a non-empty value. */
   isFilter?: boolean;
-  [key: string]: string | number | boolean | null | undefined | Object;
+  [key: string]: unknown;
+}
+
+/** JSON object used instead of the generated paging/search/sort request. */
+export type InternalApiPayload = Record<string, unknown>;
+
+/** Server response passed to onFetch (not the Axios response wrapper). */
+export interface InternalApiResponse<Row = Record<string, unknown>> {
+  /** Loaded page; null signals an empty warning response. */
+  data: Row[] | null;
+  /** Total number of rows after server filtering, before pagination. */
+  recordsFiltered: number;
+  /** Optional warning message used when data is null. */
+  message?: string;
+  /** Additional server fields are preserved. Narrow them before use. */
+  [key: string]: unknown;
+}
+
+/** Request options for mode="internal". No host QueryClient is required. */
+export interface InternalApiConfig {
+  /** Required relative path or absolute HTTP(S) URL. */
+  endpoint: string;
+  /** Prefix for relative endpoints; ignored for absolute endpoints. */
+  baseUrl?: string;
+  /** Replaces the entire generated request, including customBody. GET uses params; POST uses data. */
+  payload?: InternalApiPayload;
+  /** Fields merged in order into the generated request; later values win. */
+  customBody?: CustomBody[];
+  /** Initial server sort field (normally a column's data key). */
+  defaultSortBy?: string;
+  /** Initial sort direction; defaults to desc when defaultSortBy is set. */
+  sortType?: "asc" | "desc";
+  /** @deprecated Unused here. Set saveSearch on Table with a tableName instead. */
+  saveSearch?: boolean;
+  /** Called with the server response on successful fetch/cache updates. */
+  onFetch?: (data: InternalApiResponse) => void;
+  /** HTTP method. Defaults to POST. */
+  method?: "POST" | "GET";
+  /** Request headers. Do not put private server credentials in client props. */
+  headers?: Record<string, string>;
 }
 export interface InternalModeProps {
-  internalApiConfig: {
-    endpoint: string;
-    baseUrl?: string;
-    payload?: any;
-    customBody?: CustomBody[];
-    defaultSortBy?: string;
-    sortType?: "asc" | "desc";
-    saveSearch?: boolean;
-    onFetch?: (data: any) => void;
-    method?: "POST" | "GET";
-    headers?: Record<string, string>;
-  };
+  /** Endpoint, request fields, initial sorting and response callback. */
+  internalApiConfig: InternalApiConfig;
 }
 
 export interface StaticModeProps {

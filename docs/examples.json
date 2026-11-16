@@ -37,7 +37,7 @@
         "Internal API mode",
         "External API mode"
       ],
-      "code": "// All rows are already in memory\n<Table mode=\"static\" columns={columns} staticRows={rows} />\n\n// The table manages requests\n<Table mode=\"internal\" columns={columns}\n  internalApiConfig={{ endpoint: '/api/people', method: 'GET' }} />\n\n// Your app manages requests and state\n<Table mode=\"external\" columns={columns}\n  externalRows={rows} totalItems={total} isLoading={loading}\n  onPageChange={setPage} onPageSizeChange={setPageSize}\n  onSearch={setSearch} onSortChange={setOrder} />",
+      "code": "import type { InternalApiConfig } from \"react-responsive-datatable-kit\";\n\nconst api = { endpoint: \"/api/people\", method: \"GET\",\n  onFetch: response => console.log(response.recordsFiltered),\n} satisfies InternalApiConfig;\n<Table mode=\"internal\" columns={columns} internalApiConfig={api} />;\n\n// All rows are already in memory\n<Table mode=\"static\" columns={columns} staticRows={rows} />\n\n// The table manages requests\n<Table mode=\"internal\" columns={columns}\n  internalApiConfig={{ endpoint: '/api/people', method: 'GET' }} />\n\n// Your app manages requests and state\n<Table mode=\"external\" columns={columns}\n  externalRows={rows} totalItems={total} isLoading={loading}\n  onPageChange={setPage} onPageSizeChange={setPageSize}\n  onSearch={setSearch} onSortChange={setOrder} />",
       "note": "Internal mode expects { data: [...], recordsFiltered: total }. External callbacks and loading state belong to your app."
     },
     {

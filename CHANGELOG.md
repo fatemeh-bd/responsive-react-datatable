@@ -2,6 +2,9 @@
 
 ## 3.0.0
 
+- Export documented InternalApiConfig, InternalApiPayload and InternalApiResponse types;
+  constrain payload objects and replace untyped response/custom field values with unknown.
+
 - Default table surfaces are transparent and text inherits from the host. Explicit
   light/dark/hex themes and colorTheme overrides remain available.
 

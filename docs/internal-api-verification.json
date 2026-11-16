@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-16",
+  "checks": {
+    "libraryBuild": "passed",
+    "behavioralTests": "42 passed",
+    "packageSurfaceAndNodeSSR": "passed",
+    "packedConsumerTypes": {
+      "Bundler": "passed",
+      "NodeNext": "passed"
+    }
+  },
+  "limitations": [
+    "Full React/Next/browser release matrix not rerun for this type-only change"
+  ]
+}

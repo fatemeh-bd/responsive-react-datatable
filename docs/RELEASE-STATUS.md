@@ -163,3 +163,10 @@ See PUBLISHING.md for the manual publication commands.
 Default surfaces are transparent; explicit themes retain their palettes. See
 versions/3.0.0.styling.md. Earlier packed matrix evidence predates this correction
 and must be rerun before publishing this artifact.
+
+## Internal API types: 2026-11-16
+
+Exported InternalApiConfig, InternalApiPayload and InternalApiResponse with field
+comments and stricter payload/response types. See versions/3.0.0.internal-api.md
+and internal-api-verification.json for checks against the packed declarations.
+The existing full release matrix predates this declaration change.
