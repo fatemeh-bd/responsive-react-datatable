@@ -163,13 +163,21 @@ export interface StaticModeProps {
   staticRows: any[];
   totalItems?: number;
 }
+/** Desktop-only automatic sizing; explicit URL page-size selections take precedence. */
 export interface AutoPageSizeConfig {
+  /** Opt in to viewport-based sizing. Defaults to false. */
   enabled?: boolean;
+  /** Optional bounded container. Its bottom edge caps the available viewport space. */
   containerSelector?: string;
+  /** External reserved regions to subtract. Built-in table controls are already measured. */
   subtractSelectors?: string[];
+  /** Optional regions whose presence enables extraBufferRows. */
   optionalSelectorsForExtraBuffer?: string[];
+  /** Explicit row height in pixels. Otherwise measure rendered rows (51.15px fallback). */
   rowHeight?: number;
+  /** Additional rows to reserve after measuring the layout. Defaults to zero. */
   baseBufferRows?: number;
+  /** Additional reserved rows when an optional selector is visible. Defaults to zero. */
   extraBufferRows?: number;
 }
 export interface BaseTableProps {

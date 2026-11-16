@@ -1,6 +1,6 @@
 "use client";
 import { strToU8, zipSync } from 'fflate';
-import { a as cellText } from './index-Cttf2Ykr.mjs';
+import { a as cellText } from './index-B9F4TQVW.mjs';
 import 'react/jsx-runtime';
 import 'react';
 import '@tanstack/react-query';
@@ -48,4 +48,4 @@ function xlsxBytes(headers, rows, rtl) {
 }
 
 export { xlsxBytes };
-//# sourceMappingURL=xlsx-sNqZpRuT.mjs.map
+//# sourceMappingURL=xlsx-DfFLPNY1.mjs.map

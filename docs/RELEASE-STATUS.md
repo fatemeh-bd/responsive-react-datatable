@@ -170,3 +170,12 @@ Exported InternalApiConfig, InternalApiPayload and InternalApiResponse with fiel
 comments and stricter payload/response types. See versions/3.0.0.internal-api.md
 and internal-api-verification.json for checks against the packed declarations.
 The existing full release matrix predates this declaration change.
+
+## Automatic page sizing: 2026-11-16
+
+Viewport-based desktop sizing now needs only enabled: true. Row and control
+measurements replace the default selector and estimated row buffers. Manual
+URL page sizes retain priority. See versions/3.0.0.auto-page-size.md and
+auto-page-size-verification.json for the exact local Chrome layout checks.
+43 tests, library/package/SSR checks and demo build pass. The full release
+matrix predates this change and must be refreshed before publication.

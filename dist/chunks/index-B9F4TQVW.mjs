@@ -7,6 +7,102 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Virtual } from 'swiper/modules';
 import { createPortal } from 'react-dom';
 
+/** Measure only after mount, keeping the first render safe for SSR/hydration. */
+function useAutoPageSize(root, config, mobile) {
+    const [size, setSize] = useState(null);
+    useEffect(() => {
+        const element = root.current;
+        if (!config.enabled || mobile || !element)
+            return;
+        const query = (selector) => {
+            try {
+                return selector ? document.querySelector(selector) : null;
+            }
+            catch {
+                return null;
+            }
+        };
+        const local = (selector) => element.querySelector(`:scope > ${selector}`);
+        const find = (selector) => selector === "#topFilter" ? local(".top-filter-container") :
+            selector === "#paging" ? local(".table-footer") : selector === "#table-header-actions" ? local(".table-header-actions") : query(selector);
+        const container = query(config.containerSelector);
+        let frame;
+        let measuredRowHeight = 0;
+        const observed = new Set();
+        const observe = (target) => {
+            if (target && !observed.has(target)) {
+                observed.add(target);
+                observer?.observe(target);
+            }
+        };
+        const calculate = () => {
+            frame = undefined;
+            const body = local(".desktop-table-container > .desktop-table-body-container");
+            if (!body || !element.getClientRects().length)
+                return;
+            const viewportBottom = window.visualViewport ? window.visualViewport.offsetTop + window.visualViewport.height : window.innerHeight;
+            const bounds = container?.getBoundingClientRect();
+            const bottom = bounds && bounds.height > 0 ? Math.min(viewportBottom, bounds.bottom - (container.offsetHeight - container.clientHeight)) : viewportBottom;
+            const bodyRect = body.getBoundingClientRect();
+            const footer = local(".table-footer");
+            const height = (el) => el?.getBoundingClientRect().height || 0;
+            const outerHeight = (el) => {
+                if (!el)
+                    return 0;
+                const css = getComputedStyle(el);
+                return height(el) + (parseFloat(css.marginTop) || 0) + (parseFloat(css.marginBottom) || 0);
+            };
+            const extras = Array.from(new Set((config.subtractSelectors || []).map(find)))
+                .filter((el) => !!el && !element.contains(el) && !el.contains(element));
+            // Count only outermost external regions, avoiding nested selector double subtraction.
+            const subtract = extras.filter(el => !extras.some(other => other !== el && other.contains(el)))
+                .reduce((sum, el) => sum + outerHeight(el), 0);
+            const rows = body.querySelectorAll(":scope > table > tbody > .desktop-table-data-row");
+            rows.forEach(row => { measuredRowHeight = Math.max(measuredRowHeight, height(row)); observe(row); });
+            const explicitHeight = config.rowHeight && Number.isFinite(config.rowHeight) && config.rowHeight > 0 ? config.rowHeight : 0;
+            const rowHeight = explicitHeight || measuredRowHeight || 51.15;
+            const head = body.querySelector(":scope > table > .desktop-table-head");
+            const css = getComputedStyle(element);
+            const chrome = outerHeight(footer) + (parseFloat(css.paddingBottom) || 0) + (parseFloat(css.borderBottomWidth) || 0) + 2;
+            let available = bottom - bodyRect.top - chrome - subtract;
+            const maxHeight = parseFloat(getComputedStyle(body).maxHeight);
+            if (Number.isFinite(maxHeight))
+                available = Math.min(available, maxHeight);
+            const details = Array.from(body.querySelectorAll(":scope > table > tbody > .table-details-row")).reduce((sum, row) => sum + height(row), 0);
+            const optional = (config.optionalSelectorsForExtraBuffer || []).some(selector => height(find(selector)) > 0);
+            const buffer = Math.max(0, config.baseBufferRows || 0) + (optional ? Math.max(0, config.extraBufferRows || 0) : 0);
+            const next = Math.max(1, Math.floor((available - height(head) - details) / rowHeight) - buffer);
+            if (Number.isFinite(next))
+                setSize(previous => previous === next ? previous : next);
+            [element, body, head, footer, local(".table-header-actions"), local(".top-filter-container"), container, ...extras].forEach(observe);
+            for (const target of Array.from(observed))
+                if (!target.isConnected) {
+                    observer?.unobserve(target);
+                    observed.delete(target);
+                }
+        };
+        const schedule = () => { if (frame === undefined)
+            frame = requestAnimationFrame(calculate); };
+        const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(schedule);
+        const mutations = new MutationObserver(schedule);
+        mutations.observe(element, { childList: true, subtree: true, characterData: true });
+        observe(element);
+        observe(container);
+        calculate();
+        window.addEventListener("resize", schedule);
+        window.visualViewport?.addEventListener("resize", schedule);
+        return () => {
+            if (frame !== undefined)
+                cancelAnimationFrame(frame);
+            observer?.disconnect();
+            mutations.disconnect();
+            window.removeEventListener("resize", schedule);
+            window.visualViewport?.removeEventListener("resize", schedule);
+        };
+    }, [root, config, mobile]);
+    return size;
+}
+
 function useIsMobile(breakpoint = 768) {
     const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
@@ -128,19 +224,7 @@ const darkColorTheme = {
     borderColor: "#545454", headerBackgroundColor: "#272727", backgroundColor: "#121212",
     headerTextColor: "#ffffff", cellTextColor: "#f5f5f5", primaryColor: "#d4d4d4",
 };
-const defaultAutoConfig = {
-    enabled: false,
-    containerSelector: "#content-wrapper",
-    subtractSelectors: [
-    // "#table-header-actions",
-    // "#paging",
-    // "#topFilter",
-    ],
-    optionalSelectorsForExtraBuffer: ["#topFilter"],
-    rowHeight: 51.15,
-    baseBufferRows: 2,
-    extraBufferRows: 1,
-};
+const defaultAutoConfig = { enabled: false };
 
 function rgb(color) {
     const value = color.replace(/^#/, "");
@@ -606,7 +690,7 @@ function TableTools({ columns, hiddenIds, onHiddenChange, columnVisibility, conf
             if (effectiveScope === "selected")
                 source = source.filter(row => context.selectedIds.includes(row[selectedKey]));
             const data = exportData(available, source);
-            const { createExportBlob, downloadBlob } = await import('./download-BybifC0o.mjs');
+            const { createExportBlob, downloadBlob } = await import('./download-DlrErJ1k.mjs');
             const blob = await createExportBlob(format, data.headers, data.rows, rtl);
             if (mounted.current)
                 downloadBlob(blob, settings.fileName || "table-export", format);
@@ -700,8 +784,8 @@ function Table(props) {
         setOrder(config?.defaultSortBy ? { column: initialSortColumn, dir: config.sortType ?? "desc", name: config.defaultSortBy } : null);
     }, [mode, config?.defaultSortBy, config?.sortType, initialSortColumn]);
     const dir = lang === "fa" ? "rtl" : "ltr";
-    const [autoSize, setAutoSize] = useState(null);
     const auto = useMemo(() => ({ ...defaultAutoConfig, ...props.autoPageSizeConfig }), [props.autoPageSizeConfig]);
+    const autoSize = useAutoPageSize(root, auto, isMobile);
     const preferredSize = positiveInteger(pageSize, defaultSize);
     const size = positiveInteger(getParams(pageSizeQueryName), auto.enabled && !isMobile ? autoSize ?? preferredSize : preferredSize);
     const requestedPage = positiveInteger(getParams(pageQueryName), 1);
@@ -714,51 +798,6 @@ function Table(props) {
             sizeCallback.current?.(size);
         }
     }, [size]);
-    useEffect(() => {
-        if (!auto.enabled || isMobile)
-            return;
-        const query = (selector) => {
-            try {
-                return selector ? document.querySelector(selector) : null;
-            }
-            catch {
-                return null;
-            }
-        };
-        const container = query(auto.containerSelector) || root.current?.parentElement;
-        const calculate = () => {
-            if (!container || container.clientHeight <= 0)
-                return;
-            const internal = [header.current, footer.current, top.current];
-            const additional = (auto.subtractSelectors || []).map(selector => {
-                // Historical IDs are now local to each table, not global duplicate IDs.
-                if (selector === "#table-header-actions")
-                    return header.current;
-                if (selector === "#topFilter")
-                    return top.current;
-                if (selector === "#paging")
-                    return footer.current;
-                return query(selector);
-            });
-            const elements = new Set([...internal, ...additional]);
-            const subtract = Array.from(elements).reduce((sum, el) => sum + (el?.clientHeight || 0), 0);
-            const optional = (auto.optionalSelectorsForExtraBuffer || []).some(selector => {
-                const el = selector === "#topFilter" ? top.current : selector === "#paging" ? footer.current : query(selector);
-                return !!el && el.clientHeight > 0;
-            });
-            const rowHeight = Number.isFinite(auto.rowHeight) && auto.rowHeight > 0 ? auto.rowHeight : 51.15;
-            const buffer = Math.max(0, auto.baseBufferRows ?? 2) + (optional ? Math.max(0, auto.extraBufferRows ?? 1) : 0);
-            setAutoSize(Math.max(1, Math.floor((container.clientHeight - subtract) / rowHeight) - buffer));
-        };
-        calculate();
-        const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(calculate);
-        if (container)
-            observer?.observe(container);
-        [header.current, footer.current, top.current].forEach(el => { if (el)
-            observer?.observe(el); });
-        window.addEventListener("resize", calculate);
-        return () => { observer?.disconnect(); window.removeEventListener("resize", calculate); };
-    }, [auto, isMobile]);
     const staticRows = mode === "static" ? props.staticRows || emptyRows : emptyRows;
     const processed = useMemo(() => localRows(staticRows, columns, search, order), [staticRows, columns, search, order]);
     const preliminaryTotal = mode === "static" ? processed.length : mode === "external" ? Math.max(0, props.totalItems || 0) : 0;
@@ -895,7 +934,7 @@ function Table(props) {
         .some(([key, value]) => key !== "isFilter" && key !== "noRefresh" && value != null && value !== "")).length;
     const pageSelect = jsx(PageSizeSelect, { pageSize: size, initialPageSize: autoSize ?? preferredSize, theme: theme, textsConfig: texts, onPageSizeChange: changeSize });
     return jsxs("div", { ref: root, className: `rrdt table-container ${props.className || ""}`, style: { color: theme.cellTextColor, backgroundColor: theme.backgroundColor, ...props.style }, "data-theme": props.theme || "transparent", dir: dir, "aria-busy": !!loading, children: [!isMobile && topFilter && jsx("div", { ref: top, className: `top-filter-container ${props.topFilterContainerClassName || ""}`, children: topFilter }), jsxs("div", { ref: header, className: "table-header-actions", children: [jsxs("div", { className: "search-container-table", children: [!noSearch && jsx(SearchBox, { value: search, onSearch: changeSearch, theme: theme, mergedTexts: texts, dir: dir }), !isMobile && filters && jsx("div", { className: `${props.filterContainerClassName || ""} filter-container-className`, children: filters })] }), isMobile && (filters || topFilter) && jsxs("button", { type: "button", onClick: () => setOpenFilter(true), style: { minHeight: 43, background: theme.headerBackgroundColor, color: theme.headerTextColor }, className: "mobile-filter-button", children: [activeFilterCount > 0 && jsx("span", { className: "mobile-filter-badge", children: activeFilterCount }), texts.filterText, jsx(FilterIcon, {})] }), jsxs("div", { className: "actionButtons", children: [props.actionButtons, (props.columnVisibility || props.exportConfig) && jsx(TableTools, { columns: columns, hiddenIds: hiddenIds, onHiddenChange: changeHidden, columnVisibility: props.columnVisibility, config: props.exportConfig, context: { scope: "page", page, pageSize: size, search, order, selectedIds }, pageRows: rows, filteredRows: processed, staticMode: mode === "static", selectedKey: selectedKey, theme: theme, texts: texts, rtl: dir === "rtl", disabled: !!loading }), !isMobile && !props.noPageSize && pageSelect] })] }), requestFailed && jsxs("div", { role: "alert", className: "table-request-error", style: { borderColor: theme.borderColor, color: theme.cellTextColor }, children: [jsx("span", { children: texts.errorText }), jsx("button", { type: "button", disabled: !!loading, onClick: () => { void query.refetch(); }, children: texts.retryText })] }), (!requestFailed || rows.length > 0) && (isMobile ? jsx(MobileTable, { columns: displayColumns, rows: rows, isLoading: !!loading, theme: theme, textsConfig: texts, listMode: props.listMode, rowKey: props.rowKey || selectedKey, rowClassName: props.rowClassName, expansion: expansion }) :
-                jsx(DesktopTable$1, { columns: displayColumns, rows: rows, isLoading: !!loading, theme: theme, textsConfig: texts, pageSize: size, maxHeight: props.height || `${(size + 1) * (auto.rowHeight || 51.15)}px`, rowHeight: `${auto.rowHeight || 51.15}px`, rowClassName: props.rowClassName, rowKey: props.rowKey || selectedKey, order: order, expansion: expansion, onOrderChange: changeOrder, isAllSelected: allSelected, isIndeterminate: someSelected && !allSelected, onAllSelect: selectAll })), jsxs("div", { ref: footer, className: "table-footer", children: [total > 0 && jsx(Pagination, { dir: dir, startMobileSize: props.startMobileSize, totalItems: total, pageSize: size, queryName: pageQueryName, theme: theme, textsConfig: texts, currentPage: page, onChangePage: changePage }), isMobile && !props.noPageSize && pageSelect] }), jsxs(Modal, { size: "lg", title: texts.filterText, isOpen: openFilter, onClose: () => setOpenFilter(false), className: "filter-modal", theme: theme, children: [jsxs("div", { className: "filter-modal-content space-items", children: [filters, topFilter] }), jsxs("div", { className: "filter-modal-actions", children: [jsx("button", { type: "button", onClick: () => setOpenFilter(false), className: "filter-modal-close-button", children: texts.close }), jsxs("button", { type: "button", className: "filter-modal-clear-button", onClick: () => {
+                jsx(DesktopTable$1, { columns: displayColumns, rows: rows, isLoading: !!loading, theme: theme, textsConfig: texts, pageSize: size, maxHeight: props.height || (auto.enabled ? undefined : `${(size + 1) * (auto.rowHeight || 51.15)}px`), rowHeight: `${auto.rowHeight || 51.15}px`, rowClassName: props.rowClassName, rowKey: props.rowKey || selectedKey, order: order, expansion: expansion, onOrderChange: changeOrder, isAllSelected: allSelected, isIndeterminate: someSelected && !allSelected, onAllSelect: selectAll })), jsxs("div", { ref: footer, className: "table-footer", children: [total > 0 && jsx(Pagination, { dir: dir, startMobileSize: props.startMobileSize, totalItems: total, pageSize: size, queryName: pageQueryName, theme: theme, textsConfig: texts, currentPage: page, onChangePage: changePage }), isMobile && !props.noPageSize && pageSelect] }), jsxs(Modal, { size: "lg", title: texts.filterText, isOpen: openFilter, onClose: () => setOpenFilter(false), className: "filter-modal", theme: theme, children: [jsxs("div", { className: "filter-modal-content space-items", children: [filters, topFilter] }), jsxs("div", { className: "filter-modal-actions", children: [jsx("button", { type: "button", onClick: () => setOpenFilter(false), className: "filter-modal-close-button", children: texts.close }), jsxs("button", { type: "button", className: "filter-modal-clear-button", onClick: () => {
                                     changeSearch("");
                                     try {
                                         if (props.removeFilterKey)
@@ -992,4 +1031,4 @@ const managementButton = (text) => {
 };
 
 export { ActionDropDown as A, Table_default as T, cellText as a, csvContent as c, rowRenderer as r, safeFileName as s };
-//# sourceMappingURL=index-Cttf2Ykr.mjs.map
+//# sourceMappingURL=index-B9F4TQVW.mjs.map

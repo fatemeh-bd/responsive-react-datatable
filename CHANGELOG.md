@@ -2,6 +2,9 @@
 
 ## 3.0.0
 
+- Automatic desktop page sizing now works with only enabled: true, using viewport
+  space and measured rows/controls; container and buffer settings remain optional.
+
 - Export documented InternalApiConfig, InternalApiPayload and InternalApiResponse types;
   constrain payload objects and replace untyped response/custom field values with unknown.
 

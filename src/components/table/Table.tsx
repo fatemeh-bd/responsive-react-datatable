@@ -4,6 +4,7 @@ import React, { useCallback, useContext, useEffect, useId, useMemo, useRef, useS
 import { QueryClient, QueryClientContext, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import type { ColumnType, InternalModeProps, OrderType, RowId, Selectable, TableProps } from "./types";
+import { useAutoPageSize } from "./hooks/useAutoPageSize";
 import { useIsMobile } from "./hooks/useIsMobile";
 import { useQueryParams } from "./hooks/useQueryParams";
 import { defaultAutoConfig, defaultSize, defaultTexts } from "./tableConfigs";
@@ -83,8 +84,8 @@ function Table(props: TableProps) {
     setOrder(config?.defaultSortBy ? { column: initialSortColumn, dir: config.sortType ?? "desc", name: config.defaultSortBy } : null);
   }, [mode, config?.defaultSortBy, config?.sortType, initialSortColumn]);
   const dir = lang === "fa" ? "rtl" : "ltr";
-  const [autoSize, setAutoSize] = useState<number | null>(null);
   const auto = useMemo(() => ({ ...defaultAutoConfig, ...props.autoPageSizeConfig }), [props.autoPageSizeConfig]);
+  const autoSize = useAutoPageSize(root, auto, isMobile);
   const preferredSize = positiveInteger(pageSize, defaultSize);
   const size = positiveInteger(getParams(pageSizeQueryName), auto.enabled && !isMobile ? autoSize ?? preferredSize : preferredSize);
   const requestedPage = positiveInteger(getParams(pageQueryName), 1);
@@ -97,40 +98,6 @@ function Table(props: TableProps) {
       sizeCallback.current?.(size);
     }
   }, [size]);
-
-  useEffect(() => {
-    if (!auto.enabled || isMobile) return;
-    const query = (selector?: string) => {
-      try { return selector ? document.querySelector<HTMLElement>(selector) : null; } catch { return null; }
-    };
-    const container = query(auto.containerSelector) || root.current?.parentElement;
-    const calculate = () => {
-      if (!container || container.clientHeight <= 0) return;
-      const internal = [header.current, footer.current, top.current];
-      const additional = (auto.subtractSelectors || []).map(selector => {
-        // Historical IDs are now local to each table, not global duplicate IDs.
-        if (selector === "#table-header-actions") return header.current;
-        if (selector === "#topFilter") return top.current;
-        if (selector === "#paging") return footer.current;
-        return query(selector);
-      });
-      const elements = new Set([...internal, ...additional]);
-      const subtract = Array.from(elements).reduce((sum, el) => sum + (el?.clientHeight || 0), 0);
-      const optional = (auto.optionalSelectorsForExtraBuffer || []).some(selector => {
-        const el = selector === "#topFilter" ? top.current : selector === "#paging" ? footer.current : query(selector);
-        return !!el && el.clientHeight > 0;
-      });
-      const rowHeight = Number.isFinite(auto.rowHeight) && auto.rowHeight! > 0 ? auto.rowHeight! : 51.15;
-      const buffer = Math.max(0, auto.baseBufferRows ?? 2) + (optional ? Math.max(0, auto.extraBufferRows ?? 1) : 0);
-      setAutoSize(Math.max(1, Math.floor((container.clientHeight - subtract) / rowHeight) - buffer));
-    };
-    calculate();
-    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(calculate);
-    if (container) observer?.observe(container);
-    [header.current, footer.current, top.current].forEach(el => { if (el) observer?.observe(el); });
-    window.addEventListener("resize", calculate);
-    return () => { observer?.disconnect(); window.removeEventListener("resize", calculate); };
-  }, [auto, isMobile]);
 
   const staticRows = mode === "static" ? props.staticRows || emptyRows : emptyRows;
   const processed = useMemo(() => localRows(staticRows, columns, search, order), [staticRows, columns, search, order]);
@@ -270,7 +237,7 @@ function Table(props: TableProps) {
     </div>}
     {(!requestFailed || rows.length > 0) && (isMobile ? <MobileTable columns={displayColumns} rows={rows} isLoading={!!loading} theme={theme} textsConfig={texts} listMode={props.listMode} rowKey={props.rowKey || selectedKey} rowClassName={props.rowClassName} expansion={expansion} /> :
       <DesktopTable columns={displayColumns} rows={rows} isLoading={!!loading} theme={theme} textsConfig={texts}
-        pageSize={size} maxHeight={props.height || `${(size + 1) * (auto.rowHeight || 51.15)}px`} rowHeight={`${auto.rowHeight || 51.15}px`}
+        pageSize={size} maxHeight={props.height || (auto.enabled ? undefined : `${(size + 1) * (auto.rowHeight || 51.15)}px`)} rowHeight={`${auto.rowHeight || 51.15}px`}
         rowClassName={props.rowClassName} rowKey={props.rowKey || selectedKey} order={order} expansion={expansion}
         onOrderChange={changeOrder} isAllSelected={allSelected} isIndeterminate={someSelected && !allSelected} onAllSelect={selectAll} />)}
     <div ref={footer} className="table-footer">

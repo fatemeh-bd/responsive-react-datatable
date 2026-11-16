@@ -67,13 +67,7 @@ const PropAutoPageSizeConfig = () => {
         }}
       >
         {`<Table
-  autoPageSizeConfig={{
-    enabled: true,
-    containerSelector: "#content-wrapper",
-    subtractSelectors: ["#footer", "#tab"],
-    rowHeight: 51.15,
-    baseBufferRows: 2,
-  }}
+  autoPageSizeConfig={{ enabled: true }}
 />`}
       </SyntaxHighlighter>
 
@@ -97,22 +91,22 @@ const PropAutoPageSizeConfig = () => {
             [
               "containerSelector",
               "string",
-              "Required. The selector for the parent element containing the table, e.g., #content-wrapper.",
+              "Optional. Bound the available viewport by a fixed-height container.",
             ],
             [
               "subtractSelectors",
               "string[]",
-              "Optional. Elements inside the container whose heights should be subtracted (headers, filters, tabs).",
+              "Optional external reserved regions; built-in filters and controls are already measured.",
             ],
             [
               "rowHeight",
               "number",
-              "Height of a single table row in pixels. Default: 51.15.",
+              "Optional explicit row height; otherwise measured from rendered rows (51.15px fallback).",
             ],
             [
               "baseBufferRows",
               "number",
-              "Rows to subtract from visible rows. Default: 2.",
+              "Extra rows to reserve after measurement. Default: 0.",
             ],
           ].map(([opt, type, desc]) => (
             <tr key={opt}>
@@ -130,9 +124,7 @@ const PropAutoPageSizeConfig = () => {
       <h2 className="text-2xl font-semibold">How It Works</h2>
       <ol className="list-decimal list-inside space-y-2 text-black sm:text-lg">
         <li>
-          <strong className="!text-pink-400">Parent Container:</strong> Measures
-          the height of <code>#content-wrapper</code> or your specified
-          container.
+          <strong className="!text-pink-400">Available Space:</strong> Measures from the table body to the viewport bottom, optionally capped by a bounded container.
         </li>
         <li>
           <strong className="!text-pink-400">Subtract Fixed Elements:</strong>{" "}
@@ -140,7 +132,7 @@ const PropAutoPageSizeConfig = () => {
         </li>
         <li>
           <strong className="!text-pink-400">Calculate Rows:</strong> Divide
-          available height by <code>rowHeight</code> and subtract buffers.
+          available height by measured row height, with optional manual overrides.
         </li>
         <li>
           <strong className="!text-pink-400">Dynamic Updates:</strong> A{" "}
@@ -159,13 +151,7 @@ const PropAutoPageSizeConfig = () => {
             mode="static"
             staticRows={mock.data}
             totalItems={mock.recordsFiltered}
-            autoPageSizeConfig={{
-              enabled: true,
-              containerSelector: "#wrapper",
-              subtractSelectors: ["#footer"],
-              rowHeight: 51.15,
-              baseBufferRows: 2,
-            }}
+            autoPageSizeConfig={{ enabled: true }}
           />
         </div>
       </div>
@@ -188,8 +174,7 @@ const PropAutoPageSizeConfig = () => {
       </h2>
       <ul className="list-disc list-inside space-y-1 !text-pink-500 sm:text-lg">
         <li>
-          Always point <code>containerSelector</code> to the main wrapper of
-          your table.
+          Start with enabled: true. Use containerSelector only for a bounded layout.
         </li>
         <li>
           Ensure <code>rowHeight</code> matches your table row styling (

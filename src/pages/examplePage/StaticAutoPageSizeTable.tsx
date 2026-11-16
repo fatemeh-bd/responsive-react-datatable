@@ -57,13 +57,7 @@ const StaticAutoPageSizeTable = () => {
       totalItems={mock?.recordsFiltered}
       columns={columns}
       tableName="table2"
-      autoPageSizeConfig={{
-        enabled: true,
-        containerSelector: "#content-wrapper",
-        subtractSelectors: ["#footer", "#tabId"],
-        rowHeight: 51.15,
-        baseBufferRows: 3,
-      }}
+      autoPageSizeConfig={{ enabled: true }}
       notify={(text) => alert(text)}
     />
   );

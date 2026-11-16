@@ -1,5 +1,5 @@
 "use client";
-import { c as csvContent, a as cellText, s as safeFileName } from './index-Cttf2Ykr.mjs';
+import { c as csvContent, a as cellText, s as safeFileName } from './index-B9F4TQVW.mjs';
 import 'react/jsx-runtime';
 import 'react';
 import '@tanstack/react-query';
@@ -12,7 +12,7 @@ async function createExportBlob(format, headers, rows, rtl = false) {
     if (format === "csv")
         return new Blob([csvContent(headers, rows)], { type: "text/csv;charset=utf-8" });
     if (format === "xlsx") {
-        const { xlsxBytes } = await import('./xlsx-sNqZpRuT.mjs');
+        const { xlsxBytes } = await import('./xlsx-DfFLPNY1.mjs');
         return new Blob([xlsxBytes(headers, rows, rtl)], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     }
     const [{ jsPDF }, { autoTable }, { default: font }] = await Promise.all([
@@ -46,4 +46,4 @@ function downloadBlob(blob, name, format) {
 }
 
 export { createExportBlob, downloadBlob };
-//# sourceMappingURL=download-BybifC0o.mjs.map
+//# sourceMappingURL=download-DlrErJ1k.mjs.map

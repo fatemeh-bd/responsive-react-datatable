@@ -64,16 +64,4 @@ export const darkColorTheme: ColorTheme = {
 };
 export const defaultColorTheme = lightColorTheme;
 
-export const defaultAutoConfig: AutoPageSizeConfig = {
-  enabled: false,
-  containerSelector: "#content-wrapper",
-  subtractSelectors: [
-    // "#table-header-actions",
-    // "#paging",
-    // "#topFilter",
-  ],
-  optionalSelectorsForExtraBuffer: ["#topFilter"],
-  rowHeight: 51.15,
-  baseBufferRows: 2,
-  extraBufferRows: 1,
-};
+export const defaultAutoConfig: AutoPageSizeConfig = { enabled: false };

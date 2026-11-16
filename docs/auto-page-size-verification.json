@@ -1,0 +1,26 @@
+{
+  "initial": {
+    "count": 12,
+    "footerBottom": 859.328125,
+    "viewport": 900
+  },
+  "filtered": {
+    "count": 10,
+    "footerBottom": 879.046875,
+    "viewport": 900
+  },
+  "resized": {
+    "count": 5,
+    "footerBottom": 623.34375,
+    "viewport": 650
+  },
+  "browser": "157.0.8103.51",
+  "date": "2026-11-16",
+  "checks": {
+    "libraryBuild": "passed",
+    "behavioralTests": "43 passed",
+    "packageSurfaceAndSSR": "passed",
+    "demoBuild": "passed"
+  },
+  "scope": "Local desktop Chrome sizing flow; full release matrix not rerun"
+}

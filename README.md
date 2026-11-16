@@ -199,7 +199,7 @@ Default export and named `Table` refer to the same component. Also exported:
 | `height` | Desktop maximum scroll height, e.g. `70vh` |
 | `startMobileSize` | 768; mobile cards below this width |
 | `listMode` | false; use a mobile list instead of swipe cards |
-| `autoPageSizeConfig` | Disabled by default; containerSelector, rowHeight, subtractSelectors and row buffers |
+| `autoPageSizeConfig` | Disabled by default; enable for automatic viewport sizing, optional manual overrides |
 | `columnNumber` | Optional override for the initial request sort index; otherwise derived from `defaultSortBy` |
 | `rowClassName` | `(row) => string`; applied to desktop rows and mobile cards |
 | `filters`, `topFilter`, `actionButtons` | Host-owned content slots |
@@ -467,3 +467,28 @@ const api = {
 } satisfies InternalApiConfig;
 <Table mode="internal" columns={columns} internalApiConfig={api} saveSearch tableName="people" />;
 ```
+
+## Automatic page size
+
+```tsx
+<Table mode="static" columns={columns} staticRows={rows}
+  autoPageSizeConfig={{ enabled: true }} />
+```
+
+On desktop, the table measures the space from its body to the viewport bottom,
+subtracts its header, pagination and expanded details, and fits at least one row.
+Filters/search/topFilter above the body are accounted for by its actual position.
+ResizeObserver tracks controls and rendered rows; viewport resize and content
+changes trigger recalculation. It starts after mount, preserving SSR markup.
+No selector or fixed-height parent is required. Mobile keeps ordinary pagination.
+
+An explicit containerSelector caps the bottom edge to a bounded container.
+Invalid/missing selectors fall back to the viewport. subtractSelectors reserves
+external regions; nested regions and built-in controls are not counted twice.
+Use it only for regions not already accounted for by the table's position.
+rowHeight overrides measurement; otherwise the largest row measured during the
+current sizing session is used, with a 51.15px initial fallback. Variable-height
+rows remain an estimate; a taller row may reduce page size. Explicit height caps
+the table body. Optional baseBufferRows/extraBufferRows reserve additional rows;
+both default to zero. Explicit URL page size/manual page-size selection takes
+precedence over auto sizing. When space is too small, one row is still shown.

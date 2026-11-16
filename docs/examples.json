@@ -149,6 +149,16 @@
       ],
       "code": "<Table mode=\"external\" columns={columns} externalRows={rows}\n  totalItems={total} isLoading={loading} />",
       "note": "Pass your request loading state. Skeletons only fade; they do not scale. Reduced-motion preferences are respected."
+    },
+    {
+      "id": "auto-page-size",
+      "title": "Automatic page size",
+      "summary": "Fit desktop rows to the available viewport.",
+      "sections": [
+        "Automatic page size"
+      ],
+      "code": "<Table mode=\"static\" columns={columns} staticRows={rows}\n  autoPageSizeConfig={{ enabled: true }} />",
+      "note": "Filters and pagination are measured automatically. Explicit URL page size takes precedence; mobile uses ordinary pagination."
     }
   ]
 }
