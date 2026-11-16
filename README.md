@@ -1,5 +1,9 @@
 # React Responsive DataTable Kit
 
+[![Total npm downloads](https://img.shields.io/npm/dt/react-responsive-datatable-kit)](https://www.npmjs.com/package/react-responsive-datatable-kit)
+[![npm version](https://img.shields.io/npm/v/react-responsive-datatable-kit)](https://www.npmjs.com/package/react-responsive-datatable-kit)
+[![License](https://img.shields.io/npm/l/react-responsive-datatable-kit)](https://github.com/fatemeh-bd/responsive-react-datatable/blob/main/LICENSE)
+
 A responsive data table for React 18 and 19, with desktop tables, mobile cards,
 static or server data, search, sorting, pagination, selection and Persian/RTL.
 
