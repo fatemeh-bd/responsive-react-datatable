@@ -1,6 +1,6 @@
 {
-  "artifact": "react-responsive-datatable-kit-3.0.0.tgz",
-  "sha512": "sha512-ImJ35WqnMoK78Ebp+7JEHtkT3ci5NpbxEQxCDYgjZFgMh0576Vkydd7u4pl10cVsjGS1WkLSAJjA4uHnkNhocQ==",
+  "artifact": "react-responsive-datatable-kit-3.0.1.tgz",
+  "sha512": "sha512-/cOMYjlZklowzvfRrNkl8EX797rzZ+tx7furRhC7jQqefKSZRjKs9DnHbd/vk9h88CjnfEuw8fHJp1amDLShLw==",
   "results": [
     {
       "name": "react18-min",

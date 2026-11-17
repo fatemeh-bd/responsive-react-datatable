@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-12",
+  "date": "2026-11-17",
   "registry": "https://registry.npmjs.org/",
   "scope": "root package-lock.json, including development dependencies",
   "vulnerabilities": {
@@ -12,10 +12,10 @@
   },
   "dependencies": {
     "prod": 37,
-    "dev": 449,
-    "optional": 126,
-    "peer": 18,
+    "dev": 440,
+    "optional": 117,
+    "peer": 0,
     "peerOptional": 0,
-    "total": 501
+    "total": 492
   }
 }

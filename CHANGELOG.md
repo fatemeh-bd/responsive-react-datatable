@@ -1,15 +1,18 @@
 # Changelog
 
+## 3.0.1
+
+### Improvements and fixes
+
+- Automatic desktop page sizing measures available viewport space and rendered
+  rows and controls. Enable it with `autoPageSizeConfig={{ enabled: true }}`;
+  explicit URL page sizes take precedence, and container/buffer overrides are optional.
+- Exported `InternalApiConfig`, `InternalApiPayload` and `InternalApiResponse` with
+  documented fields and safer `unknown` types for application-defined values.
+- Table surfaces are transparent by default and inherit the host text color.
+  Explicit light, dark and hex themes remain available.
+
 ## 3.0.0
-
-- Automatic desktop page sizing now works with only enabled: true, using viewport
-  space and measured rows/controls; container and buffer settings remain optional.
-
-- Export documented InternalApiConfig, InternalApiPayload and InternalApiResponse types;
-  constrain payload objects and replace untyped response/custom field values with unknown.
-
-- Default table surfaces are transparent and text inherits from the host. Explicit
-  light/dark/hex themes and colorTheme overrides remain available.
 
 ### New capabilities
 

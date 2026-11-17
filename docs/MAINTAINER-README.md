@@ -1,7 +1,7 @@
 # Maintainer quick start
 
-Release preparation: 3.0.0, 2026-11-04. This is the short entrypoint for future
-work; the earlier audit remains a historical snapshot.
+Latest public release: 3.0.0. Version 3.0.1 is staged on npm and awaits maintainer
+approval. The earlier audit remains a historical snapshot.
 
 ## Implementation
 

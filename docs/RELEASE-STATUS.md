@@ -1,4 +1,4 @@
-# Release preparation status: 3.0.0
+# Release status: 3.0.1 candidate
 
 ## Publication preflight: 2026-11-15
 
@@ -179,3 +179,30 @@ URL page sizes retain priority. See versions/3.0.0.auto-page-size.md and
 auto-page-size-verification.json for the exact local Chrome layout checks.
 43 tests, library/package/SSR checks and demo build pass. The full release
 matrix predates this change and must be refreshed before publication.
+
+## 3.0.1 release verification: 2026-11-17
+
+Version 3.0.0 is published on npm. The 3.0.1 candidate includes the transparent
+default surface, refined public internal API types and measured desktop automatic
+page sizing. Its immutable guide, change notes and runnable examples are recorded
+under `docs/versions/3.0.1.*`.
+
+All 43 root regressions pass. Library build/typecheck, packed package surface and
+Node SSR, demo build, and desktop/mobile documentation checks pass. A clean
+`npm ci` from the updated lockfile succeeds. The full packed matrix passes for
+React 18.0.0, 18.3.1, 19.0.0 and 19.3.1, including Bundler/NodeNext types and
+production Next 15 Pages/App plus Next 16 App SSR, desktop/mobile Chromium,
+request recovery, CSS and file exports. Exact artifact integrity and versions
+are recorded in `release-verification.json`.
+
+The full root dependency audit reports zero vulnerabilities; exact counts are in
+`release-security.json`. npm install reported two advisories in the isolated
+Next 15 consumer fixtures. Those fixture dependencies are not shipped by this
+library. Firefox, WebKit, React 16/17 and CommonJS consumers remain unverified.
+
+The verified 3.0.1 tarball is staged on npm as
+`0aa51ec8-e0b5-4d91-84fb-35bb2579ed14` (public access, `latest` tag, shasum
+`511cf9fc3dcfb4204fd930c4efc6f0ad0cd23b54`). npm reports its status as
+`staged` and awaits maintainer approval. It is not publicly available until a
+maintainer approves it in Account → Staged Packages with 2FA. The current public
+`latest` remains 3.0.0.

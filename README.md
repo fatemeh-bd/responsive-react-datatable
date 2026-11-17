@@ -440,7 +440,7 @@ release verification and changelog for the stabilized version.
 
 MIT License.
 
-See the [3.0.0 styling correction](docs/versions/3.0.0.styling.md) for the updated default.
+See the [3.0.1 change notes](docs/versions/3.0.1.changes.md) for the latest updates.
 
 ## Internal API configuration types
 
